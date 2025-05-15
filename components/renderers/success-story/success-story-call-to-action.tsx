@@ -12,11 +12,11 @@ export default function SuccessStoryCallToAction({ text, buttonText, buttonLink 
   if (!text || !buttonText || !buttonLink) return null
 
   return (
-    <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg p-6 shadow-lg">
+    <div className="bg-white border border-blue-300 text-gray-800 rounded-lg p-6 shadow-md">
       <h2 className="text-xl font-bold mb-4">{text}</h2>
       <Link href={buttonLink}>
-        <Button size="lg" className="w-full bg-white text-green-600 hover:bg-green-50 shadow-md">
-          {buttonText}
+        <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md">
+          {"Contact an RTLS Expert"}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </Link>

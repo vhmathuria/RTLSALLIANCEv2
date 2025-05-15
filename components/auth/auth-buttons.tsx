@@ -7,6 +7,7 @@ import { FaGoogle, FaLinkedin } from "react-icons/fa"
 import { MdEmail } from "react-icons/md"
 import { AlertCircle } from "lucide-react"
 import AuthDiagnostics from "./auth-diagnostics"
+import EnvironmentDebug from "./environment-debug"
 
 interface AuthButtonsProps {
   redirectTo?: string
@@ -46,7 +47,13 @@ export function AuthButtons({
 
     // Check if we're in a preview environment
     const hostname = window.location.hostname
-    setIsPreviewEnvironment(hostname.includes("vercel.app") && !hostname.startsWith("www"))
+    const isPreview =
+      hostname.includes("vercel.app") &&
+      !hostname.startsWith("www") &&
+      (hostname.includes("-") || hostname.includes("git"))
+
+    setIsPreviewEnvironment(isPreview)
+    console.log("Environment detection:", { hostname, isPreview })
   }, [])
 
   const handleOAuthSignIn = async (provider: "google" | "linkedin_oidc") => {
@@ -62,6 +69,12 @@ export function AuthButtons({
       // Get the current origin
       const origin = window.location.origin
       console.log("Current origin:", origin)
+
+      console.log("Environment detection in sign-in:", {
+        hostname: window.location.hostname,
+        isPreview: isPreviewEnvironment,
+        origin,
+      })
 
       // Check if we're in a preview environment
       const isPreview = isPreviewEnvironment
@@ -168,6 +181,7 @@ export function AuthButtons({
       <div className="text-xs text-gray-500 mt-2">
         By signing in, you agree to our Terms of Service and Privacy Policy.
       </div>
+      <EnvironmentDebug />
     </div>
   )
 }

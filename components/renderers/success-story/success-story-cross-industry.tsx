@@ -8,7 +8,7 @@ export default function SuccessStoryCrossIndustry({ insights }: SuccessStoryCros
   if (!insights) return null
 
   return (
-    <section className="my-12">
+    <section className="my-12 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
         <Lightbulb className="h-6 w-6 mr-2 text-blue-600" />
         Cross-Industry Insights
@@ -18,13 +18,13 @@ export default function SuccessStoryCrossIndustry({ insights }: SuccessStoryCros
       {insights.insights && Array.isArray(insights.insights) && (
         <div className="space-y-6 mb-8">
           {insights.insights.map((insight: any, index: number) => (
-            <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-md">
+            <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
               <h3 className="text-xl font-semibold text-gray-900 mb-3">{insight.industry}</h3>
               <ul className="space-y-2">
                 {Array.isArray(insight.recommendations) &&
                   insight.recommendations.map((rec: string, idx: number) => (
                     <li key={idx} className="flex items-start">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-blue-600 mr-3 flex-shrink-0">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-4 w-4"

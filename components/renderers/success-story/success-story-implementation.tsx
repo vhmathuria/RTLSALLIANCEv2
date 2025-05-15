@@ -23,14 +23,14 @@ export default function SuccessStoryImplementation({
   image,
 }: SuccessStoryImplementationProps) {
   return (
-    <section className="my-12">
+    <section className="my-12 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
         <Clock className="h-6 w-6 mr-2 text-blue-600" />
         Implementation
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
+      <div className={image ? "grid md:grid-cols-2 gap-8" : "w-full"}>
+        <div className="w-full">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Timeline Overview</h3>
             <p className="text-gray-700">{timeline}</p>
@@ -52,7 +52,7 @@ export default function SuccessStoryImplementation({
                       <div className="absolute left-0 top-6 bottom-0 w-0.5 bg-blue-200 -ml-5"></div>
                     )}
 
-                    <h4 className="font-medium text-blue-800 mb-1 flex items-center">
+                    <h4 className="font-medium text-gray-900 mb-1 flex items-center">
                       {phase.name}
                       <span className="ml-2 text-xs text-gray-500">({phase.duration})</span>
                     </h4>
@@ -66,13 +66,13 @@ export default function SuccessStoryImplementation({
           {challenges && challenges.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                <AlertTriangle className="h-5 w-5 mr-2 text-amber-600" />
+                <AlertTriangle className="h-5 w-5 mr-2 text-blue-600" />
                 Implementation Challenges
               </h3>
               <ul className="space-y-2">
                 {challenges.map((challenge, index) => (
                   <li key={index} className="flex items-start">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-amber-600 mr-3 flex-shrink-0">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-blue-600 mr-3 flex-shrink-0">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4"

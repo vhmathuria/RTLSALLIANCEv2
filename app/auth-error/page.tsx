@@ -19,13 +19,18 @@ export default function AuthErrorPage() {
 
   useEffect(() => {
     const hostname = window.location.hostname
-    const isPreview = hostname.includes("vercel.app") && !hostname.startsWith("www")
+    const isPreview =
+      hostname.includes("vercel.app") &&
+      !hostname.startsWith("www") &&
+      (hostname.includes("-") || hostname.includes("git"))
 
     setEnvironmentInfo({
       isPreview,
       hostname,
       origin: window.location.origin,
     })
+
+    console.log("Auth Error - Environment detection:", { hostname, isPreview })
   }, [])
 
   const getErrorExplanation = () => {

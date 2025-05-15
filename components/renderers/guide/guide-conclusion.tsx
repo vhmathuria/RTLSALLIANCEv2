@@ -14,7 +14,7 @@ export default function GuideConclusion({ summary }: GuideConclusionProps) {
         <CheckCircle className="h-6 w-6 mr-2 text-blue-600" />
         Conclusion
       </h2>
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-md">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
         <p className="text-gray-700">{fixSpecialChars(summary)}</p>
       </div>
     </section>

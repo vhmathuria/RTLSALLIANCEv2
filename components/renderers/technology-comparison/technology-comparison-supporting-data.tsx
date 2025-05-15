@@ -1,4 +1,4 @@
-import { PieChart } from "lucide-react"
+import { PieChart, BarChart } from "lucide-react"
 import Image from "next/image"
 
 interface Chart {
@@ -47,10 +47,9 @@ export default function TechnologyComparisonSupportingData({
   // Check if we have any data to display
   const hasCharts = Array.isArray(charts) && charts.length > 0
   const hasDataPoints = Array.isArray(dataPoints) && dataPoints.length > 0
-  const hasTable = table && table.columns && table.columns.length > 0
   const hasVisual = visual && visual.link
 
-  if (!hasCharts && !hasDataPoints && !hasTable && !hasVisual) {
+  if (!hasCharts && !hasDataPoints && !hasVisual) {
     return null
   }
 
@@ -65,9 +64,12 @@ export default function TechnologyComparisonSupportingData({
       {hasDataPoints && (
         <div className="mb-8 grid md:grid-cols-2 gap-6">
           {dataPoints.map((point, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-white">
-                <h3 className="text-lg font-semibold">{point.metric}</h3>
+            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
+              <div className="px-6 py-3 border-b border-gray-200 bg-white">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <BarChart className="h-5 w-5 mr-2 text-blue-600" />
+                  {point.metric}
+                </h3>
               </div>
               <div className="p-6">
                 <p className="text-2xl font-bold text-gray-900 mb-2">{point.value}</p>
@@ -79,41 +81,10 @@ export default function TechnologyComparisonSupportingData({
         </div>
       )}
 
-      {/* Table */}
-      {hasTable && (
-        <div className="mb-8 overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg shadow-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                {table.columns.map((column, index) => (
-                  <th
-                    key={index}
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {column}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {table.rows.map((row, rowIndex) => (
-                <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{row.Metric || ""}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{row.Value || ""}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{row.Source || ""}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{row.Implication || ""}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
       {/* Visual */}
       {hasVisual && (
         <div className="mb-8">
-          <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-md">
+          <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-md border border-gray-200">
             <Image
               src={visual.link || "/placeholder.svg"}
               alt={visual.description || "Supporting data visualization"}
@@ -131,9 +102,12 @@ export default function TechnologyComparisonSupportingData({
       {hasCharts && (
         <div className="grid md:grid-cols-2 gap-6">
           {charts.map((chart, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-white">
-                <h3 className="text-lg font-semibold">{chart.title}</h3>
+            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
+              <div className="px-6 py-3 border-b border-gray-200 bg-white">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <PieChart className="h-5 w-5 mr-2 text-blue-600" />
+                  {chart.title}
+                </h3>
               </div>
               <div className="p-6">
                 <div className="relative h-64 w-full mb-4">

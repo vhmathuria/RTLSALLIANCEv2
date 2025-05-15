@@ -32,7 +32,7 @@ export default function TechnologyComparisonExpertCommentary({
           <MessageSquare className="h-6 w-6 mr-2 text-blue-600" />
           Expert Commentary
         </h2>
-        <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
+        <div className="border border-gray-200 rounded-lg p-6 bg-white">
           <p className="text-gray-500 italic">No expert commentary available for this comparison.</p>
         </div>
       </section>
@@ -50,7 +50,7 @@ export default function TechnologyComparisonExpertCommentary({
       {hasCommentary && (
         <div className="space-y-6 mb-8">
           {commentary!.map((item, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-6 shadow-md">
+            <div key={index} className="border border-gray-200 rounded-lg p-6 shadow-md bg-white">
               <div className="flex items-start">
                 <div className="flex-shrink-0 mr-4">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
@@ -72,7 +72,7 @@ export default function TechnologyComparisonExpertCommentary({
 
       {/* Single expert voice */}
       {hasExpertVoice && (
-        <div className="border border-gray-200 rounded-lg p-6 shadow-md bg-blue-50">
+        <div className="border border-gray-200 rounded-lg p-6 shadow-md bg-white">
           <div className="flex items-start">
             <div className="flex-shrink-0 mr-4">
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">

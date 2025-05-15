@@ -22,14 +22,10 @@ export default function SuccessStoryHeader({
   clientName,
 }: SuccessStoryHeaderProps) {
   return (
-    <header className="mb-10">
+    <header className="mb-10 w-full">
       <div className="flex flex-wrap gap-2 mb-4">
         {tags.map((tag, index) => (
-          <Badge
-            key={index}
-            variant="outline"
-            className="bg-green-50 text-green-700 hover:bg-green-100 border-green-200"
-          >
+          <Badge key={index} variant="outline" className="bg-white text-blue-700 hover:bg-blue-50 border-blue-200">
             {tag}
           </Badge>
         ))}
@@ -37,9 +33,7 @@ export default function SuccessStoryHeader({
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-            {title}
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{title}</h1>
           <p className="text-xl text-gray-700">{subtitle}</p>
         </div>
 

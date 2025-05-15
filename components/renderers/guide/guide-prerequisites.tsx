@@ -11,7 +11,7 @@ export default function GuidePrerequisites({ knowledge }: GuidePrerequisitesProp
   return (
     <section id="prerequisites" className="my-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-4">Prerequisites</h2>
-      <div className="bg-blue-50 p-6 rounded-lg border border-blue-200 shadow-sm">
+      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-md">
         <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
           <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
           Helpful Background Knowledge

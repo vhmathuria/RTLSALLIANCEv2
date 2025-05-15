@@ -12,12 +12,12 @@ export default function SuccessStoryLessons({ overview, keyLessons, bestPractice
 
   if (!hasContent) {
     return (
-      <div className="my-12">
+      <div className="my-12 w-full">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
           <BookOpen className="h-6 w-6 mr-2 text-blue-600" />
           Key Takeaways
         </h2>
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
           <p className="text-gray-500 italic">No key takeaways available.</p>
         </div>
       </div>
@@ -25,7 +25,7 @@ export default function SuccessStoryLessons({ overview, keyLessons, bestPractice
   }
 
   return (
-    <section className="my-12">
+    <section className="my-12 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
         <BookOpen className="h-6 w-6 mr-2 text-blue-600" />
         {keyLessons && keyLessons.length > 0 ? "Key Takeaways" : "Lessons Learned"}
@@ -40,7 +40,7 @@ export default function SuccessStoryLessons({ overview, keyLessons, bestPractice
             <ul className="space-y-3">
               {keyLessons.map((lesson, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-blue-600 mr-3 flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                       <path
@@ -60,13 +60,13 @@ export default function SuccessStoryLessons({ overview, keyLessons, bestPractice
         {bestPractices && bestPractices.length > 0 && (
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-              <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
+              <CheckCircle className="h-5 w-5 mr-2 text-blue-600" />
               Best Practices
             </h3>
             <ul className="space-y-3">
               {bestPractices.map((practice, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600 mr-3 flex-shrink-0">
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-blue-600 mr-3 flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                       <path
                         fillRule="evenodd"

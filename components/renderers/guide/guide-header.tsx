@@ -20,9 +20,7 @@ export default function GuideHeader({ title, subtitle, tags, publishDate, author
         ))}
       </div>
 
-      <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-        {title}
-      </h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{title}</h1>
 
       <p className="text-xl text-gray-700 mb-6">{subtitle}</p>
 

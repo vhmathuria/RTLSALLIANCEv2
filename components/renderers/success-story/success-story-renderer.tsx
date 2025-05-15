@@ -163,7 +163,7 @@ export default function SuccessStoryRenderer({ article }: SuccessStoryRendererPr
           </div>
 
           {/* Main content */}
-          <div className="flex-1 max-w-3xl">
+          <div className="flex-1 max-w-4xl">
             <SuccessStoryHeader
               title={content.title || article.title}
               subtitle={content.pageHeader?.subtitle || ""}
@@ -185,12 +185,14 @@ export default function SuccessStoryRenderer({ article }: SuccessStoryRendererPr
             <section id={sectionIds[1] || "the-challenge"}>
               <SuccessStoryChallenge
                 overview={content.theChallenge?.problemDescription || ""}
-                painPoints={[
-                  "Frequent misplacement of critical assets",
-                  "Significant staff time spent searching",
-                  "Disrupted patient care workflows",
-                  "Increased operational costs",
-                ]}
+                painPoints={
+                  content.theChallenge?.painPoints || [
+                    "Frequent misplacement of critical assets",
+                    "Significant staff time spent searching",
+                    "Disrupted patient care workflows",
+                    "Increased operational costs",
+                  ]
+                }
                 businessImpact={content.theChallenge?.impact || ""}
                 previousSolutions={content.theChallenge?.whyLegacyFailed || ""}
               />
@@ -251,13 +253,13 @@ export default function SuccessStoryRenderer({ article }: SuccessStoryRendererPr
 
             {/* Next Steps */}
             <section id={sectionIds[7] || "next-steps"}>
-              <div className="my-12">
+              <div className="my-12 w-full">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Next Steps</h2>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-md">
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
                   <ul className="space-y-3">
                     {content.nextSteps?.recommendations?.map((step: string, index: number) => (
                       <li key={index} className="flex items-start">
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-blue-600 mr-3 flex-shrink-0">
                           {index + 1}
                         </span>
                         <span className="text-gray-700">{step}</span>

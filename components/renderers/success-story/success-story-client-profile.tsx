@@ -21,7 +21,7 @@ export default function SuccessStoryClientProfile({
   image,
 }: SuccessStoryClientProfileProps) {
   return (
-    <section className="my-12">
+    <section className="my-12 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Client Profile</h2>
 
       <div className="grid md:grid-cols-2 gap-8">
@@ -31,21 +31,21 @@ export default function SuccessStoryClientProfile({
 
             <div className="space-y-3">
               <div className="flex items-center text-gray-700">
-                <Building2 className="h-5 w-5 mr-2 text-green-600" />
+                <Building2 className="h-5 w-5 mr-2 text-blue-600" />
                 <span>
                   <strong>Industry:</strong> {industry}
                 </span>
               </div>
 
               <div className="flex items-center text-gray-700">
-                <MapPin className="h-5 w-5 mr-2 text-green-600" />
+                <MapPin className="h-5 w-5 mr-2 text-blue-600" />
                 <span>
                   <strong>Location:</strong> {location}
                 </span>
               </div>
 
               <div className="flex items-center text-gray-700">
-                <Users className="h-5 w-5 mr-2 text-green-600" />
+                <Users className="h-5 w-5 mr-2 text-blue-600" />
                 <span>
                   <strong>Size:</strong> {size}
                 </span>
@@ -72,7 +72,7 @@ export default function SuccessStoryClientProfile({
           )}
 
           {logo && !image && (
-            <div className="relative h-40 w-full flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200 p-6">
+            <div className="relative h-40 w-full flex items-center justify-center bg-white rounded-lg border border-gray-200 p-6 shadow-md">
               <div className="relative h-24 w-48">
                 <Image src={logo || "/placeholder.svg"} alt={`${name} logo`} fill className="object-contain" />
               </div>

@@ -15,13 +15,19 @@ export default async function HomePage() {
   const successStoryArticles = await getArticlesByContentType("Success Story")
   const memberInsightArticles = await getArticlesByContentType("Member Insight")
 
-  // Combine and sort all articles by publish date (newest first)
-  const allArticles = [...guideArticles, ...comparisonArticles, ...successStoryArticles, ...memberInsightArticles].sort(
-    (a, b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime(),
-  )
+  // Combine all articles
+  const allArticles = [...guideArticles, ...comparisonArticles, ...successStoryArticles, ...memberInsightArticles]
 
-  // Get the 3 most recent articles for the featured section
-  const featuredArticles = allArticles.slice(0, 3)
+  // Function to randomly select articles
+  const getRandomArticles = (articles: Article[], count: number) => {
+    // Create a copy of the array to avoid modifying the original
+    const shuffled = [...articles].sort(() => 0.5 - Math.random())
+    // Get the first 'count' elements
+    return shuffled.slice(0, count)
+  }
+
+  // Get 3 random articles for the featured section
+  const featuredArticles = getRandomArticles(allArticles, 3)
 
   // Member logos for carousel
   const memberLogos = [

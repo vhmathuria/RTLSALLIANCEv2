@@ -1,9 +1,7 @@
-import { Building2 } from "lucide-react"
+import { Building2, CheckCircle, Lightbulb } from "lucide-react"
 
 interface IndustryRecommendation {
   industry: string
-  recommendation?: string
-  rationale?: string
   recommendedTech?: string
   reason?: string
 }
@@ -32,17 +30,16 @@ export default function TechnologyComparisonIndustryRecommendations({
   const recommendationItems = items || recommendations || []
 
   // Check if we have any data to display
-  const hasRecommendations = recommendationItems.length > 0
-  const hasTable = table && table.columns && table.columns.length > 0
+  const hasRecommendations = recommendationItems && recommendationItems.length > 0
 
-  if (!hasRecommendations && !hasTable) {
+  if (!hasRecommendations) {
     return (
       <section className="my-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
           <Building2 className="h-6 w-6 mr-2 text-blue-600" />
           Industry Recommendations
         </h2>
-        <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
+        <div className="border border-gray-200 rounded-lg p-6 bg-white">
           <p className="text-gray-500 italic">No industry recommendations available for this comparison.</p>
         </div>
       </section>
@@ -59,53 +56,31 @@ export default function TechnologyComparisonIndustryRecommendations({
       {hasRecommendations && (
         <div className="space-y-6 mb-8">
           {recommendationItems.map((rec, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-white">
-                <h3 className="text-lg font-semibold">{rec.industry}</h3>
+            <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
+              <div className="px-6 py-3 border-b border-gray-200 bg-white">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <Building2 className="h-5 w-5 mr-2 text-blue-600" />
+                  {rec.industry}
+                </h3>
               </div>
               <div className="p-6">
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2">Recommendation</h4>
-                  <p className="text-gray-900 font-medium">{rec.recommendedTech || rec.recommendation || ""}</p>
+                  <h4 className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2 flex items-center">
+                    <CheckCircle className="h-4 w-4 mr-2 text-blue-600" />
+                    Recommendation
+                  </h4>
+                  <p className="text-gray-900 font-medium">{rec.recommendedTech || ""}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2">Rationale</h4>
-                  <p className="text-gray-700">{rec.reason || rec.rationale || ""}</p>
+                  <h4 className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2 flex items-center">
+                    <Lightbulb className="h-4 w-4 mr-2 text-blue-600" />
+                    Rationale
+                  </h4>
+                  <p className="text-gray-700">{rec.reason || ""}</p>
                 </div>
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {hasTable && (
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg shadow-md">
-            <thead className="bg-gray-50">
-              <tr>
-                {table.columns.map((column, index) => (
-                  <th
-                    key={index}
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {column}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {table.rows.map((row, rowIndex) => (
-                <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {row.Industry || ""}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{row["Recommended Tech"] || ""}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700">{row.Reason || ""}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       )}
     </section>

@@ -25,7 +25,7 @@ export default function GuideSteps({ steps }: GuideStepsProps) {
         {steps.map((step, index) => (
           <div key={index} className="relative pl-8 pb-8">
             {/* Step number circle */}
-            <div className="absolute left-0 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold shadow-md">
+            <div className="absolute left-0 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold shadow-md">
               {index + 1}
             </div>
 
@@ -37,15 +37,15 @@ export default function GuideSteps({ steps }: GuideStepsProps) {
               <p className="text-gray-700 mb-4">{fixSpecialChars(step.details)}</p>
 
               {step.challenges && step.challenges.length > 0 && (
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 shadow-sm">
-                  <h4 className="text-sm font-medium text-orange-800 uppercase tracking-wider mb-2 flex items-center">
-                    <AlertTriangle className="h-4 w-4 mr-1 text-orange-600" />
+                <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                  <h4 className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2 flex items-center">
+                    <AlertTriangle className="h-4 w-4 mr-1 text-blue-600" />
                     Potential Challenges
                   </h4>
                   <ul className="space-y-2">
                     {step.challenges.map((challenge, idx) => (
                       <li key={idx} className="flex items-start">
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-orange-100 text-orange-600 mr-2 flex-shrink-0 text-xs">
+                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 mr-2 flex-shrink-0 text-xs">
                           !
                         </span>
                         <span className="text-gray-700">{fixSpecialChars(challenge)}</span>

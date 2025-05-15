@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import type { Article, TechnologyComparisonContent } from "@/types/article"
 import { fixSpecialChars } from "@/lib/utils"
-import { inspectRichTextStructure } from "@/lib/debug-utils"
 import TechnologyComparisonHeader from "./technology-comparison-header"
 import TechnologyComparisonIntro from "./technology-comparison-intro"
 import TechnologyComparisonKeyInsights from "./technology-comparison-key-insights"
@@ -33,8 +32,6 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
   const [content, setContent] = useState<TechnologyComparisonContent | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [debugMode, setDebugMode] = useState(false)
-  const [structure, setStructure] = useState<Record<string, any>>({})
 
   // Helper function to create consistent section IDs
   const createSectionId = (text: string) => {
@@ -83,15 +80,8 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
   useEffect(() => {
     if (article && article.rich_text) {
       try {
-        // Inspect the structure for debugging
-        const structureMap = inspectRichTextStructure(article.rich_text)
-        setStructure(structureMap)
-
         // Parse the rich_text JSON
         const parsedContent = JSON.parse(article.rich_text) as TechnologyComparisonContent
-
-        // Log the raw content for debugging
-        console.log("Raw Technology Comparison content:", parsedContent)
 
         // Fix all text fields including number ranges
         const fixedContent = fixAllTextFields(parsedContent)
@@ -157,22 +147,6 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
 
   return (
     <div className="bg-white">
-      {/* Debug Mode Toggle */}
-      <div className="container mx-auto px-4 py-2">
-        <button onClick={() => setDebugMode(!debugMode)} className="px-4 py-2 bg-red-600 text-white rounded-md text-sm">
-          {debugMode ? "Hide Debug Info" : "Show Debug Info"}
-        </button>
-
-        {debugMode && (
-          <div className="mt-4 p-4 bg-gray-100 rounded-md overflow-auto max-h-96">
-            <h3 className="text-lg font-bold mb-2">Content Structure</h3>
-            <pre className="text-xs">{JSON.stringify(structure, null, 2)}</pre>
-            <h3 className="text-lg font-bold mt-4 mb-2">Full Content</h3>
-            <pre className="text-xs">{JSON.stringify(content, null, 2)}</pre>
-          </div>
-        )}
-      </div>
-
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left sidebar for desktop */}
@@ -258,12 +232,19 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
 
             {/* Industry Recommendations Section */}
             <section id={sectionIds[6] || "industry-recommendations"}>
-              <TechnologyComparisonIndustryRecommendations recommendations={content.industryRecommendations} />
+              <TechnologyComparisonIndustryRecommendations
+                items={content.industryRecommendations?.items}
+                table={content.industryRecommendations?.table}
+              />
             </section>
 
             {/* Use Cases Comparison Section */}
             <section id={sectionIds[7] || "use-cases"}>
-              <TechnologyComparisonUseCases useCases={content.useCasesComparison} techNames={techNames} />
+              <TechnologyComparisonUseCases
+                items={content.useCasesComparison?.items}
+                table={content.useCasesComparison?.table}
+                techNames={techNames}
+              />
             </section>
 
             {/* Pros and Cons Section */}
@@ -280,18 +261,25 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
 
             {/* Decision Framework Section */}
             <section id={sectionIds[9] || "decision-framework"}>
-              <TechnologyComparisonDecisionFramework framework={content.decisionFramework || content.decisionMatrix} />
+              <TechnologyComparisonDecisionFramework
+                items={content.decisionMatrix?.items}
+                table={content.decisionMatrix?.table}
+              />
             </section>
 
             {/* Deployment Considerations Section */}
             <section id={sectionIds[10] || "deployment-considerations"}>
-              <TechnologyComparisonDeployment considerations={content.deploymentConsiderations} />
+              <TechnologyComparisonDeployment
+                technologies={content.deploymentConsiderations?.technologies}
+                table={content.deploymentConsiderations?.table}
+              />
             </section>
 
             {/* Challenges and Mitigations Section */}
             <section id={sectionIds[11] || "challenges"}>
               <TechnologyComparisonChallenges
-                challenges={content.challengesMitigations || content.challengesAndMitigations}
+                items={content.challengesMitigations?.items}
+                table={content.challengesMitigations?.table}
               />
             </section>
 
@@ -316,7 +304,7 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
             </section>
 
             {/* Related Reads Section */}
-            {content.relatedReads && Array.isArray(content.relatedReads) && (
+            {content.relatedReads && content.relatedReads.articles && Array.isArray(content.relatedReads.articles) && (
               <section id={sectionIds[15] || "related-reads"}>
                 <TechnologyComparisonRelatedReads relatedReads={content.relatedReads} />
               </section>
@@ -327,7 +315,7 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
               <div className="lg:hidden my-12">
                 <TechnologyComparisonCallToAction
                   text={content.callToAction.text}
-                  buttonText={content.callToAction.buttonText}
+                  buttonText="Contact an RTLS Expert"
                   buttonLink={content.callToAction.buttonLink}
                 />
               </div>
@@ -347,7 +335,7 @@ export default function TechnologyComparisonRenderer({ article }: TechnologyComp
               <div className="sticky top-24">
                 <TechnologyComparisonCallToAction
                   text={content.callToAction.text}
-                  buttonText={content.callToAction.buttonText}
+                  buttonText="Contact an RTLS Expert"
                   buttonLink={content.callToAction.buttonLink}
                 />
               </div>

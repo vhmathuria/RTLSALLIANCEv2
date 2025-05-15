@@ -21,7 +21,7 @@ export default function GuideRelatedReads({ relatedReads }: GuideRelatedReadsPro
           <Link
             key={index}
             href={`/resources/${article.slug}`}
-            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex justify-between items-center"
+            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex justify-between items-center bg-white"
           >
             <span className="text-gray-900 font-medium">{article.title}</span>
             <ArrowRight className="h-4 w-4 text-blue-600" />

@@ -17,14 +17,14 @@ export default function SuccessStoryChallenge({
   image,
 }: SuccessStoryChallengeProps) {
   return (
-    <section className="my-12">
+    <section className="my-12 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-        <AlertTriangle className="h-6 w-6 mr-2 text-amber-600" />
+        <AlertTriangle className="h-6 w-6 mr-2 text-blue-600" />
         The Challenge
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
+      <div className={image ? "grid md:grid-cols-2 gap-8" : "w-full"}>
+        <div className="w-full">
           <p className="text-gray-700 mb-6">{overview}</p>
 
           <div className="mb-6">
@@ -32,7 +32,7 @@ export default function SuccessStoryChallenge({
             <ul className="space-y-2">
               {painPoints.map((point, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-amber-600 mr-3 flex-shrink-0">
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 text-blue-600 mr-3 flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                       <path
                         fillRule="evenodd"

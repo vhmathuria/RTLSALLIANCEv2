@@ -22,14 +22,14 @@ export default function SuccessStorySolution({
   image,
 }: SuccessStorySolutionProps) {
   return (
-    <section className="my-12">
+    <section className="my-12 w-full">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
         <Lightbulb className="h-6 w-6 mr-2 text-blue-600" />
         The Solution
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
+      <div className={image ? "grid md:grid-cols-2 gap-8" : "w-full"}>
+        <div className="w-full">
           <p className="text-gray-700 mb-6">{overview}</p>
 
           {technologies && technologies.length > 0 && (
@@ -37,8 +37,8 @@ export default function SuccessStorySolution({
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Technologies Implemented</h3>
               <div className="space-y-4">
                 {technologies.map((tech, index) => (
-                  <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 className="font-medium text-blue-800 mb-1">{tech.name}</h4>
+                  <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 shadow-md">
+                    <h4 className="font-medium text-gray-900 mb-1">{tech.name}</h4>
                     <p className="text-gray-700 text-sm">{tech.description}</p>
                   </div>
                 ))}

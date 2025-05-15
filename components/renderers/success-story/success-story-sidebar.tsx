@@ -56,21 +56,21 @@ export default function SuccessStorySidebar({
   }
 
   return (
-    <div className="bg-white border border-green-500 rounded-lg p-5 shadow-md">
+    <div className="bg-white border border-blue-300 rounded-lg p-5 shadow-md">
       <div className="mb-6">
         <h2 className="text-lg font-bold text-gray-900 mb-2">Article Info</h2>
         <div className="space-y-2 text-sm text-gray-600">
           <div className="flex items-center">
-            <Calendar className="h-4 w-4 mr-2 text-green-500" />
+            <Calendar className="h-4 w-4 mr-2 text-blue-500" />
             <time dateTime={publishDate}>{formatDate(publishDate)}</time>
           </div>
           <div className="flex items-center">
-            <User className="h-4 w-4 mr-2 text-green-500" />
+            <User className="h-4 w-4 mr-2 text-blue-500" />
             <span>{author}</span>
           </div>
           {readingTime && (
             <div className="flex items-center">
-              <Clock className="h-4 w-4 mr-2 text-green-500" />
+              <Clock className="h-4 w-4 mr-2 text-blue-500" />
               <span>{readingTime} min read</span>
             </div>
           )}
@@ -83,7 +83,7 @@ export default function SuccessStorySidebar({
           <div className="space-y-2 text-sm text-gray-600">
             {clientName && (
               <div className="flex items-start">
-                <Building2 className="h-4 w-4 mr-2 text-green-500 mt-0.5" />
+                <Building2 className="h-4 w-4 mr-2 text-blue-500 mt-0.5" />
                 <span>{clientName}</span>
               </div>
             )}
@@ -91,7 +91,7 @@ export default function SuccessStorySidebar({
               <div className="flex items-start">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 mr-2 text-green-500 mt-0.5"
+                  className="h-4 w-4 mr-2 text-blue-500 mt-0.5"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -106,7 +106,7 @@ export default function SuccessStorySidebar({
             )}
             {location && (
               <div className="flex items-start">
-                <MapPin className="h-4 w-4 mr-2 text-green-500 mt-0.5" />
+                <MapPin className="h-4 w-4 mr-2 text-blue-500 mt-0.5" />
                 <span>{location}</span>
               </div>
             )}
@@ -121,9 +121,9 @@ export default function SuccessStorySidebar({
             <li key={index}>
               <button
                 onClick={() => scrollToSection(item, index)}
-                className="text-sm text-gray-700 hover:text-green-600 hover:underline text-left w-full flex items-center"
+                className="text-sm text-gray-700 hover:text-blue-600 hover:underline text-left w-full flex items-center"
               >
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-600 mr-2 flex-shrink-0 text-xs">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 mr-2 flex-shrink-0 text-xs">
                   {index + 1}
                 </span>
                 <span>{item}</span>

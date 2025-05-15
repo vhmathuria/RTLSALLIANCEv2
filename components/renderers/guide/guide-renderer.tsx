@@ -166,7 +166,7 @@ export default function GuideRenderer({ article }: GuideRendererProps) {
                 </svg>
                 Who Should Read This Guide
               </h2>
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-md">
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{content.audienceDefinition.whoShouldRead}</h3>
                 <p className="text-gray-700">{content.audienceDefinition.whyItMatters}</p>
               </div>

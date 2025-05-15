@@ -30,8 +30,8 @@ export default function GuideResources({ resources }: GuideResourcesProps) {
             <div className="flex items-start">
               <div className="flex-shrink-0 mr-3">
                 {resource.type === "Reference" ? (
-                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center shadow-sm">
-                    <BookOpen className="h-5 w-5 text-purple-600" />
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shadow-sm">
+                    <BookOpen className="h-5 w-5 text-blue-600" />
                   </div>
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shadow-sm">

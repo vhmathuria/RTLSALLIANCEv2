@@ -40,10 +40,10 @@ export default function SuccessStoryConclusion({ summary }: SuccessStoryConclusi
   return (
     <section className="my-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-        <CheckCircle className="h-6 w-6 mr-2 text-green-600" />
+        <CheckCircle className="h-6 w-6 mr-2 text-blue-600" />
         Conclusion
       </h2>
-      <div className="bg-green-50 border border-green-200 rounded-lg p-6 shadow-md">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
         <p className="text-gray-700">{safelyExtractText(summary)}</p>
       </div>
     </section>

@@ -18,7 +18,7 @@ export default function GuideCitations({ citations }: GuideCitationsProps) {
         <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
         Citations
       </h2>
-      <div className="border border-gray-200 rounded-lg p-6 bg-gray-50 shadow-md">
+      <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-md">
         <ol className="space-y-3 pl-5">
           {citations.map((citation, index) => (
             <li key={index} className="text-gray-700">

@@ -11,14 +11,14 @@ export default function GuideMistakes({ mistakes }: GuideMistakesProps) {
   return (
     <section id="mistakes" className="my-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-        <AlertTriangle className="h-6 w-6 mr-2 text-red-600" />
+        <AlertTriangle className="h-6 w-6 mr-2 text-blue-600" />
         Common Mistakes to Avoid
       </h2>
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 shadow-md">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
         <ul className="space-y-4">
           {mistakes.map((mistake, index) => (
             <li key={index} className="flex items-start">
-              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 flex-shrink-0">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fillRule="evenodd"

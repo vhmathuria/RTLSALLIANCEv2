@@ -19,12 +19,7 @@ export default function TechnologyComparisonOverview({ technologies }: Technolog
 
       <div className="grid md:grid-cols-2 gap-6">
         {technologies.map((tech, index) => (
-          <div
-            key={index}
-            className={`rounded-lg p-6 shadow-md ${
-              index === 0 ? "bg-blue-50 border border-blue-200" : "bg-purple-50 border border-purple-200"
-            }`}
-          >
+          <div key={index} className="rounded-lg p-6 shadow-md bg-white border border-gray-200">
             <h3 className="text-xl font-bold mb-3 text-gray-900">{tech.name}</h3>
             <p className="text-gray-700">{tech.description}</p>
           </div>
