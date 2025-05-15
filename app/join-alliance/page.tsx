@@ -2,20 +2,23 @@
 
 import { useState } from "react"
 import { useSearchParams } from "next/navigation"
-import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import AuthButtons from "@/components/auth/auth-buttons"
+import EmailSignupForm from "@/components/auth/email-signup-form"
 
 export default function JoinAlliancePage() {
   const searchParams = useSearchParams()
   const tier = searchParams.get("tier") || "professional"
+  const stepParam = searchParams.get("step")
 
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(stepParam ? Number.parseInt(stepParam) : 1)
   const [selectedTier, setSelectedTier] = useState(tier)
+  const [showEmailForm, setShowEmailForm] = useState(false)
 
   const nextStep = () => {
     setStep(step + 1)
@@ -43,29 +46,22 @@ export default function JoinAlliancePage() {
           <div className="max-w-3xl mx-auto">
             {/* Sign in with social options */}
             <div className="mb-8 bg-white p-8 rounded-lg border border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign up securely with one click</h2>
-
-              <div className="space-y-4">
-                <Link href="/api/auth/signin/google" className="block">
-                  <button className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-3 px-4 text-gray-700 hover:bg-gray-50">
-                    <Image src="/google-logo.png" alt="Google" width={20} height={20} />
-                    Sign in with Google
-                  </button>
-                </Link>
-
-                <Link href="/api/auth/signin/linkedin_oidc" className="block">
-                  <button className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-3 px-4 text-gray-700 hover:bg-gray-50">
-                    <Image src="/linkedin-logo.png" alt="LinkedIn" width={20} height={20} />
-                    Sign in with LinkedIn
-                  </button>
-                </Link>
-
-                <div className="relative flex items-center py-4">
-                  <div className="flex-grow border-t border-gray-300"></div>
-                  <span className="flex-shrink mx-4 text-gray-600">or continue with email</span>
-                  <div className="flex-grow border-t border-gray-300"></div>
-                </div>
-              </div>
+              {showEmailForm ? (
+                <EmailSignupForm
+                  onBack={() => setShowEmailForm(false)}
+                  redirectTo="/join-alliance"
+                  tier={selectedTier}
+                />
+              ) : (
+                <>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign up securely with one click</h2>
+                  <AuthButtons
+                    tier={selectedTier}
+                    redirectTo="/join-alliance"
+                    onEmailSignup={() => setShowEmailForm(true)}
+                  />
+                </>
+              )}
             </div>
 
             {/* Progress Steps */}

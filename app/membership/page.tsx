@@ -1,7 +1,7 @@
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Check, X } from "lucide-react"
+import AuthButtons from "@/components/auth/auth-buttons"
 
 export const metadata = {
   title: "Membership - RTLS Alliance",
@@ -427,25 +427,7 @@ export default function MembershipPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign up securely with one click</h2>
 
           <div className="max-w-md mx-auto">
-            <Link href="/api/auth/signin/google" className="block">
-              <button className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-3 px-4 text-gray-700 hover:bg-gray-50 mb-4">
-                <Image src="/google-logo.png" alt="Google" width={20} height={20} />
-                Sign in with Google
-              </button>
-            </Link>
-
-            <Link href="/api/auth/signin/linkedin_oidc" className="block">
-              <button className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-3 px-4 text-gray-700 hover:bg-gray-50 mb-4">
-                <Image src="/linkedin-logo.png" alt="LinkedIn" width={20} height={20} />
-                Sign in with LinkedIn
-              </button>
-            </Link>
-
-            <Link href="/join-alliance">
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 px-4">
-                Sign Up with Email/Password
-              </button>
-            </Link>
+            <AuthButtons redirectTo="/join-alliance" onEmailSignup={() => (window.location.href = "/join-alliance")} />
 
             <p className="text-xs text-gray-500 mt-4">
               We never sell or share your personal info. All account protections are updated regularly.
