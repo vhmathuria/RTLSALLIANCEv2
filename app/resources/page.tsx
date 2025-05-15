@@ -52,6 +52,12 @@ export default function ResourcesPage() {
     }
   }
 
+  // Determine if an article is popular (threshold: 500 views)
+  const isPopular = (article: Article): boolean => {
+    const viewsCount = getViewsCount(article)
+    return viewsCount >= 500 // Higher threshold for "truly popular"
+  }
+
   // Fetch articles on component mount
   useEffect(() => {
     const fetchArticles = async () => {
@@ -241,11 +247,11 @@ export default function ResourcesPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredArticles.map((article: Article) => {
-              const tags = parseJsonSafely<string[]>(article.tags, [])
-              // Get viewsCount safely
-              const viewsCount = getViewsCount(article)
-              // Filter out "RTLS" tag
-              const filteredTags = tags.filter((tag) => tag !== "RTLS")
+              // Get tags and filter out "RTLS" tag
+              const tags = parseJsonSafely<string[]>(article.tags, []).filter((tag) => tag.toLowerCase() !== "rtls")
+
+              // Check if article is truly popular
+              const articleIsPopular = isPopular(article)
 
               return (
                 <Link key={article.slug} href={`/resources/${article.slug}`} className="group">
@@ -268,7 +274,7 @@ export default function ResourcesPage() {
                           </Badge>
                         )}
 
-                        {viewsCount > 100 && <Badge className="bg-amber-500 hover:bg-amber-600">Popular</Badge>}
+                        {articleIsPopular && <Badge className="bg-amber-500 hover:bg-amber-600">Popular</Badge>}
 
                         {article.access_level === "members" && (
                           <Badge className="bg-gray-800 hover:bg-gray-900">Members Only</Badge>
@@ -282,7 +288,7 @@ export default function ResourcesPage() {
                       <p className="text-gray-600 mb-4 flex-1">{truncateText(article.meta_description, 120)}</p>
 
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {filteredTags.slice(0, 3).map((tag, index) => (
+                        {tags.slice(0, 3).map((tag, index) => (
                           <Badge
                             key={index}
                             variant="outline"
@@ -291,43 +297,16 @@ export default function ResourcesPage() {
                             {tag}
                           </Badge>
                         ))}
-                        {filteredTags.length > 3 && (
+                        {tags.length > 3 && (
                           <Badge variant="outline" className="bg-gray-50 text-gray-700">
-                            +{filteredTags.length - 3}
+                            +{tags.length - 3}
                           </Badge>
                         )}
                       </div>
 
                       <div className="flex items-center justify-between text-sm text-gray-500 mt-auto pt-4 border-t border-gray-100">
                         <span>{article.author}</span>
-                        <div className="flex items-center gap-4">
-                          {viewsCount > 0 && (
-                            <span className="flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 mr-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                />
-                              </svg>
-                              {viewsCount}
-                            </span>
-                          )}
-                          <time dateTime={article.publish_date}>{formatDate(article.publish_date)}</time>
-                        </div>
+                        <time dateTime={article.publish_date}>{formatDate(article.publish_date)}</time>
                       </div>
                     </div>
                   </div>
