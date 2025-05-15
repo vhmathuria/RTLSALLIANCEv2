@@ -1188,18 +1188,10 @@ export default function EcosystemClientPage() {
             Join a global community of RTLS professionals and solution providers. Get listed, establish yourself as a
             leading RTLS voice, and unlock new business opportunities in real-time location systems.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Link href="/membership">
-              <Button className="bg-yellow-400 text-blue-900 hover:bg-yellow-300 font-semibold text-lg px-6 py-2">
+              <Button className="bg-white text-blue-900 hover:bg-gray-100 font-semibold text-lg px-6 py-2">
                 Join The Alliance
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button
-                variant="outline"
-                className="text-white border-white hover:bg-white hover:text-purple-700 font-semibold text-lg px-6 py-2"
-              >
-                Contact Us
               </Button>
             </Link>
           </div>
