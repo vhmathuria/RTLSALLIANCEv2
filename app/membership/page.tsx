@@ -1,15 +1,18 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Check, X } from "lucide-react"
 import AuthButtons from "@/components/auth/auth-buttons"
-
-export const metadata = {
-  title: "Membership - RTLS Alliance",
-  description:
-    "Join the RTLS Alliance and become part of a global community driving the adoption of real-time location systems.",
-}
+import { useRouter } from "next/navigation"
 
 export default function MembershipPage() {
+  const router = useRouter()
+
+  const handleEmailSignup = () => {
+    router.push("/join-alliance")
+  }
+
   return (
     <main className="bg-white pb-16">
       <section className="py-12 text-center">
@@ -427,7 +430,7 @@ export default function MembershipPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign up securely with one click</h2>
 
           <div className="max-w-md mx-auto">
-            <AuthButtons redirectTo="/join-alliance" onEmailSignup={() => (window.location.href = "/join-alliance")} />
+            <AuthButtons redirectTo="/join-alliance" onEmailClick={handleEmailSignup} />
 
             <p className="text-xs text-gray-500 mt-4">
               We never sell or share your personal info. All account protections are updated regularly.

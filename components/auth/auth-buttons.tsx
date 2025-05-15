@@ -72,6 +72,8 @@ export function AuthButtons({ redirectTo = "/", showEmail = true, onEmailClick, 
   const handleEmailClick = () => {
     if (onEmailClick) {
       onEmailClick()
+    } else {
+      router.push(redirectTo)
     }
   }
 
