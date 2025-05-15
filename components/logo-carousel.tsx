@@ -16,18 +16,19 @@ export default function LogoCarousel({ logos }: LogoCarouselProps) {
 
   useEffect(() => {
     // Duplicate the logos array to create a seamless loop
-    setDuplicatedLogos([...logos, ...logos, ...logos])
+    // Using more duplicates to ensure the carousel stays filled
+    setDuplicatedLogos([...logos, ...logos, ...logos, ...logos, ...logos])
   }, [logos])
 
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
-    // Animation for continuous scrolling - slowed down to 60s
+    // Animation for continuous scrolling - slowed down to 120s (twice as slow)
     const animation = container.animate(
       [{ transform: "translateX(0)" }, { transform: `translateX(-${logos.length * 100}%)` }],
       {
-        duration: 60000, // 60 seconds duration
+        duration: 120000, // 120 seconds duration (slowed down from 60s)
         iterations: Number.POSITIVE_INFINITY,
         easing: "linear",
       },
@@ -44,12 +45,12 @@ export default function LogoCarousel({ logos }: LogoCarouselProps) {
         <div ref={containerRef} className="flex items-center">
           {duplicatedLogos.map((logo, index) => (
             <div key={index} className="flex-shrink-0 px-6 py-2" style={{ width: `${100 / logos.length}%` }}>
-              <div className="flex items-center justify-center h-20 grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center h-20 transition-all">
                 <Image
                   src={logo.src || "/placeholder.svg"}
                   alt={logo.alt}
-                  width={120} // Increased logo width
-                  height={60} // Increased logo height
+                  width={144} // Increased logo width by 20% (from 120 to 144)
+                  height={72} // Increased logo height by 20% (from 60 to 72)
                   className="object-contain max-h-full"
                 />
               </div>
