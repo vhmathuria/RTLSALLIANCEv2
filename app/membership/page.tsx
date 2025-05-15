@@ -5,25 +5,48 @@ import { Button } from "@/components/ui/button"
 import { Check, X } from "lucide-react"
 import AuthButtons from "@/components/auth/auth-buttons"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function MembershipPage() {
   const router = useRouter()
+  const [showDiagnostics, setShowDiagnostics] = useState(false)
 
   const handleEmailSignup = () => {
     router.push("/join-alliance")
   }
 
   return (
-    <main className="bg-white pb-16">
-      <section className="py-12 text-center">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Join the $17B+ RTLS Revolution</h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Become part of a global community driving the adoption of real-time location systems. Access knowledge, gain
-            visibility, and connect with leaders shaping the future of location intelligence.
-          </p>
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-50">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2">Join RTLS Alliance</h1>
+          <p className="text-gray-600">Connect with industry leaders and access exclusive resources</p>
         </div>
-      </section>
+
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Sign Up with One Click</h2>
+            <AuthButtons redirectTo="/join-alliance" showDiagnostics={showDiagnostics} />
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-4">
+              Already a member?{" "}
+              <Link href="/login" className="text-blue-600 hover:underline">
+                Sign in
+              </Link>
+            </p>
+
+            <Button
+              variant="link"
+              onClick={() => setShowDiagnostics(!showDiagnostics)}
+              className="text-xs text-gray-500"
+            >
+              {showDiagnostics ? "Hide Diagnostics" : "Show Diagnostics"}
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Membership Tiers */}
       <section className="py-8">
@@ -392,7 +415,7 @@ export default function MembershipPage() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                   />
                 </svg>
               </div>
@@ -420,21 +443,6 @@ export default function MembershipPage() {
               <h3 className="text-lg font-bold text-gray-900 mb-2">Co-Author Content</h3>
               <p className="text-gray-700 text-sm">Collaborate on whitepapers & reports</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sign Up Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign up securely with one click</h2>
-
-          <div className="max-w-md mx-auto">
-            <AuthButtons redirectTo="/join-alliance" onEmailClick={handleEmailSignup} />
-
-            <p className="text-xs text-gray-500 mt-4">
-              We never sell or share your personal info. All account protections are updated regularly.
-            </p>
           </div>
         </div>
       </section>
