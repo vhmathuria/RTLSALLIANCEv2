@@ -15,6 +15,8 @@ interface AuthButtonsProps {
   onEmailClick?: () => void
   className?: string
   showDiagnostics?: boolean
+  onEmailSignup?: () => void
+  tier?: string
 }
 
 export function AuthButtons({
@@ -23,6 +25,8 @@ export function AuthButtons({
   onEmailClick,
   className = "",
   showDiagnostics = false,
+  onEmailSignup,
+  tier,
 }: AuthButtonsProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({
@@ -118,6 +122,9 @@ export function AuthButtons({
     }
   }
 
+  const redirectParam = encodeURIComponent(redirectTo)
+  const tierParam = tier ? `&tier=${tier}` : ""
+
   return (
     <div className={`flex flex-col gap-3 w-full ${className}`}>
       {error && (
@@ -165,6 +172,26 @@ export function AuthButtons({
           disabled={isLoading.email || !envVarsAvailable}
         >
           <MdEmail className="h-5 w-5 text-gray-600" />
+          Sign in with Email
+        </Button>
+      )}
+
+      {onEmailSignup && (
+        <Button className="w-full flex items-center justify-center gap-3" variant="outline" onClick={onEmailSignup}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
           Sign in with Email
         </Button>
       )}

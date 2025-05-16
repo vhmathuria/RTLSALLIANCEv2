@@ -64,21 +64,41 @@ export async function GET(request: NextRequest) {
 
       // If profile doesn't exist, create one and redirect to account page
       if (profileError || !profile) {
+        console.log("Creating new user profile for:", user.id)
+
         // Extract name from user metadata if available
         const fullName = user.user_metadata?.full_name || user.user_metadata?.name || "RTLS Member"
+        console.log("Using name:", fullName)
 
-        await supabase.from("profiles").insert({
-          id: user.id,
-          email: user.email,
-          full_name: fullName,
-          membership_tier: "public",
-          membership_status: "active",
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
+        try {
+          const { data: insertData, error: insertError } = await supabase
+            .from("profiles")
+            .insert({
+              id: user.id,
+              email: user.email,
+              full_name: fullName,
+              membership_tier: "public",
+              membership_status: "active",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .select()
 
-        // For first-time users, redirect to account page
-        return NextResponse.redirect(new URL("/account", requestUrl.origin))
+          if (insertError) {
+            console.error("Error creating profile:", insertError)
+            throw insertError
+          }
+
+          console.log("Profile created successfully:", insertData)
+
+          // For first-time users, redirect to account page
+          return NextResponse.redirect(new URL("/account", requestUrl.origin))
+        } catch (insertCatchError) {
+          console.error("Exception during profile creation:", insertCatchError)
+          return NextResponse.redirect(
+            new URL(`/auth-error?error=${encodeURIComponent("Failed to create user profile")}`, requestUrl.origin),
+          )
+        }
       }
     }
 

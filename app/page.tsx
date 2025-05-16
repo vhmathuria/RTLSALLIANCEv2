@@ -196,14 +196,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Member Logos Carousel */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
-          <LogoCarousel logos={memberLogos} />
-        </div>
-      </section>
-
       {/* What The Alliance Does Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -382,6 +374,14 @@ export default async function HomePage() {
               </Button>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Member Logos Carousel - Moved to after Latest Insights */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
+          <LogoCarousel logos={memberLogos} />
         </div>
       </section>
 

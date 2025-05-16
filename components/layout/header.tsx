@@ -34,6 +34,7 @@ const navigation = [
     ],
   },
   { name: "Ecosystem", href: "/ecosystem" },
+  { name: "Certification", href: "/certification" },
   { name: "Membership", href: "/membership" },
   { name: "Contact", href: "/contact" },
 ]

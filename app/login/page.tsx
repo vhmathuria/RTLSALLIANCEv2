@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { createServerClient } from "@/lib/supabase-server"
-import { Button } from "@/components/ui/button"
+import AuthButtons from "@/components/auth/auth-buttons"
 
 export const metadata = {
   title: "Sign In - RTLS Alliance",
@@ -50,40 +50,7 @@ export default async function LoginPage({
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <div className="space-y-6">
-              <div>
-                <Button className="w-full flex items-center justify-center gap-3" variant="outline" asChild>
-                  <Link href={`/api/auth/google?redirectTo=${encodeURIComponent(redirectTo)}`}>
-                    <Image src="/google-logo.png" alt="Google" width={20} height={20} />
-                    Sign in with Google
-                  </Link>
-                </Button>
-              </div>
-
-              <div>
-                <Button className="w-full flex items-center justify-center gap-3" variant="outline" asChild>
-                  <Link href={`/api/auth/linkedin?redirectTo=${encodeURIComponent(redirectTo)}`}>
-                    <Image src="/linkedin-logo.png" alt="LinkedIn" width={20} height={20} />
-                    Sign in with LinkedIn
-                  </Link>
-                </Button>
-              </div>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                </div>
-              </div>
-
-              <div>
-                <Button className="w-full" asChild>
-                  <Link href="/join-alliance">Create an Account</Link>
-                </Button>
-              </div>
-            </div>
+            <AuthButtons redirectTo={redirectTo} />
           </div>
         </div>
       </div>

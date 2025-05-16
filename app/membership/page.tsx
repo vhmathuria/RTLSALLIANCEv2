@@ -4,9 +4,40 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Check, X, Users, GraduationCap, Building, ArrowRight } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 export default function MembershipPage() {
   const router = useRouter()
+  const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserAndProfile = async () => {
+      const supabase = createClientComponentClient()
+
+      // Get the current user
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser()
+
+      if (currentUser) {
+        setUser(currentUser)
+
+        // Get the user's profile
+        const { data: userProfile } = await supabase.from("profiles").select("*").eq("id", currentUser.id).single()
+
+        if (userProfile) {
+          setProfile(userProfile)
+        }
+      }
+
+      setLoading(false)
+    }
+
+    fetchUserAndProfile()
+  }, [])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-50">
@@ -22,6 +53,26 @@ export default function MembershipPage() {
           </p>
         </div>
       </section>
+
+      {/* Current Membership (only shown when logged in) */}
+      {user && profile && (
+        <div className="w-full max-w-6xl mx-auto mb-8 bg-blue-50 p-6 rounded-lg border border-blue-100">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">Your Current Membership</h3>
+              <p className="text-gray-700">
+                You are currently on the <span className="font-semibold capitalize">{profile.membership_tier}</span>{" "}
+                plan.
+              </p>
+            </div>
+            <div className="mt-4 md:mt-0">
+              <Link href="/account">
+                <Button variant="outline">Manage Membership</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Membership Tiers */}
       <section className="py-8 w-full max-w-6xl mx-auto">
@@ -77,9 +128,17 @@ export default function MembershipPage() {
               </ul>
             </div>
             <div className="px-6 pb-6 mt-auto">
-              <Link href="/join-alliance?tier=student">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">Join as a Student</Button>
-              </Link>
+              {user ? (
+                <Link href="/membership/upgrade?tier=student">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {profile?.membership_tier === "student" ? "Current Plan" : "Upgrade to Student"}
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/join-alliance?tier=student">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">Join as a Student</Button>
+                </Link>
+              )}
             </div>
           </div>
 
@@ -139,9 +198,17 @@ export default function MembershipPage() {
               </ul>
             </div>
             <div className="px-6 pb-6 mt-auto">
-              <Link href="/join-alliance?tier=professional">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">Join as a Professional</Button>
-              </Link>
+              {user ? (
+                <Link href="/membership/upgrade?tier=professional">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {profile?.membership_tier === "professional" ? "Current Plan" : "Upgrade to Professional"}
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/join-alliance?tier=professional">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">Join as a Professional</Button>
+                </Link>
+              )}
             </div>
           </div>
 
@@ -198,9 +265,17 @@ export default function MembershipPage() {
               </ul>
             </div>
             <div className="px-6 pb-6 mt-auto">
-              <Link href="/join-alliance?tier=vendor">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">Join as a Vendor</Button>
-              </Link>
+              {user ? (
+                <Link href="/membership/upgrade?tier=vendor">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {profile?.membership_tier === "vendor" ? "Current Plan" : "Upgrade to Vendor"}
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/join-alliance?tier=vendor">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">Join as a Vendor</Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

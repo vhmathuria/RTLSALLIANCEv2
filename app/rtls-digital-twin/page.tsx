@@ -339,7 +339,7 @@ export default function RTLSDigitalTwinPage() {
               <Button className="bg-white text-blue-700 hover:bg-blue-50">Contact an Expert</Button>
             </Link>
             <Link href="/resources">
-              <Button variant="outline" className="text-white border-white hover:bg-blue-700">
+              <Button variant="outline" className="bg-transparent text-white border-white hover:bg-blue-700">
                 View Resources
               </Button>
             </Link>

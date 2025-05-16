@@ -10,10 +10,10 @@ export const metadata = {
 export default function CertificationPage() {
   return (
     <main className="bg-white pb-16">
-      <section className="py-12 text-center">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">RTLS Alliance Certification Program</h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl font-bold mb-4">RTLS Alliance Certification Program</h1>
+          <p className="text-xl max-w-3xl mx-auto">
             Validate your expertise and accelerate your career with industry-recognized RTLS certifications
           </p>
         </div>
@@ -25,7 +25,7 @@ export default function CertificationPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Who Should Take These Courses?</h2>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-blue-50 rounded-lg p-6">
+            <div className="bg-blue-50 rounded-lg p-6 h-full">
               <div className="flex items-center mb-4">
                 <Users className="h-6 w-6 text-blue-600 mr-3" />
                 <h3 className="text-lg font-bold text-gray-900">Professionals</h3>
@@ -35,7 +35,7 @@ export default function CertificationPage() {
               </p>
             </div>
 
-            <div className="bg-blue-50 rounded-lg p-6">
+            <div className="bg-blue-50 rounded-lg p-6 h-full">
               <div className="flex items-center mb-4">
                 <Building className="h-6 w-6 text-blue-600 mr-3" />
                 <h3 className="text-lg font-bold text-gray-900">Organizations</h3>
@@ -45,7 +45,7 @@ export default function CertificationPage() {
               </p>
             </div>
 
-            <div className="bg-blue-50 rounded-lg p-6">
+            <div className="bg-blue-50 rounded-lg p-6 h-full">
               <div className="flex items-center mb-4">
                 <Lightbulb className="h-6 w-6 text-blue-600 mr-3" />
                 <h3 className="text-lg font-bold text-gray-900">Consultants</h3>
@@ -63,8 +63,8 @@ export default function CertificationPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Certified RTLS Professional */}
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <div className="p-6">
+            <div className="border border-gray-200 rounded-lg overflow-hidden h-full flex flex-col">
+              <div className="p-6 flex-1">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
                     <svg
@@ -133,7 +133,7 @@ export default function CertificationPage() {
                 </div>
 
                 <div className="text-gray-700 mb-4">
-                  <p>Duration: 8 hours online</p>
+                  <p>Duration: 4 hours online</p>
                   <p>Price: $399</p>
                 </div>
               </div>
@@ -145,8 +145,8 @@ export default function CertificationPage() {
             </div>
 
             {/* Certified RTLS Expert */}
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <div className="p-6">
+            <div className="border border-gray-200 rounded-lg overflow-hidden h-full flex flex-col">
+              <div className="p-6 flex-1">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
                     <svg
@@ -266,7 +266,7 @@ export default function CertificationPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-1">Online Training</h3>
-                  <p className="text-gray-700">Complete the 8-hour online training program</p>
+                  <p className="text-gray-700">Complete the online training program</p>
                 </div>
               </div>
             </div>
