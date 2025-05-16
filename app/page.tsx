@@ -271,9 +271,9 @@ export default async function HomePage() {
           <div className="grid md:grid-cols-4 gap-8 mt-16">
             <div className="text-center">
               <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                $17B
+                $24B
               </h3>
-              <p className="text-gray-700">RTLS Market Growth</p>
+              <p className="text-gray-700">Global RTLS Market by 2029</p>
             </div>
 
             <div className="text-center">
@@ -285,16 +285,16 @@ export default async function HomePage() {
 
             <div className="text-center">
               <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                28+
+                $4.3B
               </h3>
-              <p className="text-gray-700">Contributing Professionals</p>
+              <p className="text-gray-700">Invested in RTLS startups since 2020</p>
             </div>
 
             <div className="text-center">
               <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                108+
+                137%
               </h3>
-              <p className="text-gray-700">Success Stories</p>
+              <p className="text-gray-700">Increase in RTLS jobs since 2021</p>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,6 +15,13 @@ import { createSupabaseClient } from "@/lib/supabase-auth"
 import { GraduationCap, Briefcase, Building, User, MapPin, BookOpen, GroupIcon as CompanyIcon } from "lucide-react"
 
 export default function AccountProfile({ user, profile }: { user: any; profile: any }) {
+  console.log("Profile data:", profile)
+  console.log("Membership details:", {
+    tier: profile?.membership_tier,
+    status: profile?.membership_status,
+    expiry: profile?.membership_expiry,
+  })
+
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     full_name: profile?.full_name || "",
@@ -25,6 +32,39 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
   })
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState({ type: "", text: "" })
+  const [membershipDetails, setMembershipDetails] = useState({
+    tier: profile?.membership_tier || "public",
+    status: profile?.membership_status || "inactive",
+    expiry: profile?.membership_expiry || null,
+  })
+
+  // Fetch latest membership details on component mount
+  useEffect(() => {
+    const fetchMembershipDetails = async () => {
+      try {
+        const supabase = createSupabaseClient()
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("membership_tier, membership_status, membership_expiry")
+          .eq("id", user.id)
+          .single()
+
+        if (error) throw error
+
+        if (data) {
+          setMembershipDetails({
+            tier: data.membership_tier || "public",
+            status: data.membership_status || "inactive",
+            expiry: data.membership_expiry,
+          })
+        }
+      } catch (error) {
+        console.error("Error fetching membership details:", error)
+      }
+    }
+
+    fetchMembershipDetails()
+  }, [user.id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -54,7 +94,7 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
 
   // Helper function to get membership tier badge
   const getMembershipBadge = () => {
-    const tier = profile?.membership_tier || "public"
+    const tier = membershipDetails.tier || "public"
 
     const tierConfig = {
       public: {
@@ -87,6 +127,12 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
         {config.label} Membership
       </Badge>
     )
+  }
+
+  // Format membership tier for display
+  const formatMembershipTier = (tier: string) => {
+    if (!tier) return "Public"
+    return tier.charAt(0).toUpperCase() + tier.slice(1)
   }
 
   return (
@@ -269,20 +315,22 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
                 <div className="mr-4">{getMembershipBadge()}</div>
                 <div>
                   <h3 className="text-lg font-semibold">
-                    {profile?.membership_tier === "public" ? "Free Account" : `${profile?.membership_tier} Membership`}
+                    {membershipDetails.tier === "public"
+                      ? "Free Account"
+                      : `${formatMembershipTier(membershipDetails.tier)} Membership`}
                   </h3>
-                  <p className="text-gray-500">{profile?.membership_status === "active" ? "Active" : "Inactive"}</p>
+                  <p className="text-gray-500">{membershipDetails.status === "active" ? "Active" : "Inactive"}</p>
                 </div>
               </div>
 
-              {profile?.membership_expiry && (
+              {membershipDetails.expiry && (
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Membership Expiry</h4>
-                  <p className="text-gray-700">{new Date(profile.membership_expiry).toLocaleDateString()}</p>
+                  <p className="text-gray-700">{new Date(membershipDetails.expiry).toLocaleDateString()}</p>
                 </div>
               )}
 
-              {profile?.membership_tier === "public" ? (
+              {membershipDetails.tier === "public" ? (
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-medium text-blue-800 mb-2">Upgrade Your Membership</h4>
                   <p className="text-blue-700 mb-4">

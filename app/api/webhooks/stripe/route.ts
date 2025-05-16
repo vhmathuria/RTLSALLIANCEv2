@@ -45,6 +45,18 @@ export async function POST(req: NextRequest) {
 
           // Update user membership
           await updateMembership(userId, membershipTier, subscription.id, expiryDate)
+
+          // Directly update the profile in case the server action fails
+          const supabase = createClient()
+          await supabase
+            .from("profiles")
+            .update({
+              membership_tier: membershipTier,
+              membership_status: "active",
+              membership_expiry: expiryDate.toISOString(),
+              last_payment_date: new Date().toISOString(),
+            })
+            .eq("id", userId)
         }
 
         break
@@ -95,6 +107,17 @@ export async function POST(req: NextRequest) {
 
         // Update user membership
         await updateMembership(profile.id, membershipTier, subscription.id, expiryDate)
+
+        // Directly update the profile in case the server action fails
+        await supabase
+          .from("profiles")
+          .update({
+            membership_tier: membershipTier,
+            membership_status: "active",
+            membership_expiry: expiryDate.toISOString(),
+            last_payment_date: new Date().toISOString(),
+          })
+          .eq("id", profile.id)
 
         break
       }

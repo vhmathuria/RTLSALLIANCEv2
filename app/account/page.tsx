@@ -1,39 +1,44 @@
+import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
-import { createServerClient } from "@/lib/supabase-server"
 import AccountProfile from "./account-profile"
 
-export const metadata = {
-  title: "My Account - RTLS Alliance",
-  description: "Manage your RTLS Alliance account and membership",
-}
-
 export default async function AccountPage() {
-  const supabase = createServerClient()
+  const supabase = createClient()
 
-  // Get the current user
+  // Get current user
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // If no user is logged in, redirect to login
+  // Redirect to login if not authenticated
   if (!user) {
-    redirect("/login?redirectTo=/account")
+    redirect("/login?redirect=/account")
   }
 
-  // Get the user's profile
+  // Get user profile
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
 
-  return (
-    <div className="bg-gray-50 min-h-screen py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">My Account</h1>
+  // If no profile exists, create one
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      id: user.id,
+      email: user.email,
+      membership_tier: "public",
+      membership_status: "inactive",
+    })
+  }
 
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <AccountProfile user={user} profile={profile} />
-          </div>
+  // Get the latest profile data
+  const { data: updatedProfile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+
+  return (
+    <main className="py-12">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-8">Your Account</h1>
+          <AccountProfile user={user} profile={updatedProfile} />
         </div>
       </div>
-    </div>
+    </main>
   )
 }

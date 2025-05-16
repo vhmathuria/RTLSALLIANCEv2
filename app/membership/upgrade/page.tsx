@@ -10,7 +10,7 @@ export const metadata = {
   description: "Upgrade your RTLS Alliance membership to access premium content",
 }
 
-export default async function MembershipUpgradePage() {
+export default async function MembershipUpgradePage({ searchParams }: { searchParams: { tier?: string } }) {
   // Check if user is logged in
   const supabase = createServerClient()
   const {
@@ -26,6 +26,9 @@ export default async function MembershipUpgradePage() {
   const { data: profile } = await supabase.from("profiles").select("membership_tier").eq("id", user.id).single()
 
   const currentTier = profile?.membership_tier || "public"
+
+  // Get the selected tier from the URL query parameter
+  const selectedTier = searchParams.tier || "all"
 
   // Define membership tiers
   const tiers = [
@@ -71,7 +74,7 @@ export default async function MembershipUpgradePage() {
     {
       id: "corporate",
       name: "Corporate",
-      price: "$3,500",
+      price: "$4,500",
       period: "per year",
       description: "For organizations and teams",
       icon: <Building className="h-8 w-8 text-green-500" />,
@@ -91,6 +94,9 @@ export default async function MembershipUpgradePage() {
     },
   ]
 
+  // Filter tiers based on the selected tier
+  const displayTiers = selectedTier === "all" ? tiers : tiers.filter((tier) => tier.id === selectedTier)
+
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="container mx-auto px-4">
@@ -98,12 +104,16 @@ export default async function MembershipUpgradePage() {
           <div className="text-center mb-12">
             <h1 className="text-3xl font-bold mb-4">Upgrade Your Membership</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose the membership tier that best fits your needs and unlock premium content and features
+              {selectedTier === "all"
+                ? "Choose the membership tier that best fits your needs and unlock premium content and features"
+                : `Upgrade to our ${displayTiers[0]?.name} membership to unlock premium content and features`}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {tiers.map((tier) => (
+          <div
+            className={`grid gap-8 ${displayTiers.length > 1 ? "md:grid-cols-3" : "md:grid-cols-1 max-w-md mx-auto"}`}
+          >
+            {displayTiers.map((tier) => (
               <Card key={tier.id} className={`relative ${tier.recommended ? "border-2 " + tier.color : ""}`}>
                 {tier.recommended && (
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium">

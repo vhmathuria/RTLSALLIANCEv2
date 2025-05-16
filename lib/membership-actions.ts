@@ -138,21 +138,32 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
 export async function updateMembership(userId: string, tier: string, subscriptionId: string, expiryDate?: Date) {
   const supabase = createClient()
 
-  await supabase
-    .from("profiles")
-    .update({
-      membership_tier: tier,
-      membership_status: "active",
-      membership_expiry: expiryDate?.toISOString() || null,
-      last_payment_date: new Date().toISOString(),
-    })
-    .eq("id", userId)
+  try {
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        membership_tier: tier,
+        membership_status: "active",
+        membership_expiry: expiryDate?.toISOString() || null,
+        last_payment_date: new Date().toISOString(),
+      })
+      .eq("id", userId)
 
-  // Revalidate paths that might show different content based on membership
-  revalidatePath("/resources")
-  revalidatePath("/membership")
+    if (error) {
+      console.error("Error updating membership:", error)
+      throw error
+    }
 
-  return { success: true }
+    // Revalidate paths that might show different content based on membership
+    revalidatePath("/resources")
+    revalidatePath("/membership")
+    revalidatePath("/account")
+
+    return { success: true }
+  } catch (error) {
+    console.error("Failed to update membership:", error)
+    return { success: false, error }
+  }
 }
 
 // Get current user's membership info

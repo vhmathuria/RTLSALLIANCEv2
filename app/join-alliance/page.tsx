@@ -1,15 +1,30 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { BarChartIcon as ChartBar, Globe, Award, Building, Zap, Users } from "lucide-react"
+import { BarChartIcon as ChartBar, Globe, Award, Building, Zap, Users, LogIn } from "lucide-react"
 import EmailSignupForm from "@/components/auth/email-signup-form"
+import { createSupabaseClient } from "@/lib/supabase-auth"
 
 export default function JoinAlliancePage() {
   const [showEmailForm, setShowEmailForm] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Check if user is signed in
+  useEffect(() => {
+    const checkUser = async () => {
+      const supabase = createSupabaseClient()
+      const { data } = await supabase.auth.getUser()
+      setUser(data.user)
+      setLoading(false)
+    }
+
+    checkUser()
+  }, [])
 
   return (
     <main className="bg-white pb-16">
@@ -26,7 +41,9 @@ export default function JoinAlliancePage() {
 
       <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-4xl mx-auto">
+            {" "}
+            {/* Increased max-width from 3xl to 4xl */}
             {/* Sign in with social options */}
             <div className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg border border-blue-200 shadow-md">
               {showEmailForm ? (
@@ -35,6 +52,24 @@ export default function JoinAlliancePage() {
                   redirectTo="/join-alliance"
                   tier="professional"
                 />
+              ) : user ? (
+                <div className="text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                      <LogIn className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">You're Signed In!</h2>
+                  <p className="text-gray-600 mb-4">Welcome to the RTLS Alliance, {user.email}</p>
+                  <div className="flex justify-center gap-4">
+                    <Button asChild>
+                      <Link href="/account">View Your Account</Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link href="/resources">Explore Resources</Link>
+                    </Button>
+                  </div>
+                </div>
               ) : (
                 <>
                   <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign Up with One Click</h2>
@@ -64,7 +99,6 @@ export default function JoinAlliancePage() {
                 </>
               )}
             </div>
-
             {/* Why RTLS Matters Section */}
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -222,7 +256,6 @@ export default function JoinAlliancePage() {
                 </div>
               </div>
             </div>
-
             {/* FAQ Section */}
             <div className="mb-12">
               <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
@@ -243,7 +276,7 @@ export default function JoinAlliancePage() {
                   <AccordionTrigger className="text-left">How much does membership cost?</AccordionTrigger>
                   <AccordionContent>
                     We offer tiered membership options: Student ($100/year), Professional ($550/year), and Vendor
-                    ($3,500/year). Each tier provides different levels of access and benefits tailored to your needs.
+                    ($4,500/year). Each tier provides different levels of access and benefits tailored to your needs.
                   </AccordionContent>
                 </AccordionItem>
 
