@@ -5,6 +5,7 @@ import type { Article } from "@/types/article"
 import { formatDate, truncateText, parseJsonSafely } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Filter, Search } from "lucide-react"
+import MemberOnlyBadge from "@/components/member-only-badge"
 
 export const metadata = {
   title: "Resources - RTLS Alliance",
@@ -94,6 +95,7 @@ export default async function ResourcesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedArticles.map((article: Article) => {
               const tags = parseJsonSafely<string[]>(article.tags, [])
+              const membershipTier = article.membership_tier || "public"
 
               return (
                 <Link key={article.slug} href={`/resources/${article.slug}`} className="group">
@@ -115,6 +117,9 @@ export default async function ResourcesPage() {
                             {article.content_type}
                           </Badge>
                         )}
+
+                        {/* Member-Only Badge */}
+                        {membershipTier !== "public" && <MemberOnlyBadge tier={membershipTier as any} />}
 
                         {tags
                           .filter((tag) => tag !== "RTLS")

@@ -1,89 +1,68 @@
-"use client"
-
-import { useState } from "react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Lock, GraduationCap, Briefcase, Building } from "lucide-react"
+
+type MembershipTier = "public" | "student" | "professional" | "corporate"
 
 interface ContentGateProps {
-  requiredTier: "student" | "professional" | "corporate"
-  userTier: string
+  requiredTier: MembershipTier
+  userTier: MembershipTier
 }
 
 export default function ContentGate({ requiredTier, userTier }: ContentGateProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-
-  // Map tiers to human-readable names and descriptions
   const tierInfo = {
     student: {
-      name: "Student Membership",
+      name: "Student",
+      icon: <GraduationCap className="h-8 w-8 text-blue-500" />,
+      description: "Access to student-level content, perfect for academic research and learning.",
       price: "$100/year",
-      description: "Access to educational resources and case studies for academic research.",
     },
     professional: {
-      name: "Professional Membership",
+      name: "Professional",
+      icon: <Briefcase className="h-8 w-8 text-purple-500" />,
+      description: "Full access to professional resources, case studies, and implementation guides.",
       price: "$550/year",
-      description: "Comprehensive access to professional resources, implementation guides, and industry insights.",
     },
     corporate: {
-      name: "Corporate Membership",
+      name: "Corporate",
+      icon: <Building className="h-8 w-8 text-green-500" />,
+      description: "Complete access to all RTLS Alliance content plus team collaboration features.",
       price: "$3,500/year",
-      description:
-        "Full access to all resources, including enterprise case studies, strategic analysis, and priority support.",
     },
   }
 
-  const info = tierInfo[requiredTier as keyof typeof tierInfo]
+  const tierToShow = tierInfo[requiredTier as keyof typeof tierInfo] || tierInfo.professional
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 my-8">
-      <div className="flex flex-col items-center text-center">
-        <div className="bg-blue-100 p-3 rounded-full mb-4">
-          <svg
-            className="w-8 h-8 text-blue-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
-          </svg>
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-3xl mx-auto">
+      <div className="text-center mb-6">
+        <div className="bg-gray-100 p-4 inline-block rounded-full mb-4">
+          <Lock className="h-10 w-10 text-gray-500" />
         </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Members-Only Content</h2>
+        <p className="text-gray-600">This content requires a {tierToShow.name} membership or higher to access.</p>
+      </div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-2">This content requires {info.name}</h3>
-
-        <p className="text-gray-600 mb-4">
-          This resource is available exclusively to members with {info.name} or higher.
-        </p>
-
-        {isExpanded && (
-          <div className="mb-4">
-            <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-              <h4 className="font-semibold text-gray-900 mb-1">{info.name}</h4>
-              <p className="text-gray-600 mb-2">{info.price}</p>
-              <p className="text-sm text-gray-500">{info.description}</p>
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Link
-            href="/membership"
-            className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-          >
-            Upgrade Membership
+      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div className="flex items-center mb-4">
+          {tierToShow.icon}
+          <h3 className="text-xl font-semibold ml-3">{tierToShow.name} Membership</h3>
+        </div>
+        <p className="text-gray-600 mb-4">{tierToShow.description}</p>
+        <div className="flex justify-between items-center">
+          <span className="text-lg font-bold">{tierToShow.price}</span>
+          <Link href="/membership/upgrade">
+            <Button>Upgrade Membership</Button>
           </Link>
-
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="inline-flex items-center justify-center px-5 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-          >
-            {isExpanded ? "Show Less" : "Learn More"}
-          </button>
         </div>
+      </div>
+
+      <div className="text-center text-gray-500 text-sm">
+        Already have a membership?{" "}
+        <Link href="/login" className="text-blue-600 hover:underline">
+          Sign in
+        </Link>{" "}
+        to access this content.
       </div>
     </div>
   )

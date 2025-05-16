@@ -1,108 +1,95 @@
-import type { Metadata } from "next"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
+import { createServerClient } from "@/lib/supabase-server"
 import { getArticleBySlug } from "@/lib/supabase"
-import type { Article } from "@/types/article"
 import GuideRenderer from "@/components/renderers/guide/guide-renderer"
-import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
 import SuccessStoryRenderer from "@/components/renderers/success-story/success-story-renderer"
+import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
 import MemberInsightRenderer from "@/components/renderers/member-insight/member-insight-renderer"
 import ContentGate from "@/components/content-gate"
-import { checkMembershipAccess, getCurrentMembership } from "@/lib/membership-actions"
-import { createClient } from "@/lib/supabase-server"
 
-interface ResourcePageProps {
-  params: {
-    slug: string
-  }
-}
-
-export async function generateMetadata({ params }: ResourcePageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
     return {
-      title: "Article Not Found",
+      title: "Article Not Found - RTLS Alliance",
       description: "The requested article could not be found.",
     }
   }
 
   return {
-    title: article.title,
-    description: article.meta_description,
-    openGraph: {
-      title: article.title,
-      description: article.meta_description,
-      type: "article",
-      publishedTime: article.publish_date,
-      authors: [article.author],
-      images: article.thumbnail_image ? [article.thumbnail_image] : [],
-    },
+    title: `${article.title} - RTLS Alliance`,
+    description: article.meta_description || `Read about ${article.title} on RTLS Alliance.`,
   }
 }
 
-export default async function ResourcePage({ params }: ResourcePageProps) {
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
     notFound()
   }
 
-  // Check if user is logged in
-  const supabase = createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  // Get article membership tier (default to public if not set)
+  // Check if article requires membership
   const requiredTier = article.membership_tier || "public"
 
-  // Check if user has access to this article
-  const hasAccess = await checkMembershipAccess(requiredTier)
+  // If article is public, no need to check membership
+  if (requiredTier !== "public") {
+    // Get current user
+    const supabase = createServerClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  // If user doesn't have access and not logged in, redirect to login
-  if (!hasAccess && !user) {
-    redirect(`/login?redirectTo=/resources/${params.slug}`)
+    // If no user is logged in and content is gated, show content gate
+    if (!user) {
+      return <ContentGate requiredTier={requiredTier as any} userTier="public" />
+    }
+
+    // Get user profile to check membership tier
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("membership_tier, membership_status, membership_expiry")
+      .eq("id", user.id)
+      .single()
+
+    // Define tier levels for comparison
+    const tierLevels = {
+      public: 0,
+      student: 1,
+      professional: 2,
+      corporate: 3,
+    }
+
+    // Check if user has access
+    const userTier = profile?.membership_tier || "public"
+    const userTierLevel = tierLevels[userTier as keyof typeof tierLevels] || 0
+    const requiredTierLevel = tierLevels[requiredTier as keyof typeof tierLevels] || 0
+
+    // If user's tier is lower than required, show content gate
+    if (userTierLevel < requiredTierLevel) {
+      return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
+    }
   }
 
-  // Get current user's membership info for the content gate
-  const membership = await getCurrentMembership()
-
-  // Log the article content type for debugging
-  console.log(`Rendering article with content_type: ${article.content_type}`)
-
-  return (
-    <main>
-      {/* Show content gate if user doesn't have access */}
-      {!hasAccess && requiredTier !== "public" && (
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">{article.title}</h1>
-          <ContentGate requiredTier={requiredTier as any} userTier={membership.tier} />
+  // Render the appropriate article type
+  switch (article.content_type) {
+    case "Guide":
+      return <GuideRenderer article={article} />
+    case "Success Story":
+      return <SuccessStoryRenderer article={article} />
+    case "Technology Comparison":
+      return <TechnologyComparisonRenderer article={article} />
+    case "Member Insight":
+      return <MemberInsightRenderer article={article} />
+    default:
+      return (
+        <div className="container mx-auto px-4 py-12">
+          <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
+          <div className="prose max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: article.content }} />
+          </div>
         </div>
-      )}
-
-      {/* Show article content if user has access */}
-      {hasAccess && (
-        <>
-          {article.content_type === "Guide" && <GuideRenderer article={article as Article} />}
-          {article.content_type === "Technology Comparison" && (
-            <TechnologyComparisonRenderer article={article as Article} />
-          )}
-          {article.content_type === "Success Story" && <SuccessStoryRenderer article={article as Article} />}
-          {article.content_type === "Member Insight" && <MemberInsightRenderer article={article as Article} />}
-
-          {/* Fallback for unknown content types */}
-          {!["Guide", "Technology Comparison", "Success Story", "Member Insight"].includes(article.content_type) && (
-            <div className="container mx-auto px-4 py-12">
-              <div className="text-center">
-                <h2 className="text-2xl font-bold text-gray-800">Unsupported Content Type</h2>
-                <p className="text-gray-600 mt-2">
-                  The content type "{article.content_type}" is not currently supported.
-                </p>
-              </div>
-            </div>
-          )}
-        </>
-      )}
-    </main>
-  )
+      )
+  }
 }

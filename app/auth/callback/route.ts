@@ -49,15 +49,45 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Get the user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (user) {
+      // Check if profile exists
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single()
+
+      // If profile doesn't exist, create one and redirect to account page
+      if (profileError || !profile) {
+        // Extract name from user metadata if available
+        const fullName = user.user_metadata?.full_name || user.user_metadata?.name || "RTLS Member"
+
+        await supabase.from("profiles").insert({
+          id: user.id,
+          email: user.email,
+          full_name: fullName,
+          membership_tier: "public",
+          membership_status: "active",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+
+        // For first-time users, redirect to account page
+        return NextResponse.redirect(new URL("/account", requestUrl.origin))
+      }
+    }
+
     // Get the full origin from the request
     const origin = requestUrl.origin
 
-    // Construct the full redirect URL using the origin
+    // For returning users, redirect to the requested page
     const redirectUrl = new URL(next, origin)
-
     console.log("Redirecting to:", redirectUrl.toString())
-
-    // Redirect to the intended destination
     return NextResponse.redirect(redirectUrl)
   } catch (error: any) {
     console.error("Unexpected error in auth callback:", error)
