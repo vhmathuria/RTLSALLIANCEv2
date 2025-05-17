@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import { FaGoogle, FaLinkedin } from "react-icons/fa"
+import { AlertCircle } from "lucide-react"
 
 export default function AuthPage() {
   const router = useRouter()
@@ -18,6 +19,11 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState(defaultTab)
+  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({
+    google: false,
+    linkedin_oidc: false,
+  })
+  const [isPreviewEnvironment, setIsPreviewEnvironment] = useState<boolean>(false)
 
   // Check if user is signed in
   useEffect(() => {
@@ -39,8 +45,66 @@ export default function AuthPage() {
       }
     }
 
+    // Check if we're in a preview environment
+    const hostname = window.location.hostname
+    const isPreview =
+      hostname.includes("vercel.app") &&
+      !hostname.startsWith("www") &&
+      (hostname.includes("-") || hostname.includes("git"))
+
+    setIsPreviewEnvironment(isPreview)
+    console.log("Environment detection:", { hostname, isPreview })
+
     checkUser()
   }, [redirectTo, router])
+
+  const handleOAuthSignIn = async (provider: "google" | "linkedin_oidc") => {
+    try {
+      setIsLoading((prev) => ({ ...prev, [provider]: true }))
+      setError(null)
+
+      // Get the current origin
+      const origin = window.location.origin
+      console.log("Current origin:", origin)
+
+      console.log("Environment detection in sign-in:", {
+        hostname: window.location.hostname,
+        isPreview: isPreviewEnvironment,
+        origin,
+      })
+
+      // Check if we're in a preview environment
+      const isPreview = isPreviewEnvironment
+
+      if (isPreview) {
+        setError(
+          "OAuth sign-in is limited in preview environments. For testing, please use the deployed production URL or add this preview URL to your OAuth provider's allowed redirect URIs.",
+        )
+        setIsLoading((prev) => ({ ...prev, [provider]: false }))
+        return
+      }
+
+      // Dynamically import to avoid errors when env vars aren't available
+      const supabase = createSupabaseClient()
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        },
+      })
+
+      if (error) {
+        console.error(`Error signing in with ${provider}:`, error)
+        setError(`Failed to sign in with ${provider}: ${error.message}`)
+      }
+    } catch (err: any) {
+      console.error(`Unexpected error during ${provider} sign-in:`, err)
+      setError(`An unexpected error occurred: ${err.message}`)
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [provider]: false }))
+    }
+  }
 
   if (loading) {
     return (
@@ -111,7 +175,20 @@ export default function AuthPage() {
         <div className="mt-6 sm:mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-6 sm:py-10 sm:px-8 shadow-xl rounded-xl border border-gray-100">
             {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">{error}</div>
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md flex items-start">
+                <AlertCircle className="text-red-500 mr-2 flex-shrink-0 mt-0.5" size={16} />
+                <p className="text-sm text-red-800">{error}</p>
+              </div>
+            )}
+
+            {isPreviewEnvironment && (
+              <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-4">
+                <h3 className="font-medium text-amber-800">Preview Environment Detected</h3>
+                <p className="text-sm text-amber-700 mt-1">
+                  OAuth authentication may not work in preview environments due to redirect URI restrictions. For
+                  testing, use the production URL or configure your OAuth providers to allow this preview URL.
+                </p>
+              </div>
             )}
 
             <Tabs defaultValue={defaultTab} className="w-full">
@@ -120,23 +197,21 @@ export default function AuthPage() {
                   <Button
                     variant="outline"
                     className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
-                    asChild
+                    onClick={() => handleOAuthSignIn("google")}
+                    disabled={isLoading.google}
                   >
-                    <Link href={`/api/auth/google?redirectTo=${encodeURIComponent(redirectTo)}`}>
-                      <FaGoogle className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
-                      <span>Sign in with Google</span>
-                    </Link>
+                    <FaGoogle className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+                    <span>{isLoading.google ? "Signing in..." : "Sign in with Google"}</span>
                   </Button>
 
                   <Button
                     variant="outline"
                     className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
-                    asChild
+                    onClick={() => handleOAuthSignIn("linkedin_oidc")}
+                    disabled={isLoading.linkedin_oidc}
                   >
-                    <Link href={`/api/auth/linkedin?redirectTo=${encodeURIComponent(redirectTo)}`}>
-                      <FaLinkedin className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
-                      <span>Sign in with LinkedIn</span>
-                    </Link>
+                    <FaLinkedin className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                    <span>{isLoading.linkedin_oidc ? "Signing in..." : "Sign in with LinkedIn"}</span>
                   </Button>
 
                   <div className="text-center text-sm text-gray-500 mt-4 px-4">
@@ -158,23 +233,21 @@ export default function AuthPage() {
                   <Button
                     variant="outline"
                     className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
-                    asChild
+                    onClick={() => handleOAuthSignIn("google")}
+                    disabled={isLoading.google}
                   >
-                    <Link href={`/api/auth/google?redirectTo=${encodeURIComponent(redirectTo)}`}>
-                      <FaGoogle className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
-                      <span>Sign up with Google</span>
-                    </Link>
+                    <FaGoogle className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+                    <span>{isLoading.google ? "Signing up..." : "Sign up with Google"}</span>
                   </Button>
 
                   <Button
                     variant="outline"
                     className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
-                    asChild
+                    onClick={() => handleOAuthSignIn("linkedin_oidc")}
+                    disabled={isLoading.linkedin_oidc}
                   >
-                    <Link href={`/api/auth/linkedin?redirectTo=${encodeURIComponent(redirectTo)}`}>
-                      <FaLinkedin className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
-                      <span>Sign up with LinkedIn</span>
-                    </Link>
+                    <FaLinkedin className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                    <span>{isLoading.linkedin_oidc ? "Signing up..." : "Sign up with LinkedIn"}</span>
                   </Button>
 
                   <div className="text-center text-sm text-gray-500 mt-4 px-4">
