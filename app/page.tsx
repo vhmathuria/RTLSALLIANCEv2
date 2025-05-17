@@ -127,7 +127,7 @@ export default async function HomePage() {
                 Enable your project to thrive in a neutral, trusted home, where we'll help you scale with unmatched
                 speed and ROI.
               </p>
-              <Link href="/projects" className="mt-auto">
+              <Link href="/project" className="mt-auto">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl">
                   Learn More
                 </Button>
@@ -227,7 +227,7 @@ export default async function HomePage() {
                 Discover RTLS practitioners, consultants, academics, and vendor experts shaping real-time location
                 intelligence globally. Build partnerships and join cross-sector collaboration.
               </p>
-              <Link href="/ecosystem/directory" className="mt-auto">
+              <Link href="/ecosystem" className="mt-auto">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl">
                   Learn More
                 </Button>
@@ -259,7 +259,7 @@ export default async function HomePage() {
                 Our vendor-neutral experts help de-risk RTLS deployments. Get strategic support across planning, vendor
                 selection, system design, and ROI modeling—all aligned to your environment.
               </p>
-              <Link href="/consulting" className="mt-auto">
+              <Link href="/project" className="mt-auto">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl">
                   Learn More
                 </Button>
@@ -407,7 +407,7 @@ export default async function HomePage() {
             the RTLS field.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/membership">
+            <Link href="/join-alliance">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"

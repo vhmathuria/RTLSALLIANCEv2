@@ -74,7 +74,7 @@ export default async function MembershipUpgradePage({ searchParams }: { searchPa
     {
       id: "corporate",
       name: "Corporate",
-      price: "$4,500",
+      price: "$7,500",
       period: "per year",
       description: "For organizations and teams",
       icon: <Building className="h-8 w-8 text-green-500" />,

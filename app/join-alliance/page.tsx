@@ -276,7 +276,7 @@ export default function JoinAlliancePage() {
                   <AccordionTrigger className="text-left">How much does membership cost?</AccordionTrigger>
                   <AccordionContent>
                     We offer tiered membership options: Student ($100/year), Professional ($550/year), and Vendor
-                    ($4,500/year). Each tier provides different levels of access and benefits tailored to your needs.
+                    ($7,500/year). Each tier provides different levels of access and benefits tailored to your needs.
                   </AccordionContent>
                 </AccordionItem>
 

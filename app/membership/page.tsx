@@ -220,7 +220,7 @@ export default function MembershipPage() {
               </div>
               <h2 className="text-xl font-bold text-center text-gray-900 mb-2">Vendor</h2>
               <div className="flex items-baseline justify-center mb-4">
-                <span className="text-3xl font-bold text-blue-600">$4,500</span>
+                <span className="text-3xl font-bold text-blue-600">$7,500</span>
                 <span className="text-gray-600 ml-1">/yr</span>
               </div>
               <p className="text-gray-600 text-sm text-center mb-6">
