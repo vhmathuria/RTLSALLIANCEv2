@@ -8,6 +8,7 @@ import { MdEmail } from "react-icons/md"
 import { AlertCircle } from "lucide-react"
 import AuthDiagnostics from "./auth-diagnostics"
 import EnvironmentDebug from "./environment-debug"
+import Link from "next/link"
 
 interface AuthButtonsProps {
   redirectTo?: string
@@ -60,60 +61,6 @@ export function AuthButtons({
     console.log("Environment detection:", { hostname, isPreview })
   }, [])
 
-  const handleOAuthSignIn = async (provider: "google" | "linkedin_oidc") => {
-    if (!envVarsAvailable) {
-      setError("Authentication is not configured. Please contact the site administrator.")
-      return
-    }
-
-    try {
-      setIsLoading((prev) => ({ ...prev, [provider]: true }))
-      setError(null)
-
-      // Get the current origin
-      const origin = window.location.origin
-      console.log("Current origin:", origin)
-
-      console.log("Environment detection in sign-in:", {
-        hostname: window.location.hostname,
-        isPreview: isPreviewEnvironment,
-        origin,
-      })
-
-      // Check if we're in a preview environment
-      const isPreview = isPreviewEnvironment
-
-      if (isPreview) {
-        setError(
-          "OAuth sign-in is limited in preview environments. For testing, please use the deployed production URL or add this preview URL to your OAuth provider's allowed redirect URIs.",
-        )
-        setIsLoading((prev) => ({ ...prev, [provider]: false }))
-        return
-      }
-
-      // Dynamically import to avoid errors when env vars aren't available
-      const { getSupabaseBrowser } = await import("@/lib/supabase-browser")
-      const supabase = getSupabaseBrowser()
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
-        },
-      })
-
-      if (error) {
-        console.error(`Error signing in with ${provider}:`, error)
-        setError(`Failed to sign in with ${provider}: ${error.message}`)
-      }
-    } catch (err: any) {
-      console.error(`Unexpected error during ${provider} sign-in:`, err)
-      setError(`An unexpected error occurred: ${err.message}`)
-    } finally {
-      setIsLoading((prev) => ({ ...prev, [provider]: false }))
-    }
-  }
-
   const handleEmailClick = () => {
     if (onEmailClick) {
       onEmailClick()
@@ -147,21 +94,25 @@ export function AuthButtons({
       <Button
         variant="outline"
         className="flex items-center justify-center gap-2 w-full"
-        onClick={() => handleOAuthSignIn("google")}
-        disabled={isLoading.google || !envVarsAvailable}
+        asChild
+        disabled={!envVarsAvailable}
       >
-        <FaGoogle className="h-5 w-5 text-red-500" />
-        {isLoading.google ? "Signing in..." : "Sign in with Google"}
+        <Link href={`/api/auth/google?redirectTo=${redirectParam}${tierParam}`}>
+          <FaGoogle className="h-5 w-5 text-red-500" />
+          Sign in with Google
+        </Link>
       </Button>
 
       <Button
         variant="outline"
         className="flex items-center justify-center gap-2 w-full"
-        onClick={() => handleOAuthSignIn("linkedin_oidc")}
-        disabled={isLoading.linkedin_oidc || !envVarsAvailable}
+        asChild
+        disabled={!envVarsAvailable}
       >
-        <FaLinkedin className="h-5 w-5 text-blue-600" />
-        {isLoading.linkedin_oidc ? "Signing in..." : "Sign in with LinkedIn"}
+        <Link href={`/api/auth/linkedin?redirectTo=${redirectParam}${tierParam}`}>
+          <FaLinkedin className="h-5 w-5 text-blue-600" />
+          Sign in with LinkedIn
+        </Link>
       </Button>
 
       {showEmail && (
@@ -169,7 +120,7 @@ export function AuthButtons({
           variant="outline"
           className="flex items-center justify-center gap-2 w-full"
           onClick={handleEmailClick}
-          disabled={isLoading.email || !envVarsAvailable}
+          disabled={!envVarsAvailable}
         >
           <MdEmail className="h-5 w-5 text-gray-600" />
           Sign in with Email

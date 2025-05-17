@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { getArticlesByContentType } from "@/lib/supabase"
@@ -7,30 +9,15 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, BookOpen, Users, Award, Headphones, LightbulbIcon } from "lucide-react"
 import NewsletterSignup from "@/components/newsletter-signup"
 import LogoCarousel from "@/components/logo-carousel"
+import { useEffect, useState } from "react"
+import { createSupabaseClient } from "@/lib/supabase-auth"
 
-export default async function HomePage() {
-  // Get featured articles for the homepage
-  const guideArticles = await getArticlesByContentType("Guide")
-  const comparisonArticles = await getArticlesByContentType("Technology Comparison")
-  const successStoryArticles = await getArticlesByContentType("Success Story")
-  const memberInsightArticles = await getArticlesByContentType("Member Insight")
-
-  // Combine all articles
-  const allArticles = [...guideArticles, ...comparisonArticles, ...successStoryArticles, ...memberInsightArticles]
-
-  // Function to randomly select articles
-  const getRandomArticles = (articles: Article[], count: number) => {
-    // Create a copy of the array to avoid modifying the original
-    const shuffled = [...articles].sort(() => 0.5 - Math.random())
-    // Get the first 'count' elements
-    return shuffled.slice(0, count)
-  }
-
-  // Get 3 random articles for the featured section
-  const featuredArticles = getRandomArticles(allArticles, 3)
-
-  // Member logos for carousel
-  const memberLogos = [
+export default function HomePage() {
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [articles, setArticles] = useState<Article[]>([])
+  const [featuredArticles, setFeaturedArticles] = useState<Article[]>([])
+  const [memberLogos, setMemberLogos] = useState([
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pozyx%20logo-qB3F5r1TslcVB9lUhr5BuuMf4jda01.png",
       alt: "Pozyx",
@@ -71,7 +58,48 @@ export default async function HomePage() {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/quuppa%20logo-carOZgTUMW1jvLj3ikTUiovXVguV1M.png",
       alt: "Quuppa",
     },
-  ]
+  ])
+
+  useEffect(() => {
+    async function loadUserAndArticles() {
+      const supabase = createSupabaseClient()
+
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+
+      // Get articles
+      try {
+        const guideArticles = await getArticlesByContentType("Guide")
+        const comparisonArticles = await getArticlesByContentType("Technology Comparison")
+        const successStoryArticles = await getArticlesByContentType("Success Story")
+        const memberInsightArticles = await getArticlesByContentType("Member Insight")
+
+        // Combine all articles
+        const allArticles = [...guideArticles, ...comparisonArticles, ...successStoryArticles, ...memberInsightArticles]
+        setArticles(allArticles)
+
+        // Get random featured articles
+        setFeaturedArticles(getRandomArticles(allArticles, 3))
+      } catch (error) {
+        console.error("Error loading articles:", error)
+      }
+
+      setLoading(false)
+    }
+
+    loadUserAndArticles()
+  }, [])
+
+  // Function to randomly select articles
+  const getRandomArticles = (articles: Article[], count: number) => {
+    // Create a copy of the array to avoid modifying the original
+    const shuffled = [...articles].sort(() => 0.5 - Math.random())
+    // Get the first 'count' elements
+    return shuffled.slice(0, count)
+  }
 
   return (
     <main>
@@ -91,14 +119,16 @@ export default async function HomePage() {
             Industry, Healthcare, and Consumer sectors.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/join-alliance">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"
-              >
-                Join the Alliance
-              </Button>
-            </Link>
+            {!user && (
+              <Link href="/join-alliance">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"
+                >
+                  Join the Alliance
+                </Button>
+              </Link>
+            )}
             <Link href="/rtls-digital-twin">
               <Button
                 size="lg"
@@ -407,14 +437,16 @@ export default async function HomePage() {
             the RTLS field.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/join-alliance">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"
-              >
-                Join Now
-              </Button>
-            </Link>
+            {!user ? (
+              <Link href="/join-alliance">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"
+                >
+                  Join Now
+                </Button>
+              </Link>
+            ) : null}
             <Link href="/contact">
               <Button
                 size="lg"

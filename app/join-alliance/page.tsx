@@ -8,11 +8,15 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { BarChartIcon as ChartBar, Globe, Award, Building, Zap, Users, LogIn } from "lucide-react"
 import EmailSignupForm from "@/components/auth/email-signup-form"
 import { createSupabaseClient } from "@/lib/supabase-auth"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function JoinAlliancePage() {
   const [showEmailForm, setShowEmailForm] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") || "/"
 
   // Check if user is signed in
   useEffect(() => {
@@ -25,6 +29,20 @@ export default function JoinAlliancePage() {
 
     checkUser()
   }, [])
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace(`/auth?tab=signup&redirectTo=${encodeURIComponent(redirectTo)}`)
+    }
+  }, [router, redirectTo, loading, user])
+
+  if (!loading && !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
 
   return (
     <main className="bg-white pb-16">

@@ -84,6 +84,9 @@ export default function Header() {
     return pathname.startsWith(path)
   }
 
+  // Check if user has a public membership tier
+  const hasPublicTier = profile?.membership_tier === "public"
+
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <nav className="container mx-auto px-4 flex items-center justify-between py-3" aria-label="Global">
@@ -174,18 +177,20 @@ export default function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Link href="/membership/upgrade">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  Upgrade Membership
-                </Button>
-              </Link>
+              {hasPublicTier && (
+                <Link href="/membership/upgrade">
+                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                    Upgrade Membership
+                  </Button>
+                </Link>
+              )}
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link href="/login">
+              <Link href="/auth?tab=login">
                 <Button variant="outline">Sign In</Button>
               </Link>
-              <Link href="/join-alliance">
+              <Link href="/auth?tab=signup">
                 <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                   Join Alliance
                 </Button>
@@ -282,22 +287,24 @@ export default function Header() {
                       >
                         Sign Out
                       </button>
-                      <Link href="/membership/upgrade" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                        <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                          Upgrade Membership
-                        </Button>
-                      </Link>
+                      {hasPublicTier && (
+                        <Link href="/membership/upgrade" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                          <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                            Upgrade Membership
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                   ) : (
                     <div className="space-y-2">
                       <Link
-                        href="/login"
+                        href="/auth?tab=login"
                         className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Sign In
                       </Link>
-                      <Link href="/join-alliance" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                      <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
                         <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                           Join Alliance
                         </Button>
