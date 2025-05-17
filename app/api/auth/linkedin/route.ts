@@ -4,12 +4,10 @@ import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
-  const searchParams = requestUrl.searchParams
   const cookieStore = cookies()
 
-  // Get the redirectTo parameter or default to /join-alliance
-  const redirectTo = searchParams.get("redirectTo") || "/"
-  const tier = searchParams.get("tier") || null
+  // Get the redirectTo parameter or default to /
+  const redirectTo = requestUrl.searchParams.get("redirectTo") || "/"
 
   try {
     console.log("LinkedIn OAuth flow initiated, redirecting to:", redirectTo)
@@ -27,21 +25,6 @@ export async function GET(request: Request) {
         },
       },
     })
-
-    // Store tier in session if provided
-    if (tier) {
-      await supabase.auth.setSession(
-        {
-          access_token: "",
-          refresh_token: "",
-        },
-        {
-          options: {
-            data: { requested_tier: tier },
-          },
-        },
-      )
-    }
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "linkedin_oidc",

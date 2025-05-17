@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import { FaGoogle, FaLinkedin } from "react-icons/fa"
-import { motion } from "framer-motion"
 
 export default function AuthPage() {
   const router = useRouter()
@@ -23,14 +22,20 @@ export default function AuthPage() {
   // Check if user is signed in
   useEffect(() => {
     const checkUser = async () => {
-      const supabase = createSupabaseClient()
-      const { data } = await supabase.auth.getUser()
-      setUser(data.user)
-      setLoading(false)
+      try {
+        const supabase = createSupabaseClient()
+        const { data } = await supabase.auth.getUser()
+        setUser(data.user)
 
-      // If user is already logged in, redirect to the requested page
-      if (data.user) {
-        router.push(redirectTo)
+        // If user is already logged in, redirect to the requested page
+        if (data.user) {
+          router.push(redirectTo)
+        }
+      } catch (err) {
+        console.error("Error checking user:", err)
+        setError("Failed to check authentication status")
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -60,12 +65,7 @@ export default function AuthPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md z-10 relative">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center"
-        >
+        <div className="text-center">
           <div className="bg-white p-4 rounded-full inline-block shadow-md mb-6">
             <Image
               src="/images/rtls-alliance-logo.png"
@@ -93,28 +93,27 @@ export default function AuthPage() {
             </TabsList>
 
             <TabsContent value="login" className="mt-8">
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+              <div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Welcome Back</h2>
                 <p className="mt-3 text-base text-gray-600">Sign in to access exclusive RTLS Alliance resources</p>
-              </motion.div>
+              </div>
             </TabsContent>
 
             <TabsContent value="signup" className="mt-8">
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+              <div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Join the Alliance</h2>
                 <p className="mt-3 text-base text-gray-600">Become part of the leading RTLS community</p>
-              </motion.div>
+              </div>
             </TabsContent>
           </Tabs>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-6 sm:mt-8 sm:mx-auto sm:w-full sm:max-w-md"
-        >
+        <div className="mt-6 sm:mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-6 sm:py-10 sm:px-8 shadow-xl rounded-xl border border-gray-100">
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">{error}</div>
+            )}
+
             <Tabs defaultValue={defaultTab} className="w-full">
               <TabsContent value="login">
                 <div className="flex flex-col gap-4 sm:gap-5 w-full">
@@ -211,7 +210,7 @@ export default function AuthPage() {
               </p>
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
     </div>
   )
