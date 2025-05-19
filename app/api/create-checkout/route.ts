@@ -1,60 +1,80 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
-import Stripe from "stripe"
+import { auth, currentUser } from "@clerk/nextjs"
+import { NextResponse } from "next/server"
 
-// Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16",
-})
+import prismadb from "@/lib/prismadb"
+import { stripe } from "@/lib/stripe"
+import { absoluteUrl } from "@/lib/utils"
 
-export async function POST(request: NextRequest) {
+const settingsUrl = absoluteUrl("/settings")
+
+export async function GET() {
   try {
-    // Get form data
-    const formData = await request.formData()
-    const priceId = formData.get("priceId") as string
-    const tier = formData.get("tier") as string
+    const { userId } = auth()
+    const user = await currentUser()
 
-    // Validate inputs
-    if (!priceId || !tier) {
-      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 403 })
     }
 
-    // Get the current user
-    const supabase = createRouteHandlerClient({ cookies })
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    const subscription = await prismadb.subscription.findUnique({
+      where: {
+        userId: userId,
+      },
+    })
 
-    if (!user) {
-      return NextResponse.json({ error: "User not authenticated" }, { status: 401 })
+    if (subscription) {
+      return NextResponse.json({ url: settingsUrl })
     }
 
-    // Get or create Stripe customer
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("stripe_customer_id, email")
-      .eq("id", user.id)
-      .single()
+    const stripeSession = await prismadb.stripeSession.findFirst({
+      where: {
+        userId: userId,
+        status: "open",
+      },
+    })
 
-    let stripeCustomerId = profile?.stripe_customer_id
+    if (stripeSession) {
+      return NextResponse.json({ url: stripeSession.url })
+    }
 
-    if (!stripeCustomerId) {
-      // Create a new customer
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          supabase_id: user.id,
+    return NextResponse.json({ url: settingsUrl })
+  } catch (error: any) {
+    console.log("[STRIPE_GET]", error)
+    return new NextResponse("Internal Error", { status: 500 })
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const { userId } = auth()
+    const user = await currentUser()
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 403 })
+    }
+
+    const { priceId, tier } = await req.json()
+
+    if (!priceId) {
+      return new NextResponse("Price ID is required", { status: 400 })
+    }
+
+    const stripeCustomerId = await prismadb.user
+      .findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          stripeCustomerId: true,
         },
       })
+      .then((user) => user?.stripeCustomerId)
 
-      stripeCustomerId = customer.id
-
-      // Save the customer ID to the profile
-      await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
+    if (!stripeCustomerId) {
+      return new NextResponse("Stripe customer ID not found", { status: 400 })
     }
 
-    // Create a checkout session
+    // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       line_items: [
@@ -69,13 +89,28 @@ export async function POST(request: NextRequest) {
       metadata: {
         user_id: user.id,
         membership_tier: tier,
+        email: user.email || profile?.email || "",
+      },
+      subscription_data: {
+        metadata: {
+          user_id: user.id,
+          membership_tier: tier,
+        },
       },
     })
 
-    // Redirect to the checkout URL
-    return NextResponse.redirect(session.url!, 303)
+    await prismadb.stripeSession.create({
+      data: {
+        userId: userId,
+        sessionId: session.id,
+        url: session.url || "",
+        status: session.status || "open",
+      },
+    })
+
+    return NextResponse.json({ url: session.url })
   } catch (error: any) {
-    console.error("Error creating checkout session:", error)
-    return NextResponse.json({ error: error.message || "Failed to create checkout session" }, { status: 500 })
+    console.log("[STRIPE_POST]", error)
+    return new NextResponse("Internal Error", { status: 500 })
   }
 }
