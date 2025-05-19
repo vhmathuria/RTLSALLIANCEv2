@@ -2,6 +2,16 @@ import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import AccountProfile from "./account-profile"
 
+export const metadata = {
+  title: "My RTLS Alliance Account | Manage Your Profile",
+  description:
+    "Manage your RTLS Alliance account, update your profile information, and access your membership benefits and resources.",
+  keywords: "RTLS account, member profile, account management, membership status, RTLS Alliance login",
+  alternates: {
+    canonical: "/account",
+  },
+}
+
 export default async function AccountPage() {
   const supabase = createClient()
 

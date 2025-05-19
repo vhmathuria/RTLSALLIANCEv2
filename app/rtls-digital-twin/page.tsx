@@ -15,12 +15,16 @@ import {
   Truck,
   Boxes,
 } from "lucide-react"
+import { generatePageMetadata } from "@/lib/seo-utils"
 
-export const metadata = {
-  title: "RTLS + Digital Twin Integration",
+export const metadata = generatePageMetadata({
+  title: "RTLS + Digital Twin Integration | Real-Time Location Systems",
   description:
-    "Discover how real-time location systems power next-generation digital twin platforms for enhanced visibility and control",
-}
+    "Discover how real-time location systems power next-generation digital twin platforms for enhanced visibility and control across industrial, healthcare, defense, and consumer sectors. Educational resources from our non-profit community.",
+  keywords:
+    "RTLS digital twin, real-time location systems, digital twin integration, location intelligence, asset tracking, IoT location, positioning technology, digital twin platform, non-profit education",
+  path: "/rtls-digital-twin",
+})
 
 export default function RTLSDigitalTwinPage() {
   return (
@@ -32,7 +36,7 @@ export default function RTLSDigitalTwinPage() {
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
             Discover how real-time location systems power next-generation digital twin platforms for enhanced visibility
-            and control
+            and control across industries.
           </p>
         </div>
       </section>

@@ -3,11 +3,16 @@ import { Button } from "@/components/ui/button"
 import { getAllArticles } from "@/lib/supabase"
 import { Suspense } from "react"
 import { ResourcesClientPage } from "./resources-client"
+import { generatePageMetadata } from "@/lib/seo-utils"
 
-export const metadata = {
-  title: "Resources - RTLS Alliance",
-  description: "Explore guides, case studies, and insights about Real-Time Location Systems (RTLS).",
-}
+export const metadata = generatePageMetadata({
+  title: "RTLS Resources | Guides, Comparisons & Case Studies",
+  description:
+    "Access comprehensive educational resources from our non-profit community on real-time location systems across industrial, healthcare, defense, and consumer sectors, including implementation guides, technology comparisons, and success stories.",
+  keywords:
+    "RTLS resources, location technology guides, RTLS case studies, technology comparisons, implementation guides, expert insights, real-time location systems, positioning technology resources, non-profit education",
+  path: "/resources",
+})
 
 export default async function ResourcesPage() {
   // Get all articles

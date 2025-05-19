@@ -4,11 +4,16 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Building2, MapPin, ExternalLink, Linkedin, Mail } from "lucide-react"
 import Image from "next/image"
+import { generatePageMetadata } from "@/lib/seo-utils"
 
-export const metadata = {
-  title: "Directory - RTLS Alliance",
-  description: "Connect with RTLS vendors and practitioners in our comprehensive directory.",
-}
+export const metadata = generatePageMetadata({
+  title: "RTLS Provider Directory | Find Technology Partners",
+  description:
+    "Browse our comprehensive directory of RTLS technology providers, system integrators, and solution partners to find the right match for your real-time location system needs.",
+  keywords:
+    "RTLS directory, location technology providers, vendor selection, RTLS partners, solution providers, system integrators, technology comparison, positioning technology companies",
+  path: "/ecosystem/directory",
+})
 
 // List of RTLS vendors (excluding SEWIO and HID)
 const vendors = [
@@ -54,7 +59,7 @@ const vendors = [
   },
   {
     name: "Sensolus",
-    logo: "/placeholder.svg?height=60&width=120&query=Sensolus logo",
+    logo: "/placeholder.svg?key=khrdj",
     description: "Supply chain visibility through IoT tracking solutions",
     specialties: ["Supply Chain", "Logistics", "IoT"],
     location: "Ghent, Belgium",
@@ -62,7 +67,7 @@ const vendors = [
   },
   {
     name: "Airista",
-    logo: "/placeholder.svg?height=60&width=120&query=Airista logo",
+    logo: "/placeholder.svg?key=892ku",
     description: "RTLS solutions for healthcare, manufacturing, and logistics",
     specialties: ["Healthcare", "Wi-Fi", "RFID"],
     location: "Sparks, USA",
@@ -70,7 +75,7 @@ const vendors = [
   },
   {
     name: "CEIT",
-    logo: "/placeholder.svg?height=60&width=120&query=CEIT logo",
+    logo: "/placeholder.svg?key=hjd9q",
     description: "Research and development in RTLS and industrial automation",
     specialties: ["R&D", "Industrial", "Automation"],
     location: "San Sebastian, Spain",
@@ -78,7 +83,7 @@ const vendors = [
   },
   {
     name: "CyberNX",
-    logo: "/placeholder.svg?height=60&width=120&query=CyberNX logo",
+    logo: "/cybernx-logo.png",
     description: "Cybersecurity and IoT solutions with location tracking capabilities",
     specialties: ["Cybersecurity", "IoT", "Enterprise"],
     location: "Bangalore, India",
@@ -86,7 +91,7 @@ const vendors = [
   },
   {
     name: "Quuppa",
-    logo: "/placeholder.svg?height=60&width=120&query=Quuppa logo",
+    logo: "/quuppa-logo.png",
     description: "Bluetooth Low Energy (BLE) real-time locating system",
     specialties: ["BLE", "Sports", "Retail"],
     location: "Espoo, Finland",
@@ -94,7 +99,7 @@ const vendors = [
   },
   {
     name: "Litum",
-    logo: "/placeholder.svg?height=60&width=120&query=Litum logo",
+    logo: "/placeholder-2xsx8.png",
     description: "IoT-enabled RTLS solutions for workforce safety and asset tracking",
     specialties: ["Safety", "Construction", "UWB"],
     location: "Izmir, Turkey",
@@ -102,7 +107,7 @@ const vendors = [
   },
   {
     name: "FleetIQ360",
-    logo: "/placeholder.svg?height=60&width=120&query=FleetIQ360 logo",
+    logo: "/fleetiq360-logo.png",
     description: "Fleet management and asset tracking solutions",
     specialties: ["Fleet Management", "GPS", "Logistics"],
     location: "Toronto, Canada",

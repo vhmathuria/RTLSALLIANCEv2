@@ -3,8 +3,21 @@ import { Button } from "@/components/ui/button"
 import { Check, Users, Building, Lightbulb } from "lucide-react"
 
 export const metadata = {
-  title: "Certification - RTLS Alliance",
-  description: "Validate your expertise and accelerate your career with industry-recognized RTLS certifications.",
+  title: "RTLS Certification Program | Industry-Recognized Credentials",
+  description:
+    "Earn industry-recognized RTLS certification to validate your expertise in real-time location systems technology, implementation, and best practices.",
+  keywords:
+    "RTLS certification, location technology credentials, professional development, industry recognition, RTLS expertise, technology certification",
+  alternates: {
+    canonical: "/certification",
+  },
+  openGraph: {
+    title: "RTLS Certification Program | Industry-Recognized Credentials",
+    description:
+      "Earn industry-recognized RTLS certification to validate your expertise in real-time location systems.",
+    url: "https://rtlsalliance.org/certification",
+    type: "website",
+  },
 }
 
 export default function CertificationPage() {

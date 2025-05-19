@@ -2,11 +2,16 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone, MapPin } from "lucide-react"
 import ContactForm from "./contact-form"
+import { generatePageMetadata } from "@/lib/seo-utils"
 
-export const metadata = {
-  title: "Contact Us - RTLS Alliance",
-  description: "Get in touch with the RTLS Alliance team for inquiries, partnerships, or support.",
-}
+export const metadata = generatePageMetadata({
+  title: "Contact RTLS Alliance | Get in Touch with Our Team",
+  description:
+    "Contact the RTLS Alliance non-profit team for inquiries about membership, partnerships, educational resources, or technical assistance with real-time location systems across industrial, healthcare, defense, and consumer sectors.",
+  keywords:
+    "contact RTLS Alliance, RTLS support, membership inquiries, technical assistance, location technology help, RTLS experts, location systems consultation, non-profit organization",
+  path: "/contact",
+})
 
 export default function ContactPage() {
   return (
