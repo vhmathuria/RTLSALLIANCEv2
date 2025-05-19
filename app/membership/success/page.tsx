@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase-server"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, AlertTriangle } from "lucide-react"
+import Link from "next/link"
 
 export default async function MembershipSuccessPage({
   searchParams,
@@ -98,13 +99,13 @@ export default async function MembershipSuccessPage({
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild className="bg-blue-600 hover:bg-blue-700">
-            <a href="/resources">Explore Resources</a>
+            <Link href="/resources">Explore Resources</Link>
           </Button>
           <Button asChild variant="outline">
-            <a href="/account">View Account</a>
+            <Link href="/account">View Account</Link>
           </Button>
           <Button asChild variant="outline">
-            <a href="/membership/success" className="flex items-center gap-1">
+            <Link href="/membership/success" className="flex items-center gap-1">
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -120,7 +121,7 @@ export default async function MembershipSuccessPage({
                 />
               </svg>
               Refresh Status
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

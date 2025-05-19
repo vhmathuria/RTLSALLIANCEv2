@@ -1,80 +1,60 @@
-import { auth, currentUser } from "@clerk/nextjs"
 import { NextResponse } from "next/server"
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import Stripe from "stripe"
 
-import prismadb from "@/lib/prismadb"
-import { stripe } from "@/lib/stripe"
-import { absoluteUrl } from "@/lib/utils"
+// Initialize Stripe
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16",
+})
 
-const settingsUrl = absoluteUrl("/settings")
-
-export async function GET() {
+export async function POST(request: Request) {
   try {
-    const { userId } = auth()
-    const user = await currentUser()
+    // Get form data
+    const formData = await request.formData()
+    const priceId = formData.get("priceId") as string
+    const tier = formData.get("tier") as string
 
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 403 })
+    // Validate inputs
+    if (!priceId || !tier) {
+      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
     }
 
-    const subscription = await prismadb.subscription.findUnique({
-      where: {
-        userId: userId,
-      },
-    })
+    // Get the current user
+    const supabase = createRouteHandlerClient({ cookies })
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    if (subscription) {
-      return NextResponse.json({ url: settingsUrl })
+    if (!user) {
+      return NextResponse.json({ error: "User not authenticated" }, { status: 401 })
     }
 
-    const stripeSession = await prismadb.stripeSession.findFirst({
-      where: {
-        userId: userId,
-        status: "open",
-      },
-    })
+    // Get or create Stripe customer
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("stripe_customer_id, email")
+      .eq("id", user.id)
+      .single()
 
-    if (stripeSession) {
-      return NextResponse.json({ url: stripeSession.url })
-    }
-
-    return NextResponse.json({ url: settingsUrl })
-  } catch (error: any) {
-    console.log("[STRIPE_GET]", error)
-    return new NextResponse("Internal Error", { status: 500 })
-  }
-}
-
-export async function POST(req: Request) {
-  try {
-    const { userId } = auth()
-    const user = await currentUser()
-
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 403 })
-    }
-
-    const { priceId, tier } = await req.json()
-
-    if (!priceId) {
-      return new NextResponse("Price ID is required", { status: 400 })
-    }
-
-    const stripeCustomerId = await prismadb.user
-      .findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          stripeCustomerId: true,
-        },
-      })
-      .then((user) => user?.stripeCustomerId)
+    let stripeCustomerId = profile?.stripe_customer_id
 
     if (!stripeCustomerId) {
-      return new NextResponse("Stripe customer ID not found", { status: 400 })
+      // Create a new customer
+      const customer = await stripe.customers.create({
+        email: user.email,
+        metadata: {
+          supabase_id: user.id,
+        },
+      })
+
+      stripeCustomerId = customer.id
+
+      // Save the customer ID to the profile
+      await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
     }
 
-    // Create checkout session
+    // Create a checkout session
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       line_items: [
@@ -99,18 +79,75 @@ export async function POST(req: Request) {
       },
     })
 
-    await prismadb.stripeSession.create({
-      data: {
-        userId: userId,
-        sessionId: session.id,
-        url: session.url || "",
-        status: session.status || "open",
+    // Store the session in Supabase
+    await supabase.from("stripe_sessions").insert({
+      user_id: user.id,
+      session_id: session.id,
+      status: "created",
+      metadata: {
+        price_id: priceId,
+        tier: tier,
       },
     })
 
-    return NextResponse.json({ url: session.url })
+    // Redirect to the checkout URL
+    return NextResponse.redirect(session.url!, 303)
   } catch (error: any) {
-    console.log("[STRIPE_POST]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.error("Error creating checkout session:", error)
+    return NextResponse.json({ error: error.message || "Failed to create checkout session" }, { status: 500 })
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    // Get the current user
+    const supabase = createRouteHandlerClient({ cookies })
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: "User not authenticated" }, { status: 401 })
+    }
+
+    // Get user's active subscription
+    const { data: subscription } = await supabase
+      .from("profiles")
+      .select("membership_status, membership_tier")
+      .eq("id", user.id)
+      .single()
+
+    if (subscription?.membership_status === "active") {
+      return NextResponse.json({
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/account`,
+        status: "active",
+        tier: subscription.membership_tier,
+      })
+    }
+
+    // Check for pending sessions
+    const { data: pendingSession } = await supabase
+      .from("stripe_sessions")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("status", "created")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single()
+
+    if (pendingSession) {
+      // Retrieve the session from Stripe to get the current URL
+      const session = await stripe.checkout.sessions.retrieve(pendingSession.session_id)
+
+      if (session.url) {
+        return NextResponse.json({ url: session.url, status: "pending" })
+      }
+    }
+
+    // Default to account page
+    return NextResponse.json({ url: `${process.env.NEXT_PUBLIC_BASE_URL}/account`, status: "none" })
+  } catch (error: any) {
+    console.error("Error retrieving checkout session:", error)
+    return NextResponse.json({ error: error.message || "Failed to retrieve checkout session" }, { status: 500 })
   }
 }

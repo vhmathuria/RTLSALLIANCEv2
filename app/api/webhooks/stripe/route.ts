@@ -1,62 +1,72 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
 import Stripe from "stripe"
-import { createClient } from "@/lib/supabase-server"
-import { updateMembership } from "@/lib/membership-actions"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 })
 
-// Webhook endpoint for Stripe events
-export async function POST(req: NextRequest) {
+// This is your Stripe webhook secret for testing your endpoint locally.
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+
+export async function POST(req: Request) {
   const body = await req.text()
   const signature = req.headers.get("stripe-signature") as string
 
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
   } catch (error: any) {
     console.error(`Webhook signature verification failed: ${error.message}`)
-    return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
   }
 
-  console.log(`Processing Stripe webhook event: ${event.type}`)
+  const supabase = createRouteHandlerClient({ cookies })
+
+  // Store the event in the database for audit purposes
+  try {
+    await supabase.from("stripe_events").insert({
+      stripe_event_id: event.id,
+      type: event.type,
+      object: event.data.object,
+    })
+  } catch (error) {
+    console.error("Error storing Stripe event:", error)
+    // Continue processing even if storing the event fails
+  }
+
+  // Handle the event
+  console.log(`Processing webhook event: ${event.type}`)
 
   try {
-    // Handle different event types
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session
-        console.log(`Checkout session completed: ${session.id}`)
 
-        // Get user ID and membership tier from metadata
+        // Update the stripe_session status
+        await supabase.from("stripe_sessions").update({ status: "completed" }).eq("session_id", session.id)
+
+        // Get the user ID and membership tier from metadata
         const userId = session.metadata?.user_id
         const membershipTier = session.metadata?.membership_tier
 
         if (!userId || !membershipTier) {
-          console.error("Missing user ID or membership tier in session metadata", session.metadata)
-          throw new Error("Missing user ID or membership tier in session metadata")
+          console.error("Missing user_id or membership_tier in session metadata")
+          return new NextResponse("Missing metadata", { status: 400 })
         }
-
-        console.log(`Updating membership for user ${userId} to tier ${membershipTier}`)
 
         // Get subscription details
         if (session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
-          console.log(`Retrieved subscription: ${subscription.id}`)
 
           // Calculate expiry date (end of current period)
           const expiryDate = new Date(subscription.current_period_end * 1000)
 
-          // Update user membership via server action
-          const actionResult = await updateMembership(userId, membershipTier, subscription.id, expiryDate)
-          console.log(`Server action result:`, actionResult)
-
-          // Directly update the profile in case the server action fails
-          const supabase = createClient()
-          const { data, error } = await supabase
+          // Update user profile with membership details
+          const { error: updateError } = await supabase
             .from("profiles")
             .update({
               membership_tier: membershipTier,
@@ -66,150 +76,108 @@ export async function POST(req: NextRequest) {
               stripe_subscription_id: subscription.id,
             })
             .eq("id", userId)
-            .select()
 
-          if (error) {
-            console.error("Error updating profile in webhook:", error)
-            throw new Error(`Failed to update profile: ${error.message}`)
+          if (updateError) {
+            console.error("Error updating profile:", updateError)
+            return new NextResponse("Error updating profile", { status: 500 })
           }
 
-          console.log(`Profile updated successfully:`, data)
-        } else {
-          console.error("No subscription found in checkout session")
-        }
+          // Verify the update was successful
+          const { data: updatedProfile, error: verifyError } = await supabase
+            .from("profiles")
+            .select("membership_tier, membership_status, membership_expiry")
+            .eq("id", userId)
+            .single()
 
+          if (verifyError || !updatedProfile) {
+            console.error("Error verifying profile update:", verifyError)
+          } else {
+            console.log("Profile updated successfully:", updatedProfile)
+          }
+        }
         break
       }
 
-      case "customer.subscription.updated": {
-        const subscription = event.data.object as Stripe.Subscription
-        console.log(`Subscription updated: ${subscription.id}`)
+      case "invoice.payment_succeeded": {
+        const invoice = event.data.object as Stripe.Invoice
 
-        // Get user from Stripe customer
-        const customer = await stripe.customers.retrieve(subscription.customer as string)
+        if (invoice.subscription) {
+          const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
 
-        if (!customer || customer.deleted) {
-          console.error("Customer not found or deleted", subscription.customer)
-          throw new Error("Customer not found or deleted")
-        }
+          // Get the user ID from the subscription metadata
+          const userId = subscription.metadata?.user_id
 
-        // Find user by Stripe customer ID
-        const supabase = createClient()
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("stripe_customer_id", customer.id)
-          .single()
+          if (!userId) {
+            console.error("Missing user_id in subscription metadata")
+            return new NextResponse("Missing metadata", { status: 400 })
+          }
 
-        if (profileError || !profile) {
-          console.error("User profile not found for customer ID:", customer.id, profileError)
-          throw new Error("User profile not found")
-        }
+          // Calculate expiry date (end of current period)
+          const expiryDate = new Date(subscription.current_period_end * 1000)
 
-        console.log(`Found profile for customer ${customer.id}: ${profile.id}`)
+          // Update user profile with new expiry date and payment date
+          const { error: updateError } = await supabase
+            .from("profiles")
+            .update({
+              membership_status: "active",
+              membership_expiry: expiryDate.toISOString(),
+              last_payment_date: new Date().toISOString(),
+            })
+            .eq("id", userId)
 
-        // Get membership tier from subscription metadata or product
-        let membershipTier = "public"
-
-        if (subscription.metadata?.membership_tier) {
-          membershipTier = subscription.metadata.membership_tier
-        } else {
-          // Try to determine tier from price ID
-          const priceId = subscription.items.data[0]?.price.id
-
-          if (priceId === process.env.STRIPE_STUDENT_PRICE_ID) {
-            membershipTier = "student"
-          } else if (priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) {
-            membershipTier = "professional"
-          } else if (priceId === process.env.STRIPE_CORPORATE_PRICE_ID) {
-            membershipTier = "corporate"
+          if (updateError) {
+            console.error("Error updating profile:", updateError)
+            return new NextResponse("Error updating profile", { status: 500 })
           }
         }
-
-        console.log(`Determined membership tier: ${membershipTier}`)
-
-        // Calculate expiry date (end of current period)
-        const expiryDate = new Date(subscription.current_period_end * 1000)
-
-        // Update user membership via server action
-        const actionResult = await updateMembership(profile.id, membershipTier, subscription.id, expiryDate)
-        console.log(`Server action result:`, actionResult)
-
-        // Directly update the profile in case the server action fails
-        const { data, error } = await supabase
-          .from("profiles")
-          .update({
-            membership_tier: membershipTier,
-            membership_status: "active",
-            membership_expiry: expiryDate.toISOString(),
-            last_payment_date: new Date().toISOString(),
-            stripe_subscription_id: subscription.id,
-          })
-          .eq("id", profile.id)
-          .select()
-
-        if (error) {
-          console.error("Error updating profile in webhook:", error)
-          throw new Error(`Failed to update profile: ${error.message}`)
-        }
-
-        console.log(`Profile updated successfully:`, data)
-
         break
       }
 
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription
-        console.log(`Subscription deleted: ${subscription.id}`)
 
-        // Get user from Stripe customer
-        const customer = await stripe.customers.retrieve(subscription.customer as string)
+        // Get the user ID from the subscription metadata
+        const userId = subscription.metadata?.user_id
 
-        if (!customer || customer.deleted) {
-          console.error("Customer not found or deleted", subscription.customer)
-          throw new Error("Customer not found or deleted")
+        if (!userId) {
+          // Try to find the user by subscription ID
+          const { data: profiles } = await supabase
+            .from("profiles")
+            .select("id")
+            .eq("stripe_subscription_id", subscription.id)
+
+          if (profiles && profiles.length > 0) {
+            const userId = profiles[0].id
+
+            // Update user profile to inactive
+            await supabase
+              .from("profiles")
+              .update({
+                membership_status: "inactive",
+              })
+              .eq("id", userId)
+          } else {
+            console.error("Could not find user for subscription:", subscription.id)
+          }
+        } else {
+          // Update user profile to inactive
+          await supabase
+            .from("profiles")
+            .update({
+              membership_status: "inactive",
+            })
+            .eq("id", userId)
         }
-
-        // Find user by Stripe customer ID
-        const supabase = createClient()
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("stripe_customer_id", customer.id)
-          .single()
-
-        if (profileError || !profile) {
-          console.error("User profile not found for customer ID:", customer.id, profileError)
-          throw new Error("User profile not found")
-        }
-
-        console.log(`Found profile for customer ${customer.id}: ${profile.id}`)
-
-        // Downgrade user to public tier
-        const { data, error } = await supabase
-          .from("profiles")
-          .update({
-            membership_tier: "public",
-            membership_status: "inactive",
-            stripe_subscription_id: null,
-          })
-          .eq("id", profile.id)
-          .select()
-
-        if (error) {
-          console.error("Error updating profile in webhook:", error)
-          throw new Error(`Failed to update profile: ${error.message}`)
-        }
-
-        console.log(`Profile downgraded successfully:`, data)
-
         break
       }
+
+      default:
+        console.log(`Unhandled event type: ${event.type}`)
     }
 
-    return NextResponse.json({ received: true })
+    return new NextResponse("Webhook processed successfully", { status: 200 })
   } catch (error: any) {
-    console.error(`Webhook error: ${error.message}`, error)
-    return NextResponse.json({ error: `Webhook handler failed: ${error.message}` }, { status: 500 })
+    console.error(`Error processing webhook: ${error.message}`)
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 500 })
   }
 }
