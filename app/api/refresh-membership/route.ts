@@ -1,124 +1,169 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
 import Stripe from "stripe"
-import { createClient } from "@/lib/supabase-server"
-import { updateMembership } from "@/lib/membership-actions"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 })
 
-export async function POST(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    // Get user ID from request body
-    const { userId } = await req.json()
+    // Get the current user
+    const supabase = createRouteHandlerClient({ cookies })
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    if (!userId) {
-      return NextResponse.json({ error: "User ID is required" }, { status: 400 })
+    if (!user) {
+      return NextResponse.json({ error: "User not authenticated" }, { status: 401 })
     }
 
-    console.log(`[refresh-membership] Refreshing membership for user ${userId}`)
-
-    // Get user profile from Supabase
-    const supabase = createClient()
-    const { data: profile, error: profileError } = await supabase.from("profiles").select("*").eq("id", userId).single()
+    // Get the user's profile
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("stripe_customer_id, stripe_subscription_id")
+      .eq("id", user.id)
+      .single()
 
     if (profileError || !profile) {
-      console.error("[refresh-membership] Error fetching profile:", profileError)
-      return NextResponse.json(
-        { error: `Profile not found: ${profileError?.message || "Unknown error"}` },
-        { status: 404 },
-      )
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 })
     }
 
-    // Check if profile has Stripe customer ID
-    if (!profile.stripe_customer_id) {
-      console.error("[refresh-membership] No Stripe customer ID found in profile")
-      return NextResponse.json({ error: "No Stripe customer ID found in profile" }, { status: 400 })
-    }
+    // If we have a subscription ID, check its status
+    if (profile.stripe_subscription_id) {
+      try {
+        const subscription = await stripe.subscriptions.retrieve(profile.stripe_subscription_id)
 
-    console.log(`[refresh-membership] Found profile with Stripe customer ID: ${profile.stripe_customer_id}`)
+        // Calculate expiry date
+        const expiryDate = new Date(subscription.current_period_end * 1000)
 
-    // Get customer's subscriptions from Stripe
-    const subscriptions = await stripe.subscriptions.list({
-      customer: profile.stripe_customer_id,
-      status: "active",
-      limit: 1,
-    })
+        // Get membership tier from metadata or determine from price
+        let membershipTier = "public"
 
-    if (subscriptions.data.length === 0) {
-      console.log("[refresh-membership] No active subscriptions found for customer")
+        if (subscription.metadata?.membership_tier) {
+          membershipTier = subscription.metadata.membership_tier
+        } else {
+          // Try to determine tier from price ID
+          const priceId = subscription.items.data[0]?.price.id
 
-      // Update profile to public tier if no active subscriptions
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({
-          membership_tier: "public",
-          membership_status: "inactive",
-          membership_expiry: null,
-          stripe_subscription_id: null,
+          if (priceId === process.env.STRIPE_STUDENT_PRICE_ID) {
+            membershipTier = "student"
+          } else if (priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) {
+            membershipTier = "professional"
+          } else if (priceId === process.env.STRIPE_CORPORATE_PRICE_ID) {
+            membershipTier = "corporate"
+          }
+        }
+
+        // Update the profile
+        const { data: updatedProfile, error: updateError } = await supabase
+          .from("profiles")
+          .update({
+            membership_tier: membershipTier,
+            membership_status: subscription.status === "active" ? "active" : "inactive",
+            membership_expiry: expiryDate.toISOString(),
+            last_payment_date: new Date(subscription.current_period_start * 1000).toISOString(),
+          })
+          .eq("id", user.id)
+          .select()
+
+        if (updateError) {
+          return NextResponse.json({ error: "Failed to update profile" }, { status: 500 })
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: "Membership refreshed successfully",
+          data: updatedProfile,
         })
-        .eq("id", userId)
+      } catch (stripeError: any) {
+        console.error("Error retrieving subscription:", stripeError)
 
-      if (updateError) {
-        console.error("[refresh-membership] Error updating profile:", updateError)
-        return NextResponse.json({ error: `Failed to update profile: ${updateError.message}` }, { status: 500 })
+        // If the subscription doesn't exist, reset the membership
+        if (stripeError.code === "resource_missing") {
+          await supabase
+            .from("profiles")
+            .update({
+              membership_tier: "public",
+              membership_status: "inactive",
+              stripe_subscription_id: null,
+            })
+            .eq("id", user.id)
+
+          return NextResponse.json({
+            success: true,
+            message: "Subscription not found, membership reset to public",
+          })
+        }
+
+        return NextResponse.json({ error: stripeError.message }, { status: 500 })
       }
-
-      return NextResponse.json({
-        success: true,
-        message: "No active subscriptions found, profile updated to public tier",
-        tier: "public",
-        status: "inactive",
+    } else if (profile.stripe_customer_id) {
+      // Try to find active subscriptions for this customer
+      const subscriptions = await stripe.subscriptions.list({
+        customer: profile.stripe_customer_id,
+        status: "active",
+        limit: 1,
       })
-    }
 
-    // Get the active subscription
-    const subscription = subscriptions.data[0]
-    console.log(`[refresh-membership] Found active subscription: ${subscription.id}`)
+      if (subscriptions.data.length > 0) {
+        const subscription = subscriptions.data[0]
 
-    // Get membership tier from subscription metadata or product
-    let membershipTier = "public"
+        // Calculate expiry date
+        const expiryDate = new Date(subscription.current_period_end * 1000)
 
-    if (subscription.metadata?.membership_tier) {
-      membershipTier = subscription.metadata.membership_tier
-    } else {
-      // Try to determine tier from price ID
-      const priceId = subscription.items.data[0]?.price.id
+        // Get membership tier from metadata or determine from price
+        let membershipTier = "public"
 
-      if (priceId === process.env.STRIPE_STUDENT_PRICE_ID) {
-        membershipTier = "student"
-      } else if (priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) {
-        membershipTier = "professional"
-      } else if (priceId === process.env.STRIPE_CORPORATE_PRICE_ID) {
-        membershipTier = "corporate"
+        if (subscription.metadata?.membership_tier) {
+          membershipTier = subscription.metadata.membership_tier
+        } else {
+          // Try to determine tier from price ID
+          const priceId = subscription.items.data[0]?.price.id
+
+          if (priceId === process.env.STRIPE_STUDENT_PRICE_ID) {
+            membershipTier = "student"
+          } else if (priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) {
+            membershipTier = "professional"
+          } else if (priceId === process.env.STRIPE_CORPORATE_PRICE_ID) {
+            membershipTier = "corporate"
+          }
+        }
+
+        // Update the profile
+        const { data: updatedProfile, error: updateError } = await supabase
+          .from("profiles")
+          .update({
+            membership_tier: membershipTier,
+            membership_status: "active",
+            membership_expiry: expiryDate.toISOString(),
+            last_payment_date: new Date(subscription.current_period_start * 1000).toISOString(),
+            stripe_subscription_id: subscription.id,
+          })
+          .eq("id", user.id)
+          .select()
+
+        if (updateError) {
+          return NextResponse.json({ error: "Failed to update profile" }, { status: 500 })
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: "Found active subscription and updated membership",
+          data: updatedProfile,
+        })
       }
     }
-
-    console.log(`[refresh-membership] Determined membership tier: ${membershipTier}`)
-
-    // Calculate expiry date (end of current period)
-    const expiryDate = new Date(subscription.current_period_end * 1000)
-
-    // Update user membership
-    const result = await updateMembership(userId, membershipTier, subscription.id, expiryDate)
-
-    if (!result.success) {
-      console.error("[refresh-membership] Error updating membership:", result.error)
-      return NextResponse.json({ error: `Failed to update membership: ${result.error}` }, { status: 500 })
-    }
-
-    console.log("[refresh-membership] Membership updated successfully")
 
     return NextResponse.json({
       success: true,
-      message: "Membership refreshed successfully",
-      tier: membershipTier,
-      status: "active",
-      expiryDate: expiryDate.toISOString(),
+      message: "No active subscriptions found",
+      data: profile,
     })
   } catch (error: any) {
-    console.error("[refresh-membership] Unexpected error:", error)
-    return NextResponse.json({ error: `Unexpected error: ${error.message}` }, { status: 500 })
+    console.error("Error refreshing membership:", error)
+    return NextResponse.json({ error: error.message || "Failed to refresh membership" }, { status: 500 })
   }
 }

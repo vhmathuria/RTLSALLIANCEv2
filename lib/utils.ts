@@ -50,17 +50,17 @@ export function fixSpecialChars(text: string): string {
       .replace(/\?(\d+\.\d+)%/g, "$1%") // Fix ?99.9% to 99.9%
 
       // Fix other special characters
-      .replace(/-/g, "-") // Basic hyphen replacement
-      .replace(/'/g, "'") // Single quote
-      .replace(/"/g, '"') // Double quote
-      .replace(/\.{3}/g, "...") // Ellipsis
-      .replace(/–/g, "-") // En dash
-      .replace(/—/g, "-") // Em dash
-      .replace(/•/g, "-") // Bullet
-      .replace(/4/g, "-4") // Hyphen followed by 4
-      .replace(/1/g, "-1") // Hyphen followed by 1
-      .replace(/2/g, "-2") // Hyphen followed by 2
-      .replace(/-/g, "-") // Generic hyphen replacement
+      .replace(/�/g, "-") // Basic hyphen replacement
+      .replace(/�/g, "'") // Single quote
+      .replace(/�/g, '"') // Double quote
+      .replace(/�/g, "...") // Ellipsis
+      .replace(/�/g, "–") // En dash
+      .replace(/�/g, "—") // Em dash
+      .replace(/�/g, "•") // Bullet
+      .replace(/�4/g, "-4") // Hyphen followed by 4
+      .replace(/�1/g, "-1") // Hyphen followed by 1
+      .replace(/�2/g, "-2") // Hyphen followed by 2
+      .replace(/�/g, "-") // Generic hyphen replacement
       .replace(/-e-g--/g, "(e.g.)") // Fix e.g. pattern
       .replace(/-e\.g\.-/g, "(e.g.)") // Alternative e.g. pattern
       .replace(/-i\.e\.-/g, "(i.e.)") // Fix i.e. pattern
@@ -85,16 +85,4 @@ export function createIdFromText(text: string): string {
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
-}
-
-/**
- * Generates an absolute URL from a relative path
- */
-export function absoluteUrl(path: string): string {
-  // Use NEXT_PUBLIC_BASE_URL if available, otherwise fallback to localhost in development
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://rtlsalliance.org")
-
-  return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`
 }
