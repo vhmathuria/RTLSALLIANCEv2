@@ -99,11 +99,12 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
   // Check if user already has a Stripe customer ID
   const { data: profile } = await supabase
     .from("profiles")
-    .select("stripe_customer_id, email")
+    .select("stripe_customer_id, email") // Use the correct column name
     .eq("id", user.id)
     .single()
 
   if (profile?.stripe_customer_id) {
+    // Use the correct column name
     stripeCustomerId = profile.stripe_customer_id
   } else {
     // Create new Stripe customer
@@ -117,7 +118,7 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
     stripeCustomerId = customer.id
 
     // Save Stripe customer ID to profile
-    await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
+    await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id) // Use the correct column name
   }
 
   // Create checkout session
@@ -142,7 +143,7 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
 }
 
 // Update user membership after successful payment
-export async function updateMembership(userId: string, tier: string, subscriptionId: string, expiryDate?: Date) {
+export async function updateMembership(userId: string, tier: string, expiryDate?: Date) {
   const supabase = createClient()
 
   try {
@@ -155,7 +156,6 @@ export async function updateMembership(userId: string, tier: string, subscriptio
         membership_status: "ACTIVE", // Ensure consistent casing
         membership_expiry: expiryDate?.toISOString() || null,
         last_payment_date: new Date().toISOString(),
-        stripe_subscription_id: subscriptionId,
       })
       .eq("id", userId)
 
@@ -193,7 +193,7 @@ export async function getCurrentMembership() {
   // Get user profile with membership info
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_tier, membership_status, membership_expiry, stripe_subscription_id")
+    .select("membership_tier, membership_status, membership_expiry")
     .eq("id", user.id)
     .single()
 
@@ -213,7 +213,6 @@ export async function getCurrentMembership() {
     tier: profile.membership_tier || "public",
     status: profile.membership_status || "inactive",
     expiryDate: profile.membership_expiry,
-    subscriptionId: profile.stripe_subscription_id,
   }
 }
 
@@ -258,7 +257,7 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
         membership_status: "ACTIVE",
         membership_expiry: expiryDate.toISOString(),
         last_payment_date: new Date().toISOString(),
-        stripe_subscription_id: subscription.id,
+        stripe_customer_id: session.customer as string, // Use the correct column name
       })
       .eq("id", userId)
 

@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 
           // Update user membership using both methods for redundancy
           try {
-            await updateMembership(userId, membershipTier, subscription.id, expiryDate)
+            await updateMembership(userId, membershipTier, expiryDate)
             console.log("Updated membership via server action")
           } catch (serverActionError) {
             console.error("Server action failed, falling back to direct update:", serverActionError)
@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
               membership_status: "ACTIVE", // Ensure consistent casing
               membership_expiry: expiryDate.toISOString(),
               last_payment_date: new Date().toISOString(),
-              stripe_subscription_id: subscription.id,
+              // Use the correct column name
+              stripe_customer_id: session.customer as string,
             })
             .eq("id", userId)
 
@@ -97,7 +98,7 @@ export async function POST(req: NextRequest) {
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
-          .eq("stripe_customer_id", customer.id)
+          .eq("stripe_customer_id", customer.id) // Use the correct column name
           .single()
 
         if (profileError || !profile) {
@@ -128,7 +129,7 @@ export async function POST(req: NextRequest) {
 
         // Update user membership using both methods for redundancy
         try {
-          await updateMembership(profile.id, membershipTier, subscription.id, expiryDate)
+          await updateMembership(profile.id, membershipTier, expiryDate)
           console.log("Updated membership via server action for subscription update")
         } catch (serverActionError) {
           console.error(
@@ -145,7 +146,6 @@ export async function POST(req: NextRequest) {
             membership_status: "ACTIVE", // Ensure consistent casing
             membership_expiry: expiryDate.toISOString(),
             last_payment_date: new Date().toISOString(),
-            stripe_subscription_id: subscription.id,
           })
           .eq("id", profile.id)
 
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest) {
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
-          .eq("stripe_customer_id", customer.id)
+          .eq("stripe_customer_id", customer.id) // Use the correct column name
           .single()
 
         if (profileError || !profile) {
@@ -190,7 +190,6 @@ export async function POST(req: NextRequest) {
           .update({
             membership_tier: "public",
             membership_status: "INACTIVE",
-            stripe_subscription_id: null,
           })
           .eq("id", profile.id)
 
