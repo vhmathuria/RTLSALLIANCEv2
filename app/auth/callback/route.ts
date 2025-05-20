@@ -85,7 +85,7 @@ export async function GET(request: Request) {
           email: user.email,
           full_name: fullName,
           membership_tier: "public",
-          membership_status: "active",
+          membership_status: "ACTIVE", // Set to ACTIVE by default for public tier
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
@@ -100,6 +100,30 @@ export async function GET(request: Request) {
       }
     } else {
       console.log("Profile already exists for user:", user.id)
+
+      // If profile exists but status is INACTIVE for public tier, update it to ACTIVE
+      if (
+        existingProfile.membership_tier === "public" &&
+        (existingProfile.membership_status === "INACTIVE" || !existingProfile.membership_status)
+      ) {
+        try {
+          const { error: updateError } = await supabaseAdmin
+            .from("profiles")
+            .update({
+              membership_status: "ACTIVE",
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", user.id)
+
+          if (updateError) {
+            console.error("Error updating profile status:", updateError)
+          } else {
+            console.log("Profile status updated to ACTIVE for user:", user.id)
+          }
+        } catch (updateError) {
+          console.error("Exception during profile status update:", updateError)
+        }
+      }
     }
 
     // Redirect to the specified next page
