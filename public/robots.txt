@@ -1,5 +1,13 @@
+# robots.txt for RTLS Alliance
+
 User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: https://rtlsalliance.org/sitemap.xml
+# Disallow admin and auth pages
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /auth-error/
+Disallow: /debug/
+
+# Sitemap location
+Sitemap: https://rtlsalliance.com/sitemap.xml

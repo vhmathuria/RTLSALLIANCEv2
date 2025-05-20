@@ -1,7 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import RulesEngineModuleClientPage from "./RulesEngineModuleClientPage"
-import { generateModuleMetadata, generateModuleSchema } from "@/lib/seo-utils"
 import {
   ArrowLeft,
   GitBranch,
@@ -14,20 +12,16 @@ import {
   BookOpen,
   BarChart3,
   Layers,
+  ArrowRight,
 } from "lucide-react"
 
-export const metadata: Metadata = generateModuleMetadata(
-  "Rules Engine",
-  "Automated Workflows & Business Logic",
-  "Create and manage location-based business rules and automated workflows with the RTLS Rules Engine module for real-time decision making.",
-  "RTLS rules engine, location-based automation, business rules, workflow automation, event processing, conditional logic, real-time alerts",
-)
+export const metadata: Metadata = {
+  title: "Rules Engine Module | RTLS Digital Twin",
+  description:
+    "Create and manage location-based business rules and automated workflows in digital twin environments with verifiable research-based insights.",
+}
 
-export default function RulesEngineModulePage() {
-  const title = "RTLS Rules Engine Module | Automated Workflows & Business Logic"
-  const description =
-    "Create and manage location-based business rules and automated workflows with the RTLS Rules Engine module for real-time decision making."
-
+export default function RulesEnginePage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mb-8">
@@ -36,8 +30,6 @@ export default function RulesEngineModulePage() {
           Back to Digital Twin
         </Link>
       </div>
-
-      <RulesEngineModuleClientPage />
 
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4">Rules Engine Module</h1>
@@ -462,12 +454,22 @@ export default function RulesEngineModulePage() {
         </div>
       </div>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: generateModuleSchema(title, description, "Rules Engine"),
-        }}
-      />
+      <section className="bg-blue-50 border border-blue-200 rounded-lg p-8 mb-12">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">Ready to implement location-based business rules?</h2>
+          <p className="text-lg mb-6">
+            Contact an RTLS expert to discuss how the Rules Engine Module can automate your operations and improve
+            compliance.
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors"
+          >
+            Contact an RTLS Expert
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        </div>
+      </section>
     </div>
   )
 }

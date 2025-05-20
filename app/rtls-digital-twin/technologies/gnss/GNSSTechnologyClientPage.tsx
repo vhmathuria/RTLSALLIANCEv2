@@ -458,48 +458,6 @@ export default function GNSSTechnologyClientPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Global Shipping Container Tracking</h3>
-                <p className="mb-4">
-                  A major shipping company implemented GNSS-based tracking for their container fleet, resulting in:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>98% reduction in lost containers</li>
-                  <li>15% improvement in logistics efficiency</li>
-                  <li>Real-time visibility across global supply chain</li>
-                  <li>Enhanced security and theft prevention</li>
-                </ul>
-                <Link
-                  href="/resources/gnss-container-tracking-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Smart City Vehicle Management</h3>
-                <p className="mb-4">
-                  A European municipality deployed GNSS tracking across their public service fleet:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>23% reduction in fuel consumption</li>
-                  <li>30% decrease in vehicle idle time</li>
-                  <li>Improved emergency response times by 4.5 minutes</li>
-                  <li>Enhanced public transportation reliability</li>
-                </ul>
-                <Link
-                  href="/resources/smart-city-gnss-fleet-management"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in GNSS Technology</h2>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
@@ -672,7 +630,7 @@ export default function GNSSTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">GNSS Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -802,38 +760,38 @@ export default function GNSSTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/gnss-implementation-guide"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>GNSS Implementation Guide</span>
+                  <span>RTLS Deployment Guide</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/gnss-receiver-selection"
+                  href="/resources/rtls-accuracy-precision-explained-sub-meter-positioning"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>GNSS Receiver Selection Guide</span>
+                  <span>RTLS Accuracy Guide</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/gnss-vs-rtk-comparison"
+                  href="/resources/uwb-vs-gps-indoor-outdoor-tracking-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>GNSS vs RTK-GPS Comparison</span>
+                  <span>GNSS (GPS) vs UWB Analysis</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/gnss-rtls-case-studies"
+                  href="/resources/automotive-oem-40-throughput-boost-uwb-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>GNSS RTLS Case Studies</span>
+                  <span>RTLS Success Story</span>
                 </Link>
               </li>
             </ul>

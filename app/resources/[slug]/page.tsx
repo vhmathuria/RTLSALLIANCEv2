@@ -6,9 +6,11 @@ import SuccessStoryRenderer from "@/components/renderers/success-story/success-s
 import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
 import MemberInsightRenderer from "@/components/renderers/member-insight/member-insight-renderer"
 import ContentGate from "@/components/content-gate"
-import { generateArticleSchema } from "@/lib/seo-utils"
+import { ResourceSEO } from "@/components/seo/resource-seo"
+import { generateArticleSchema, extractKeywords } from "@/lib/seo-utils"
+import type { Metadata } from "next"
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
@@ -18,45 +20,66 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
-  // Generate comprehensive metadata for the article
+  // Extract keywords from title, excerpt and content
+  const keywords = extractKeywords(article.title, article.excerpt, article.content)
+
+  // Base URL for canonical and OG URLs
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
+  const canonicalUrl = `${baseUrl}/resources/${article.slug}`
+
+  // Determine content category
+  const contentCategory = article.content_type || "Article"
+
+  // Format publication date
+  const pubDate = article.published_at ? new Date(article.published_at).toISOString() : new Date().toISOString()
+
+  // Generate structured data
+  const structuredData = generateArticleSchema({
+    title: article.title,
+    description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
+    url: canonicalUrl,
+    imageUrl: article.featured_image || `${baseUrl}/images/rtls-alliance-logo.png`,
+    authorName: article.author || "RTLS Alliance",
+    publisherName: "RTLS Alliance",
+    publisherLogo: `${baseUrl}/images/rtls-alliance-logo.png`,
+    datePublished: pubDate,
+    dateModified: article.updated_at ? new Date(article.updated_at).toISOString() : pubDate,
+    contentType: contentCategory,
+  })
+
   return {
-    title: `${article.title} | RTLS Alliance`,
-    description:
-      article.meta_description ||
-      `${article.title.substring(0, 100)}. Learn more about real-time location systems on RTLS Alliance.`,
-    keywords:
-      article.keywords ||
-      `RTLS, real-time location systems, ${article.content_type.toLowerCase()}, ${article.title.toLowerCase().replace(/[^\w\s]/gi, "")}`,
-    alternates: {
-      canonical: `/resources/${params.slug}`,
-    },
+    title: `${article.title} - RTLS Alliance`,
+    description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
+    keywords: keywords.join(", "),
+    authors: [{ name: article.author || "RTLS Alliance" }],
     openGraph: {
       title: article.title,
-      description:
-        article.meta_description ||
-        `${article.title.substring(0, 100)}. Learn more about real-time location systems on RTLS Alliance.`,
-      url: `https://rtlsalliance.org/resources/${params.slug}`,
-      type: "article",
-      publishedTime: article.publish_date,
-      modifiedTime: article.updated_at || article.publish_date,
-      section: article.content_type,
+      description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
+      url: canonicalUrl,
       siteName: "RTLS Alliance",
       images: [
         {
-          url: article.featured_image || "/images/rtls-alliance-og-image.png",
+          url: article.featured_image || `${baseUrl}/images/rtls-alliance-logo.png`,
           width: 1200,
           height: 630,
           alt: article.title,
         },
       ],
+      locale: "en_US",
+      type: "article",
+      publishedTime: pubDate,
+      modifiedTime: article.updated_at ? new Date(article.updated_at).toISOString() : pubDate,
+      authors: [article.author || "RTLS Alliance"],
+      tags: keywords,
     },
     twitter: {
       card: "summary_large_image",
       title: article.title,
-      description:
-        article.meta_description ||
-        `${article.title.substring(0, 100)}. Learn more about real-time location systems on RTLS Alliance.`,
-      images: [article.featured_image || "/images/rtls-alliance-twitter-image.png"],
+      description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
+      images: [article.featured_image || `${baseUrl}/images/rtls-alliance-logo.png`],
+    },
+    alternates: {
+      canonical: canonicalUrl,
     },
   }
 }
@@ -81,7 +104,12 @@ export default async function ArticlePage({ params }: { params: { slug: string }
 
     // If no user is logged in and content is gated, show content gate
     if (!user) {
-      return <ContentGate requiredTier={requiredTier as any} userTier="public" />
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <ContentGate requiredTier={requiredTier as any} userTier="public" />
+        </>
+      )
     }
 
     // Get user profile to check membership tier
@@ -106,96 +134,56 @@ export default async function ArticlePage({ params }: { params: { slug: string }
 
     // If user's tier is lower than required, show content gate
     if (userTierLevel < requiredTierLevel) {
-      return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
+        </>
+      )
     }
   }
 
-  // Render the appropriate article type with structured data
-  const renderArticle = () => {
-    switch (article.content_type) {
-      case "Guide":
-        return (
-          <>
-            <GuideRenderer article={article} />
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: generateArticleSchema({
-                  ...article,
-                  "@type": "TechArticle",
-                  articleSection: "Guide",
-                }),
-              }}
-            />
-          </>
-        )
-      case "Success Story":
-        return (
-          <>
-            <SuccessStoryRenderer article={article} />
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: generateArticleSchema({
-                  ...article,
-                  "@type": "Case",
-                  articleSection: "Success Story",
-                }),
-              }}
-            />
-          </>
-        )
-      case "Technology Comparison":
-        return (
-          <>
-            <TechnologyComparisonRenderer article={article} />
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: generateArticleSchema({
-                  ...article,
-                  "@type": "TechArticle",
-                  articleSection: "Technology Comparison",
-                }),
-              }}
-            />
-          </>
-        )
-      case "Member Insight":
-        return (
-          <>
-            <MemberInsightRenderer article={article} />
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: generateArticleSchema({
-                  ...article,
-                  "@type": "Article",
-                  articleSection: "Member Insight",
-                }),
-              }}
-            />
-          </>
-        )
-      default:
-        return (
-          <>
-            <div className="container mx-auto px-4 py-12">
-              <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
-              <div className="prose max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
-              </div>
+  // Render the appropriate article type with SEO component
+  switch (article.content_type) {
+    case "Guide":
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <GuideRenderer article={article} />
+        </>
+      )
+    case "Success Story":
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <SuccessStoryRenderer article={article} />
+        </>
+      )
+    case "Technology Comparison":
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <TechnologyComparisonRenderer article={article} />
+        </>
+      )
+    case "Member Insight":
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <MemberInsightRenderer article={article} />
+        </>
+      )
+    default:
+      return (
+        <>
+          <ResourceSEO article={article} />
+          <div className="container mx-auto px-4 py-12">
+            <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
+            <div className="prose max-w-none">
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
             </div>
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: generateArticleSchema(article),
-              }}
-            />
-          </>
-        )
-    }
+          </div>
+        </>
+      )
   }
-
-  return renderArticle()
 }

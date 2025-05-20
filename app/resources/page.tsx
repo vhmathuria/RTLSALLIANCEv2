@@ -3,23 +3,70 @@ import { Button } from "@/components/ui/button"
 import { getAllArticles } from "@/lib/supabase"
 import { Suspense } from "react"
 import { ResourcesClientPage } from "./resources-client"
-import { generatePageMetadata } from "@/lib/seo-utils"
+import { PageSEO } from "@/components/seo/page-seo"
+import type { Metadata } from "next"
 
-export const metadata = generatePageMetadata({
-  title: "RTLS Resources | Guides, Comparisons & Case Studies",
-  description:
-    "Access comprehensive educational resources from our non-profit community on real-time location systems across industrial, healthcare, defense, and consumer sectors, including implementation guides, technology comparisons, and success stories.",
+export const metadata: Metadata = {
+  title: "Resources - RTLS Alliance",
+  description: "Explore guides, case studies, and insights about Real-Time Location Systems (RTLS).",
   keywords:
-    "RTLS resources, location technology guides, RTLS case studies, technology comparisons, implementation guides, expert insights, real-time location systems, positioning technology resources, non-profit education",
-  path: "/resources",
-})
+    "RTLS resources, real-time location systems guides, RTLS case studies, location technology insights, positioning technology comparisons",
+  openGraph: {
+    title: "Resources - RTLS Alliance",
+    description: "Explore guides, case studies, and insights about Real-Time Location Systems (RTLS).",
+    url: "https://rtlsalliance.com/resources",
+    siteName: "RTLS Alliance",
+    images: [
+      {
+        url: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "RTLS Alliance Resources",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Resources - RTLS Alliance",
+    description: "Explore guides, case studies, and insights about Real-Time Location Systems (RTLS).",
+    images: ["https://rtlsalliance.com/images/rtls-alliance-logo.png"],
+  },
+  alternates: {
+    canonical: "https://rtlsalliance.com/resources",
+  },
+}
 
 export default async function ResourcesPage() {
   // Get all articles
   const allArticles = await getAllArticles()
 
+  // Define collection data for structured data
+  const collectionData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "RTLS Alliance Resources",
+    description: "Explore guides, case studies, and insights about Real-Time Location Systems (RTLS).",
+    url: "https://rtlsalliance.com/resources",
+    publisher: {
+      "@type": "Organization",
+      name: "RTLS Alliance",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+      },
+    },
+  }
+
   return (
     <main className="min-h-screen bg-gray-50">
+      <PageSEO
+        title={metadata.title as string}
+        description={metadata.description as string}
+        structuredData={collectionData}
+      />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="container mx-auto px-4 text-center">

@@ -46,13 +46,21 @@ export async function signInWithEmail(email: string, password: string) {
 export async function signUpWithEmail(email: string, password: string) {
   const supabase = createSupabaseClient()
 
-  return supabase.auth.signUp({
+  const result = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${window.location.origin}/auth/callback`,
+      data: {
+        email_confirmed: true, // Flag to indicate we should send welcome email
+      },
     },
   })
+
+  // The welcome email will be triggered by a database function
+  // when a new user is created with email_confirmed set to true
+
+  return result
 }
 
 export async function signOut() {

@@ -457,41 +457,6 @@ export default function AICamerasTechnologyClientPage() {
               </table>
             </div>
 
-            <h2>Case Studies</h2>
-            <div className="grid md:grid-cols-2 gap-6 my-8">
-              <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold mb-3">Retail Customer Analytics</h3>
-                <p className="mb-4">
-                  A national retail chain deployed AI-powered cameras in 50 stores to analyze customer behavior and
-                  optimize store layouts. The system tracks customer paths, identifies dwell times at different
-                  displays, and measures conversion rates for various store sections.
-                </p>
-                <h4 className="font-semibold mb-2">Results:</h4>
-                <ul className="list-disc pl-5 mb-4">
-                  <li>18% increase in conversion rate for optimized departments</li>
-                  <li>22% reduction in checkout wait times</li>
-                  <li>Data-driven decisions for product placement and staffing</li>
-                  <li>Heat maps revealing customer engagement patterns</li>
-                </ul>
-              </div>
-
-              <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold mb-3">Manufacturing Safety & Efficiency</h3>
-                <p className="mb-4">
-                  A large manufacturing facility implemented an AI camera system to monitor worker-machine interactions
-                  and enforce safety protocols. The system tracks both people and equipment, detecting potential safety
-                  violations and analyzing workflow efficiency.
-                </p>
-                <h4 className="font-semibold mb-2">Results:</h4>
-                <ul className="list-disc pl-5 mb-4">
-                  <li>73% reduction in safety incidents</li>
-                  <li>15% improvement in production efficiency</li>
-                  <li>Automated compliance documentation</li>
-                  <li>Identification of process bottlenecks</li>
-                </ul>
-              </div>
-            </div>
-
             <h2>Future Trends</h2>
             <p>The AI camera RTLS market continues to evolve with several emerging trends:</p>
             <ul>
@@ -542,7 +507,7 @@ export default function AICamerasTechnologyClientPage() {
         </div>
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">AI + Cameras Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -672,38 +637,20 @@ export default function AICamerasTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/ai-camera-implementation-guide"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>AI Camera Implementation Guide</span>
+                  <span>RTLS Deployment Guide</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/camera-placement-optimization"
+                  href="/resources/vision-rtls-warehousing-60-percent-pick-time-improvement"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Camera Placement Optimization</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/ai-model-selection-guide"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>AI Model Selection Guide</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/ai-camera-rtls-case-studies"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>AI Camera RTLS Case Studies</span>
+                  <span>RTLS Success Story</span>
                 </Link>
               </li>
             </ul>

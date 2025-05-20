@@ -38,14 +38,21 @@ export async function checkMembershipAccess(requiredTier: string): Promise<boole
     .single()
 
   // If no profile or inactive membership, only allow public content
-  if (!profile || profile.membership_status !== "active") {
+  if (!profile) {
+    return requiredTier === "public"
+  }
+
+  // Check for active status (case insensitive)
+  const isActive = profile.membership_status?.toUpperCase() === "ACTIVE"
+
+  if (!isActive) {
     return requiredTier === "public"
   }
 
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
     // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id)
+    await supabase.from("profiles").update({ membership_status: "EXPIRED" }).eq("id", user.id)
 
     return requiredTier === "public"
   }
@@ -129,12 +136,6 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
       user_id: user.id,
       membership_tier: tier,
     },
-    subscription_data: {
-      metadata: {
-        user_id: user.id,
-        membership_tier: tier,
-      },
-    },
   })
 
   return { url: session.url }
@@ -145,23 +146,21 @@ export async function updateMembership(userId: string, tier: string, subscriptio
   const supabase = createClient()
 
   try {
-    // Create a direct Supabase client with admin privileges
-    // This ensures we have proper permissions to update the profiles table
-    const adminSupabase = createClient()
+    console.log("Updating membership for user:", userId, "to tier:", tier)
 
-    // Prepare the update data
-    const updateData = {
-      membership_tier: tier,
-      membership_status: "active",
-      membership_expiry: expiryDate?.toISOString() || null,
-      last_payment_date: new Date().toISOString(),
-      stripe_subscription_id: subscriptionId,
-    }
-
-    // Update the profile with the admin client
-    const { error } = await adminSupabase.from("profiles").update(updateData).eq("id", userId)
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        membership_tier: tier,
+        membership_status: "ACTIVE", // Ensure consistent casing
+        membership_expiry: expiryDate?.toISOString() || null,
+        last_payment_date: new Date().toISOString(),
+        stripe_subscription_id: subscriptionId,
+      })
+      .eq("id", userId)
 
     if (error) {
+      console.error("Error updating membership:", error)
       throw error
     }
 
@@ -170,8 +169,10 @@ export async function updateMembership(userId: string, tier: string, subscriptio
     revalidatePath("/membership")
     revalidatePath("/account")
 
+    console.log("Membership updated successfully for user:", userId)
     return { success: true }
   } catch (error) {
+    console.error("Failed to update membership:", error)
     return { success: false, error }
   }
 }
@@ -192,7 +193,7 @@ export async function getCurrentMembership() {
   // Get user profile with membership info
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_tier, membership_status, membership_expiry")
+    .select("membership_tier, membership_status, membership_expiry, stripe_subscription_id")
     .eq("id", user.id)
     .single()
 
@@ -203,7 +204,7 @@ export async function getCurrentMembership() {
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
     // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id)
+    await supabase.from("profiles").update({ membership_status: "EXPIRED" }).eq("id", user.id)
 
     return { tier: "public", status: "expired", expiryDate: profile.membership_expiry }
   }
@@ -212,5 +213,69 @@ export async function getCurrentMembership() {
     tier: profile.membership_tier || "public",
     status: profile.membership_status || "inactive",
     expiryDate: profile.membership_expiry,
+    subscriptionId: profile.stripe_subscription_id,
+  }
+}
+
+// Verify and update membership from success page
+export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
+  try {
+    console.log("Verifying session:", sessionId)
+
+    // Retrieve the checkout session
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["subscription"],
+    })
+
+    if (!session || session.status !== "complete") {
+      console.error("Session not complete:", session?.status)
+      return { success: false, error: "Payment not completed" }
+    }
+
+    const userId = session.metadata?.user_id
+    const membershipTier = session.metadata?.membership_tier
+
+    if (!userId || !membershipTier) {
+      console.error("Missing metadata in session:", session.id)
+      return { success: false, error: "Missing user information" }
+    }
+
+    const subscription = session.subscription as Stripe.Subscription
+    if (!subscription) {
+      console.error("No subscription in session:", session.id)
+      return { success: false, error: "No subscription found" }
+    }
+
+    // Calculate expiry date
+    const expiryDate = new Date(subscription.current_period_end * 1000)
+
+    // Update the membership
+    const supabase = createClient()
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        membership_tier: membershipTier,
+        membership_status: "ACTIVE",
+        membership_expiry: expiryDate.toISOString(),
+        last_payment_date: new Date().toISOString(),
+        stripe_subscription_id: subscription.id,
+      })
+      .eq("id", userId)
+
+    if (error) {
+      console.error("Error updating profile from success page:", error)
+      return { success: false, error: error.message }
+    }
+
+    // Revalidate paths
+    revalidatePath("/resources")
+    revalidatePath("/membership")
+    revalidatePath("/account")
+
+    console.log("Membership verified and updated from success page for user:", userId)
+    return { success: true, tier: membershipTier }
+  } catch (error: any) {
+    console.error("Error verifying session:", error)
+    return { success: false, error: error.message }
   }
 }

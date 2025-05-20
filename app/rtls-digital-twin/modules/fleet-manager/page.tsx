@@ -1,5 +1,5 @@
+import type { Metadata } from "next"
 import Link from "next/link"
-import { generateModuleMetadata, generateModuleSchema } from "@/lib/seo-utils"
 import {
   ArrowLeft,
   MapPin,
@@ -14,18 +14,12 @@ import {
   Clock,
 } from "lucide-react"
 
-export const metadata = generateModuleMetadata(
-  "Fleet Manager",
-  "Real-Time Vehicle & Asset Tracking",
-  "Implement real-time fleet management with RTLS technology. Track vehicles, equipment, and mobile assets with precision for improved operational efficiency.",
-  "RTLS fleet management, vehicle tracking, asset tracking, fleet optimization, real-time location, equipment tracking, mobile asset management, logistics tracking",
-)
+export const metadata: Metadata = {
+  title: "Fleet Manager Module | RTLS Digital Twin",
+  description: "Track and manage vehicles, equipment, and mobile assets in real-time with digital twin technology.",
+}
 
-export default function FleetManagerModulePage() {
-  const title = "RTLS Fleet Manager Module | Real-Time Vehicle & Asset Tracking"
-  const description =
-    "Implement real-time fleet management with RTLS technology. Track vehicles, equipment, and mobile assets with precision for improved operational efficiency."
-
+export default function FleetManagerPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mb-8">
@@ -453,13 +447,6 @@ export default function FleetManagerModulePage() {
           </div>
         </div>
       </section>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: generateModuleSchema(title, description, "Fleet Manager"),
-        }}
-      />
     </div>
   )
 }

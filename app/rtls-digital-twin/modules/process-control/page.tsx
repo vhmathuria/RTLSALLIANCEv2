@@ -17,20 +17,9 @@ import {
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "RTLS Process Control Module | Real-Time Workflow Management",
+  title: "Process Control Module | RTLS Digital Twin",
   description:
-    "Comprehensive overview of the RTLS Process Control module for monitoring and optimizing workflows, ensuring compliance, and identifying bottlenecks using real-time location data.",
-  keywords:
-    "process control, workflow management, RTLS module, compliance monitoring, bottleneck identification, process optimization, operational efficiency",
-  alternates: {
-    canonical: "/rtls-digital-twin/modules/process-control",
-  },
-  openGraph: {
-    title: "RTLS Process Control Module | RTLS Alliance",
-    description: "Comprehensive overview of the RTLS Process Control module for real-time workflow management.",
-    url: "https://rtlsalliance.org/rtls-digital-twin/modules/process-control",
-    type: "article",
-  },
+    "Monitor and control manufacturing processes with location-aware automation in digital twin environments.",
 }
 
 export default function ProcessControlPage() {

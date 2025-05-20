@@ -495,46 +495,6 @@ export default function RTKGPSTechnologyClientPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Precision Agriculture Implementation</h3>
-                <p className="mb-4">
-                  A large agricultural operation implemented RTK-GPS guidance systems across their equipment fleet:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Reduced input costs by 15% through precise application</li>
-                  <li>Decreased fuel consumption by 12% with optimized field operations</li>
-                  <li>Achieved 2.5cm pass-to-pass accuracy in field operations</li>
-                  <li>Enabled 24-hour operations with consistent accuracy</li>
-                </ul>
-                <Link
-                  href="/resources/rtk-gps-precision-agriculture-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Construction Site Management</h3>
-                <p className="mb-4">A construction company deployed RTK-GPS for machine control and site management:</p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Reduced earthmoving costs by 30% through precise grading</li>
-                  <li>Decreased rework by 80% with accurate machine guidance</li>
-                  <li>Improved project completion time by 25%</li>
-                  <li>Achieved ROI within 8 months of implementation</li>
-                </ul>
-                <Link
-                  href="/resources/rtk-gps-construction-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in RTK-GPS/DGPS Technology</h2>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
@@ -707,7 +667,7 @@ export default function RTKGPSTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">RTK-GPS/DGPS Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -827,6 +787,48 @@ export default function RTKGPSTechnologyClientPage() {
                 >
                   <MapPin className="h-4 w-4 mr-2" />
                   <span>SLAM</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <h3 className="text-lg font-bold mb-4">Resources</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
+                  className="flex items-center text-blue-600 hover:underline"
+                >
+                  <ArrowRight className="h-4 w-4 mr-2" />
+                  <span>RTLS Deployment Guide</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/rf-site-survey-rtls-planning-density-best-practices"
+                  className="flex items-center text-blue-600 hover:underline"
+                >
+                  <ArrowRight className="h-4 w-4 mr-2" />
+                  <span>RTLS Infrastructure Planning</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/uwb-vs-gps-indoor-outdoor-tracking-guide"
+                  className="flex items-center text-blue-600 hover:underline"
+                >
+                  <ArrowRight className="h-4 w-4 mr-2" />
+                  <span>RTK-GPS vs UWB Tracking Guide</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/automotive-oem-40-throughput-boost-uwb-rtls"
+                  className="flex items-center text-blue-600 hover:underline"
+                >
+                  <ArrowRight className="h-4 w-4 mr-2" />
+                  <span>RTLS Success Story</span>
                 </Link>
               </li>
             </ul>

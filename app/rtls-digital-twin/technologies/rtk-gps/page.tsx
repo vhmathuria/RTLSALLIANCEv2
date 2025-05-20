@@ -1,54 +1,69 @@
-import RTKGPSTechnologyClientPage from "./RTKGPSTechnologyClientPage" // Assuming this is the correct path
+import RTKGPSTechnologyClientPage from "./RTKGPSTechnologyClientPage"
+import { TechnologySEO } from "@/components/seo/technology-seo"
+import type { Metadata } from "next"
 
-export const metadata = {
-  title: "RTK-GPS/DGPS Technology for Real-Time Location Systems | Centimeter Accuracy",
+// Define metadata for the page
+export const metadata: Metadata = {
+  title: "RTK-GPS Technology for Precise Positioning - RTLS Alliance",
   description:
-    "Explore how Real-Time Kinematic (RTK) GPS and Differential GPS (DGPS) deliver centimeter-level positioning accuracy for high-precision outdoor RTLS applications in agriculture, construction, and surveying.",
+    "Learn how Real-Time Kinematic GPS provides centimeter-level accuracy for outdoor positioning and tracking applications.",
   keywords:
-    "RTK GPS, DGPS, differential GPS, high-precision GPS, centimeter accuracy, outdoor positioning, precision agriculture, construction tracking, surveying",
-  alternates: {
-    canonical: "/rtls-digital-twin/technologies/rtk-gps",
-  },
+    "RTK-GPS, real-time kinematic, GPS, GNSS, precise positioning, centimeter accuracy, differential GPS, RTLS, location tracking",
   openGraph: {
-    title: "RTK-GPS/DGPS Technology for Real-Time Location Systems | RTLS Alliance",
+    title: "RTK-GPS Technology for Precise Positioning - RTLS Alliance",
     description:
-      "Explore how Real-Time Kinematic (RTK) GPS and Differential GPS (DGPS) deliver centimeter-level positioning accuracy.",
-    url: "https://rtlsalliance.org/rtls-digital-twin/technologies/rtk-gps",
+      "Learn how Real-Time Kinematic GPS provides centimeter-level accuracy for outdoor positioning and tracking applications.",
+    url: "https://rtlsalliance.com/rtls-digital-twin/technologies/rtk-gps",
+    siteName: "RTLS Alliance",
+    images: [
+      {
+        url: "https://rtlsalliance.com/images/rtk-gps-positioning.png",
+        width: 1200,
+        height: 630,
+        alt: "RTK-GPS Technology",
+      },
+    ],
+    locale: "en_US",
     type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RTK-GPS Technology for Precise Positioning - RTLS Alliance",
+    description:
+      "Learn how Real-Time Kinematic GPS provides centimeter-level accuracy for outdoor positioning and tracking applications.",
+    images: ["https://rtlsalliance.com/images/rtk-gps-positioning.png"],
+  },
+  alternates: {
+    canonical: "https://rtlsalliance.com/rtls-digital-twin/technologies/rtk-gps",
   },
 }
 
-export default function RTKGPSPage() {
+export default function RTKGPSTechnologyPage() {
+  // Define technology data for structured data
+  const technology = {
+    name: "RTK-GPS Technology",
+    slug: "rtk-gps",
+    image: "https://rtlsalliance.com/images/rtk-gps-positioning.png",
+    category: "Satellite Positioning Technology",
+  }
+
+  // Define breadcrumbs for structured data
+  const breadcrumbs = [
+    { name: "Home", url: "https://rtlsalliance.com" },
+    { name: "RTLS + Digital Twin", url: "https://rtlsalliance.com/rtls-digital-twin" },
+    { name: "Technologies", url: "https://rtlsalliance.com/rtls-digital-twin/technologies" },
+    { name: "RTK-GPS", url: "https://rtlsalliance.com/rtls-digital-twin/technologies/rtk-gps" },
+  ]
+
   return (
     <>
-      <RTKGPSTechnologyClientPage />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "TechArticle",
-            headline: "RTK-GPS/DGPS Technology for Real-Time Location Systems",
-            description:
-              "Explore how Real-Time Kinematic (RTK) GPS and Differential GPS (DGPS) deliver centimeter-level positioning accuracy for high-precision outdoor RTLS applications.",
-            keywords: "RTK GPS, DGPS, differential GPS, high-precision GPS, centimeter accuracy",
-            author: {
-              "@type": "Organization",
-              name: "RTLS Alliance",
-            },
-            publisher: {
-              "@type": "Organization",
-              name: "RTLS Alliance",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
-              },
-            },
-            datePublished: "2023-10-05",
-            dateModified: "2024-05-19",
-          }),
-        }}
+      <TechnologySEO
+        title={metadata.title as string}
+        description={metadata.description as string}
+        technology={technology}
+        breadcrumbs={breadcrumbs}
       />
+      <RTKGPSTechnologyClientPage />
     </>
   )
 }

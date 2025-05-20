@@ -458,48 +458,6 @@ export default function SLAMTechnologyClientPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Warehouse Automation</h3>
-                <p className="mb-4">
-                  A major e-commerce fulfillment center implemented SLAM-based autonomous mobile robots (AMRs):
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Deployed 120 AMRs equipped with LiDAR SLAM across a 500,000 sq ft facility</li>
-                  <li>Robots dynamically mapped the warehouse and navigated without fixed infrastructure</li>
-                  <li>System adapted automatically to changing inventory layouts and obstacles</li>
-                  <li>Achieved 35% increase in picking efficiency and 28% reduction in operational costs</li>
-                  <li>Eliminated need for expensive fixed infrastructure and facility modifications</li>
-                </ul>
-                <Link
-                  href="/resources/slam-warehouse-automation-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Augmented Reality Retail Experience</h3>
-                <p className="mb-4">A retail chain implemented Visual SLAM for an immersive shopping application:</p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Mobile app used Visual SLAM to map store environments in real-time</li>
-                  <li>Customers received personalized navigation and product information</li>
-                  <li>System worked without markers, beacons, or store modifications</li>
-                  <li>Increased customer engagement by 47% and average purchase value by 23%</li>
-                  <li>Deployment costs were 65% lower than beacon-based alternatives</li>
-                </ul>
-                <Link
-                  href="/resources/slam-retail-ar-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in SLAM Technology</h2>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
@@ -670,7 +628,7 @@ export default function SLAMTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">SLAM Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -800,38 +758,29 @@ export default function SLAMTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/slam-implementation-guide"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>SLAM Implementation Guide</span>
+                  <span>RTLS Implementation Guide</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/visual-vs-lidar-slam-comparison"
+                  href="/resources/vision-slam-vs-lidar-choosing-ideal-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Visual vs. LiDAR SLAM Comparison</span>
+                  <span>Visual vs. LiDAR SLAM Analysis</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/slam-algorithm-selection-tool"
+                  href="/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>SLAM Algorithm Selection Tool</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/infrastructure-free-rtls-guide"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Infrastructure-Free RTLS Guide</span>
+                  <span>SLAM Mapping Strategies</span>
                 </Link>
               </li>
             </ul>

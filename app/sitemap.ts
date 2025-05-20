@@ -1,65 +1,63 @@
 import type { MetadataRoute } from "next"
-import { getAllArticles } from "@/lib/supabase"
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Get all articles for dynamic routes
-  const allArticles = await getAllArticles()
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://rtlsalliance.com"
 
-  // Base URL
-  const baseUrl = "https://rtlsalliance.org"
-
-  // Current date for lastModified
-  const currentDate = new Date()
-
-  // Static routes
-  const staticRoutes = [
+  // Main pages
+  const mainPages = [
     {
       url: baseUrl,
-      lastModified: currentDate,
+      lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 1.0,
+      priority: 1,
     },
     {
-      url: `${baseUrl}/membership`,
-      lastModified: currentDate,
+      url: `${baseUrl}/rtls-digital-twin`,
+      lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/resources`,
-      lastModified: currentDate,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/certification`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/membership`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/contact`,
-      lastModified: currentDate,
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/ecosystem`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ecosystem/directory`,
-      lastModified: currentDate,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/join-alliance`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
+      url: `${baseUrl}/ecosystem/directory`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/rtls-digital-twin`,
-      lastModified: currentDate,
+      url: `${baseUrl}/project`,
+      lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.9,
+      priority: 0.7,
     },
   ]
 
@@ -82,38 +80,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "dead-reckoning",
   ]
 
-  const technologyRoutes = technologies.map((tech) => ({
+  const technologyPages = technologies.map((tech) => ({
     url: `${baseUrl}/rtls-digital-twin/technologies/${tech}`,
-    lastModified: currentDate,
+    lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.8,
   }))
 
-  // Module pages
-  const modules = [
-    "production-planning",
-    "process-control",
-    "rules-engine",
-    "dashboard-reports",
-    "fleet-manager",
-    "simulation-modeling",
-  ]
-
-  const moduleRoutes = modules.map((module) => ({
-    url: `${baseUrl}/rtls-digital-twin/modules/${module}`,
-    lastModified: currentDate,
-    changeFrequency: "monthly",
-    priority: 0.8,
-  }))
-
-  // Article routes
-  const articleRoutes = allArticles.map((article) => ({
-    url: `${baseUrl}/resources/${article.slug}`,
-    lastModified: new Date(article.updated_at || article.publish_date),
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }))
-
-  // Combine all routes
-  return [...staticRoutes, ...technologyRoutes, ...moduleRoutes, ...articleRoutes]
+  // Combine all pages
+  return [...mainPages, ...technologyPages]
 }

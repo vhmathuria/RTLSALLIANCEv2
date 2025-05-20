@@ -447,41 +447,6 @@ export default function LiDARTechnologyClientPage() {
               </table>
             </div>
 
-            <h2>Case Studies</h2>
-            <div className="grid md:grid-cols-2 gap-6 my-8">
-              <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold mb-3">Warehouse Automation</h3>
-                <p className="mb-4">
-                  A large e-commerce fulfillment center implemented a LiDAR-based RTLS to optimize their operations.
-                  Ceiling-mounted 3D LiDAR sensors track the movement of workers, forklifts, and autonomous mobile
-                  robots throughout the 500,000 square foot facility.
-                </p>
-                <h4 className="font-semibold mb-2">Results:</h4>
-                <ul className="list-disc pl-5 mb-4">
-                  <li>25% increase in picking efficiency</li>
-                  <li>38% reduction in travel time for material handlers</li>
-                  <li>62% decrease in safety incidents</li>
-                  <li>Real-time visibility into warehouse operations</li>
-                </ul>
-              </div>
-
-              <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold mb-3">Manufacturing Safety</h3>
-                <p className="mb-4">
-                  An automotive manufacturing plant deployed a network of 2D LiDAR sensors to create safety zones around
-                  automated machinery. The system tracks the position of workers and equipment, automatically slowing or
-                  stopping machines when safety thresholds are crossed.
-                </p>
-                <h4 className="font-semibold mb-2">Results:</h4>
-                <ul className="list-disc pl-5 mb-4">
-                  <li>Zero machine-related injuries since implementation</li>
-                  <li>15% increase in production throughput</li>
-                  <li>Reduced need for physical safety barriers</li>
-                  <li>Comprehensive safety compliance documentation</li>
-                </ul>
-              </div>
-            </div>
-
             <h2>Future Trends</h2>
             <p>The LiDAR RTLS market continues to evolve with several emerging trends:</p>
             <ul>
@@ -530,7 +495,7 @@ export default function LiDARTechnologyClientPage() {
         </div>
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">LiDAR Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -660,38 +625,38 @@ export default function LiDARTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/lidar-rtls-implementation-guide"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>LiDAR RTLS Implementation Guide</span>
+                  <span>RTLS Deployment Guide</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/lidar-sensor-selection"
+                  href="/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>LiDAR Sensor Selection Guide</span>
+                  <span>Mapping Optimization</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/lidar-vs-camera-comparison"
+                  href="/resources/vision-slam-vs-lidar-choosing-ideal-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>LiDAR vs Camera Comparison</span>
+                  <span>LiDAR vs SLAM Analysis</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/lidar-rtls-case-studies"
+                  href="/resources/vision-rtls-warehousing-60-percent-pick-time-improvement"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>LiDAR RTLS Case Studies</span>
+                  <span>RTLS Success Story</span>
                 </Link>
               </li>
             </ul>

@@ -465,7 +465,7 @@ export default function UWBTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">UWB Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -595,38 +595,38 @@ export default function UWBTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/uwb-implementation-guide"
+                  href="/resources/how-uwb-works-time-of-flight-tdoa-deep-dive"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>UWB Implementation Guide</span>
+                  <span>UWB Technical Overview</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/anchor-placement-optimization"
+                  href="/resources/rf-site-survey-rtls-planning-density-best-practices"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Anchor Placement Optimization</span>
+                  <span>Anchor Deployment Strategies</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/uwb-vs-ble-comparison"
+                  href="/resources/ble-vs-uwb-cost-accuracy-deployment-comparison"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>UWB vs BLE Comparison</span>
+                  <span>UWB vs BLE Analysis</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/uwb-rtls-case-studies"
+                  href="/resources/automotive-oem-40-throughput-boost-uwb-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>UWB RTLS Case Studies</span>
+                  <span>UWB Success Stories</span>
                 </Link>
               </li>
             </ul>

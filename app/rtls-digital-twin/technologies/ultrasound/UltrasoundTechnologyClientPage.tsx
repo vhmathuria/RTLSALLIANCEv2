@@ -416,48 +416,6 @@ export default function UltrasoundTechnologyClientPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Hospital Asset Management</h3>
-                <p className="mb-4">
-                  A major hospital implemented an ultrasound-based RTLS to track critical medical equipment:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Deployed across 15,000 square meters with 450 ultrasonic receivers</li>
-                  <li>Tracked 2,000+ mobile medical devices with ultrasonic tags</li>
-                  <li>Achieved 10cm positioning accuracy throughout the facility</li>
-                  <li>Reduced equipment search time by 78% and rental costs by 32%</li>
-                  <li>ROI achieved within 9 months of full deployment</li>
-                </ul>
-                <Link
-                  href="/resources/ultrasound-hospital-asset-tracking-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Manufacturing Tool Tracking</h3>
-                <p className="mb-4">An automotive manufacturer deployed ultrasound positioning for tool management:</p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Implemented across 5 assembly lines covering 8,000 square meters</li>
-                  <li>Tracked 1,200 precision tools with ultrasonic tags</li>
-                  <li>Integrated with torque verification and process control systems</li>
-                  <li>Reduced tool search time by 92% and calibration compliance issues by 64%</li>
-                  <li>Prevented assembly errors through tool-to-task verification</li>
-                </ul>
-                <Link
-                  href="/resources/ultrasound-manufacturing-tool-tracking-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in Ultrasound Positioning</h2>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
@@ -630,7 +588,7 @@ export default function UltrasoundTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">Ultrasound Technology Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -760,38 +718,20 @@ export default function UltrasoundTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/ultrasound-implementation-guide"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Ultrasound Implementation Guide</span>
+                  <span>RTLS Implementation Guide</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/resources/ultrasound-beacon-placement"
+                  href="/resources/hospital-asset-tracking-1-2m-savings-rtls"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Ultrasound Beacon Placement</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/ultrasound-vs-uwb-comparison"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Ultrasound vs UWB Comparison</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/ultrasound-rtls-case-studies"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Ultrasound RTLS Case Studies</span>
+                  <span>RTLS Success Story</span>
                 </Link>
               </li>
             </ul>

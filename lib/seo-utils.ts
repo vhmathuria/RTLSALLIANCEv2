@@ -1,198 +1,155 @@
-import type { Metadata } from "next"
-
 /**
- * Generates standardized metadata for any page
+ * Generates a BreadcrumbList schema for structured data
  */
-export function generatePageMetadata({
-  title,
-  description,
-  keywords,
-  path,
-  ogImage = "/images/rtls-alliance-og-image.png",
-  ogType = "website",
-  twitterImage = "/images/rtls-alliance-twitter-image.png",
-}: {
-  title: string
-  description: string
-  keywords: string
-  path: string
-  ogImage?: string
-  ogType?: "website" | "article"
-  twitterImage?: string
-}): Metadata {
-  const url = `https://rtlsalliance.org${path}`
-
+export function generateBreadcrumbSchema(breadcrumbs: { name: string; url: string }[]) {
   return {
-    title,
-    description,
-    keywords,
-    alternates: {
-      canonical: path,
-    },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: "RTLS Alliance - Non-Profit Location Intelligence Community",
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-      locale: "en_US",
-      type: ogType,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [twitterImage],
-    },
-    other: {
-      "org:non-profit": "true",
-      "org:sectors": "industrial, healthcare, defense, consumer",
-    },
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: breadcrumb.name,
+      item: breadcrumb.url,
+    })),
   }
 }
 
 /**
- * Generates standardized metadata for technology pages
+ * Generates an Organization schema for structured data
  */
-export function generateTechnologyMetadata(
-  technology: string,
-  subtitle: string,
-  description: string,
-  keywords: string,
-): Metadata {
-  const title = `${technology} Technology for RTLS | ${subtitle}`
-  const path = `/rtls-digital-twin/technologies/${technology.toLowerCase()}`
-
-  return generatePageMetadata({
-    title,
-    description,
-    keywords,
-    path,
-    ogType: "article",
-  })
-}
-
-/**
- * Generates standardized metadata for module pages
- */
-export function generateModuleMetadata(
-  module: string,
-  subtitle: string,
-  description: string,
-  keywords: string,
-): Metadata {
-  const title = `RTLS ${module} Module | ${subtitle}`
-  const path = `/rtls-digital-twin/modules/${module.toLowerCase().replace(/\s+/g, "-")}`
-
-  return generatePageMetadata({
-    title,
-    description,
-    keywords,
-    path,
-    ogType: "article",
-  })
-}
-
-/**
- * Generates schema.org structured data for technology pages
- */
-export function generateTechnologySchema(title: string, description: string, technology: string): string {
-  return JSON.stringify({
+export function generateOrganizationSchema({
+  name,
+  url,
+  logo,
+  description,
+  sameAs,
+}: {
+  name: string
+  url: string
+  logo: string
+  description: string
+  sameAs: string[]
+}) {
+  return {
     "@context": "https://schema.org",
-    "@type": "TechArticle",
-    headline: `${technology} Technology for RTLS`,
+    "@type": "Organization",
+    name,
+    url,
+    logo: {
+      "@type": "ImageObject",
+      url: logo,
+    },
     description,
-    keywords: `${technology}, RTLS, real-time location systems`,
+    sameAs,
+  }
+}
+
+/**
+ * Generates an Article schema for structured data
+ */
+export function generateArticleSchema({
+  title,
+  description,
+  url,
+  imageUrl,
+  authorName,
+  publisherName,
+  publisherLogo,
+  datePublished,
+  dateModified,
+}: {
+  title: string
+  description: string
+  url: string
+  imageUrl: string
+  authorName: string
+  publisherName: string
+  publisherLogo: string
+  datePublished: string
+  dateModified: string
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    image: imageUrl,
     author: {
-      "@type": "NonprofitOrganization",
-      name: "RTLS Alliance",
-      description:
-        "A non-profit community dedicated to education and promotion of Location Intelligence across industrial, healthcare, defense, and consumer sectors.",
+      "@type": "Person",
+      name: authorName,
     },
     publisher: {
-      "@type": "NonprofitOrganization",
-      name: "RTLS Alliance",
-      description:
-        "A non-profit community dedicated to education and promotion of Location Intelligence across industrial, healthcare, defense, and consumer sectors.",
+      "@type": "Organization",
+      name: publisherName,
       logo: {
         "@type": "ImageObject",
-        url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
+        url: publisherLogo,
       },
     },
-    datePublished: "2023-01-15",
-    dateModified: new Date().toISOString().split("T")[0],
-  })
+    url,
+    datePublished,
+    dateModified,
+  }
 }
 
 /**
- * Generates schema.org structured data for module pages
+ * Generates a Technology schema for structured data (Product type)
  */
-export function generateModuleSchema(title: string, description: string, module: string): string {
-  return JSON.stringify({
+export function generateTechnologySchema({
+  name,
+  description,
+  image,
+  url,
+  category,
+  brand = "RTLS Alliance",
+  offers = null,
+}: {
+  name: string
+  description: string
+  image: string
+  url: string
+  category: string
+  brand?: string
+  offers?: any
+}) {
+  return {
     "@context": "https://schema.org",
-    "@type": "TechArticle",
-    headline: `RTLS ${module} Module`,
+    "@type": "Product",
+    name,
     description,
-    keywords: `${module}, RTLS module, real-time location systems`,
-    author: {
-      "@type": "NonprofitOrganization",
-      name: "RTLS Alliance",
-      description:
-        "A non-profit community dedicated to education and promotion of Location Intelligence across industrial, healthcare, defense, and consumer sectors.",
+    image,
+    url,
+    category,
+    brand: {
+      "@type": "Brand",
+      name: brand,
     },
-    publisher: {
-      "@type": "NonprofitOrganization",
-      name: "RTLS Alliance",
-      description:
-        "A non-profit community dedicated to education and promotion of Location Intelligence across industrial, healthcare, defense, and consumer sectors.",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
-      },
-    },
-    datePublished: "2023-01-15",
-    dateModified: new Date().toISOString().split("T")[0],
-  })
+    ...(offers && { offers }),
+  }
 }
 
 /**
- * Generates schema.org structured data for resource articles
+ * Extracts keywords from content
  */
-export function generateArticleSchema(article: any): string {
-  return JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": article.content_type === "Success Story" ? "Case" : "Article",
-    headline: article.title,
-    description: article.meta_description || article.title,
-    keywords: article.keywords || `RTLS, ${article.content_type.toLowerCase()}, real-time location systems`,
-    author: {
-      "@type": "NonprofitOrganization",
-      name: "RTLS Alliance",
-      description:
-        "A non-profit community dedicated to education and promotion of Location Intelligence across industrial, healthcare, defense, and consumer sectors.",
-    },
-    publisher: {
-      "@type": "NonprofitOrganization",
-      name: "RTLS Alliance",
-      description:
-        "A non-profit community dedicated to education and promotion of Location Intelligence across industrial, healthcare, defense, and consumer sectors.",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
+export function extractKeywords(content: string, maxKeywords = 10): string {
+  // This is a simplified implementation
+  // In a real application, you would use NLP or other techniques
+  const words = content
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .split(/\s+/)
+    .filter((word) => word.length > 3)
+    .reduce(
+      (acc, word) => {
+        acc[word] = (acc[word] || 0) + 1
+        return acc
       },
-    },
-    datePublished: article.publish_date,
-    dateModified: article.updated_at || article.publish_date,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://rtlsalliance.org/resources/${article.slug}`,
-    },
-  })
+      {} as Record<string, number>,
+    )
+
+  return Object.entries(words)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, maxKeywords)
+    .map(([word]) => word)
+    .join(", ")
 }

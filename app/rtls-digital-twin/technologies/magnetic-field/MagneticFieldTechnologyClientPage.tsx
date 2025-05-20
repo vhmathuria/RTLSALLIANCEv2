@@ -2,7 +2,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import {
-  ArrowRight,
   CheckCircle,
   XCircle,
   MapPin,
@@ -108,7 +107,7 @@ export default function MagneticFieldTechnologyClientPage() {
 
             <div className="relative h-64 w-full rounded-xl overflow-hidden mb-8">
               <Image
-                src="/placeholder.svg?height=300&width=800&query=magnetic field heatmap of indoor environment with positioning overlay"
+                src="/indoor-magnetic-heatmap.png"
                 alt="Magnetic field heatmap of indoor environment with positioning overlay"
                 fill
                 className="object-cover"
@@ -436,46 +435,6 @@ export default function MagneticFieldTechnologyClientPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Hospital Wayfinding Solution</h3>
-                <p className="mb-4">
-                  A major medical center implemented magnetic field mapping for patient and visitor navigation:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Deployed across 2.3 million square feet with no additional hardware</li>
-                  <li>Achieved 2-3 meter accuracy throughout the facility</li>
-                  <li>Reduced missed appointments by 17% through improved navigation</li>
-                  <li>Integrated with appointment systems for end-to-end guidance</li>
-                </ul>
-                <Link
-                  href="/resources/magnetic-hospital-wayfinding-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Retail Analytics Platform</h3>
-                <p className="mb-4">A retail chain deployed magnetic positioning for customer journey analysis:</p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Implemented across 50 stores with minimal setup time</li>
-                  <li>Generated detailed heatmaps of customer movement patterns</li>
-                  <li>Identified 23% increase in conversion after layout optimization</li>
-                  <li>Combined with BLE beacons at key decision points for enhanced accuracy</li>
-                </ul>
-                <Link
-                  href="/resources/magnetic-retail-analytics-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in Magnetic Field Mapping</h2>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
@@ -640,7 +599,7 @@ export default function MagneticFieldTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">Magnetic Field Mapping Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -770,38 +729,10 @@ export default function MagneticFieldTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/magnetic-mapping-implementation-guide"
-                  className="flex items-center text-blue-600 hover:underline"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
+                  className="text-blue-600 hover:underline"
                 >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Magnetic Mapping Implementation Guide</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/hybrid-positioning-strategies"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Hybrid Positioning Strategies</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/magnetic-mapping-roi-calculator"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Magnetic Mapping ROI Calculator</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/indoor-positioning-technology-comparison"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Indoor Positioning Technology Comparison</span>
+                  RTLS Implementation Guide
                 </Link>
               </li>
             </ul>

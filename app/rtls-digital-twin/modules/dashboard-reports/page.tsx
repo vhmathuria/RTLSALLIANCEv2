@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -11,33 +12,20 @@ import {
   BookOpen,
   GitBranch,
   Layers,
+  ArrowRight,
   Workflow,
   Bell,
 } from "lucide-react"
-import DashboardReportsModuleClientPage from "./DashboardReportsModuleClientPage"
-import { generateModuleMetadata, generateModuleSchema } from "@/lib/seo-utils"
 
-export const metadata = generateModuleMetadata(
-  "Dashboard & Reports",
-  "Location Intelligence Analytics",
-  "Visualize location data and generate actionable insights with customizable analytics tools in the RTLS Dashboard & Reports module.",
-  "RTLS dashboard, location analytics, real-time reporting, data visualization, location intelligence, asset utilization metrics, operational insights",
-)
+export const metadata: Metadata = {
+  title: "Dashboard & Reports Module | RTLS Digital Twin",
+  description:
+    "Visualize location data and generate insights with customizable analytics tools in digital twin environments with verifiable research-based insights.",
+}
 
-export default function DashboardReportsModulePage() {
-  const title = "RTLS Dashboard & Reports Module | Location Intelligence Analytics"
-  const description =
-    "Visualize location data and generate actionable insights with customizable analytics tools in the RTLS Dashboard & Reports module."
-
+export default function DashboardReportsPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <DashboardReportsModuleClientPage />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: generateModuleSchema(title, description, "Dashboard & Reports"),
-        }}
-      />
       <div className="mb-8">
         <Link href="/rtls-digital-twin" className="flex items-center text-blue-600 hover:text-blue-800">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -548,6 +536,23 @@ export default function DashboardReportsModulePage() {
           </section>
         </div>
       </div>
+
+      <section className="bg-blue-50 border border-blue-200 rounded-lg p-8 mb-12">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">Ready to visualize your location data?</h2>
+          <p className="text-lg mb-6">
+            Contact an RTLS expert to discuss how the Dashboard & Reports Module can transform your location data into
+            actionable insights.
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors"
+          >
+            Contact an RTLS Expert
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        </div>
+      </section>
     </div>
   )
 }

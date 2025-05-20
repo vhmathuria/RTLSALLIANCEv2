@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -15,21 +16,10 @@ import {
   Server,
 } from "lucide-react"
 
-export const metadata = {
-  title: "RTLS Production Planning Module | Manufacturing Optimization",
+export const metadata: Metadata = {
+  title: "Production Planning Module | RTLS Digital Twin",
   description:
-    "Comprehensive overview of the RTLS Production Planning module for optimizing manufacturing workflows, resource allocation, and production scheduling using real-time location data.",
-  keywords:
-    "production planning, manufacturing optimization, RTLS module, workflow efficiency, resource allocation, production scheduling, lean manufacturing",
-  alternates: {
-    canonical: "/rtls-digital-twin/modules/production-planning",
-  },
-  openGraph: {
-    title: "RTLS Production Planning Module | RTLS Alliance",
-    description: "Comprehensive overview of the RTLS Production Planning module for manufacturing optimization.",
-    url: "https://rtlsalliance.org/rtls-digital-twin/modules/production-planning",
-    type: "article",
-  },
+    "Optimize production schedules and resource allocation with real-time location data in digital twin environments.",
 }
 
 export default function ProductionPlanningPage() {

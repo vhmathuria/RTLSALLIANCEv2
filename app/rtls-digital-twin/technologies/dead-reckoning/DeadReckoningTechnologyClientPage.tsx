@@ -43,7 +43,7 @@ export default function DeadReckoningTechnologyClientPage() {
 
             <div className="relative h-80 w-full rounded-xl overflow-hidden mb-8">
               <Image
-                src="/placeholder-rjuey.png"
+                src="/dead-reckoning-rtls.png"
                 alt="Dead reckoning with RTLS anchor correction visualization"
                 fill
                 className="object-cover"
@@ -129,7 +129,7 @@ export default function DeadReckoningTechnologyClientPage() {
 
             <div className="relative h-64 w-full rounded-xl overflow-hidden mb-8">
               <Image
-                src="/placeholder-6tk4d.png"
+                src="/dead-reckoning-rtls-correction.png"
                 alt="Dead reckoning error correction with RTLS anchors diagram"
                 fill
                 className="object-cover"
@@ -472,53 +472,6 @@ export default function DeadReckoningTechnologyClientPage() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Manufacturing Facility Optimization</h3>
-                <p className="mb-4">
-                  A large automotive manufacturing plant implemented a hybrid dead reckoning system with strategic UWB
-                  anchors:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Deployed IMU-equipped badges for 500+ workers across a 1.2 million sq ft facility</li>
-                  <li>Installed only 120 UWB anchors (vs. 400+ required for full UWB coverage)</li>
-                  <li>Dead reckoning maintained tracking between anchor points</li>
-                  <li>Achieved 1-2 meter accuracy throughout the facility</li>
-                  <li>Reduced infrastructure costs by 65% while maintaining required positioning accuracy</li>
-                  <li>Improved workflow analysis led to 12% productivity increase</li>
-                </ul>
-                <Link
-                  href="/resources/dead-reckoning-manufacturing-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Hospital Asset Tracking</h3>
-                <p className="mb-4">A regional hospital implemented a hybrid tracking system for critical equipment:</p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Equipped 2,000+ mobile medical devices with IMU-based tracking modules</li>
-                  <li>Deployed BLE beacons at key locations (room entrances, nursing stations, storage areas)</li>
-                  <li>Dead reckoning maintained device locations between beacon encounters</li>
-                  <li>
-                    System provided room-level accuracy with 75% fewer beacons than traditional BLE-only solutions
-                  </li>
-                  <li>Equipment utilization increased by 26% and search time reduced by 64%</li>
-                  <li>Battery life extended to 18 months due to optimized sensor usage</li>
-                </ul>
-                <Link
-                  href="/resources/dead-reckoning-hospital-case-study"
-                  className="text-blue-600 hover:underline flex items-center"
-                >
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
             <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in Dead Reckoning + RTLS</h2>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
@@ -692,7 +645,7 @@ export default function DeadReckoningTechnologyClientPage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
             <h3 className="text-lg font-bold mb-4">Dead Reckoning + RTLS Overview</h3>
 
             <div className="space-y-4 mb-6">
@@ -822,35 +775,11 @@ export default function DeadReckoningTechnologyClientPage() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/resources/dead-reckoning-implementation-guide"
+                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                   className="flex items-center text-blue-600 hover:underline"
                 >
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Dead Reckoning Implementation Guide</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/anchor-placement-optimization"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Anchor Placement Optimization</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/resources/imu-selection-guide" className="flex items-center text-blue-600 hover:underline">
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>IMU Selection Guide for RTLS</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/hybrid-rtls-cost-benefit-analysis"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Hybrid RTLS Cost-Benefit Analysis</span>
+                  <span>RTLS Implementation Guide</span>
                 </Link>
               </li>
             </ul>

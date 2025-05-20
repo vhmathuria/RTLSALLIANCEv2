@@ -1,54 +1,69 @@
-import SLAMTechnologyClientPage from "./SLAMTechnologyClientPage" // Assuming this is the correct path
+import SLAMTechnologyClientPage from "./SLAMTechnologyClientPage"
+import { TechnologySEO } from "@/components/seo/technology-seo"
+import type { Metadata } from "next"
 
-export const metadata = {
-  title: "SLAM Technology for RTLS | Simultaneous Localization and Mapping",
+// Define metadata for the page
+export const metadata: Metadata = {
+  title: "SLAM Technology for Indoor Positioning - RTLS Alliance",
   description:
-    "Learn how Simultaneous Localization and Mapping (SLAM) enables devices to build maps of unknown environments while simultaneously tracking their position, providing infrastructure-free positioning for robotics and automation.",
+    "Explore how Simultaneous Localization and Mapping (SLAM) enables devices to map their environment while tracking their position.",
   keywords:
-    "SLAM, simultaneous localization and mapping, infrastructure-free positioning, robotics navigation, autonomous vehicles, dynamic mapping, real-time cartography",
-  alternates: {
-    canonical: "/rtls-digital-twin/technologies/slam",
-  },
+    "SLAM, simultaneous localization and mapping, indoor positioning, autonomous navigation, mapping, RTLS, location tracking",
   openGraph: {
-    title: "SLAM Technology for RTLS | RTLS Alliance",
+    title: "SLAM Technology for Indoor Positioning - RTLS Alliance",
     description:
-      "Learn how Simultaneous Localization and Mapping (SLAM) enables infrastructure-free positioning for robotics and automation.",
-    url: "https://rtlsalliance.org/rtls-digital-twin/technologies/slam",
+      "Explore how Simultaneous Localization and Mapping (SLAM) enables devices to map their environment while tracking their position.",
+    url: "https://rtlsalliance.com/rtls-digital-twin/technologies/slam",
+    siteName: "RTLS Alliance",
+    images: [
+      {
+        url: "https://rtlsalliance.com/images/slam-mapping.png",
+        width: 1200,
+        height: 630,
+        alt: "SLAM Technology",
+      },
+    ],
+    locale: "en_US",
     type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SLAM Technology for Indoor Positioning - RTLS Alliance",
+    description:
+      "Explore how Simultaneous Localization and Mapping (SLAM) enables devices to map their environment while tracking their position.",
+    images: ["https://rtlsalliance.com/images/slam-mapping.png"],
+  },
+  alternates: {
+    canonical: "https://rtlsalliance.com/rtls-digital-twin/technologies/slam",
   },
 }
 
 export default function SLAMTechnologyPage() {
+  // Define technology data for structured data
+  const technology = {
+    name: "SLAM Technology",
+    slug: "slam",
+    image: "https://rtlsalliance.com/images/slam-mapping.png",
+    category: "Autonomous Positioning Technology",
+  }
+
+  // Define breadcrumbs for structured data
+  const breadcrumbs = [
+    { name: "Home", url: "https://rtlsalliance.com" },
+    { name: "RTLS + Digital Twin", url: "https://rtlsalliance.com/rtls-digital-twin" },
+    { name: "Technologies", url: "https://rtlsalliance.com/rtls-digital-twin/technologies" },
+    { name: "SLAM", url: "https://rtlsalliance.com/rtls-digital-twin/technologies/slam" },
+  ]
+
   return (
     <>
-      <SLAMTechnologyClientPage />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "TechArticle",
-            headline: "SLAM Technology for RTLS",
-            description:
-              "Learn how Simultaneous Localization and Mapping (SLAM) enables devices to build maps of unknown environments while simultaneously tracking their position.",
-            keywords: "SLAM, simultaneous localization and mapping, infrastructure-free positioning",
-            author: {
-              "@type": "Organization",
-              name: "RTLS Alliance",
-            },
-            publisher: {
-              "@type": "Organization",
-              name: "RTLS Alliance",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
-              },
-            },
-            datePublished: "2024-02-15",
-            dateModified: "2024-05-19",
-          }),
-        }}
+      <TechnologySEO
+        title={metadata.title as string}
+        description={metadata.description as string}
+        technology={technology}
+        breadcrumbs={breadcrumbs}
       />
+      <SLAMTechnologyClientPage />
     </>
   )
 }

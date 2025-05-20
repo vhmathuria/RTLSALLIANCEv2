@@ -542,7 +542,7 @@ export default function WiFiTechnologyClientPage() {
           </div>
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6 sticky top-6">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
               <h3 className="text-lg font-bold mb-4">Wi-Fi Technology Overview</h3>
 
               <div className="space-y-4 mb-6">
@@ -672,38 +672,38 @@ export default function WiFiTechnologyClientPage() {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/resources/wifi-rtls-implementation-guide"
+                    href="/resources/rf-site-survey-rtls-planning-density-best-practices"
                     className="flex items-center text-blue-600 hover:underline"
                   >
                     <ArrowRight className="h-4 w-4 mr-2" />
-                    <span>Wi-Fi RTLS Implementation Guide</span>
+                    <span>WiFi RTLS Deployment Guide</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/access-point-optimization"
+                    href="/resources/rf-site-survey-rtls-planning-density-best-practices"
                     className="flex items-center text-blue-600 hover:underline"
                   >
                     <ArrowRight className="h-4 w-4 mr-2" />
-                    <span>Access Point Optimization</span>
+                    <span>Access Point Planning</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/wifi-vs-ble-comparison"
+                    href="/resources/wifi-rtt-vs-ble-best-indoor-navigation"
                     className="flex items-center text-blue-600 hover:underline"
                   >
                     <ArrowRight className="h-4 w-4 mr-2" />
-                    <span>Wi-Fi vs BLE Comparison</span>
+                    <span>WiFi vs BLE Analysis</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/wifi-rtls-case-studies"
+                    href="/resources/hospital-asset-tracking-1-2m-savings-rtls"
                     className="flex items-center text-blue-600 hover:underline"
                   >
                     <ArrowRight className="h-4 w-4 mr-2" />
-                    <span>Wi-Fi RTLS Case Studies</span>
+                    <span>Other RTLS Success Stories</span>
                   </Link>
                 </li>
               </ul>
