@@ -627,8 +627,8 @@ export default function BLETechnologyClientPage() {
               <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
               <p className="mb-4">
                 Need help determining if BLE is the right technology for your RTLS project? 
-                <li>RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
-                </li>
+                <p>RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+                </p>
               </p>
               <Link
                 href="/contact"
