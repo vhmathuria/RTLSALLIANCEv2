@@ -12,7 +12,7 @@ export default function BLETechnologyClientPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <article className="max-w-5xl mx-auto">
+      <article>
         {/* Page Header */}
         <header className="mb-10">
           <h1 className="text-3xl font-bold mb-4">Bluetooth Low Energy (BLE) Technology</h1>
@@ -100,31 +100,39 @@ export default function BLETechnologyClientPage() {
           </div>
         </section>
 
-        {/* Advantages & Limitations */}
-        <section className="mb-12 border rounded-md p-6">
+        {/* Advantages & Limitations - Now in separate boxes */}
+        <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-3 text-green-600">Advantages</h3>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Low power consumption enabling long battery life</li>
-                <li>Widespread compatibility with smartphones and tablets</li>
-                <li>Relatively low infrastructure cost</li>
-                <li>Easy deployment and maintenance</li>
-                <li>Scalable for various environment sizes</li>
-                <li>Support for additional sensor data (temperature, motion, etc.)</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-3 text-red-600">Limitations</h3>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Limited accuracy compared to UWB or optical systems</li>
-                <li>Susceptible to signal interference and multipath effects</li>
-                <li>Environmental factors can affect signal propagation</li>
-                <li>Requires regular battery replacement for beacons</li>
-                <li>Update rate limitations compared to wired systems</li>
-              </ul>
-            </div>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Low power consumption enabling long battery life</li>
+                  <li>Widespread compatibility with smartphones and tablets</li>
+                  <li>Relatively low infrastructure cost</li>
+                  <li>Easy deployment and maintenance</li>
+                  <li>Scalable for various environment sizes</li>
+                  <li>Support for additional sensor data (temperature, motion, etc.)</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Limited accuracy compared to UWB or optical systems</li>
+                  <li>Susceptible to signal interference and multipath effects</li>
+                  <li>Environmental factors can affect signal propagation</li>
+                  <li>Requires regular battery replacement for beacons</li>
+                  <li>Update rate limitations compared to wired systems</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -416,43 +424,55 @@ export default function BLETechnologyClientPage() {
           </div>
         </section>
 
-        {/* Implementation Considerations */}
-        <section className="mb-12 border rounded-md p-6">
+        {/* Implementation Considerations - Now in separate boxes */}
+        <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Infrastructure Requirements</h3>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>BLE beacons/tags for tracked assets</li>
-                <li>BLE gateways or receivers</li>
-                <li>Network infrastructure (typically Wi-Fi or Ethernet)</li>
-                <li>Server for data processing (on-premises or cloud)</li>
-                <li>Software platform for location management</li>
-                <li>Integration middleware for existing systems</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Deployment Best Practices</h3>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Conduct RF site survey before installation</li>
-                <li>Place gateways strategically for optimal coverage</li>
-                <li>Configure beacon transmission intervals based on use case</li>
-                <li>Implement proper security measures for BLE communications</li>
-                <li>Establish battery replacement procedures</li>
-                <li>Develop a calibration schedule to maintain accuracy</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Common Challenges</h3>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Signal interference in dense environments</li>
-                <li>Accuracy limitations in complex layouts</li>
-                <li>Battery management for large beacon deployments</li>
-                <li>Integration with legacy systems</li>
-                <li>User adoption and training</li>
-                <li>Maintaining system performance over time</li>
-              </ul>
-            </div>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>BLE beacons/tags for tracked assets</li>
+                  <li>BLE gateways or receivers</li>
+                  <li>Network infrastructure (typically Wi-Fi or Ethernet)</li>
+                  <li>Server for data processing (on-premises or cloud)</li>
+                  <li>Software platform for location management</li>
+                  <li>Integration middleware for existing systems</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct RF site survey before installation</li>
+                  <li>Place gateways strategically for optimal coverage</li>
+                  <li>Configure beacon transmission intervals based on use case</li>
+                  <li>Implement proper security measures for BLE communications</li>
+                  <li>Establish battery replacement procedures</li>
+                  <li>Develop a calibration schedule to maintain accuracy</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Signal interference in dense environments</li>
+                  <li>Accuracy limitations in complex layouts</li>
+                  <li>Battery management for large beacon deployments</li>
+                  <li>Integration with legacy systems</li>
+                  <li>User adoption and training</li>
+                  <li>Maintaining system performance over time</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -607,16 +627,17 @@ export default function BLETechnologyClientPage() {
                     ))}
                   </ul>
                 </div>
-                <div className="border rounded-md p-4">
-                  <h3 className="text-lg font-semibold mb-3">Expert Guidance</h3>
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
                   <p className="mb-4">
-                    Need unbiased advice to determine if BLE is the right technology for your RTLS project?
+                    Need help determining if BLE is the right technology for your RTLS project? RTLS Alliance
+                    Practitioners can provide personalized guidance based on your specific requirements.
                   </p>
                   <Link
                     href="/contact"
                     className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                   >
-                    Ask an Alliance member
+                    Ask an Alliance Member
                   </Link>
                 </div>
               </div>
