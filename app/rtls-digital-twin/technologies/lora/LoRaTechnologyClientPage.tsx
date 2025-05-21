@@ -5,10 +5,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { useEffect } from "react"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function LoRaTechnologyClientPage() {
-  // Remove this line since we're not using it
-  // const loraRelatedArticles = getTechnologyRelatedArticles("lora").slice(0, 5)
+  // Get LoRa FAQs
+  const loraFAQs = technologyFAQs.lora || []
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -622,7 +625,7 @@ export default function LoRaTechnologyClientPage() {
         </section>
 
         {/* Learn More - Related Resources */}
-        <section className="mt-12">
+        <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-6">Learn More About LoRa Technology</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -680,6 +683,21 @@ export default function LoRaTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {loraFAQs.length > 0 && (
+          <section className="mt-16 mb-12 bg-gray-50 rounded-lg p-6">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-center">
+                Frequently Asked Questions About LoRa Positioning
+              </h2>
+              <FAQSection faqs={loraFAQs} sectionId="lora-faqs" showTitle={false} />
+            </div>
+          </section>
+        )}
+
+        {/* Add Schema for SEO */}
+        <FAQSchema faqs={loraFAQs} pageId="lora-technology" />
       </article>
     </div>
   )

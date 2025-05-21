@@ -6,6 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useScrollToTop } from "@/hooks/useScrollToTop"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function SLAMTechnologyClientPage() {
   useScrollToTop()
@@ -648,7 +651,7 @@ export default function SLAMTechnologyClientPage() {
           </div>
         </section>
 
-        <section>
+        <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-6">Related Resources</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -712,6 +715,17 @@ export default function SLAMTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        <FAQSection
+          faqs={technologyFAQs.slam}
+          title="Frequently Asked Questions About SLAM Technology"
+          sectionId="slam-faqs"
+          className="bg-gray-50 mt-12 mb-10"
+        />
+
+        {/* FAQ Schema for SEO */}
+        <FAQSchema faqs={technologyFAQs.slam} pageId="slam-technology" />
       </article>
     </div>
   )

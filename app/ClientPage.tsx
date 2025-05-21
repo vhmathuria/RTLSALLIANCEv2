@@ -6,12 +6,13 @@ import { getArticlesByContentType } from "@/lib/supabase"
 import type { Article } from "@/types/article"
 import { formatDate, truncateText, parseJsonSafely } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, BookOpen, Users, Award, Headphones, LightbulbIcon } from "lucide-react"
+import { ArrowRight, BookOpen, Users, Award, Headphones, LightbulbIcon, ChevronDown } from "lucide-react"
 import NewsletterSignup from "@/components/newsletter-signup"
 import LogoCarousel from "@/components/logo-carousel"
 import { useEffect, useState } from "react"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import PageLayout from "@/components/layout/page-layout"
+import { homepageFAQs, generalRTLSFAQs } from "@/lib/faq-data"
 
 export default function ClientPage() {
   const [user, setUser] = useState<any>(null)
@@ -464,7 +465,89 @@ export default function ClientPage() {
             </div>
           </div>
         </section>
+
+        {/* Consolidated FAQ Section - Now only appears after the CTA section */}
+        <section className="py-16 bg-gray-50" id="faqs">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+
+            {/* Alliance FAQs */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-semibold mb-6 text-center">About RTLS Alliance</h3>
+              <div className="max-w-3xl mx-auto space-y-4">
+                {homepageFAQs.map((faq, index) => (
+                  <FAQItem
+                    key={`alliance-${index}`}
+                    question={faq.question}
+                    answer={faq.answer}
+                    index={index}
+                    sectionId="alliance-faqs"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Technology FAQs */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-6 text-center">About RTLS Technology</h3>
+              <div className="max-w-3xl mx-auto space-y-4">
+                {generalRTLSFAQs.map((faq, index) => (
+                  <FAQItem
+                    key={`tech-${index}`}
+                    question={faq.question}
+                    answer={faq.answer}
+                    index={index}
+                    sectionId="rtls-tech-faqs"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </PageLayout>
+  )
+}
+
+// Individual FAQ item component with accessibility features
+function FAQItem({
+  question,
+  answer,
+  index,
+  sectionId,
+}: {
+  question: string
+  answer: string
+  index: number
+  sectionId: string
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const itemId = `${sectionId}-question-${index}`
+  const answerId = `${sectionId}-answer-${index}`
+
+  return (
+    <div className="bg-white rounded-lg shadow">
+      <button
+        id={itemId}
+        aria-expanded={isOpen}
+        aria-controls={answerId}
+        className="flex justify-between w-full px-6 py-4 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="font-medium text-lg">{question}</span>
+        <ChevronDown
+          className={`${isOpen ? "transform rotate-180" : ""} w-5 h-5 transition-transform duration-200`}
+          aria-hidden="true"
+        />
+      </button>
+      <div
+        id={answerId}
+        role="region"
+        aria-labelledby={itemId}
+        className={`px-6 overflow-hidden transition-all duration-200 ${isOpen ? "max-h-96 pb-4 pt-2" : "max-h-0"}`}
+      >
+        <p className="text-gray-700">{answer}</p>
+      </div>
+    </div>
   )
 }

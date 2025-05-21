@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Building2, MapPin, ExternalLink, Linkedin, Mail } from "lucide-react"
 import Image from "next/image"
 
+// Enable daily revalidation (86400 seconds = 24 hours)
+export const revalidate = 86400
+
 export const metadata = {
   title: "Directory - RTLS Alliance",
   description: "Connect with RTLS vendors and practitioners in our comprehensive directory.",
@@ -54,7 +57,7 @@ const vendors = [
   },
   {
     name: "Sensolus",
-    logo: "/placeholder.svg?height=60&width=120&query=Sensolus logo",
+    logo: "/sensolus-logo.png",
     description: "Supply chain visibility through IoT tracking solutions",
     specialties: ["Supply Chain", "Logistics", "IoT"],
     location: "Ghent, Belgium",

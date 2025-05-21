@@ -2,8 +2,18 @@ import { technologyInterlinks, moduleInterlinks, industryInterlinks } from "./in
 
 /**
  * Generates a BreadcrumbList schema for structured data
+ * Now with proper error handling for undefined or invalid input
  */
-export function generateBreadcrumbSchema(breadcrumbs: { name: string; url: string }[]) {
+export function generateBreadcrumbSchema(breadcrumbs?: { name: string; url: string }[]) {
+  // Return a valid but empty schema if no breadcrumbs are provided
+  if (!breadcrumbs || !Array.isArray(breadcrumbs) || breadcrumbs.length === 0) {
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [],
+    }
+  }
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -238,7 +248,16 @@ export function generateTechnologyStructuredData(technology: string) {
  * Generate breadcrumbs structured data
  * @param breadcrumbs - Array of breadcrumb items with name and path
  */
-export function generateBreadcrumbsStructuredData(breadcrumbs: { name: string; path: string }[]) {
+export function generateBreadcrumbsStructuredData(breadcrumbs?: { name: string; path: string }[]) {
+  // Return empty schema if no breadcrumbs
+  if (!breadcrumbs || !Array.isArray(breadcrumbs) || breadcrumbs.length === 0) {
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [],
+    }
+  }
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -255,7 +274,12 @@ export function generateBreadcrumbsStructuredData(breadcrumbs: { name: string; p
  * Generate FAQ structured data
  * @param faqs - Array of FAQ items with question and answer
  */
-export function generateFAQStructuredData(faqs: { question: string; answer: string }[]) {
+export function generateFAQStructuredData(faqs?: { question: string; answer: string }[]) {
+  // Return null if no FAQs
+  if (!faqs || !Array.isArray(faqs) || faqs.length === 0) {
+    return null
+  }
+
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -268,4 +292,30 @@ export function generateFAQStructuredData(faqs: { question: string; answer: stri
       },
     })),
   }
+}
+
+/**
+ * Helper function to get formatted technology name
+ * @param technology - The technology slug
+ */
+export function getTechnologyName(technology: string): string {
+  const names: Record<string, string> = {
+    ble: "Bluetooth Low Energy",
+    uwb: "Ultra-Wideband",
+    wifi: "WiFi",
+    nfc: "NFC",
+    lora: "LoRa",
+    infrared: "Infrared",
+    lidar: "LiDAR",
+    "ai-cameras": "AI Cameras",
+    gnss: "GNSS",
+    "rtk-gps": "RTK GPS",
+    "magnetic-field": "Magnetic Field",
+    ultrasound: "Ultrasound",
+    "sensor-fusion": "Sensor Fusion",
+    slam: "SLAM",
+    "dead-reckoning": "Dead Reckoning",
+  }
+
+  return names[technology] || technology.charAt(0).toUpperCase() + technology.slice(1).replace(/-/g, " ")
 }

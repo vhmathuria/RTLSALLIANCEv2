@@ -4,8 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function UltrasoundTechnologyClientPage() {
+  const ultrasoundFAQs = technologyFAQs.ultrasound || []
+
   return (
     <div className="container mx-auto py-8 px-4">
       <article>
@@ -616,6 +621,17 @@ export default function UltrasoundTechnologyClientPage() {
             </Card>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {ultrasoundFAQs.length > 0 && (
+          <section id="ultrasound-faqs" className="mt-16 mb-12 bg-gray-50 p-6 rounded-lg">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-center">Frequently Asked Questions</h2>
+              <FAQSection faqs={ultrasoundFAQs} showTitle={false} />
+              <FAQSchema faqs={ultrasoundFAQs} pageId="ultrasound-technology" />
+            </div>
+          </section>
+        )}
 
         {/* Learn More */}
         <section className="mt-12">

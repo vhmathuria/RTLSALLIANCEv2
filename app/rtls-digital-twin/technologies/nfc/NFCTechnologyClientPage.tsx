@@ -5,10 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { getTechnologyRelatedArticles } from "@/lib/article-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function NFCTechnologyClientPage() {
   // Get NFC-related articles for the related resources section
   const nfcRelatedArticles = getTechnologyRelatedArticles("nfc").slice(0, 5)
+
+  // Get NFC FAQs
+  const nfcFAQs = technologyFAQs.nfc || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -677,7 +683,22 @@ export default function NFCTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {nfcFAQs.length > 0 && (
+          <section className="mt-16 mb-12 bg-gray-50 rounded-lg p-6">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-center">
+                Frequently Asked Questions About NFC Technology
+              </h2>
+              <FAQSection faqs={nfcFAQs} sectionId="nfc-faqs" showTitle={false} />
+            </div>
+          </section>
+        )}
       </article>
+
+      {/* Add Schema for SEO */}
+      <FAQSchema faqs={nfcFAQs} pageId="nfc-technology" />
     </div>
   )
 }

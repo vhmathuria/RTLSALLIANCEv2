@@ -1,5 +1,10 @@
 import ClientPage from "./ClientPage"
 import type { Metadata } from "next"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { homepageFAQs, generalRTLSFAQs } from "@/lib/faq-data"
+
+// Enable daily revalidation (86400 seconds = 24 hours)
+export const revalidate = 86400
 
 // Define metadata for the page
 export const metadata: Metadata = {
@@ -38,5 +43,14 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  return <ClientPage />
+  // Combine all FAQs for the schema
+  const allFaqs = [...homepageFAQs, ...generalRTLSFAQs]
+
+  return (
+    <>
+      {/* Add FAQ Schema for structured data with all FAQs */}
+      <FAQSchema faqs={allFaqs} pageId="homepage" />
+      <ClientPage />
+    </>
+  )
 }

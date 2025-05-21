@@ -10,6 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useScrollToTop } from "@/hooks/useScrollToTop"
 
+// Add the following imports at the top of the file
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
+
 export default function SensorFusionTechnologyClientPage() {
   useScrollToTop()
 
@@ -643,6 +648,17 @@ export default function SensorFusionTechnologyClientPage() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mt-16">
+          <FAQSection
+            faqs={technologyFAQs.sensor_fusion}
+            title="Frequently Asked Questions About Sensor Fusion"
+            sectionId="sensor-fusion-faqs"
+            className="bg-gray-50 p-6 rounded-lg"
+          />
+          <FAQSchema faqs={technologyFAQs.sensor_fusion} pageId="sensor-fusion-technology" />
         </section>
       </article>
     </div>

@@ -1,74 +1,61 @@
 import Script from "next/script"
-import type { Article } from "@/types/article"
+import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-utils"
 
 interface ResourceSEOProps {
-  article: Article
+  title: string
+  description: string
+  url: string
+  imageUrl: string
+  authorName: string
+  publisherName?: string
+  publisherLogo?: string
+  datePublished: string
+  dateModified: string
+  breadcrumbs?: { name: string; url: string }[]
 }
 
-export function ResourceSEO({ article }: ResourceSEOProps) {
-  // Base URL for canonical and OG URLs
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
-  const canonicalUrl = `${baseUrl}/resources/${article.slug}`
+export function ResourceSEO({
+  title,
+  description,
+  url,
+  imageUrl,
+  authorName,
+  publisherName = "RTLS Alliance",
+  publisherLogo = "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+  datePublished,
+  dateModified,
+  breadcrumbs,
+}: ResourceSEOProps) {
+  // Generate structured data
+  const articleSchema = generateArticleSchema({
+    title,
+    description,
+    url,
+    imageUrl,
+    authorName,
+    publisherName,
+    publisherLogo,
+    datePublished,
+    dateModified,
+  })
 
-  // Format publication date
-  const pubDate = article.published_at ? new Date(article.published_at).toISOString() : new Date().toISOString()
-
-  // Generate Article schema
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
-    image: article.featured_image || `${baseUrl}/images/rtls-alliance-logo.png`,
-    author: {
-      "@type": "Person",
-      name: article.author || "RTLS Alliance",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "RTLS Alliance",
-      logo: {
-        "@type": "ImageObject",
-        url: `${baseUrl}/images/rtls-alliance-logo.png`,
-      },
-    },
-    datePublished: pubDate,
-    dateModified: article.updated_at ? new Date(article.updated_at).toISOString() : pubDate,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": canonicalUrl,
-    },
-  }
-
-  // Generate BreadcrumbList schema
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: baseUrl,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Resources",
-        item: `${baseUrl}/resources`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: article.title,
-        item: canonicalUrl,
-      },
-    ],
-  }
+  // Generate breadcrumb schema with fallback
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
   return (
-    <Script id={`resource-seo-${article.slug}`} type="application/ld+json">
-      {JSON.stringify([articleSchema, breadcrumbSchema])}
-    </Script>
+    <>
+      <Script
+        id={`article-schema-${encodeURIComponent(title.substring(0, 20))}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <Script
+          id={`breadcrumb-schema-${encodeURIComponent(title.substring(0, 20))}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
+    </>
   )
 }

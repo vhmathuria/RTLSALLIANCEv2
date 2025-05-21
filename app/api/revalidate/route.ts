@@ -1,20 +1,26 @@
-import { revalidatePath } from "next/cache"
+import { revalidatePath } from "next/server"
 import { type NextRequest, NextResponse } from "next/server"
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  const secret = request.nextUrl.searchParams.get("secret")
+
+  if (secret !== process.env.CONTENTFUL_REVALIDATE_SECRET) {
+    return NextResponse.json({ message: "Invalid secret" }, { status: 401 })
+  }
+
+  const paths = [
+    "/",
+    "/resources",
+    "/sitemap.xml",
+    // ... other paths
+  ]
+
   try {
-    const { path, token } = await request.json()
-
-    // Validate secret token
-    if (token !== process.env.REVALIDATION_TOKEN) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 })
-    }
-
-    // Revalidate the specific path
-    revalidatePath(path)
-
-    return NextResponse.json({ revalidated: true, path })
+    paths.forEach((path) => {
+      revalidatePath(path)
+    })
+    return NextResponse.json({ revalidated: true, now: Date.now() })
   } catch (error) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 })
+    return NextResponse.json({ revalidated: false, error: error }, { status: 500 })
   }
 }

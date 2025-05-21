@@ -6,6 +6,9 @@ import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { getTechnologyRelatedArticles } from "@/lib/article-data"
 import { useEffect } from "react"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function AICamerasTechnologyClientPage() {
   // Get AI Camera-related articles for the related resources section
@@ -690,6 +693,21 @@ export default function AICamerasTechnologyClientPage() {
                 Ask an Alliance Member
               </Link>
             </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section id="ai-cameras-faqs" className="mt-16 mb-12 bg-gray-50 p-6 rounded-lg">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Frequently Asked Questions</h2>
+
+            {/* Get the AI Cameras FAQs */}
+            {technologyFAQs.ai_cameras && technologyFAQs.ai_cameras.length > 0 && (
+              <>
+                <FAQSection faqs={technologyFAQs.ai_cameras} showTitle={false} className="mb-8" />
+                <FAQSchema faqs={technologyFAQs.ai_cameras} pageId="ai-cameras-technology" />
+              </>
+            )}
           </div>
         </section>
       </article>

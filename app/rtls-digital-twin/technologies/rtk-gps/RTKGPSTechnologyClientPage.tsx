@@ -5,12 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useScrollToTop } from "@/hooks/useScrollToTop"
 import { getTechnologyRelatedArticles } from "@/lib/article-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function RTKGPSTechnologyClientPage() {
   useScrollToTop()
 
   // Get RTK/GPS-related articles for the related resources section
   const rtkGpsRelatedArticles = getTechnologyRelatedArticles("gps").slice(0, 5)
+
+  // Get RTK GPS FAQs
+  const rtkGpsFAQs = technologyFAQs.rtk_gps || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -654,6 +660,17 @@ export default function RTKGPSTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {rtkGpsFAQs.length > 0 && (
+          <section id="rtk-gps-faqs" className="mt-16 mb-12 bg-gray-50 p-6 rounded-lg">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-center">Frequently Asked Questions</h2>
+              <FAQSection faqs={rtkGpsFAQs} showTitle={false} />
+              <FAQSchema faqs={rtkGpsFAQs} pageId="rtk-gps-technology" />
+            </div>
+          </section>
+        )}
       </article>
     </div>
   )

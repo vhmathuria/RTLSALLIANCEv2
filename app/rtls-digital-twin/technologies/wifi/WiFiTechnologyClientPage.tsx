@@ -5,10 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { getTechnologyRelatedArticles } from "@/lib/article-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function WiFiTechnologyClientPage() {
   // Get WiFi-related articles for the related resources section
   const wifiRelatedArticles = getTechnologyRelatedArticles("wifi").slice(0, 5)
+
+  // Get WiFi FAQs
+  const wifiFAQs = technologyFAQs.wifi || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -672,6 +678,21 @@ export default function WiFiTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {wifiFAQs.length > 0 && (
+          <section className="mt-16 mb-12 bg-gray-50 rounded-lg p-6">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-center">
+                Frequently Asked Questions About Wi-Fi Positioning
+              </h2>
+              <FAQSection faqs={wifiFAQs} sectionId="wifi-faqs" showTitle={false} />
+            </div>
+          </section>
+        )}
+
+        {/* Add Schema for SEO */}
+        <FAQSchema faqs={wifiFAQs} pageId="wifi-technology" />
       </article>
     </div>
   )

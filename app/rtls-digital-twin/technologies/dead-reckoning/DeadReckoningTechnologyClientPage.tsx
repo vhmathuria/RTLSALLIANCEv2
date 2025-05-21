@@ -5,6 +5,9 @@ import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
+import { getFAQsByPage } from "@/lib/faq-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
 
 export default function DeadReckoningTechnologyClientPage() {
   useEffect(() => {
@@ -683,6 +686,13 @@ export default function DeadReckoningTechnologyClientPage() {
               </Link>
             </div>
           </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions About Dead Reckoning</h2>
+          <FAQSection faqs={getFAQsByPage("dead_reckoning")} />
+          <FAQSchema faqs={getFAQsByPage("dead_reckoning")} />
         </section>
       </article>
     </div>

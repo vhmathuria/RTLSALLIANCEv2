@@ -5,10 +5,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { getUWBRelatedArticles } from "@/lib/article-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function UWBTechnologyClientPage() {
   // Get UWB-related articles for the related resources section
   const uwbRelatedArticles = getUWBRelatedArticles().slice(0, 5)
+  const uwbFAQs = technologyFAQs.uwb || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -605,7 +609,7 @@ export default function UWBTechnologyClientPage() {
         </section>
 
         {/* Learn More - Updated with real resource links from article-data.ts */}
-        <section className="mt-12">
+        <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-6">Learn More About UWB Technology</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -635,7 +639,22 @@ export default function UWBTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {uwbFAQs.length > 0 && (
+          <section className="mb-12 bg-gray-50 rounded-lg p-6">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6 text-center">
+                Frequently Asked Questions About Ultra-Wideband Positioning
+              </h2>
+              <FAQSection faqs={uwbFAQs} sectionId="uwb-faqs" showTitle={false} />
+            </div>
+          </section>
+        )}
       </article>
+
+      {/* Add Schema for SEO */}
+      <FAQSchema faqs={uwbFAQs} pageId="uwb-technology" />
     </div>
   )
 }

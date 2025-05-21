@@ -1,44 +1,48 @@
 import Script from "next/script"
+import { generateBreadcrumbSchema } from "@/lib/seo-utils"
 
 interface PageSEOProps {
   title: string
   description: string
-  structuredData?: any
-  path?: string
-  breadcrumbs?: { name: string; url: string }[]
+  type?: string
+  url: string
   imageUrl?: string
-  type?: "website" | "article" | "product"
-  includeOrganization?: boolean
+  breadcrumbs?: { name: string; url: string }[]
 }
 
-export function PageSEO({
-  title,
-  description,
-  structuredData,
-  path,
-  breadcrumbs,
-  imageUrl,
-  type = "website",
-  includeOrganization = false,
-}: PageSEOProps) {
-  // Only render structured data if provided
-  if (!structuredData) {
-    return null
+export function PageSEO({ title, description, type = "WebPage", url, imageUrl, breadcrumbs }: PageSEOProps) {
+  // Generate page schema
+  const pageSchema = {
+    "@context": "https://schema.org",
+    "@type": type,
+    name: title,
+    description: description,
+    url: url,
+    ...(imageUrl && {
+      image: {
+        "@type": "ImageObject",
+        url: imageUrl,
+      },
+    }),
   }
 
-  // Handle array or single object
-  const dataArray = Array.isArray(structuredData) ? structuredData : [structuredData]
+  // Generate breadcrumb schema with fallback
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs)
 
   return (
     <>
-      {dataArray.map((data, index) => (
+      <Script
+        id={`page-schema-${encodeURIComponent(title.substring(0, 20))}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      {breadcrumbs && breadcrumbs.length > 0 && (
         <Script
-          key={index}
-          id={`structured-data-${index}`}
+          id={`breadcrumb-schema-${encodeURIComponent(title.substring(0, 20))}`}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
-      ))}
+      )}
     </>
   )
 }

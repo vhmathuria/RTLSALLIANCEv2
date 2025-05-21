@@ -6,6 +6,9 @@ import { Hospital, ShoppingBag, Factory, Truck, Building2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { articles } from "@/lib/article-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function InfraredTechnologyClientPage() {
   useEffect(() => {
@@ -14,6 +17,9 @@ export default function InfraredTechnologyClientPage() {
 
   // Get general RTLS articles for related resources since there might not be enough infrared-specific ones
   const relatedArticles = articles.slice(0, 5)
+
+  // Get Infrared FAQs
+  const infraredFAQs = technologyFAQs.infrared || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -654,7 +660,22 @@ export default function InfraredTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {infraredFAQs.length > 0 && (
+          <section className="mt-16 mb-12">
+            <div className="max-w-3xl mx-auto bg-gray-50 rounded-lg p-6">
+              <h2 className="text-2xl font-semibold text-center mb-6">
+                Frequently Asked Questions About Infrared Positioning
+              </h2>
+              <FAQSection faqs={infraredFAQs} sectionId="infrared-faqs" showTitle={false} />
+            </div>
+          </section>
+        )}
       </article>
+
+      {/* FAQ Schema for SEO */}
+      <FAQSchema faqs={infraredFAQs} pageId="infrared-technology" />
     </div>
   )
 }

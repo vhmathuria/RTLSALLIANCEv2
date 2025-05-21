@@ -39,6 +39,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Add revalidation to the ecosystem page
+export const revalidate = 86400
+
 export default function EcosystemPageWrapper() {
   // Define breadcrumbs for structured data
   const breadcrumbs = [

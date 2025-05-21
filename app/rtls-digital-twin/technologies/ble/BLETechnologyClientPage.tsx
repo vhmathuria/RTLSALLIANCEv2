@@ -5,10 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { getBLERelatedArticles } from "@/lib/article-data"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function BLETechnologyClientPage() {
   // Get BLE-related articles for the related resources section
   const bleRelatedArticles = getBLERelatedArticles().slice(0, 5)
+
+  // Get BLE FAQs from the data file
+  const bleFaqs = technologyFAQs.ble || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -638,7 +644,22 @@ export default function BLETechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section - Added new section with all 5 FAQs */}
+        {bleFaqs.length > 0 && (
+          <section className="mt-16 mb-12 bg-gray-50 py-12 px-4 rounded-lg">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-8 text-center">
+                Frequently Asked Questions About BLE Positioning
+              </h2>
+              <FAQSection faqs={bleFaqs} sectionId="ble-faqs" className="bg-transparent" showTitle={false} />
+            </div>
+          </section>
+        )}
       </article>
+
+      {/* Add Schema for SEO */}
+      <FAQSchema faqs={bleFaqs} pageId="ble-technology" />
     </div>
   )
 }

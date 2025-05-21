@@ -14,5 +14,11 @@ Disallow: /account/
 Disallow: /membership/cancel/
 Disallow: /membership/success/
 
+# Disallow API routes
+Disallow: /api/
+
+# Allow specific API routes that generate public content
+Allow: /api/articles
+
 # Sitemap location
 Sitemap: https://rtlsalliance.com/sitemap.xml

@@ -5,11 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
 import { useEffect } from "react"
+import { FAQSection } from "@/components/ui/faq-section"
+import { FAQSchema } from "@/components/seo/faq-schema"
+import { technologyFAQs } from "@/lib/faq-data"
 
 export default function LiDARTechnologyClientPage() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const lidarFAQs = technologyFAQs.lidar || []
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -676,6 +681,19 @@ export default function LiDARTechnologyClientPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {lidarFAQs.length > 0 && (
+          <section className="mt-16 mb-12">
+            <div className="max-w-3xl mx-auto bg-gray-50 rounded-lg p-6">
+              <h2 className="text-2xl font-semibold text-center mb-6">
+                Frequently Asked Questions About LiDAR Technology
+              </h2>
+              <FAQSection faqs={lidarFAQs} sectionId="lidar-faqs" showTitle={false} />
+            </div>
+            <FAQSchema faqs={lidarFAQs} pageId="lidar-technology" />
+          </section>
+        )}
       </article>
     </div>
   )
