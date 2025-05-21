@@ -1,743 +1,687 @@
 "use client"
-import Image from "next/image"
-import Link from "next/link"
-import {
-  ArrowRight,
-  CheckCircle,
-  XCircle,
-  Compass,
-  Clock,
-  Zap,
-  Building,
-  Ruler,
-  Server,
-  Wifi,
-  Radio,
-  Layers,
-  Volume2,
-  Camera,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useScrollToTop } from "@/hooks/useScrollToTop"
+import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
+import Link from "next/link"
 
 export default function UltrasoundTechnologyClientPage() {
-  useScrollToTop()
-
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          <h1 className="text-3xl font-bold mb-6">Ultrasound Technology for Real-Time Location Systems</h1>
+    <div className="container mx-auto py-8 px-4">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">Ultrasound Technology for RTLS</h1>
+          <p className="text-base text-muted-foreground">
+            Ultrasound positioning systems leverage high-frequency sound waves beyond human hearing to deliver
+            centimeter-level accuracy for indoor positioning.
+          </p>
+        </header>
 
-          <div className="prose max-w-none">
-            <p className="lead text-xl text-gray-700 mb-8">
-              Ultrasound positioning systems leverage high-frequency sound waves beyond human hearing to deliver
-              centimeter-level accuracy for indoor positioning, offering a unique combination of precision and
-              reliability in complex environments.
-            </p>
-
-            <div className="relative h-80 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/placeholder.svg?key=eo8o1"
-                alt="Ultrasound positioning system with transmitters and receivers"
-                fill
-                className="object-cover"
-              />
+        {/* Overview and Key Specifications */}
+        <section className="mb-12">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+              <p className="mb-4">
+                Ultrasound positioning is a technology that uses sound waves at frequencies above the range of human
+                hearing (typically 20 kHz to 100 kHz) to determine the location of objects or people in indoor
+                environments. The technology relies on the measurement of time-of-flight or phase differences of
+                ultrasonic signals between transmitters and receivers to calculate precise positions.
+              </p>
+              <p>
+                For RTLS applications, ultrasound technology typically achieves 1-10 centimeter accuracy using
+                time-of-flight measurements, making it one of the most precise indoor positioning technologies
+                available.
+              </p>
             </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">What is Ultrasound Positioning Technology?</h2>
-            <p className="mb-4">
-              Ultrasound positioning is a technology that uses sound waves at frequencies above the range of human
-              hearing (typically 20 kHz to 100 kHz) to determine the location of objects or people in indoor
-              environments. The technology relies on the measurement of time-of-flight or phase differences of
-              ultrasonic signals between transmitters and receivers to calculate precise positions.
-            </p>
-
-            <ul className="list-disc pl-6 mb-6">
-              <li>
-                <strong>High-Frequency Sound Waves</strong> - Operates beyond human hearing range (&gt;20 kHz)
-              </li>
-              <li>
-                <strong>Time-of-Flight Measurement</strong> - Calculates distances based on sound propagation time
-              </li>
-              <li>
-                <strong>Multilateration</strong> - Determines position using distances from multiple reference points
-              </li>
-              <li>
-                <strong>Controlled Propagation</strong> - Sound waves don't penetrate walls, reducing interference
-              </li>
-            </ul>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">How Ultrasound Positioning Works</h2>
-
-            <div className="bg-blue-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <Volume2 className="mr-2 h-5 w-5 text-blue-600" />
-                Hardware Components
-              </h3>
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
               <ul className="space-y-2">
-                <li>
-                  <strong>Ultrasonic Transducers</strong> - Convert electrical energy to sound waves and vice versa
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Frequency:</span>
+                  <span>20-100 kHz (above human hearing)</span>
                 </li>
-                <li>
-                  <strong>Microcontrollers</strong> - Control signal generation and processing
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Range:</span>
+                  <span>5-15 meters (indoor)</span>
                 </li>
-                <li>
-                  <strong>RF Modules</strong> - Often used for synchronization and data transmission
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Data Rate:</span>
+                  <span>Low (typically used for positioning only)</span>
                 </li>
-                <li>
-                  <strong>Power Management</strong> - Especially important for battery-powered tags
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Typical Accuracy:</span>
+                  <span>1-10 centimeters</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>Low to medium</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Battery Life:</span>
+                  <span>6 months to 3 years (depending on configuration)</span>
                 </li>
               </ul>
             </div>
-
-            <div className="relative h-64 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/placeholder.svg?key=55s1i"
-                alt="Ultrasound positioning system diagram showing time of flight measurement"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <h3 className="text-xl font-semibold mt-6 mb-4">Key Technical Components</h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <Volume2 className="mr-2 h-5 w-5 text-blue-600" />
-                    Hardware Components
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Ultrasonic Transducers</strong> - Convert electrical energy to sound waves and vice versa
-                    </li>
-                    <li>
-                      <strong>Microcontrollers</strong> - Control signal generation and processing
-                    </li>
-                    <li>
-                      <strong>RF Modules</strong> - Often used for synchronization and data transmission
-                    </li>
-                    <li>
-                      <strong>Power Management</strong> - Especially important for battery-powered tags
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <Server className="mr-2 h-5 w-5 text-blue-600" />
-                    Software Components
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Signal Processing</strong> - Filtering, amplification, and detection algorithms
-                    </li>
-                    <li>
-                      <strong>Multilateration Algorithms</strong> - Calculate position from multiple distance
-                      measurements
-                    </li>
-                    <li>
-                      <strong>Kalman Filtering</strong> - Smoothing and prediction of movement trajectories
-                    </li>
-                    <li>
-                      <strong>Calibration Software</strong> - Accounts for environmental factors affecting sound speed
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Ultrasound for Real-Time Location Systems</h2>
-            <p className="mb-4">
-              When implemented as part of an RTLS solution, ultrasound technology offers several unique capabilities:
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Ruler className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">High Precision</h3>
-                </div>
-                <p className="text-sm">Centimeter-level accuracy in properly configured environments</p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Building className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Room-Level Containment</h3>
-                </div>
-                <p className="text-sm">Sound waves don't penetrate walls, providing natural zone isolation</p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Wifi className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">RF Independence</h3>
-                </div>
-                <p className="text-sm">Functions in environments with RF interference or restrictions</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Advantages and Limitations</h2>
-
-            <Tabs defaultValue="advantages" className="mb-8">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="advantages">Advantages</TabsTrigger>
-                <TabsTrigger value="limitations">Limitations</TabsTrigger>
-              </TabsList>
-              <TabsContent value="advantages" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>High Accuracy</strong> - Typically 1-10 cm positioning accuracy in ideal conditions
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Room Containment</strong> - Natural isolation by walls prevents signal bleeding between
-                      rooms
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>RF Immunity</strong> - Not affected by radio frequency interference
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Low Power Requirements</strong> - Ultrasonic transducers can be very energy efficient
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Privacy Advantages</strong> - Sound waves don't penetrate walls, limiting tracking to
-                      defined areas
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-              <TabsContent value="limitations" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Environmental Sensitivity</strong> - Performance affected by temperature, humidity, and
-                      air currents
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Line-of-Sight Requirements</strong> - Obstacles can block ultrasonic signals
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Acoustic Interference</strong> - Some industrial environments may have ultrasonic noise
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Infrastructure Requirements</strong> - Typically requires dense deployment of
-                      receivers/transmitters
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Limited Range</strong> - Effective range typically limited to 10-15 meters
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-            </Tabs>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Implementation Considerations</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Environmental Factors</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Temperature Variations</strong> - Affects speed of sound (approximately 0.6 m/s per °C)
-                    </li>
-                    <li>
-                      <strong>Humidity</strong> - Influences sound propagation characteristics
-                    </li>
-                    <li>
-                      <strong>Air Currents</strong> - Can affect signal path and timing
-                    </li>
-                    <li>
-                      <strong>Ambient Noise</strong> - Industrial equipment may generate ultrasonic interference
-                    </li>
-                    <li>
-                      <strong>Room Acoustics</strong> - Reflections and reverberations can affect signal quality
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Deployment Considerations</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Transducer Placement</strong> - Strategic positioning for optimal coverage
-                    </li>
-                    <li>
-                      <strong>Density Requirements</strong> - Typically 1 receiver per 10-30 square meters
-                    </li>
-                    <li>
-                      <strong>Calibration Procedures</strong> - Initial and periodic calibration for accuracy
-                    </li>
-                    <li>
-                      <strong>Power Supply</strong> - Wired or battery options with appropriate maintenance schedules
-                    </li>
-                    <li>
-                      <strong>Mounting Considerations</strong> - Height, orientation, and stability of devices
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h3 className="text-xl font-semibold mt-6 mb-4">Integration with Other Technologies</h3>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Complementary Technology</TableHead>
-                    <TableHead>Integration Benefit</TableHead>
-                    <TableHead>Implementation Approach</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">RF Synchronization</TableCell>
-                    <TableCell>Provides timing reference for improved accuracy</TableCell>
-                    <TableCell>Combined RF/ultrasound tags and receivers</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Inertial Sensors</TableCell>
-                    <TableCell>Continuous tracking between ultrasonic updates</TableCell>
-                    <TableCell>Sensor fusion algorithms with Kalman filtering</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">BLE</TableCell>
-                    <TableCell>Extended coverage in areas with limited ultrasound infrastructure</TableCell>
-                    <TableCell>Hybrid positioning system with handover between technologies</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Computer Vision</TableCell>
-                    <TableCell>Additional context and identification capabilities</TableCell>
-                    <TableCell>Multi-modal tracking with position correlation</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Wi-Fi</TableCell>
-                    <TableCell>Data backhaul and coarse positioning when ultrasound unavailable</TableCell>
-                    <TableCell>Fallback positioning with confidence metrics</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Key Industry Applications</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Healthcare</h3>
-                <p className="text-sm mb-3">Precise tracking of medical equipment, staff, and patients in hospitals</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>High adoption rate</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Manufacturing</h3>
-                <p className="text-sm mb-3">Tool tracking, worker safety zones, and process optimization</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Growing application</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Laboratory Environments</h3>
-                <p className="text-sm mb-3">Tracking samples, equipment, and ensuring proper procedures</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Precision-critical use case</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Robotics</h3>
-                <p className="text-sm mb-3">Indoor navigation and positioning for autonomous robots</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Emerging application</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Virtual/Augmented Reality</h3>
-                <p className="text-sm mb-3">Precise indoor positioning for immersive experiences</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>High growth potential</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Secure Facilities</h3>
-                <p className="text-sm mb-3">Access control and personnel tracking in high-security environments</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Specialized application</span>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in Ultrasound Positioning</h2>
-
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4">Emerging Developments</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold mb-2">Miniaturization</h4>
-                  <p className="text-sm mb-4">
-                    Smaller, more energy-efficient ultrasonic transducers enabling new form factors and applications
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Advanced Signal Processing</h4>
-                  <p className="text-sm mb-4">
-                    Machine learning algorithms improving accuracy and resilience to environmental interference
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Smartphone Integration</h4>
-                  <p className="text-sm">
-                    Leveraging standard smartphone microphones for ultrasonic positioning without specialized hardware
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-2">Multi-Modal Systems</h4>
-                  <p className="text-sm mb-4">
-                    Tighter integration with complementary technologies for seamless indoor/outdoor tracking
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Self-Calibrating Networks</h4>
-                  <p className="text-sm mb-4">
-                    Systems that automatically adjust for environmental changes and optimize performance
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Mesh Architectures</h4>
-                  <p className="text-sm">
-                    Distributed ultrasonic networks with peer-to-peer capabilities for improved coverage and resilience
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Comparison with Other RTLS Technologies</h2>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Feature</TableHead>
-                    <TableHead>Ultrasound</TableHead>
-                    <TableHead>UWB</TableHead>
-                    <TableHead>BLE</TableHead>
-                    <TableHead>Wi-Fi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Typical Accuracy</TableCell>
-                    <TableCell>1-10 cm</TableCell>
-                    <TableCell>10-30 cm</TableCell>
-                    <TableCell>1-3 m</TableCell>
-                    <TableCell>3-15 m</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Range</TableCell>
-                    <TableCell>5-15 m</TableCell>
-                    <TableCell>10-100 m</TableCell>
-                    <TableCell>10-50 m</TableCell>
-                    <TableCell>20-100 m</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Infrastructure Density</TableCell>
-                    <TableCell>High</TableCell>
-                    <TableCell>Medium</TableCell>
-                    <TableCell>Medium</TableCell>
-                    <TableCell>Low</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Power Consumption</TableCell>
-                    <TableCell>Low-Medium</TableCell>
-                    <TableCell>Medium</TableCell>
-                    <TableCell>Low</TableCell>
-                    <TableCell>High</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Environmental Sensitivity</TableCell>
-                    <TableCell>High</TableCell>
-                    <TableCell>Medium</TableCell>
-                    <TableCell>Low</TableCell>
-                    <TableCell>Low</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Room Containment</TableCell>
-                    <TableCell>Excellent</TableCell>
-                    <TableCell>Poor</TableCell>
-                    <TableCell>Poor</TableCell>
-                    <TableCell>Poor</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Implementation Best Practices</h2>
-
-            <div className="space-y-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Environmental Assessment</h3>
-                <p className="text-sm">
-                  Conduct a thorough evaluation of the deployment environment, including temperature variations, air
-                  currents, ambient noise sources, and acoustic properties. This baseline understanding will inform
-                  system design and calibration requirements.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Strategic Receiver Placement</h3>
-                <p className="text-sm">
-                  Position ultrasonic receivers to maximize coverage while minimizing dead zones. Consider ceiling
-                  mounting with overlapping coverage patterns and account for potential obstacles that could block
-                  line-of-sight.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Regular Calibration</h3>
-                <p className="text-sm">
-                  Implement a schedule for system calibration that accounts for seasonal temperature changes and any
-                  modifications to the physical environment. Consider automated calibration routines using reference
-                  tags at known positions.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Hybrid Technology Approach</h3>
-                <p className="text-sm">
-                  Complement ultrasound positioning with RF technologies for synchronization and as a fallback when
-                  ultrasonic signals are compromised. This creates a more robust overall system with higher
-                  availability.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Signal Processing Optimization</h3>
-                <p className="text-sm">
-                  Implement advanced signal processing techniques to filter noise, detect multipath reflections, and
-                  improve timing accuracy. Consider adaptive algorithms that can adjust to changing environmental
-                  conditions.
-                </p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
-            <p className="mb-4">
-              Ultrasound positioning technology offers a unique combination of high accuracy and room-level containment
-              that makes it particularly valuable for applications requiring precise indoor positioning. While it comes
-              with certain environmental sensitivities and infrastructure requirements, its centimeter-level accuracy
-              and immunity to RF interference make it an excellent choice for many specialized RTLS applications.
-            </p>
-            <p className="mb-4">
-              The technology is particularly well-suited to healthcare, manufacturing, and laboratory environments where
-              precision positioning is critical and the controlled indoor environment mitigates many of the technology's
-              limitations. As advances in signal processing, miniaturization, and integration with complementary
-              technologies continue, ultrasound positioning is likely to become even more versatile and accessible.
-            </p>
-            <p>
-              For organizations seeking highly accurate indoor positioning in controlled environments, ultrasound
-              technology offers a proven solution with demonstrable ROI across numerous industry applications.
-            </p>
           </div>
-        </div>
+        </section>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">Ultrasound Technology Overview</h3>
+        {/* How Ultrasound Works */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">How Ultrasound Works for RTLS</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Time-of-Flight Measurement</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Ultrasonic transmitters (beacons or tags) emit high-frequency sound pulses that are detected by
+                  receivers installed in the environment. By measuring the time it takes for the sound to travel from
+                  transmitter to receiver, the system calculates the distance between them. Using multiple receivers,
+                  multilateration algorithms determine the transmitter's precise position.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">RF Synchronization</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Many ultrasound systems use RF signals for synchronization between transmitters and receivers. The RF
+                  signal travels at the speed of light, while the ultrasound travels at the speed of sound
+                  (approximately 343 m/s). This significant speed difference allows for precise distance calculation by
+                  measuring the time difference between receiving the RF and ultrasonic signals.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <Building className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Infrastructure</h4>
-                  <p className="text-sm text-gray-600">Ultrasonic beacons and receivers</p>
-                </div>
-              </div>
+        {/* Advantages & Limitations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>High accuracy (typically 1-10 cm)</li>
+                  <li>Natural room containment as sound doesn't penetrate walls</li>
+                  <li>Immunity to RF interference</li>
+                  <li>Low power requirements for transmitters</li>
+                  <li>Privacy advantages due to room containment</li>
+                  <li>Not affected by lighting conditions</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Environmental sensitivity (temperature, humidity, air currents)</li>
+                  <li>Line-of-sight requirements between transmitters and receivers</li>
+                  <li>Susceptibility to acoustic interference in noisy environments</li>
+                  <li>Limited range (typically 5-15 meters)</li>
+                  <li>Requires dense infrastructure deployment</li>
+                  <li>Potential issues with reflections in complex environments</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Ruler className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Accuracy Range</h4>
-                  <p className="text-sm text-gray-600">1-10 cm typical</p>
-                </div>
-              </div>
+        {/* Industry Applications */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
+          <Tabs defaultValue="healthcare" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
+              <TabsTrigger value="healthcare" className="flex flex-col py-2 h-auto">
+                <Hospital className="h-5 w-5 mb-1" />
+                Healthcare
+              </TabsTrigger>
+              <TabsTrigger value="manufacturing" className="flex flex-col py-2 h-auto">
+                <Factory className="h-5 w-5 mb-1" />
+                Manufacturing
+              </TabsTrigger>
+              <TabsTrigger value="logistics" className="flex flex-col py-2 h-auto">
+                <Truck className="h-5 w-5 mb-1" />
+                Logistics
+              </TabsTrigger>
+              <TabsTrigger value="retail" className="flex flex-col py-2 h-auto">
+                <ShoppingBag className="h-5 w-5 mb-1" />
+                Retail
+              </TabsTrigger>
+              <TabsTrigger value="commercial" className="flex flex-col py-2 h-auto">
+                <Building2 className="h-5 w-5 mb-1" />
+                Commercial
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    Ultrasound technology enables precise tracking in healthcare environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In healthcare settings, ultrasound RTLS provides centimeter-level accuracy for tracking critical
+                    medical equipment, staff, and patients. The technology's natural room containment properties ensure
+                    that tracking is limited to specific areas, addressing privacy concerns.
+                  </p>
+                  <p>
+                    Ultrasound is particularly valuable for applications requiring precise positioning, such as surgical
+                    instrument tracking, patient flow management in operating rooms, and monitoring hand hygiene
+                    compliance at specific stations.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Surgical instrument tracking</li>
+                        <li>High-value medical device location</li>
+                        <li>Patient flow in critical care areas</li>
+                        <li>Staff workflow optimization</li>
+                        <li>Hand hygiene compliance monitoring</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Centimeter-level accuracy for critical assets</li>
+                        <li>Room-level containment for privacy</li>
+                        <li>Reduced search time for equipment</li>
+                        <li>Improved workflow efficiency</li>
+                        <li>Enhanced patient safety</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="manufacturing" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Manufacturing Applications</CardTitle>
+                  <CardDescription>
+                    Ultrasound technology provides precision tracking in manufacturing environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Manufacturing facilities use ultrasound RTLS for high-precision tool tracking, worker safety zones,
+                    and robotic positioning. The technology's immunity to RF interference makes it ideal for
+                    environments with heavy machinery and electromagnetic noise.
+                  </p>
+                  <p>
+                    Ultrasound systems can track assets with centimeter-level accuracy, enabling precise process control
+                    and quality assurance in assembly lines. The technology also supports automated tool calibration
+                    verification and worker safety applications.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Precision tool tracking</li>
+                        <li>Worker safety zone monitoring</li>
+                        <li>Robotic positioning</li>
+                        <li>Assembly line optimization</li>
+                        <li>Quality control process tracking</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>High precision in noisy RF environments</li>
+                        <li>Improved tool utilization</li>
+                        <li>Enhanced worker safety</li>
+                        <li>Reduced production errors</li>
+                        <li>Better process control</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Logistics Applications</CardTitle>
+                  <CardDescription>
+                    Ultrasound technology enables precise asset tracking in logistics operations.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In logistics and warehouse environments, ultrasound RTLS provides accurate tracking of high-value
+                    items, automated guided vehicles (AGVs), and personnel. The technology's precision enables efficient
+                    space utilization and optimized picking routes.
+                  </p>
+                  <p>
+                    Ultrasound systems are particularly valuable for applications requiring zone-level containment, such
+                    as secure storage areas or hazardous material zones. The technology's immunity to RF interference
+                    ensures reliable operation in environments with metal shelving and machinery.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>High-value inventory tracking</li>
+                        <li>AGV navigation and control</li>
+                        <li>Secure zone access monitoring</li>
+                        <li>Picking route optimization</li>
+                        <li>Personnel safety in automated environments</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Precise location of critical assets</li>
+                        <li>Improved space utilization</li>
+                        <li>Enhanced security for high-value items</li>
+                        <li>Reduced picking errors</li>
+                        <li>Better coordination between humans and AGVs</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="retail" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Retail Applications</CardTitle>
+                  <CardDescription>
+                    Ultrasound technology provides precise positioning for retail environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Retail environments use ultrasound RTLS for high-precision customer analytics, inventory management,
+                    and interactive shopping experiences. The technology's room containment properties enable
+                    zone-specific promotions and customer engagement.
+                  </p>
+                  <p>
+                    Ultrasound systems can track shopping carts, high-value merchandise, and staff with centimeter-level
+                    accuracy. This enables detailed analysis of customer behavior, optimized store layouts, and enhanced
+                    security for premium products.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Premium product security</li>
+                        <li>Customer journey analysis</li>
+                        <li>Interactive product displays</li>
+                        <li>Staff allocation optimization</li>
+                        <li>Zone-specific promotions</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Precise customer behavior insights</li>
+                        <li>Reduced shrinkage for high-value items</li>
+                        <li>Enhanced shopping experience</li>
+                        <li>Improved staff efficiency</li>
+                        <li>Better store layout optimization</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="commercial" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Commercial Building Applications</CardTitle>
+                  <CardDescription>
+                    Ultrasound technology enables precise positioning in commercial spaces.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Commercial buildings implement ultrasound RTLS for precise space utilization analysis, access
+                    control, and occupancy monitoring. The technology's natural room containment properties make it
+                    ideal for monitoring specific zones without cross-boundary detection.
+                  </p>
+                  <p>
+                    Ultrasound systems provide accurate data for meeting room utilization, workspace optimization, and
+                    security applications. The technology can also support interactive wayfinding and personalized
+                    workspace settings in smart buildings.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Meeting room utilization tracking</li>
+                        <li>Secure area access monitoring</li>
+                        <li>Workspace optimization</li>
+                        <li>Interactive wayfinding</li>
+                        <li>Personalized workspace settings</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Accurate space utilization data</li>
+                        <li>Enhanced security for sensitive areas</li>
+                        <li>Improved workplace efficiency</li>
+                        <li>Better facility management</li>
+                        <li>Enhanced user experience in smart buildings</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </section>
 
-              <div className="flex items-start">
-                <Compass className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Environment</h4>
-                  <p className="text-sm text-gray-600">Indoor, controlled environments</p>
-                </div>
-              </div>
+        {/* Case Studies */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Surgical Instrument Tracking</CardTitle>
+                <CardDescription>University Medical Center</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A major university medical center implemented an ultrasound-based RTLS to track surgical instruments
+                  across 20 operating rooms. The system provided 3-5 cm accuracy, enabling real-time location of
+                  critical instruments during procedures and ensuring complete instrument counts before and after
+                  surgeries.
+                </p>
+                <p>
+                  The implementation reduced instrument search time by 93% and virtually eliminated retained surgical
+                  item incidents. The hospital reported annual savings of $425,000 through improved workflow efficiency
+                  and reduced procedure delays, achieving ROI within 11 months.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Precision Manufacturing Tool Tracking</CardTitle>
+                <CardDescription>Aerospace Components Manufacturer</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  An aerospace components manufacturer deployed an ultrasound RTLS to track 800 precision tools in their
+                  quality control department. The system provided 2-3 cm positioning accuracy, enabling automated tool
+                  verification for specific workstations and ensuring calibrated tools were used for critical
+                  measurements.
+                </p>
+                <p>
+                  Quality defects related to improper tool usage decreased by 87%, while tool search time was reduced by
+                  76%. The manufacturer estimated annual savings of $380,000 through improved quality control and
+                  reduced rework, with complete ROI achieved in 14 months.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Zap className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Power Requirements</h4>
-                  <p className="text-sm text-gray-600">Low to medium</p>
-                </div>
-              </div>
+        {/* Implementation Considerations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Ultrasonic transmitters/receivers</li>
+                  <li>RF synchronization modules (optional)</li>
+                  <li>Mounting hardware for receivers</li>
+                  <li>Network infrastructure (typically Ethernet)</li>
+                  <li>Server for data processing</li>
+                  <li>Positioning software platform</li>
+                  <li>Integration middleware for existing systems</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct acoustic site survey before installation</li>
+                  <li>Place receivers for optimal coverage and line-of-sight</li>
+                  <li>Account for temperature variations in calibration</li>
+                  <li>Implement regular system calibration procedures</li>
+                  <li>Consider environmental noise sources</li>
+                  <li>Develop battery replacement schedule for tags</li>
+                  <li>Test system performance in various conditions</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Environmental factors affecting sound propagation</li>
+                  <li>Line-of-sight requirements between tags and receivers</li>
+                  <li>Acoustic interference in noisy environments</li>
+                  <li>Reflections and multipath effects</li>
+                  <li>Temperature variations affecting calibration</li>
+                  <li>Integration with existing systems</li>
+                  <li>Maintaining system performance over time</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Clock className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Setup Time</h4>
-                  <p className="text-sm text-gray-600">Medium (beacon placement and calibration)</p>
-                </div>
-              </div>
-            </div>
-
-            <h4 className="font-semibold mb-3">Ideal Applications</h4>
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Precision manufacturing</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Medical device tracking</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Laboratory equipment</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Robotic positioning</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Small room environments</span>
-              </li>
-            </ul>
-
-            <Link href="/contact">
-              <Button className="w-full">Contact RTLS Expert</Button>
+        {/* Technology Comparison */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Ultrasound</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-2">1-10 cm</td>
+                  <td className="border px-4 py-2">10-30 cm</td>
+                  <td className="border px-4 py-2">1-3 m</td>
+                  <td className="border px-4 py-2">3-5 m</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Range</td>
+                  <td className="border px-4 py-2">5-15 m</td>
+                  <td className="border px-4 py-2">10-50 m</td>
+                  <td className="border px-4 py-2">10-30 m</td>
+                  <td className="border px-4 py-2">30-50 m</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Very Low</td>
+                  <td className="border px-4 py-2">High</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Infrastructure Cost</td>
+                  <td className="border px-4 py-2">Medium-High</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">Medium</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Tag Cost</td>
+                  <td className="border px-4 py-2">$15-40</td>
+                  <td className="border px-4 py-2">$15-50</td>
+                  <td className="border px-4 py-2">$5-15</td>
+                  <td className="border px-4 py-2">$10-30</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Battery Life</td>
+                  <td className="border px-4 py-2">6 months - 3 years</td>
+                  <td className="border px-4 py-2">6 months - 3 years</td>
+                  <td className="border px-4 py-2">6 months - 5 years</td>
+                  <td className="border px-4 py-2">3 months - 2 years</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Room Containment</td>
+                  <td className="border px-4 py-2">Excellent</td>
+                  <td className="border px-4 py-2">Poor</td>
+                  <td className="border px-4 py-2">Poor</td>
+                  <td className="border px-4 py-2">Poor</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
+              View all RTLS technologies →
             </Link>
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">Related Technologies</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/uwb"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Radio className="h-4 w-4 mr-2" />
-                  <span>Ultra-Wideband (UWB)</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/infrared"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Camera className="h-4 w-4 mr-2" />
-                  <span>Infrared</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/sensor-fusion"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Layers className="h-4 w-4 mr-2" />
-                  <span>Sensor Fusion</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/lidar"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Camera className="h-4 w-4 mr-2" />
-                  <span>LiDAR</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/magnetic-field"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Compass className="h-4 w-4 mr-2" />
-                  <span>Magnetic Field Mapping</span>
-                </Link>
-              </li>
-            </ul>
+        {/* Future Trends */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Miniaturization:</span> Smaller, more energy-efficient ultrasonic
+                    transducers enabling new form factors and applications
+                  </li>
+                  <li>
+                    <span className="font-medium">Advanced Signal Processing:</span> Machine learning algorithms
+                    improving accuracy and resilience to environmental interference
+                  </li>
+                  <li>
+                    <span className="font-medium">Smartphone Integration:</span> Leveraging standard smartphone
+                    microphones for ultrasonic positioning without specialized hardware
+                  </li>
+                  <li>
+                    <span className="font-medium">Self-Calibrating Systems:</span> Adaptive systems that automatically
+                    adjust for environmental changes and optimize performance
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Hybrid Solutions:</span> Increasing integration of ultrasound with
+                    other technologies like UWB and BLE for comprehensive coverage
+                  </li>
+                  <li>
+                    <span className="font-medium">Industry Standardization:</span> Development of more robust standards
+                    for interoperability between different ultrasound RTLS systems
+                  </li>
+                  <li>
+                    <span className="font-medium">Mesh Architectures:</span> Distributed ultrasonic networks with
+                    peer-to-peer capabilities for improved coverage and resilience
+                  </li>
+                  <li>
+                    <span className="font-medium">Specialized Applications:</span> Growth in niche markets requiring
+                    centimeter-level accuracy, such as surgical robotics and precision manufacturing
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h3 className="text-lg font-bold mb-4">Resources</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>RTLS Implementation Guide</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/hospital-asset-tracking-1-2m-savings-rtls"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>RTLS Success Story</span>
-                </Link>
-              </li>
-            </ul>
+        {/* Learn More */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About Ultrasound Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/resources/rtls-101-core-components-protocols-deployment-models"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS 101: Core Components, Protocols & Deployment Models
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/indoor-positioning-technologies-comparative-analysis"
+                    className="text-primary hover:underline"
+                  >
+                    Indoor Positioning Technologies: Comparative Analysis
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/precision-rtls-sub-meter-accuracy-requirements"
+                    className="text-primary hover:underline"
+                  >
+                    Precision RTLS: When Sub-Meter Accuracy is Required
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/healthcare-asset-tracking-1-2m-savings-rtls"
+                    className="text-primary hover:underline"
+                  >
+                    Healthcare Asset Tracking: $1.2M Savings with RTLS
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-sensor-fusion-multi-technology-approach"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS Sensor Fusion: A Multi-Technology Approach
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">Need help determining if ultrasound is the right technology for your RTLS project?</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </article>
     </div>
   )
 }
