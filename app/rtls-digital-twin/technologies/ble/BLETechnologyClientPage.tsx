@@ -625,15 +625,13 @@ export default function BLETechnologyClientPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
-              <p className="mb-4">
-                Need help determining if BLE is the right technology for your RTLS project?
-              </p>
-              <p>   
-                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.  
+              <p className="mb-4">Need help determining if BLE is the right technology for your RTLS project?</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
               >
                 Ask an Alliance Member
               </Link>
