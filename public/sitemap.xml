@@ -1,146 +1,344 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main pages -->
   <url>
     <loc>https://rtlsalliance.com/</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/rtls-digital-twin</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ble</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/uwb</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/wifi</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/lora</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/nfc</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/infrared</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/lidar</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ai-cameras</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/gnss</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/rtk-gps</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/magnetic-field</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ultrasound</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/sensor-fusion</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/slam</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/dead-reckoning</loc>
-    <lastmod>2023-11-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://rtlsalliance.com/resources</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/certification</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/membership</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/contact</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/ecosystem</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/ecosystem/directory</loc>
-    <lastmod>2023-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://rtlsalliance.com/project</loc>
-    <lastmod>2023-11-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Technology pages -->
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ble</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/uwb</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/wifi</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/lora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/nfc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/infrared</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/lidar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ai-cameras</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/gnss</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/rtk-gps</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/magnetic-field</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ultrasound</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/sensor-fusion</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/slam</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/dead-reckoning</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Module pages -->
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/fleet-manager</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/rules-engine</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/dashboard-reports</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/production-planning</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/process-control</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Resource articles -->
+  <url>
+    <loc>https://rtlsalliance.com/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/automotive-oem-uwb-45-minute-fod-savings</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/ble-positioning-rssi-aoa-fingerprinting-explained</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/ble-rtls-fod-prevention-aerospace</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/building-rtls-dashboards-kpis-analytics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/hospital-rtls-ble-uwb-hybrid</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/how-uwb-works-time-of-flight-tdoa-deep-dive</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/indoor-positioning-basics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/integrating-rtls-with-iot-apis-middleware-data-flows</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/lidar-rtls-warehouse-30-minute-forklift-savings</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rfid-vs-barcode-vs-ble-asset-tracking-comparison</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-101-core-components-protocols-deployment-models</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-roi-quantify-efficiency-gains-cost-savings</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-security-encryption-authentication-privacy-best-practices</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/smart-warehousing-rtls-use-cases-automated-fulfillment</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-ble-rfid-wifi-rtt-ultimate-rtls-showdown</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-vs-ble-which-rtls-tech-fits-use-case</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-vs-gps-indoor-outdoor-tracking-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-vs-rfid-cost-benefit-rtls</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-vs-vision-rtls-accuracy-vs-contextual-tracking</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-vs-wifi-rtt-latency-accuracy-infrastructure-cost</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/uwb-vs-wifi-rtt-precision-showdown</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/vision-rtls-warehousing-60-percent-pick-time-improvement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/vision-slam-vs-lidar-choosing-ideal-rtls</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/wifi-rtt-vs-ble-best-indoor-navigation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/wifi-rtt-vs-uwb-scalability-precision-trade-offs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/zigbee-vs-ble-low-power-rtls-iot</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-deployment-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-use-cases-healthcare</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-use-cases-manufacturing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-use-cases-retail</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-use-cases-smart-cities</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-use-cases-transportation-logistics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-technology-selection-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/rtls-vendor-evaluation-checklist</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rtlsalliance.com/resources/warehouse-rtls-optimization-guide</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

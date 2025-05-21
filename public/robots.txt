@@ -9,5 +9,10 @@ Disallow: /auth/
 Disallow: /auth-error/
 Disallow: /debug/
 
+# Disallow account management pages
+Disallow: /account/
+Disallow: /membership/cancel/
+Disallow: /membership/success/
+
 # Sitemap location
 Sitemap: https://rtlsalliance.com/sitemap.xml
