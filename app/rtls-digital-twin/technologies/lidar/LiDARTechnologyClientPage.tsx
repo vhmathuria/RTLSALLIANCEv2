@@ -4,13 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
-import { getTechnologyRelatedArticles } from "@/lib/article-data"
 import { useEffect } from "react"
 
 export default function LiDARTechnologyClientPage() {
-  // Get LiDAR-related articles for the related resources section
-  const lidarRelatedArticles = getTechnologyRelatedArticles("lidar").slice(0, 5)
-
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -631,50 +627,38 @@ export default function LiDARTechnologyClientPage() {
             <div>
               <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
               <ul className="space-y-2">
-                {lidarRelatedArticles.length > 0 ? (
-                  lidarRelatedArticles.map((article) => (
-                    <li key={article.slug}>
-                      <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
-                        {article.title}
-                      </Link>
-                    </li>
-                  ))
-                ) : (
-                  <>
-                    <li>
-                      <Link
-                        href="/resources/vision-slam-vs-lidar-choosing-ideal-rtls"
-                        className="text-primary hover:underline"
-                      >
-                        Vision SLAM vs LiDAR: Choosing the Ideal RTLS
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls"
-                        className="text-primary hover:underline"
-                      >
-                        Vision SLAM vs LiDAR vs VIO: 3D Mapping for RTLS
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning"
-                        className="text-primary hover:underline"
-                      >
-                        Visual SLAM vs UWB vs LiDAR: Next-Gen Indoor Positioning
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/rtls-101-core-components-protocols-deployment-models"
-                        className="text-primary hover:underline"
-                      >
-                        RTLS 101: Core Components, Protocols & Deployment Models
-                      </Link>
-                    </li>
-                  </>
-                )}
+                <li>
+                  <Link
+                    href="/resources/vision-slam-vs-lidar-choosing-ideal-rtls"
+                    className="text-primary hover:underline"
+                  >
+                    Vision SLAM vs LiDAR: Choosing the Ideal RTLS
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls"
+                    className="text-primary hover:underline"
+                  >
+                    Vision SLAM vs LiDAR vs VIO: 3D Mapping for RTLS
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning"
+                    className="text-primary hover:underline"
+                  >
+                    Visual SLAM vs UWB vs LiDAR: Next-Gen Indoor Positioning
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-101-core-components-protocols-deployment-models"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS 101: Core Components, Protocols & Deployment Models
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
