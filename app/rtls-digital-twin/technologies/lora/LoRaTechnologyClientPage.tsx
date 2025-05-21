@@ -1,757 +1,698 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { ArrowLeft, Radio, Building2, Factory, Hospital, ShoppingCart, Truck, Warehouse } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
+import Link from "next/link"
 import { getTechnologyRelatedArticles } from "@/lib/article-data"
+import { useEffect } from "react"
 
 export default function LoRaTechnologyClientPage() {
-  const [activeTab, setActiveTab] = useState("manufacturing")
-  const relatedArticles = getTechnologyRelatedArticles("lora")
+  // Get LoRa-related articles for the related resources section
+  const loraRelatedArticles = getTechnologyRelatedArticles("lora").slice(0, 5)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   return (
-    <main className="bg-white pb-16">
-      <div className="container mx-auto px-4 py-8">
-        <Link href="/rtls-digital-twin" className="flex items-center text-blue-600 hover:text-blue-800 mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to RTLS + Digital Twin
-        </Link>
+    <div className="container mx-auto py-8 px-4">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">LoRa Technology for RTLS</h1>
+          <p className="text-base text-muted-foreground">
+            LoRa (Long Range) is a low-power wide-area network (LPWAN) technology designed for long-range communication
+            with minimal power consumption, ideal for IoT and RTLS applications covering large areas.
+          </p>
+        </header>
 
-        <div className="flex items-center mb-8">
-          <Radio className="h-10 w-10 text-blue-600 mr-4" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            LoRa Technology for RTLS
-          </h1>
-        </div>
-
+        {/* Overview and Key Specifications */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-          <p className="mb-4">
-            LoRa (Long Range) is a low-power wide-area network (LPWAN) technology designed for long-range, low-power,
-            and low-bandwidth communications. Developed by Semtech Corporation, LoRa uses a proprietary spread spectrum
-            modulation technique that enables long-range transmission with minimal power consumption, making it ideal
-            for IoT applications including asset tracking and real-time location systems (RTLS) that don't require
-            high-precision positioning.
-          </p>
-
-          <p className="mb-6">
-            LoRaWAN is the network protocol built on top of the LoRa physical layer, providing a communication standard
-            for low-power devices to communicate with internet-connected applications over long-range wireless
-            connections. This protocol is managed by the LoRa Alliance, an open, non-profit association of members.
-          </p>
-
-          <div className="bg-gray-50 p-6 rounded-lg shadow-sm mb-6">
-            <h3 className="text-xl font-semibold mb-4">Key Specifications</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-medium text-gray-900">Range</h4>
-                <p className="text-gray-700">2-15 km urban, up to 30+ km rural with line of sight</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Frequency Bands</h4>
-                <p className="text-gray-700">Unlicensed ISM bands (433 MHz, 868 MHz, 915 MHz depending on region)</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Data Rate</h4>
-                <p className="text-gray-700">0.3 kbps to 50 kbps (depending on spreading factor and bandwidth)</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Power Consumption</h4>
-                <p className="text-gray-700">Extremely low (battery life of 5-10+ years possible)</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Positioning Accuracy</h4>
-                <p className="text-gray-700">20-200 meters (typical for TDOA implementations)</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Network Topology</h4>
-                <p className="text-gray-700">
-                  Star-of-stars (devices connect to gateways, which connect to network servers)
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Payload Size</h4>
-                <p className="text-gray-700">Small (51-243 bytes depending on region and spreading factor)</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Security</h4>
-                <p className="text-gray-700">AES-128 encryption with end-to-end security</p>
-              </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+              <p className="mb-4">
+                LoRa operates in unlicensed ISM bands (433 MHz, 868 MHz, 915 MHz depending on region) and is optimized
+                for long-range, low-power communication. It provides exceptional coverage of 2-15 km in urban areas and
+                up to 30+ km in rural areas with line of sight.
+              </p>
+              <p>
+                For RTLS applications, LoRa typically achieves 20-200 meter accuracy using RSSI or TDOA techniques,
+                making it suitable for tracking assets across large areas where high precision is not required.
+              </p>
+            </div>
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
+              <ul className="space-y-2">
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Frequency:</span>
+                  <span>433/868/915 MHz ISM bands</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Range:</span>
+                  <span>2-15 km urban, up to 30+ km rural</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Data Rate:</span>
+                  <span>0.3-50 kbps (depending on spreading factor)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Typical Accuracy:</span>
+                  <span>20-200 meters (RSSI/TDOA)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>0.01-0.05 W (transmit)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Battery Life:</span>
+                  <span>5-10+ years (depending on transmission frequency)</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
 
+        {/* How LoRa Works */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">How LoRa Works for RTLS</h2>
-          <p className="mb-6">
-            While LoRa was not originally designed as a positioning technology, its long range and low power
-            characteristics make it suitable for certain RTLS applications, particularly those covering large areas
-            where high precision is not required. Several methods can be used to determine location with LoRa:
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-blue-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-2">RSSI-based Positioning</h3>
-              <p>
-                Uses the Received Signal Strength Indicator (RSSI) from multiple gateways to estimate distance based on
-                signal attenuation. While simple to implement, this method provides relatively low accuracy (50-200
-                meters) due to signal variations caused by environmental factors.
-              </p>
-            </div>
-            <div className="bg-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-2">Time Difference of Arrival (TDOA)</h3>
-              <p>
-                Measures the time difference of a signal arriving at multiple synchronized gateways. This approach
-                provides better accuracy (20-50 meters) than RSSI but requires precise time synchronization between
-                gateways, typically using GPS receivers.
-              </p>
-            </div>
-            <div className="bg-green-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-2">Differential RSSI</h3>
-              <p>
-                An enhanced version of RSSI positioning that uses reference nodes at known locations to calibrate and
-                improve distance estimates. This method can achieve 30-100 meter accuracy depending on the density of
-                reference nodes and environmental conditions.
-              </p>
-            </div>
-            <div className="bg-yellow-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-2">Hybrid Positioning</h3>
-              <p>
-                Combines LoRa with other technologies or sensors (GPS, Wi-Fi, cellular, accelerometers) to improve
-                accuracy and reliability. For example, a device might use GPS when outdoors and switch to LoRa
-                positioning when indoors or in areas with poor GPS reception.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-            <h3 className="text-xl font-semibold mb-4">LoRa RTLS Architecture</h3>
-            <p className="mb-4">A typical LoRa-based RTLS system consists of the following components:</p>
-            <ul className="space-y-3 list-disc pl-5">
-              <li>
-                <strong>LoRa End Devices (Nodes/Tags):</strong> Battery-powered devices attached to assets or carried by
-                personnel. These transmit periodic beacons or respond to location requests.
-              </li>
-              <li>
-                <strong>LoRa Gateways:</strong> Fixed infrastructure devices that receive signals from end devices and
-                forward them to the network server. For TDOA positioning, gateways require precise time synchronization.
-              </li>
-              <li>
-                <strong>Network Server:</strong> Manages the LoRaWAN network, handling functions like deduplication of
-                messages received by multiple gateways, security, and routing data.
-              </li>
-              <li>
-                <strong>Location Solver:</strong> Specialized software that processes signal data from multiple gateways
-                to calculate the position of end devices using algorithms for RSSI trilateration or TDOA
-                multilateration.
-              </li>
-              <li>
-                <strong>Application Server:</strong> Hosts the business logic and user interface for the RTLS
-                application, processing location data and providing visualization and alerting capabilities.
-              </li>
-            </ul>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">RSSI-Based Positioning</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  LoRa end devices broadcast signals that are received by multiple gateways. The Received Signal
+                  Strength Indicator (RSSI) is measured to estimate the distance between the device and gateway. Using
+                  multiple gateways, trilateration algorithms determine the device's position with 50-200 meter
+                  accuracy.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Time Difference of Arrival (TDOA)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  TDOA measures the time difference of a signal arriving at multiple synchronized gateways. This
+                  approach provides better accuracy (20-50 meters) than RSSI but requires precise time synchronization
+                  between gateways, typically using GPS receivers for accurate timestamping.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Advantages & Limitations */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-green-600">Advantages</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Exceptional Range:</strong> Covers large areas with fewer gateways (2-15 km urban, 30+ km
-                  rural)
-                </li>
-                <li>
-                  <strong>Extremely Low Power Consumption:</strong> Enables battery life of 5-10+ years for tracking
-                  devices
-                </li>
-                <li>
-                  <strong>Excellent Building Penetration:</strong> Sub-GHz frequencies penetrate buildings and obstacles
-                  better
-                </li>
-                <li>
-                  <strong>Cost-Effective Infrastructure:</strong> Requires fewer gateways to cover large areas
-                </li>
-                <li>
-                  <strong>License-Free Operation:</strong> Uses unlicensed ISM bands, eliminating spectrum licensing
-                  costs
-                </li>
-                <li>
-                  <strong>Robust in Noisy Environments:</strong> Spread spectrum modulation provides resistance to
-                  interference
-                </li>
-                <li>
-                  <strong>Scalable Network:</strong> A single gateway can support thousands of end devices
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-red-600">Limitations</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Limited Positioning Accuracy:</strong> Typically 20-200 meters, insufficient for precise
-                  indoor positioning
-                </li>
-                <li>
-                  <strong>Low Data Rate:</strong> 0.3-50 kbps limits the amount and frequency of data transmission
-                </li>
-                <li>
-                  <strong>Duty Cycle Restrictions:</strong> Regulatory limitations in some regions restrict transmission
-                  time
-                </li>
-                <li>
-                  <strong>Limited Real-Time Capability:</strong> Low data rates can limit update frequency for real-time
-                  tracking
-                </li>
-                <li>
-                  <strong>Uplink-Dominated Protocol:</strong> LoRaWAN is optimized for uplink, with limitations on
-                  downlink
-                </li>
-                <li>
-                  <strong>Gateway Synchronization Challenges:</strong> TDOA positioning requires precise time
-                  synchronization
-                </li>
-                <li>
-                  <strong>Environmental Sensitivity:</strong> RSSI-based positioning is affected by environmental
-                  factors
-                </li>
-              </ul>
-            </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Exceptional range (2-15 km urban, 30+ km rural)</li>
+                  <li>Extremely low power consumption enabling 5-10+ year battery life</li>
+                  <li>Excellent building penetration with sub-GHz frequencies</li>
+                  <li>Cost-effective infrastructure (fewer gateways needed)</li>
+                  <li>License-free operation in ISM bands</li>
+                  <li>Robust in noisy environments due to spread spectrum modulation</li>
+                  <li>Scalable network supporting thousands of devices per gateway</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Limited positioning accuracy (20-200 meters)</li>
+                  <li>Low data rate (0.3-50 kbps) limiting update frequency</li>
+                  <li>Duty cycle restrictions in some regions (e.g., 1% in EU868)</li>
+                  <li>Limited real-time capability for frequent location updates</li>
+                  <li>Uplink-dominated protocol with limitations on downlink</li>
+                  <li>Gateway synchronization challenges for TDOA positioning</li>
+                  <li>Environmental factors affecting RSSI-based positioning</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Industry Applications */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Industry Applications</h2>
-
-          <Tabs defaultValue="manufacturing" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-6 mb-8">
-              <TabsTrigger value="manufacturing" className="flex flex-col items-center gap-1 py-3">
-                <Factory className="h-5 w-5" />
-                <span>Manufacturing</span>
+          <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
+          <Tabs defaultValue="logistics" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
+              <TabsTrigger value="logistics" className="flex flex-col py-2 h-auto">
+                <Truck className="h-5 w-5 mb-1" />
+                Logistics
               </TabsTrigger>
-              <TabsTrigger value="healthcare" className="flex flex-col items-center gap-1 py-3">
-                <Hospital className="h-5 w-5" />
-                <span>Healthcare</span>
+              <TabsTrigger value="agriculture" className="flex flex-col py-2 h-auto">
+                <ShoppingBag className="h-5 w-5 mb-1" />
+                Agriculture
               </TabsTrigger>
-              <TabsTrigger value="retail" className="flex flex-col items-center gap-1 py-3">
-                <ShoppingCart className="h-5 w-5" />
-                <span>Retail</span>
+              <TabsTrigger value="manufacturing" className="flex flex-col py-2 h-auto">
+                <Factory className="h-5 w-5 mb-1" />
+                Manufacturing
               </TabsTrigger>
-              <TabsTrigger value="logistics" className="flex flex-col items-center gap-1 py-3">
-                <Truck className="h-5 w-5" />
-                <span>Logistics</span>
+              <TabsTrigger value="smartcity" className="flex flex-col py-2 h-auto">
+                <Building2 className="h-5 w-5 mb-1" />
+                Smart City
               </TabsTrigger>
-              <TabsTrigger value="warehousing" className="flex flex-col items-center gap-1 py-3">
-                <Warehouse className="h-5 w-5" />
-                <span>Warehousing</span>
-              </TabsTrigger>
-              <TabsTrigger value="commercial" className="flex flex-col items-center gap-1 py-3">
-                <Building2 className="h-5 w-5" />
-                <span>Commercial</span>
+              <TabsTrigger value="healthcare" className="flex flex-col py-2 h-auto">
+                <Hospital className="h-5 w-5 mb-1" />
+                Healthcare
               </TabsTrigger>
             </TabsList>
-
-            <TabsContent value="manufacturing" className="border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-3">Manufacturing Applications</h3>
-              <p className="mb-4">
-                In manufacturing, LoRa RTLS is primarily used for tracking large equipment, outdoor assets, and
-                monitoring the movement of goods between facilities across large industrial campuses.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Equipment Tracking</h4>
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Logistics Applications</CardTitle>
+                  <CardDescription>
+                    LoRa technology enables efficient tracking across large supply chain operations.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <p>
-                    Monitor the location of large machinery and equipment across expansive manufacturing sites and
-                    outdoor storage areas.
+                    In logistics environments, LoRa is used to track shipping containers, vehicles, and high-value
+                    assets across ports, rail yards, and large distribution centers. The technology provides zone-level
+                    location data with minimal infrastructure requirements.
                   </p>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Inter-Facility Logistics</h4>
                   <p>
-                    Track the movement of materials and finished goods between buildings in large manufacturing
-                    complexes.
+                    LoRa is also used for condition monitoring of sensitive shipments, tracking temperature, humidity,
+                    and shock events across long-distance transportation routes. For yard management, LoRa helps locate
+                    trailers and containers quickly in large facilities.
                   </p>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Environmental Monitoring</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Container tracking in ports and terminals</li>
+                        <li>Fleet management across wide geographic areas</li>
+                        <li>Cold chain monitoring for sensitive goods</li>
+                        <li>Yard management in large facilities</li>
+                        <li>Rural delivery tracking in remote areas</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Wide-area coverage with minimal infrastructure</li>
+                        <li>Long battery life for tracking devices (5+ years)</li>
+                        <li>Reduced infrastructure costs for large areas</li>
+                        <li>Ability to track assets in remote locations</li>
+                        <li>Low maintenance requirements for deployed devices</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="agriculture" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Agricultural Applications</CardTitle>
+                  <CardDescription>
+                    LoRa enables livestock tracking and agricultural asset monitoring across vast rural areas.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <p>
-                    Combine location data with environmental sensors to monitor conditions across manufacturing
-                    facilities.
+                    Agricultural operations use LoRa to track livestock across large grazing areas, monitoring location
+                    and health metrics of animals. The technology's long range and low power consumption make it ideal
+                    for remote farming applications where cellular coverage may be limited.
                   </p>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Yard Management</h4>
                   <p>
-                    Track trailers, containers, and other transport equipment in manufacturing yards and loading areas.
+                    LoRa is also used for tracking agricultural equipment, irrigation systems, and environmental
+                    monitoring stations across large farms. The system integrates with farm management software to
+                    optimize operations and resource usage.
                   </p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 italic">
-                Note: LoRa is best suited for applications that don't require high precision positioning but benefit
-                from long range and battery life.
-              </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Livestock tracking and health monitoring</li>
+                        <li>Farm equipment location management</li>
+                        <li>Environmental condition monitoring</li>
+                        <li>Irrigation system tracking and control</li>
+                        <li>Fence breach detection and alerts</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Coverage across vast rural properties</li>
+                        <li>Solar-powered options for continuous operation</li>
+                        <li>Reduced livestock losses through early detection</li>
+                        <li>Improved resource management</li>
+                        <li>Operation in areas without cellular coverage</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
-
-            <TabsContent value="healthcare" className="border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-3">Healthcare Applications</h3>
-              <p className="mb-4">
-                In healthcare, LoRa RTLS is valuable for tracking assets and monitoring patients across large hospital
-                campuses, particularly for outdoor areas and inter-building transfers.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Campus-Wide Asset Tracking</h4>
-                  <p>Track medical equipment as it moves between buildings in large healthcare complexes.</p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Patient Wandering Prevention</h4>
-                  <p>Monitor at-risk patients with geofencing alerts if they leave designated safe areas.</p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Ambulance Fleet Management</h4>
-                  <p>Track the location of ambulances and emergency vehicles across a service region.</p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Remote Patient Monitoring</h4>
-                  <p>Track location of home healthcare equipment and ensure it remains at the patient's residence.</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 italic">
-                Note: For precise indoor positioning within hospital buildings, LoRa is typically complemented with
-                other technologies like BLE.
-              </p>
-            </TabsContent>
-
-            <TabsContent value="retail" className="border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-3">Retail Applications</h3>
-              <p className="mb-4">
-                In retail, LoRa RTLS provides value for tracking assets across large shopping centers, malls, and
-                outdoor retail spaces where long range is more important than centimeter-level accuracy.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Shopping Cart Tracking</h4>
-                  <p>Monitor shopping carts across large retail properties and parking areas to reduce loss.</p>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Mall-Wide Asset Management</h4>
-                  <p>Track maintenance equipment, kiosks, and shared resources across shopping centers.</p>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Outdoor Display Monitoring</h4>
-                  <p>Track seasonal displays, garden center inventory, and outdoor furniture in retail environments.</p>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Delivery Vehicle Tracking</h4>
-                  <p>Monitor the location of delivery vehicles for customer order status updates.</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 italic">
-                Note: LoRa is particularly useful for retail applications that span indoor and outdoor spaces.
-              </p>
-            </TabsContent>
-
-            <TabsContent value="logistics" className="border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-3">Logistics Applications</h3>
-              <p className="mb-4">
-                In logistics, LoRa RTLS excels at tracking assets across large areas and along transportation routes,
-                providing visibility throughout the supply chain with minimal infrastructure.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Container Tracking</h4>
-                  <p>Monitor shipping containers in ports, rail yards, and intermodal facilities.</p>
-                </div>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Fleet Management</h4>
-                  <p>Track trucks, trailers, and delivery vehicles across regional distribution networks.</p>
-                </div>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Cold Chain Monitoring</h4>
-                  <p>Combine location tracking with temperature monitoring for sensitive shipments.</p>
-                </div>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Rural Delivery Tracking</h4>
-                  <p>Monitor last-mile deliveries in rural areas where cellular coverage may be limited.</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 italic">
-                Note: LoRa's long range and low power consumption make it ideal for tracking assets across large
-                geographic areas.
-              </p>
-            </TabsContent>
-
-            <TabsContent value="warehousing" className="border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-3">Warehousing Applications</h3>
-              <p className="mb-4">
-                In warehousing, LoRa RTLS is used for tracking assets across large distribution centers, outdoor storage
-                yards, and between multiple facilities in a warehouse complex.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Yard Management</h4>
-                  <p>Track trailers, containers, and other transport equipment in warehouse yards and loading areas.</p>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Equipment Tracking</h4>
-                  <p>Monitor the location of forklifts, pallet jacks, and other material handling equipment.</p>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Bulk Storage Monitoring</h4>
-                  <p>Track large items stored in outdoor areas or across multiple warehouse buildings.</p>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Cross-Dock Operations</h4>
+            <TabsContent value="manufacturing" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Manufacturing Applications</CardTitle>
+                  <CardDescription>
+                    LoRa technology enables tracking across large industrial facilities and campuses.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <p>
-                    Monitor the movement of goods between receiving and shipping areas in large distribution centers.
+                    In manufacturing environments, LoRa is used to track large equipment, materials, and assets across
+                    expansive industrial sites and between multiple buildings. The technology helps monitor the movement
+                    of goods through production processes and outdoor storage areas.
                   </p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 italic">
-                Note: For large warehouse complexes, LoRa can provide cost-effective coverage with fewer infrastructure
-                points.
-              </p>
+                  <p>
+                    LoRa is particularly valuable for tracking assets in challenging RF environments like metal-rich
+                    facilities, where its sub-GHz frequencies provide better penetration than higher frequency
+                    technologies. The system can integrate with manufacturing execution systems for production
+                    visibility.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Large equipment tracking across facilities</li>
+                        <li>Inter-building material movement monitoring</li>
+                        <li>Yard management for incoming/outgoing goods</li>
+                        <li>Environmental monitoring in production areas</li>
+                        <li>Worker safety in hazardous environments</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Coverage across multi-building campuses</li>
+                        <li>Reduced infrastructure costs for large facilities</li>
+                        <li>Better signal penetration in industrial environments</li>
+                        <li>Long battery life reducing maintenance needs</li>
+                        <li>Ability to combine location with sensor data</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
-
-            <TabsContent value="commercial" className="border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-3">Commercial Building Applications</h3>
-              <p className="mb-4">
-                In commercial buildings, LoRa RTLS helps track assets and monitor occupancy across large campuses,
-                office parks, and multi-building facilities.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Campus Security</h4>
-                  <p>Track security personnel and equipment across large corporate or educational campuses.</p>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Maintenance Equipment Tracking</h4>
-                  <p>Monitor the location of maintenance equipment, tools, and vehicles across facilities.</p>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Parking Management</h4>
-                  <p>Track vehicle occupancy in large parking structures and surface lots.</p>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Emergency Response</h4>
-                  <p>Locate emergency equipment and personnel during crisis situations across large facilities.</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 italic">
-                Note: LoRa is particularly valuable for commercial applications that span multiple buildings or large
-                outdoor areas.
-              </p>
+            <TabsContent value="smartcity" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Smart City Applications</CardTitle>
+                  <CardDescription>
+                    LoRa enables municipal asset tracking and infrastructure monitoring across urban areas.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Smart cities implement LoRa for tracking and monitoring municipal assets like waste bins, street
+                    lights, parking spaces, and public infrastructure. The technology provides city-wide coverage with
+                    minimal gateway infrastructure, making it cost-effective for large-scale deployments.
+                  </p>
+                  <p>
+                    LoRa networks enable cities to monitor environmental conditions, traffic patterns, and utility usage
+                    across urban areas. The long battery life of LoRa devices reduces maintenance requirements for city
+                    operations teams.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Waste management container tracking</li>
+                        <li>Street light monitoring and control</li>
+                        <li>Parking space occupancy detection</li>
+                        <li>Public transportation asset tracking</li>
+                        <li>Environmental monitoring stations</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>City-wide coverage with minimal infrastructure</li>
+                        <li>Reduced operational costs through optimization</li>
+                        <li>Improved service delivery to citizens</li>
+                        <li>Low maintenance requirements for deployed devices</li>
+                        <li>Scalable solution for growing urban areas</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    LoRa enables tracking across large healthcare campuses and remote patient monitoring.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Healthcare organizations use LoRa for tracking assets and monitoring patients across large hospital
+                    campuses, particularly for outdoor areas and inter-building transfers. The technology helps locate
+                    equipment as it moves between different facilities within a healthcare system.
+                  </p>
+                  <p>
+                    LoRa is also valuable for remote patient monitoring applications, tracking the location and usage of
+                    home healthcare equipment. For ambulance and emergency services, LoRa can provide location tracking
+                    across wide service areas.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Campus-wide equipment tracking</li>
+                        <li>Patient wandering prevention in large facilities</li>
+                        <li>Ambulance and emergency vehicle tracking</li>
+                        <li>Remote patient monitoring equipment</li>
+                        <li>Environmental monitoring in sensitive areas</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Coverage across multi-building healthcare campuses</li>
+                        <li>Long battery life reducing maintenance burden</li>
+                        <li>Ability to track assets in outdoor areas</li>
+                        <li>Low infrastructure costs for wide area coverage</li>
+                        <li>Integration with existing healthcare systems</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </section>
 
+        {/* Mini Case Studies */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Smart Agriculture</h3>
-              <p className="mb-4">
-                A large cattle ranch in Australia implemented a LoRa-based RTLS to track 5,000 head of cattle across
-                50,000 acres of grazing land. The system used solar-powered LoRa tags attached to ear tags, with
-                gateways mounted on windmills and water towers.
-              </p>
-              <h4 className="font-semibold mb-2">Results:</h4>
-              <ul className="list-disc pl-5 mb-4">
-                <li>Reduced cattle loss by 85% through early detection of straying animals</li>
-                <li>Improved grazing management by identifying underutilized pasture areas</li>
-                <li>Early detection of sick animals through movement pattern analysis</li>
-                <li>Battery life exceeding 3 years with daily location updates</li>
-                <li>ROI achieved in 18 months through reduced losses and labor costs</li>
-              </ul>
-              <Link href="/resources/smart-agriculture-lora-case-study" className="text-blue-600 hover:underline">
-                Read full case study →
-              </Link>
-            </div>
-
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Port Logistics</h3>
-              <p className="mb-4">
-                A major European port deployed a LoRa-based RTLS to track containers, vehicles, and equipment across a
-                1,200-acre facility. The system integrated with existing management software to optimize operations and
-                improve security.
-              </p>
-              <h4 className="font-semibold mb-2">Results:</h4>
-              <ul className="list-disc pl-5 mb-4">
-                <li>Reduced container location time by 70% through real-time visibility</li>
-                <li>Improved yard utilization by 23% through better space management</li>
-                <li>Enhanced security with geofencing alerts for unauthorized movement</li>
-                <li>Decreased fuel consumption by 15% through optimized vehicle routing</li>
-                <li>Comprehensive coverage achieved with only 12 gateways for the entire port</li>
-              </ul>
-              <Link href="/resources/port-logistics-lora-case-study" className="text-blue-600 hover:underline">
-                Read full case study →
-              </Link>
-            </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Smart Agriculture</CardTitle>
+                <CardDescription>Australian Cattle Ranch</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A large cattle ranch in Australia implemented a LoRa-based RTLS to track 5,000 head of cattle across
+                  50,000 acres of grazing land. The system used solar-powered LoRa tags attached to ear tags, with
+                  gateways mounted on windmills and water towers.
+                </p>
+                <p>
+                  The solution reduced cattle loss by 85% through early detection of straying animals and improved
+                  grazing management by identifying underutilized pasture areas. Battery life exceeded 3 years with
+                  daily location updates, and the ranch achieved full ROI within 18 months through reduced losses and
+                  labor costs.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Port Logistics</CardTitle>
+                <CardDescription>European Container Terminal</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A major European port deployed a LoRa-based RTLS to track containers, vehicles, and equipment across a
+                  1,200-acre facility. The system integrated with existing management software to optimize operations
+                  and improve security with just 12 gateways covering the entire port.
+                </p>
+                <p>
+                  Container location time decreased by 70% through real-time visibility, while yard utilization improved
+                  by 23% through better space management. The port also reduced fuel consumption by 15% through
+                  optimized vehicle routing and enhanced security with geofencing alerts for unauthorized movement.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Implementation Considerations */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3">Planning & Design</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Gateway Placement:</strong> Strategic positioning for optimal coverage and TDOA accuracy
-                </li>
-                <li>
-                  <strong>Frequency Selection:</strong> Choose appropriate regional bands (868 MHz in Europe, 915 MHz in
-                  US)
-                </li>
-                <li>
-                  <strong>Network Architecture:</strong> Decide between public LoRaWAN networks or private deployments
-                </li>
-                <li>
-                  <strong>Power Strategy:</strong> Plan for battery replacement or implement energy harvesting solutions
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-green-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3">Technical Considerations</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Spreading Factor Selection:</strong> Balance range vs. data rate and battery life
-                </li>
-                <li>
-                  <strong>Adaptive Data Rate (ADR):</strong> Enable to optimize power consumption and network capacity
-                </li>
-                <li>
-                  <strong>Positioning Algorithm:</strong> Select appropriate methods based on accuracy requirements
-                </li>
-                <li>
-                  <strong>Security Implementation:</strong> Properly manage encryption keys and authentication
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-purple-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3">Deployment & Maintenance</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Gateway Installation:</strong> Ensure proper height, power, and network connectivity
-                </li>
-                <li>
-                  <strong>Site Survey:</strong> Conduct RF testing to validate coverage and identify interference
-                </li>
-                <li>
-                  <strong>Calibration:</strong> Perform initial system calibration for positioning accuracy
-                </li>
-                <li>
-                  <strong>Monitoring:</strong> Implement gateway and network health monitoring systems
-                </li>
-              </ul>
-            </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>LoRa end devices/tags for tracked assets</li>
+                  <li>LoRa gateways with backhaul connectivity</li>
+                  <li>Network server for LoRaWAN management</li>
+                  <li>Location solver for positioning calculations</li>
+                  <li>Application server for business logic</li>
+                  <li>Integration middleware for existing systems</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct RF site survey before installation</li>
+                  <li>Place gateways strategically for optimal coverage</li>
+                  <li>Select appropriate spreading factors for range/battery life</li>
+                  <li>Implement proper security measures for data protection</li>
+                  <li>Consider gateway time synchronization for TDOA</li>
+                  <li>Develop a power strategy for end devices</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Duty cycle restrictions in certain regions</li>
+                  <li>Accuracy limitations for precise positioning</li>
+                  <li>Gateway synchronization for TDOA positioning</li>
+                  <li>Integration with existing enterprise systems</li>
+                  <li>Managing spreading factors for optimal performance</li>
+                  <li>Balancing update frequency with battery life</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Technology Comparison */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
+            <table className="min-w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="py-3 px-4 border-b text-left">Feature</th>
-                  <th className="py-3 px-4 border-b text-left">LoRa</th>
-                  <th className="py-3 px-4 border-b text-left">BLE</th>
-                  <th className="py-3 px-4 border-b text-left">Wi-Fi</th>
-                  <th className="py-3 px-4 border-b text-left">UWB</th>
-                  <th className="py-3 px-4 border-b text-left">Cellular</th>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">LoRa</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="py-3 px-4 border-b">Range</td>
-                  <td className="py-3 px-4 border-b">2-15 km urban, 30+ km rural</td>
-                  <td className="py-3 px-4 border-b">10-100 m</td>
-                  <td className="py-3 px-4 border-b">30-100 m</td>
-                  <td className="py-3 px-4 border-b">10-150 m</td>
-                  <td className="py-3 px-4 border-b">1-10 km</td>
+                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-2">20-200 meters</td>
+                  <td className="border px-4 py-2">1-3 meters</td>
+                  <td className="border px-4 py-2">3-5 meters</td>
+                  <td className="border px-4 py-2">10-30 cm</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Positioning Accuracy</td>
-                  <td className="py-3 px-4 border-b">20-200 m</td>
-                  <td className="py-3 px-4 border-b">1-3 m</td>
-                  <td className="py-3 px-4 border-b">3-15 m</td>
-                  <td className="py-3 px-4 border-b">10-30 cm</td>
-                  <td className="py-3 px-4 border-b">50-500 m</td>
+                  <td className="border px-4 py-2 font-medium">Range</td>
+                  <td className="border px-4 py-2">2-15 km urban, 30+ km rural</td>
+                  <td className="border px-4 py-2">10-30 meters</td>
+                  <td className="border px-4 py-2">30-50 meters</td>
+                  <td className="border px-4 py-2">10-50 meters</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Battery Life</td>
-                  <td className="py-3 px-4 border-b">5-10+ years</td>
-                  <td className="py-3 px-4 border-b">1-5 years</td>
-                  <td className="py-3 px-4 border-b">3 months - 1 year</td>
-                  <td className="py-3 px-4 border-b">6 months - 2 years</td>
-                  <td className="py-3 px-4 border-b">1-5 years</td>
+                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-2">Extremely Low</td>
+                  <td className="border px-4 py-2">Very Low</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Medium</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Data Rate</td>
-                  <td className="py-3 px-4 border-b">0.3-50 kbps</td>
-                  <td className="py-3 px-4 border-b">1-2 Mbps</td>
-                  <td className="py-3 px-4 border-b">11-1300+ Mbps</td>
-                  <td className="py-3 px-4 border-b">6.8-27 Mbps</td>
-                  <td className="py-3 px-4 border-b">50-100 kbps</td>
+                  <td className="border px-4 py-2 font-medium">Infrastructure Cost</td>
+                  <td className="border px-4 py-2">Low (few gateways)</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">High</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Infrastructure Cost</td>
-                  <td className="py-3 px-4 border-b">Low (few gateways needed)</td>
-                  <td className="py-3 px-4 border-b">Medium</td>
-                  <td className="py-3 px-4 border-b">Medium-High</td>
-                  <td className="py-3 px-4 border-b">High</td>
-                  <td className="py-3 px-4 border-b">Low (uses existing networks)</td>
+                  <td className="border px-4 py-2 font-medium">Tag Cost</td>
+                  <td className="border px-4 py-2">$15-50</td>
+                  <td className="border px-4 py-2">$5-15</td>
+                  <td className="border px-4 py-2">$10-30</td>
+                  <td className="border px-4 py-2">$15-50</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Cost per Tag</td>
-                  <td className="py-3 px-4 border-b">$15-50</td>
-                  <td className="py-3 px-4 border-b">$5-30</td>
-                  <td className="py-3 px-4 border-b">$15-50</td>
-                  <td className="py-3 px-4 border-b">$25-100</td>
-                  <td className="py-3 px-4 border-b">$25-100</td>
+                  <td className="border px-4 py-2 font-medium">Battery Life</td>
+                  <td className="border px-4 py-2">5-10+ years</td>
+                  <td className="border px-4 py-2">6 months - 5 years</td>
+                  <td className="border px-4 py-2">3 months - 2 years</td>
+                  <td className="border px-4 py-2">6 months - 3 years</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Best For</td>
-                  <td className="py-3 px-4 border-b">Large outdoor areas, long battery life</td>
-                  <td className="py-3 px-4 border-b">Indoor precision, medium range</td>
-                  <td className="py-3 px-4 border-b">Data-intensive applications</td>
-                  <td className="py-3 px-4 border-b">High precision indoor tracking</td>
-                  <td className="py-3 px-4 border-b">Wide area coverage, mobile assets</td>
+                  <td className="border px-4 py-2 font-medium">Best For</td>
+                  <td className="border px-4 py-2">Large outdoor areas</td>
+                  <td className="border px-4 py-2">Indoor, medium precision</td>
+                  <td className="border px-4 py-2">Data-intensive applications</td>
+                  <td className="border px-4 py-2">High precision indoor</td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <div className="text-center mt-4">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
+              View all RTLS technologies →
+            </Link>
+          </div>
         </section>
 
+        {/* Future Trends */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3">Technology Advancements</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Enhanced Positioning Techniques:</strong> Development of more accurate positioning algorithms
-                  specifically optimized for LoRa
-                </li>
-                <li>
-                  <strong>Multi-Technology Integration:</strong> Combining LoRa with other technologies (GPS, Wi-Fi,
-                  BLE) for seamless indoor/outdoor tracking
-                </li>
-                <li>
-                  <strong>AI and Machine Learning:</strong> Advanced algorithms improving positioning accuracy by
-                  learning from historical data
-                </li>
-                <li>
-                  <strong>Energy Harvesting:</strong> Integration of solar, kinetic, or RF energy harvesting to extend
-                  battery life
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-3">Market & Ecosystem Developments</h3>
-              <ul className="space-y-2 list-disc pl-5">
-                <li>
-                  <strong>Satellite Integration:</strong> LoRa satellite connectivity for truly global coverage without
-                  terrestrial infrastructure
-                </li>
-                <li>
-                  <strong>Enhanced Security:</strong> Advanced security features to protect sensitive location data
-                </li>
-                <li>
-                  <strong>Standardized Positioning Protocols:</strong> Development of standardized approaches to LoRa
-                  positioning
-                </li>
-                <li>
-                  <strong>Increased Adoption in Smart Cities:</strong> Growing implementation for municipal asset
-                  tracking and management
-                </li>
-              </ul>
-            </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Enhanced Positioning Techniques:</span> Development of more accurate
+                    positioning algorithms specifically optimized for LoRa
+                  </li>
+                  <li>
+                    <span className="font-medium">Multi-Technology Integration:</span> Combining LoRa with other
+                    technologies (GPS, Wi-Fi, BLE) for seamless indoor/outdoor tracking
+                  </li>
+                  <li>
+                    <span className="font-medium">AI and Machine Learning:</span> Advanced algorithms improving
+                    positioning accuracy by learning from historical data and environmental patterns
+                  </li>
+                  <li>
+                    <span className="font-medium">Energy Harvesting:</span> Integration of solar, kinetic, or RF energy
+                    harvesting to extend battery life or enable battery-free operation
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Satellite Integration:</span> LoRa satellite connectivity for truly
+                    global coverage without terrestrial infrastructure
+                  </li>
+                  <li>
+                    <span className="font-medium">Industry Standardization:</span> Development of standardized
+                    approaches to LoRa positioning within the LoRaWAN specification
+                  </li>
+                  <li>
+                    <span className="font-medium">Smart City Adoption:</span> Increasing implementation in municipal
+                    asset tracking and infrastructure monitoring
+                  </li>
+                  <li>
+                    <span className="font-medium">Enhanced Security:</span> Advanced security features to protect
+                    sensitive location data and prevent spoofing or tampering
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Related Resources</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {relatedArticles.length > 0 ? (
-              relatedArticles.map((article, index) => (
-                <Link
-                  key={index}
-                  href={`/resources/${article.slug}`}
-                  className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow"
-                >
-                  <h3 className="font-semibold text-blue-600 mb-2">{article.title}</h3>
-                  <p className="text-sm text-gray-600">
-                    Learn more about LoRa technology applications and implementation strategies.
-                  </p>
-                </Link>
-              ))
-            ) : (
-              <>
-                <Link
-                  href="/resources/lora-rtls-implementation-guide"
-                  className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow"
-                >
-                  <h3 className="font-semibold text-blue-600 mb-2">LoRa RTLS Implementation Guide</h3>
-                  <p className="text-sm text-gray-600">
-                    Step-by-step guide to implementing LoRa-based RTLS solutions for wide-area tracking.
-                  </p>
-                </Link>
-                <Link
-                  href="/resources/comparing-lpwan-technologies-for-rtls"
-                  className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow"
-                >
-                  <h3 className="font-semibold text-blue-600 mb-2">Comparing LPWAN Technologies for RTLS</h3>
-                  <p className="text-sm text-gray-600">
-                    Analysis of LoRa, Sigfox, NB-IoT and other LPWAN technologies for location tracking.
-                  </p>
-                </Link>
-                <Link
-                  href="/resources/smart-agriculture-with-lora-rtls"
-                  className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow"
-                >
-                  <h3 className="font-semibold text-blue-600 mb-2">Smart Agriculture with LoRa RTLS</h3>
-                  <p className="text-sm text-gray-600">
-                    How LoRa-based tracking is transforming livestock management and agricultural operations.
-                  </p>
-                </Link>
-              </>
-            )}
+        {/* Learn More - Related Resources */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About LoRa Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                {loraRelatedArticles && loraRelatedArticles.length > 0 ? (
+                  loraRelatedArticles.map((article) => (
+                    <li key={article.slug}>
+                      <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
+                        {article.title}
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <>
+                    <li>
+                      <Link href="/resources/lora-rtls-implementation-guide" className="text-primary hover:underline">
+                        LoRa RTLS Implementation Guide
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/comparing-lpwan-technologies-for-rtls"
+                        className="text-primary hover:underline"
+                      >
+                        Comparing LPWAN Technologies for RTLS
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/resources/smart-agriculture-with-lora-rtls" className="text-primary hover:underline">
+                        Smart Agriculture with LoRa RTLS
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/lora-vs-cellular-for-wide-area-tracking"
+                        className="text-primary hover:underline"
+                      >
+                        LoRa vs Cellular for Wide Area Tracking
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/optimizing-lora-gateway-placement-for-rtls"
+                        className="text-primary hover:underline"
+                      >
+                        Optimizing LoRa Gateway Placement for RTLS
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">Need help determining if LoRa is the right technology for your RTLS project?</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
+              </Link>
+            </div>
           </div>
         </section>
-
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
-          <h2 className="text-2xl font-semibold mb-4">Ready to implement LoRa technology in your RTLS solution?</h2>
-          <p className="mb-6">
-            The RTLS Alliance can connect you with certified providers and implementation experts who specialize in
-            LoRa-based location systems for wide-area tracking applications.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/contact">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">Contact Us</Button>
-            </Link>
-            <Link href="/ecosystem/directory">
-              <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                Find LoRa RTLS Providers
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </main>
+      </article>
+    </div>
   )
 }
