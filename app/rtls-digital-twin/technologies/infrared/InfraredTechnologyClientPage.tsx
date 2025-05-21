@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Link from "next/link"
-import { ArrowLeft, ChevronRight, Building2, Hospital, ShoppingBag, Factory, Truck, Lightbulb } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Hospital, ShoppingBag, Factory, Truck, Building2 } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { articles } from "@/lib/article-data"
 
@@ -12,45 +12,27 @@ export default function InfraredTechnologyClientPage() {
     window.scrollTo(0, 0)
   }, [])
 
-  const [activeTab, setActiveTab] = useState("healthcare")
-
-  // Get related articles - using general RTLS articles if not enough infrared-specific ones
-  const relatedArticles = articles.slice(0, 3)
+  // Get general RTLS articles for related resources since there might not be enough infrared-specific ones
+  const relatedArticles = articles.slice(0, 5)
 
   return (
-    <main className="bg-white pb-16">
-      <div className="container mx-auto px-4 py-8">
-        <Link href="/rtls-digital-twin" className="flex items-center text-blue-600 hover:text-blue-800 mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to RTLS + Digital Twin
-        </Link>
+    <div className="container mx-auto py-8 px-4">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">Infrared (IR) Technology</h1>
+          <p className="text-base text-muted-foreground">
+            Infrared technology for RTLS utilizes invisible infrared light to determine the location of people and
+            assets within indoor environments.
+          </p>
+        </header>
 
-        {/* Hero Section */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 pb-6 border-b border-gray-200">
-          <div className="flex items-center mb-4 md:mb-0">
-            <Lightbulb className="h-10 w-10 text-blue-600 mr-4" />
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Infrared Technology for RTLS
-            </h1>
-          </div>
-          <div className="flex space-x-3">
-            <Link href="/contact">
-              <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                Request Demo
-              </Button>
-            </Link>
-            <Link href="/ecosystem/directory">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">Find Providers</Button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Overview Section */}
+        {/* Overview and Key Specifications */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Overview & Key Specifications</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="prose prose-lg max-w-none">
-              <p>
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+              <p className="mb-4">
                 Infrared (IR) technology for Real-Time Location Systems (RTLS) utilizes invisible infrared light to
                 determine the location of people and assets within indoor environments. Operating in the electromagnetic
                 spectrum between visible light and radio waves (wavelengths from 780 nm to 1 mm), infrared systems
@@ -64,1026 +46,615 @@ export default function InfraredTechnologyClientPage() {
                 detection is critical.
               </p>
             </div>
-            <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-4">Key Specifications</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="font-medium text-gray-700">Wavelength</p>
-                  <p>Near-infrared (780 nm - 3 μm)</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Range</p>
-                  <p>3-10 meters</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Positioning Accuracy</p>
-                  <p>Room-level or sub-room (0.3-3 meters)</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Line of Sight</p>
-                  <p>Required</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Power Consumption</p>
-                  <p>Low to moderate</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Data Rate</p>
-                  <p>9.6 kbps to 4 Mbps</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Security</p>
-                  <p>Inherently secure (room containment)</p>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-700">Interference Sources</p>
-                  <p>Direct sunlight, incandescent lighting</p>
-                </div>
-              </div>
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
+              <ul className="space-y-2">
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Wavelength:</span>
+                  <span>Near-infrared (780 nm - 3 μm)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Range:</span>
+                  <span>3-10 meters (typical effective range)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Positioning Accuracy:</span>
+                  <span>Room-level or sub-room (0.3-3 meters)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Line of Sight:</span>
+                  <span>Required (cannot penetrate walls or solid objects)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>Low to moderate (depends on implementation)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Data Rate:</span>
+                  <span>9.6 kbps to 4 Mbps (depending on modulation technique)</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
 
-        {/* How It Works Section */}
+        {/* How IR Works */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">How Infrared Works for RTLS</h2>
+          <h2 className="text-2xl font-semibold mb-4">How Infrared Works for RTLS</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Active IR Beaconing</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  In this approach, battery-powered IR tags or badges worn by personnel or attached to assets emit
+                  unique infrared identification signals. Fixed IR receivers installed in rooms or areas detect these
+                  signals and report the presence of specific tags to a central system. This method provides reliable
+                  room-level accuracy and is commonly used in healthcare settings.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Passive IR Detection</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Fixed IR transmitters broadcast location codes within defined areas. Wearable badges or tags receive
+                  these signals and report their location via a secondary communication channel (typically RF). This
+                  approach reduces power consumption in the wearable device and can provide longer battery life.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Advantages & Limitations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="prose prose-lg max-w-none">
-              <p>
-                Infrared RTLS systems use various methods to determine the location of tags or badges within a facility.
-                These approaches differ in their implementation, accuracy, and infrastructure requirements.
-              </p>
-              <p>The most common infrared positioning methods include:</p>
-              <ul>
-                <li>
-                  <strong>Active IR Beaconing:</strong> Battery-powered IR tags emit unique identification signals that
-                  are detected by fixed IR receivers.
-                </li>
-                <li>
-                  <strong>Passive IR Detection:</strong> Fixed IR transmitters broadcast location codes that are
-                  received by wearable badges.
-                </li>
-                <li>
-                  <strong>IR Triangulation:</strong> Multiple IR receivers detect signals from a tag and measure signal
-                  characteristics to determine position.
-                </li>
-                <li>
-                  <strong>Hybrid IR/RF Systems:</strong> Combines infrared for precise room-level location with RF
-                  technologies for broader coverage.
-                </li>
-              </ul>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-xl">
-              <h3 className="text-xl font-semibold mb-4">Infrared RTLS Architecture</h3>
-              <p className="mb-4">A typical infrared-based RTLS system consists of the following components:</p>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>IR Tags/Badges:</strong> Wearable devices carried by personnel or attached to assets.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>IR Receivers/Sensors:</strong> Fixed devices installed in ceilings or walls that detect IR
-                    signals from tags.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>IR Transmitters/Beacons:</strong> In passive systems, these fixed devices emit
-                    location-specific IR codes.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Room Controllers:</strong> Intermediate devices that aggregate data from multiple IR
-                    sensors.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Network Infrastructure:</strong> Wired or wireless connectivity linking the IR sensors to
-                    the central server.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Location Engine:</strong> Software that processes IR detection events to determine tag
-                    locations.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Management Platform:</strong> User interface and business logic layer for visualization and
-                    reporting.
-                  </span>
-                </li>
-              </ul>
-            </div>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Definitive room-level accuracy (IR signals do not pass through walls)</li>
+                  <li>Immunity to RF interference and electromagnetic noise</li>
+                  <li>Enhanced privacy and security due to physical containment</li>
+                  <li>No radio frequency regulatory issues or licensing requirements</li>
+                  <li>Reliable performance in RF-dense environments</li>
+                  <li>Simple deployment logic aligned with building organization</li>
+                  <li>Compatible with sensitive medical equipment and restricted RF areas</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Line of sight requirement between tags and sensors</li>
+                  <li>Limited range (typically 3-10 meters)</li>
+                  <li>Susceptibility to optical interference (sunlight, certain lighting)</li>
+                  <li>Higher infrastructure density requirements (sensors in every room)</li>
+                  <li>Limited outdoor applicability</li>
+                  <li>Primarily room-level rather than precise coordinate positioning</li>
+                  <li>Badge orientation sensitivity in some implementations</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        {/* Advantages & Limitations Section */}
+        {/* Industry Applications */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Advantages & Limitations</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-green-50 p-6 rounded-xl">
-              <h3 className="text-xl font-semibold mb-4 text-green-800">Advantages</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Definitive Room-Level Accuracy:</strong> IR signals do not pass through walls, providing
-                    unambiguous room-level location.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Immunity to RF Interference:</strong> Not affected by radio frequency interference or
-                    electromagnetic noise.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Enhanced Privacy and Security:</strong> Containment within physical spaces provides natural
-                    security boundaries.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>No Radio Frequency Regulatory Issues:</strong> IR systems are not subject to RF licensing or
-                    regulatory constraints.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Reliable in RF-Dense Environments:</strong> Performs well in environments with high RF noise
-                    or restrictions.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Simple Deployment Logic:</strong> Room-based architecture aligns well with how buildings are
-                    organized.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Compatible with Sensitive Equipment:</strong> Safe to use around medical devices and in
-                    areas where RF emissions are restricted.
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-red-50 p-6 rounded-xl">
-              <h3 className="text-xl font-semibold mb-4 text-red-800">Limitations</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Line of Sight Requirement:</strong> IR signals are blocked by obstacles, requiring clear
-                    line of sight between tags and sensors.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Limited Range:</strong> Effective range typically limited to 3-10 meters, requiring more
-                    sensors for complete coverage.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Susceptibility to Optical Interference:</strong> Performance can be degraded by direct
-                    sunlight and certain types of artificial lighting.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Infrastructure Density:</strong> Requires installation of IR sensors in every room or zone,
-                    potentially increasing deployment costs.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Limited Outdoor Applicability:</strong> Generally not suitable for outdoor use due to
-                    sunlight interference and range limitations.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Positioning Granularity:</strong> Most implementations provide room-level rather than
-                    precise coordinate-based positioning.
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>
-                    <strong>Badge Orientation Sensitivity:</strong> Some systems require the IR emitter/receiver to be
-                    properly oriented for reliable detection.
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Industry Applications Section */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Industry Applications</h2>
-          <Tabs defaultValue="healthcare" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
-              <TabsTrigger value="healthcare" className="flex items-center gap-2">
-                <Hospital className="h-4 w-4" />
-                <span className="hidden md:inline">Healthcare</span>
+          <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
+          <Tabs defaultValue="healthcare" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
+              <TabsTrigger value="healthcare" className="flex flex-col py-2 h-auto">
+                <Hospital className="h-5 w-5 mb-1" />
+                Healthcare
               </TabsTrigger>
-              <TabsTrigger value="manufacturing" className="flex items-center gap-2">
-                <Factory className="h-4 w-4" />
-                <span className="hidden md:inline">Manufacturing</span>
+              <TabsTrigger value="retail" className="flex flex-col py-2 h-auto">
+                <ShoppingBag className="h-5 w-5 mb-1" />
+                Retail
               </TabsTrigger>
-              <TabsTrigger value="retail" className="flex items-center gap-2">
-                <ShoppingBag className="h-4 w-4" />
-                <span className="hidden md:inline">Retail</span>
+              <TabsTrigger value="manufacturing" className="flex flex-col py-2 h-auto">
+                <Factory className="h-5 w-5 mb-1" />
+                Manufacturing
               </TabsTrigger>
-              <TabsTrigger value="logistics" className="flex items-center gap-2">
-                <Truck className="h-4 w-4" />
-                <span className="hidden md:inline">Logistics</span>
+              <TabsTrigger value="logistics" className="flex flex-col py-2 h-auto">
+                <Truck className="h-5 w-5 mb-1" />
+                Logistics
               </TabsTrigger>
-              <TabsTrigger value="corporate" className="flex items-center gap-2">
-                <Building2 className="h-4 w-4" />
-                <span className="hidden md:inline">Corporate</span>
+              <TabsTrigger value="commercial" className="flex flex-col py-2 h-auto">
+                <Building2 className="h-5 w-5 mb-1" />
+                Commercial
               </TabsTrigger>
             </TabsList>
-
-            <TabsContent value="healthcare" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Healthcare Applications</h3>
-                  <p className="mb-4">
-                    Infrared RTLS technology is widely used in healthcare settings where definitive room-level tracking
-                    is critical for patient care, staff efficiency, and asset management.
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    Infrared RTLS provides definitive room-level tracking for patient care and staff efficiency.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In healthcare environments, IR-based RTLS is used to track staff presence in patient rooms, enabling
+                    workflow analysis, contact tracing, and hand hygiene compliance monitoring. The technology's
+                    immunity to RF interference makes it ideal for use around sensitive medical equipment.
                   </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Staff Tracking:</strong> Monitor caregiver presence in patient rooms for workflow
-                        analysis and contact tracing.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Patient Monitoring:</strong> Track patient location and movement within healthcare
-                        facilities.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Hand Hygiene Compliance:</strong> Automatically monitor and improve hand hygiene
-                        practices.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Equipment Tracking:</strong> Locate critical medical equipment quickly when needed.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Infection Control:</strong> Support contact tracing and exposure management during
-                        outbreaks.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 p-6 rounded-xl">
-                  <h3 className="text-xl font-semibold mb-4">Key Benefits</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Hospital className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Improved Patient Care</span>
-                        <p className="text-sm text-gray-600">
-                          Reduced response times and increased direct patient care time.
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Hospital className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Enhanced Infection Control</span>
-                        <p className="text-sm text-gray-600">Automated contact tracing and exposure management.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Hospital className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Workflow Optimization</span>
-                        <p className="text-sm text-gray-600">Data-driven insights for process improvement.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Hospital className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">RF-Safe Environment</span>
-                        <p className="text-sm text-gray-600">Safe to use around sensitive medical equipment.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="manufacturing" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Manufacturing Applications</h3>
-                  <p className="mb-4">
-                    In manufacturing environments, infrared RTLS provides reliable room-level tracking in areas with
-                    high RF interference or where RF emissions must be limited.
+                  <p>
+                    Infrared systems provide definitive room-level location data, which is critical for applications
+                    like automatic nurse presence recording, patient flow management, and asset tracking within specific
+                    rooms or zones.
                   </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Tool Tracking:</strong> Monitor the location of specialized tools and equipment.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Personnel Safety:</strong> Ensure workers are not in restricted or dangerous areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Clean Room Monitoring:</strong> Track personnel and equipment in sensitive manufacturing
-                        areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Work Cell Optimization:</strong> Analyze time spent in different production areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Quality Control:</strong> Ensure proper process sequence by confirming presence in
-                        specific areas.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 p-6 rounded-xl">
-                  <h3 className="text-xl font-semibold mb-4">Key Benefits</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Factory className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">RF-Interference Immunity</span>
-                        <p className="text-sm text-gray-600">
-                          Reliable operation in environments with high electromagnetic noise.
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Factory className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Process Compliance</span>
-                        <p className="text-sm text-gray-600">Verification that workers follow required procedures.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Factory className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Safety Enhancement</span>
-                        <p className="text-sm text-gray-600">Improved emergency response and evacuation management.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Factory className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Workflow Analysis</span>
-                        <p className="text-sm text-gray-600">Data-driven insights for process optimization.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Staff tracking for workflow optimization</li>
+                        <li>Patient flow management</li>
+                        <li>Hand hygiene compliance monitoring</li>
+                        <li>Contact tracing during disease outbreaks</li>
+                        <li>Equipment location within specific rooms</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Increased direct patient care time</li>
+                        <li>Reduced response times to patient calls</li>
+                        <li>Improved infection control</li>
+                        <li>Enhanced staff efficiency</li>
+                        <li>Safe for use around medical equipment</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
-
-            <TabsContent value="retail" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Retail Applications</h3>
-                  <p className="mb-4">
+            <TabsContent value="retail" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Retail Applications</CardTitle>
+                  <CardDescription>
+                    Infrared RTLS enables zone-based tracking for customer service and operations.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
                     In retail environments, infrared RTLS can provide zone-based tracking for customer service,
-                    security, and operations management.
+                    security, and operations management. The technology helps track staff presence in different
+                    departments and monitor access to high-value merchandise areas.
                   </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Staff Allocation:</strong> Track associate presence in different departments.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Customer Service:</strong> Alert staff when customers enter specific areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>High-Value Item Security:</strong> Monitor access to areas with expensive merchandise.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Fitting Room Management:</strong> Track occupancy and service times.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Store Layout Analysis:</strong> Understand staff movement patterns for optimization.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 p-6 rounded-xl">
-                  <h3 className="text-xl font-semibold mb-4">Key Benefits</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <ShoppingBag className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Improved Customer Service</span>
-                        <p className="text-sm text-gray-600">
-                          Faster response times to customer needs in specific areas.
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <ShoppingBag className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Enhanced Security</span>
-                        <p className="text-sm text-gray-600">Better protection for high-value merchandise areas.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <ShoppingBag className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Staff Optimization</span>
-                        <p className="text-sm text-gray-600">
-                          Data-driven staffing based on department coverage needs.
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <ShoppingBag className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Operational Insights</span>
-                        <p className="text-sm text-gray-600">Analytics on staff movement and time allocation.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                  <p>
+                    IR systems can alert managers when specific areas are understaffed or notify associates when
+                    customers enter fitting rooms or specialized service areas, improving response times and customer
+                    satisfaction.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Staff allocation across departments</li>
+                        <li>Fitting room management</li>
+                        <li>High-value merchandise area monitoring</li>
+                        <li>Customer service response time improvement</li>
+                        <li>Store layout optimization</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Improved customer service response</li>
+                        <li>Enhanced security for high-value items</li>
+                        <li>Optimized staff allocation</li>
+                        <li>Better fitting room management</li>
+                        <li>Data-driven store layout decisions</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
-
-            <TabsContent value="logistics" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Logistics Applications</h3>
-                  <p className="mb-4">
-                    In logistics and warehousing, infrared RTLS can provide zone-based tracking in specific areas where
-                    RF coverage is problematic.
+            <TabsContent value="manufacturing" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Manufacturing Applications</CardTitle>
+                  <CardDescription>
+                    Infrared RTLS provides reliable tracking in RF-challenging industrial environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In manufacturing facilities, infrared RTLS is particularly valuable in areas with high RF
+                    interference or where RF emissions must be limited. The technology helps track personnel in
+                    specialized work cells, clean rooms, and restricted areas.
                   </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Loading Dock Management:</strong> Track personnel presence in specific loading areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Secure Area Access:</strong> Monitor access to high-value storage zones.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Cold Storage Monitoring:</strong> Track time spent in refrigerated or freezer areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Hazardous Material Zones:</strong> Ensure proper protocols in dangerous goods areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Quality Control Areas:</strong> Verify presence during inspection processes.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 p-6 rounded-xl">
-                  <h3 className="text-xl font-semibold mb-4">Key Benefits</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Truck className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Safety Compliance</span>
-                        <p className="text-sm text-gray-600">Verification of proper protocols in hazardous areas.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Truck className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Security Enhancement</span>
-                        <p className="text-sm text-gray-600">Controlled access to high-value inventory areas.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Truck className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Labor Management</span>
-                        <p className="text-sm text-gray-600">Insights into time spent in different warehouse zones.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Truck className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Process Verification</span>
-                        <p className="text-sm text-gray-600">
-                          Confirmation that required steps are performed in designated areas.
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                  <p>
+                    IR systems can verify worker presence in specific production areas, ensuring proper process sequence
+                    and compliance with safety protocols. They also support emergency mustering and evacuation
+                    management in industrial settings.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Clean room access monitoring</li>
+                        <li>Restricted area security</li>
+                        <li>Process sequence verification</li>
+                        <li>Safety protocol compliance</li>
+                        <li>Emergency mustering and evacuation</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Reliable operation in RF-noisy environments</li>
+                        <li>Enhanced safety compliance</li>
+                        <li>Improved process adherence</li>
+                        <li>Better emergency response</li>
+                        <li>Definitive zone-based tracking</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
-
-            <TabsContent value="corporate" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Corporate Applications</h3>
-                  <p className="mb-4">
-                    In corporate environments, infrared RTLS provides privacy-friendly tracking for security, space
-                    utilization, and emergency management.
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Logistics Applications</CardTitle>
+                  <CardDescription>
+                    Infrared RTLS enables zone-based tracking in warehouses and distribution centers.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In logistics operations, infrared RTLS can provide zone-based tracking in specific areas where RF
+                    coverage is problematic or where definitive room-level presence detection is required. The
+                    technology helps monitor personnel in loading docks, cold storage areas, and hazardous material
+                    zones.
                   </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Secure Facility Access:</strong> Monitor personnel movement in classified or restricted
-                        areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Meeting Room Utilization:</strong> Track actual usage of conference spaces.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Emergency Mustering:</strong> Account for personnel during evacuations.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Visitor Management:</strong> Ensure guests remain in authorized areas.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        <strong>Space Utilization:</strong> Analyze workplace usage patterns for optimization.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 p-6 rounded-xl">
-                  <h3 className="text-xl font-semibold mb-4">Key Benefits</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Building2 className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Enhanced Security</span>
-                        <p className="text-sm text-gray-600">Definitive verification of presence in secure areas.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Building2 className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Privacy Protection</span>
-                        <p className="text-sm text-gray-600">Room-level tracking without precise positioning.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Building2 className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Emergency Response</span>
-                        <p className="text-sm text-gray-600">Improved evacuation and mustering capabilities.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-blue-100 rounded-full p-1 mr-3 mt-0.5">
-                        <Building2 className="h-4 w-4 text-blue-700" />
-                      </div>
-                      <div>
-                        <span className="font-medium">Space Optimization</span>
-                        <p className="text-sm text-gray-600">Data-driven workplace design based on actual usage.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                  <p>
+                    IR systems can verify worker presence in quality control areas, ensure proper protocols in
+                    specialized storage zones, and support emergency response in large warehouse facilities.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Loading dock management</li>
+                        <li>Cold storage monitoring</li>
+                        <li>Hazardous material zone compliance</li>
+                        <li>Quality control area verification</li>
+                        <li>Secure storage access monitoring</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Definitive zone presence verification</li>
+                        <li>Enhanced safety in hazardous areas</li>
+                        <li>Improved protocol compliance</li>
+                        <li>Better security for high-value inventory</li>
+                        <li>Reliable operation in RF-challenging areas</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="commercial" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Commercial Building Applications</CardTitle>
+                  <CardDescription>
+                    Infrared RTLS provides privacy-friendly tracking for security and space management.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Commercial buildings implement infrared RTLS for secure facility access, meeting room utilization
+                    tracking, and emergency mustering. The technology's room-level accuracy and privacy-friendly nature
+                    make it ideal for workplace applications.
+                  </p>
+                  <p>
+                    IR systems can monitor access to restricted areas, verify meeting room usage patterns, and provide
+                    accurate personnel accounting during emergency evacuations. The technology also supports space
+                    utilization analysis for workplace optimization.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Secure area access monitoring</li>
+                        <li>Meeting room utilization tracking</li>
+                        <li>Emergency mustering and evacuation</li>
+                        <li>Visitor management</li>
+                        <li>Space utilization analysis</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Enhanced security for restricted areas</li>
+                        <li>Improved emergency response</li>
+                        <li>Better space utilization</li>
+                        <li>Privacy-friendly tracking</li>
+                        <li>Data-driven workplace design</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </section>
 
-        {/* Mini Case Studies Section */}
+        {/* Case Studies */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Mini Case Studies</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Hospital Staff Tracking</h3>
-              <p className="mb-4">
-                A 350-bed hospital implemented an IR-based RTLS to track staff presence in patient rooms, automate
-                contact tracing, and analyze workflow patterns. The system used ceiling-mounted IR receivers in all
-                patient rooms and key work areas, with staff wearing dual-technology IR/RF badges.
-              </p>
-              <h4 className="font-semibold mb-2">Results:</h4>
-              <ul className="list-disc pl-5 mb-4">
-                <li>Increased direct patient care time by 21% through workflow optimization</li>
-                <li>Reduced response time to patient calls by 37%</li>
-                <li>Automated 100% of contact tracing during infectious disease outbreaks</li>
-                <li>Improved hand hygiene compliance by 40% through automated monitoring</li>
-                <li>ROI achieved in 14 months through efficiency gains and reduced infections</li>
-              </ul>
-            </div>
-
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Secure Research Facility</h3>
-              <p className="mb-4">
-                A government research laboratory deployed an IR-based personnel tracking system to enhance security,
-                ensure compliance with access protocols, and improve emergency response capabilities. The system covered
-                200+ rooms across multiple security zones.
-              </p>
-              <h4 className="font-semibold mb-2">Results:</h4>
-              <ul className="list-disc pl-5 mb-4">
-                <li>100% accurate verification of personnel presence in classified areas</li>
-                <li>Reduced security incidents by 65% through real-time monitoring and alerts</li>
-                <li>Improved emergency evacuation time by 40% with real-time personnel accounting</li>
-                <li>Enhanced compliance with government security regulations</li>
-                <li>Seamless integration with existing access control and security systems</li>
-              </ul>
-            </div>
+          <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Hospital Staff Tracking</CardTitle>
+                <CardDescription>Memorial Hospital</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A 350-bed hospital implemented an IR-based RTLS to track staff presence in patient rooms, automate
+                  contact tracing, and analyze workflow patterns. The system used ceiling-mounted IR receivers in all
+                  patient rooms and key work areas, with staff wearing dual-technology IR/RF badges.
+                </p>
+                <p>
+                  Staff satisfaction scores related to equipment availability increased from 43% to 87% within six
+                  months of deployment. The hospital achieved full ROI within 14 months.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Secure Research Facility</CardTitle>
+                <CardDescription>Government Research Laboratory</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A government research laboratory deployed an IR-based personnel tracking system to enhance security,
+                  ensure compliance with access protocols, and improve emergency response capabilities. The system
+                  covered 200+ rooms across multiple security zones.
+                </p>
+                <p>
+                  Security incidents decreased by 65% through real-time monitoring and alerts, while emergency
+                  evacuation time improved by 40% with real-time personnel accounting. The system provided 100% accurate
+                  verification of personnel presence in classified areas.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        {/* Implementation Considerations Section */}
+        {/* Implementation Considerations */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Implementation Considerations</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Planning and Design</h3>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Sensor Placement</span>
-                    <p className="text-sm text-gray-600">
-                      Careful placement of IR sensors is critical for reliable coverage. Consider room geometry, ceiling
-                      height, potential obstructions, and typical movement patterns.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Environmental Assessment</span>
-                    <p className="text-sm text-gray-600">
-                      Evaluate potential sources of IR interference, including direct sunlight through windows, certain
-                      types of lighting fixtures, and heat sources.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Badge/Tag Design</span>
-                    <p className="text-sm text-gray-600">
-                      Consider how tags will be worn or attached to ensure reliable IR transmission/reception. Badge
-                      design should encourage proper wearing practices.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Hybrid Technology Approach</span>
-                    <p className="text-sm text-gray-600">
-                      Determine whether IR alone meets all requirements or if a hybrid approach combining IR with RF
-                      technologies would be beneficial.
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Technical Considerations</h3>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Power and Connectivity</span>
-                    <p className="text-sm text-gray-600">
-                      Plan for power and network connectivity to IR sensors and room controllers. Options include
-                      Power-over-Ethernet (PoE), local power supplies, or battery operation.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Badge Battery Management</span>
-                    <p className="text-sm text-gray-600">
-                      Develop a strategy for monitoring and replacing batteries in active IR tags. Consider battery life
-                      expectations and replacement procedures.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">System Integration</span>
-                    <p className="text-sm text-gray-600">
-                      Plan how the IR RTLS will integrate with other systems such as access control, nurse call, or
-                      building management systems.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <div className="bg-purple-100 rounded-full p-1 mr-3 mt-0.5">
-                    <ChevronRight className="h-4 w-4 text-purple-700" />
-                  </div>
-                  <div>
-                    <span className="font-medium">Privacy and Compliance</span>
-                    <p className="text-sm text-gray-600">
-                      Address privacy concerns and regulatory requirements, particularly for personnel tracking
-                      applications. Develop clear policies on data collection and usage.
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div>
+          <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>IR receivers/sensors in each room or zone</li>
+                  <li>IR tags/badges for tracked assets and personnel</li>
+                  <li>Room controllers for data aggregation</li>
+                  <li>Network infrastructure (typically Wi-Fi or Ethernet)</li>
+                  <li>Server for data processing (on-premises or cloud)</li>
+                  <li>Software platform for location management</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct site survey to identify potential IR interference</li>
+                  <li>Place sensors strategically for optimal coverage</li>
+                  <li>Consider window treatments to block direct sunlight</li>
+                  <li>Design badge form factor for proper orientation</li>
+                  <li>Implement hybrid IR/RF approach for comprehensive coverage</li>
+                  <li>Develop clear battery replacement procedures</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Optical interference from sunlight and lighting</li>
+                  <li>Line of sight obstructions</li>
+                  <li>Badge orientation issues</li>
+                  <li>Battery management for large deployments</li>
+                  <li>Integration with existing systems</li>
+                  <li>Coverage gaps in large open spaces</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        {/* Technology Comparison Section */}
+        {/* Technology Comparison */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Technology Comparison</h2>
+          <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
+            <table className="min-w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="py-3 px-4 border-b text-left">Feature</th>
-                  <th className="py-3 px-4 border-b text-left">Infrared</th>
-                  <th className="py-3 px-4 border-b text-left">BLE</th>
-                  <th className="py-3 px-4 border-b text-left">Wi-Fi</th>
-                  <th className="py-3 px-4 border-b text-left">UWB</th>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Infrared</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="py-3 px-4 border-b">Range</td>
-                  <td className="py-3 px-4 border-b">3-10 m</td>
-                  <td className="py-3 px-4 border-b">10-100 m</td>
-                  <td className="py-3 px-4 border-b">30-100 m</td>
-                  <td className="py-3 px-4 border-b">10-50 m</td>
+                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-2">Room-level (definitive)</td>
+                  <td className="border px-4 py-2">1-3 meters</td>
+                  <td className="border px-4 py-2">3-5 meters</td>
+                  <td className="border px-4 py-2">10-30 cm</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Positioning Approach</td>
-                  <td className="py-3 px-4 border-b">Room-level/zone-based</td>
-                  <td className="py-3 px-4 border-b">Coordinate-based</td>
-                  <td className="py-3 px-4 border-b">Coordinate-based</td>
-                  <td className="py-3 px-4 border-b">Precise coordinate-based</td>
+                  <td className="border px-4 py-2 font-medium">Range</td>
+                  <td className="border px-4 py-2">3-10 meters</td>
+                  <td className="border px-4 py-2">10-30 meters</td>
+                  <td className="border px-4 py-2">30-50 meters</td>
+                  <td className="border px-4 py-2">10-50 meters</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Accuracy</td>
-                  <td className="py-3 px-4 border-b">Room-level (definitive)</td>
-                  <td className="py-3 px-4 border-b">1-3 m</td>
-                  <td className="py-3 px-4 border-b">3-15 m</td>
-                  <td className="py-3 px-4 border-b">10-30 cm</td>
+                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">Very Low</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Medium</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Line of Sight Required</td>
-                  <td className="py-3 px-4 border-b">Yes</td>
-                  <td className="py-3 px-4 border-b">No</td>
-                  <td className="py-3 px-4 border-b">No</td>
-                  <td className="py-3 px-4 border-b">Partial</td>
+                  <td className="border px-4 py-2 font-medium">Infrastructure Cost</td>
+                  <td className="border px-4 py-2">Medium-High</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">High</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Wall Penetration</td>
-                  <td className="py-3 px-4 border-b">None</td>
-                  <td className="py-3 px-4 border-b">Moderate</td>
-                  <td className="py-3 px-4 border-b">Good</td>
-                  <td className="py-3 px-4 border-b">Limited</td>
+                  <td className="border px-4 py-2 font-medium">Tag Cost</td>
+                  <td className="border px-4 py-2">$10-30</td>
+                  <td className="border px-4 py-2">$5-15</td>
+                  <td className="border px-4 py-2">$10-30</td>
+                  <td className="border px-4 py-2">$15-50</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">Infrastructure Density</td>
-                  <td className="py-3 px-4 border-b">High (every room)</td>
-                  <td className="py-3 px-4 border-b">Medium</td>
-                  <td className="py-3 px-4 border-b">Low to Medium</td>
-                  <td className="py-3 px-4 border-b">Medium to High</td>
+                  <td className="border px-4 py-2 font-medium">Battery Life</td>
+                  <td className="border px-4 py-2">1-3 years</td>
+                  <td className="border px-4 py-2">6 months - 5 years</td>
+                  <td className="border px-4 py-2">3 months - 2 years</td>
+                  <td className="border px-4 py-2">6 months - 3 years</td>
                 </tr>
                 <tr>
-                  <td className="py-3 px-4 border-b">RF Interference</td>
-                  <td className="py-3 px-4 border-b">Immune</td>
-                  <td className="py-3 px-4 border-b">Susceptible</td>
-                  <td className="py-3 px-4 border-b">Susceptible</td>
-                  <td className="py-3 px-4 border-b">Resistant</td>
+                  <td className="border px-4 py-2 font-medium">Line of Sight Required</td>
+                  <td className="border px-4 py-2">Yes</td>
+                  <td className="border px-4 py-2">No</td>
+                  <td className="border px-4 py-2">No</td>
+                  <td className="border px-4 py-2">Partial</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </section>
-
-        {/* Future Trends Section */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Future Trends</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-3">Miniaturization</h3>
-              <p>
-                Smaller, more energy-efficient IR components enabling less obtrusive tags and sensors with longer
-                battery life.
-              </p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-3">Advanced Optics</h3>
-              <p>Improved IR lenses and detectors expanding coverage areas and reducing infrastructure requirements.</p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-3">Multi-Technology Integration</h3>
-              <p>
-                Tighter integration of IR with RF, ultrasound, and other technologies for comprehensive positioning
-                solutions.
-              </p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-3">Enhanced Analytics</h3>
-              <p>
-                Advanced software using IR location data to derive deeper insights into workflow, space utilization, and
-                behavior patterns.
-              </p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-3">IoT Convergence</h3>
-              <p>Integration with broader Internet of Things ecosystems for more comprehensive facility management.</p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl">
-              <h3 className="text-lg font-semibold mb-3">Embedded IR Capabilities</h3>
-              <p>
-                IR sensors built into lighting fixtures, ceiling tiles, and other building elements for less intrusive
-                deployment.
-              </p>
-            </div>
+          <div className="text-center mt-4">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
+              View all RTLS technologies →
+            </Link>
           </div>
         </section>
 
-        {/* Related Resources Section */}
+        {/* Future Trends */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Related Resources</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {relatedArticles.map((article, index) => (
-              <Link href={`/resources/${article.slug}`} key={index} className="group">
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm transition-all duration-300 h-full hover:shadow-md hover:border-blue-300">
-                  <div className="p-6">
-                    <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors duration-300">
+          <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Miniaturization:</span> Smaller, more energy-efficient IR components
+                    enabling less obtrusive tags and sensors
+                  </li>
+                  <li>
+                    <span className="font-medium">Advanced Optics:</span> Improved IR lenses and detectors expanding
+                    coverage areas and reducing infrastructure requirements
+                  </li>
+                  <li>
+                    <span className="font-medium">Multi-Technology Integration:</span> Tighter integration of IR with
+                    RF, ultrasound, and other technologies for comprehensive positioning solutions
+                  </li>
+                  <li>
+                    <span className="font-medium">Enhanced Analytics:</span> Advanced software using IR location data to
+                    derive deeper insights into workflow and behavior patterns
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Hybrid Solutions:</span> Increasing integration of IR with other
+                    technologies like BLE and UWB for comprehensive coverage
+                  </li>
+                  <li>
+                    <span className="font-medium">IoT Convergence:</span> Integration with broader Internet of Things
+                    ecosystems for more comprehensive facility management
+                  </li>
+                  <li>
+                    <span className="font-medium">Embedded IR Capabilities:</span> IR sensors built into lighting
+                    fixtures, ceiling tiles, and other building elements for less intrusive deployment
+                  </li>
+                  <li>
+                    <span className="font-medium">Privacy-Focused Design:</span> Enhanced security and privacy features
+                    to address growing concerns about location tracking
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Learn More */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About Infrared Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                {relatedArticles.map((article) => (
+                  <li key={article.slug}>
+                    <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
                       {article.title}
-                    </h3>
-                    <p className="text-blue-600 text-sm flex items-center mt-4">
-                      Read article
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Call to Action Section */}
-        <section>
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
-            <h2 className="text-2xl font-bold mb-4">Ready to implement Infrared technology in your RTLS solution?</h2>
-            <p className="mb-4">
-              The RTLS Alliance can connect you with certified providers and implementation experts who specialize in
-              infrared-based location systems for definitive room-level tracking.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/contact">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">Contact Us</Button>
-              </Link>
-              <Link href="/ecosystem/directory">
-                <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                  Find Infrared RTLS Providers
-                </Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">Need help determining if Infrared is the right technology for your RTLS project?</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
               </Link>
             </div>
           </div>
         </section>
-      </div>
-    </main>
+      </article>
+    </div>
   )
 }
