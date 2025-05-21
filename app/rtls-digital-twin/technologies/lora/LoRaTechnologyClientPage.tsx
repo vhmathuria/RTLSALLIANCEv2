@@ -4,12 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
-import { getTechnologyRelatedArticles } from "@/lib/article-data"
 import { useEffect } from "react"
 
 export default function LoRaTechnologyClientPage() {
-  // Get LoRa-related articles for the related resources section
-  const loraRelatedArticles = getTechnologyRelatedArticles("lora").slice(0, 5)
+  // Remove this line since we're not using it
+  // const loraRelatedArticles = getTechnologyRelatedArticles("lora").slice(0, 5)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -629,52 +628,41 @@ export default function LoRaTechnologyClientPage() {
             <div>
               <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
               <ul className="space-y-2">
-                {loraRelatedArticles && loraRelatedArticles.length > 0 ? (
-                  loraRelatedArticles.map((article) => (
-                    <li key={article.slug}>
-                      <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
-                        {article.title}
-                      </Link>
-                    </li>
-                  ))
-                ) : (
-                  <>
-                    <li>
-                      <Link href="/resources/lora-rtls-implementation-guide" className="text-primary hover:underline">
-                        LoRa RTLS Implementation Guide
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/comparing-lpwan-technologies-for-rtls"
-                        className="text-primary hover:underline"
-                      >
-                        Comparing LPWAN Technologies for RTLS
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/resources/smart-agriculture-with-lora-rtls" className="text-primary hover:underline">
-                        Smart Agriculture with LoRa RTLS
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/lora-vs-cellular-for-wide-area-tracking"
-                        className="text-primary hover:underline"
-                      >
-                        LoRa vs Cellular for Wide Area Tracking
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/optimizing-lora-gateway-placement-for-rtls"
-                        className="text-primary hover:underline"
-                      >
-                        Optimizing LoRa Gateway Placement for RTLS
-                      </Link>
-                    </li>
-                  </>
-                )}
+                {/* Use general RTLS resources since we may not have LoRa-specific ones */}
+                <li>
+                  <Link
+                    href="/resources/rtls-101-core-components-protocols-deployment-models"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS 101: Core Components, Protocols & Deployment Models
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/resources/rtls-technology-selection-guide" className="text-primary hover:underline">
+                    RTLS Technology Selection Guide: Choosing the Right Solution
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/resources/rtls-deployment-guide" className="text-primary hover:underline">
+                    RTLS Deployment Guide: From Planning to Optimization
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-security-encryption-authentication-privacy-best-practices"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS Security: Encryption, Authentication & Privacy Best Practices
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-roi-quantify-efficiency-gains-cost-savings"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS ROI: Quantify Efficiency Gains & Cost Savings
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
