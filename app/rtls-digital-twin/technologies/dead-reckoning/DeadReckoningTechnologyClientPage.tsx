@@ -1,26 +1,10 @@
 "use client"
 
 import { useEffect } from "react"
-import Image from "next/image"
 import Link from "next/link"
-import {
-  ArrowRight,
-  CheckCircle,
-  XCircle,
-  Compass,
-  Clock,
-  Zap,
-  Building,
-  Ruler,
-  Radio,
-  Smartphone,
-  Layers,
-  Map,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 
 export default function DeadReckoningTechnologyClientPage() {
   useEffect(() => {
@@ -28,764 +12,679 @@ export default function DeadReckoningTechnologyClientPage() {
   }, [])
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          <h1 className="text-3xl font-bold mb-6">Dead Reckoning + RTLS Anchors for Real-Time Location Systems</h1>
+    <div className="container mx-auto py-8 px-4">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">Dead Reckoning Technology</h1>
+          <p className="text-base text-muted-foreground">
+            Dead Reckoning is a positioning technique that calculates current location by using a previously determined
+            position and advancing it based on known or estimated speeds over elapsed time.
+          </p>
+        </header>
 
-          <div className="prose max-w-none">
-            <p className="lead text-xl text-gray-700 mb-8">
-              Dead Reckoning combined with RTLS anchors creates a hybrid positioning system that leverages inertial
-              navigation for continuous tracking while using fixed reference points to correct accumulated errors,
-              delivering reliable positioning in challenging environments.
-            </p>
-
-            <div className="relative h-80 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/dead-reckoning-rtls.png"
-                alt="Dead reckoning with RTLS anchor correction visualization"
-                fill
-                className="object-cover"
-              />
+        {/* Overview and Key Specifications */}
+        <section className="mb-12">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+              <p className="mb-4">
+                Dead Reckoning determines position by calculating displacement from a known starting point using
+                velocity, time, and direction data. In RTLS applications, it's often combined with periodic corrections
+                from fixed reference points to prevent cumulative errors.
+              </p>
+              <p>
+                This approach is particularly valuable in environments where continuous tracking is essential but full
+                infrastructure coverage is impractical or cost-prohibitive, such as multi-floor buildings, underground
+                facilities, or large open spaces.
+              </p>
             </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">What is Dead Reckoning with RTLS Anchors?</h2>
-            <p className="mb-4">
-              Dead Reckoning with RTLS Anchors is a hybrid positioning approach that combines the continuous tracking
-              capabilities of inertial navigation with periodic corrections from fixed reference points. This
-              combination addresses the limitations of each individual technology, creating a more robust and accurate
-              positioning solution.
-            </p>
-
-            <ul className="list-disc pl-6 mb-6">
-              <li>
-                <strong>Dead Reckoning</strong> - Calculates current position by using a previously determined position
-                and advancing it based on known or estimated speeds over elapsed time
-              </li>
-              <li>
-                <strong>RTLS Anchors</strong> - Fixed reference points that provide absolute positioning information
-                when in range
-              </li>
-              <li>
-                <strong>Error Correction</strong> - Periodic updates from anchors correct the drift inherent in dead
-                reckoning
-              </li>
-              <li>
-                <strong>Continuous Tracking</strong> - Maintains positioning even when anchors are temporarily
-                unavailable
-              </li>
-            </ul>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">How Dead Reckoning with RTLS Anchors Works</h2>
-
-            <div className="bg-blue-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4">Core Principles</h3>
-              <p className="mb-4">This hybrid approach operates through a continuous cycle of:</p>
-
-              <ol className="list-decimal pl-6 mb-4">
-                <li>
-                  <strong>Inertial Measurement</strong> - Collecting data from accelerometers, gyroscopes, and
-                  magnetometers
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
+              <ul className="space-y-2">
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Sensors:</span>
+                  <span>IMU (accelerometer, gyroscope, magnetometer)</span>
                 </li>
-                <li>
-                  <strong>Motion Calculation</strong> - Computing displacement and direction changes from sensor data
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Accuracy:</span>
+                  <span>1-5% of distance traveled (standalone)</span>
                 </li>
-                <li>
-                  <strong>Position Estimation</strong> - Updating the estimated position based on calculated movement
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Range:</span>
+                  <span>Unlimited (degrades with distance)</span>
                 </li>
-                <li>
-                  <strong>Anchor Detection</strong> - Identifying when the device is in range of RTLS anchors
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Update Rate:</span>
+                  <span>10-100 Hz</span>
                 </li>
-                <li>
-                  <strong>Position Correction</strong> - Adjusting the estimated position using anchor-based absolute
-                  positioning
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>Medium (sensor dependent)</span>
                 </li>
-                <li>
-                  <strong>Sensor Calibration</strong> - Recalibrating inertial sensors based on anchor corrections
-                </li>
-              </ol>
-
-              <h4 className="font-semibold mt-4 mb-2">Common Implementation Approaches:</h4>
-              <ul className="list-disc pl-6 mb-4">
-                <li>
-                  <strong>Kalman Filtering</strong> - Probabilistic technique for fusing inertial and anchor data
-                </li>
-                <li>
-                  <strong>Particle Filtering</strong> - Maintains multiple position hypotheses until anchor correction
-                </li>
-                <li>
-                  <strong>Sparse Anchor Deployment</strong> - Strategic placement of anchors in key locations
-                </li>
-                <li>
-                  <strong>Multi-technology Anchors</strong> - Using different technologies (UWB, BLE, Wi-Fi) as anchors
-                </li>
-                <li>
-                  <strong>Context-Aware Correction</strong> - Using environmental context to improve dead reckoning
-                  accuracy
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Infrastructure:</span>
+                  <span>Minimal (sparse anchors for correction)</span>
                 </li>
               </ul>
             </div>
-
-            <div className="relative h-64 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/dead-reckoning-rtls-correction.png"
-                alt="Dead reckoning error correction with RTLS anchors diagram"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <h3 className="text-xl font-semibold mt-6 mb-4">Key Technical Components</h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <Smartphone className="mr-2 h-5 w-5 text-blue-600" />
-                    Inertial Components
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Accelerometers</strong> - Measure linear acceleration forces
-                    </li>
-                    <li>
-                      <strong>Gyroscopes</strong> - Detect angular velocity and orientation changes
-                    </li>
-                    <li>
-                      <strong>Magnetometers</strong> - Provide heading information relative to Earth's magnetic field
-                    </li>
-                    <li>
-                      <strong>Barometers</strong> - Detect altitude changes through atmospheric pressure
-                    </li>
-                    <li>
-                      <strong>Pedometers</strong> - Count steps for pedestrian dead reckoning
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <Radio className="mr-2 h-5 w-5 text-blue-600" />
-                    RTLS Anchor Technologies
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>UWB Anchors</strong> - High precision but require dedicated infrastructure
-                    </li>
-                    <li>
-                      <strong>BLE Beacons</strong> - Cost-effective with moderate accuracy
-                    </li>
-                    <li>
-                      <strong>Wi-Fi Access Points</strong> - Leverage existing infrastructure
-                    </li>
-                    <li>
-                      <strong>RFID Checkpoints</strong> - Simple proximity detection at key locations
-                    </li>
-                    <li>
-                      <strong>QR/Visual Markers</strong> - Camera-based positioning at specific points
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">
-              Dead Reckoning with RTLS Anchors for Real-Time Location Systems
-            </h2>
-            <p className="mb-4">
-              When implemented as part of an RTLS solution, this hybrid approach offers several unique capabilities:
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Map className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Continuous Tracking</h3>
-                </div>
-                <p className="text-sm">Maintains positioning between anchor points</p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Building className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Reduced Infrastructure</h3>
-                </div>
-                <p className="text-sm">Requires fewer anchors than traditional RTLS</p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Compass className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Resilient Positioning</h3>
-                </div>
-                <p className="text-sm">Functions during temporary anchor signal loss</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Advantages and Limitations</h2>
-
-            <Tabs defaultValue="advantages" className="mb-8">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="advantages">Advantages</TabsTrigger>
-                <TabsTrigger value="limitations">Limitations</TabsTrigger>
-              </TabsList>
-              <TabsContent value="advantages" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Continuous Positioning</strong> - Maintains tracking even when out of anchor range
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Reduced Infrastructure</strong> - Requires fewer anchors than traditional RTLS
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Error Correction</strong> - Anchors prevent cumulative drift errors
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Adaptability</strong> - Works in environments with partial infrastructure coverage
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Multi-level Tracking</strong> - Effective for vertical movement between floors
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-              <TabsContent value="limitations" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Sensor Quality Dependency</strong> - Accuracy heavily influenced by IMU quality
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Drift Between Corrections</strong> - Position error grows between anchor encounters
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Algorithm Complexity</strong> - Requires sophisticated sensor fusion algorithms
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Motion Pattern Sensitivity</strong> - Accuracy varies with movement type (walking vs.
-                      running)
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Calibration Requirements</strong> - Needs regular recalibration for optimal performance
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-            </Tabs>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Implementation Considerations</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Hardware Selection</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>IMU Quality</strong> - Higher-grade inertial sensors reduce drift
-                    </li>
-                    <li>
-                      <strong>Anchor Technology</strong> - UWB, BLE, Wi-Fi based on accuracy needs
-                    </li>
-                    <li>
-                      <strong>Form Factor</strong> - Size and weight constraints for wearable applications
-                    </li>
-                    <li>
-                      <strong>Power Requirements</strong> - Battery life vs. sensor sampling rate trade-offs
-                    </li>
-                    <li>
-                      <strong>Environmental Robustness</strong> - Sensor performance in varying conditions
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Algorithm Selection</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Fusion Approach</strong> - Kalman, particle, or complementary filtering
-                    </li>
-                    <li>
-                      <strong>Motion Models</strong> - Pedestrian, vehicle, or custom movement patterns
-                    </li>
-                    <li>
-                      <strong>Anchor Deployment Strategy</strong> - Optimal placement for correction frequency
-                    </li>
-                    <li>
-                      <strong>Context Awareness</strong> - Using map constraints or activity recognition
-                    </li>
-                    <li>
-                      <strong>Adaptive Calibration</strong> - Dynamic sensor bias estimation and correction
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h3 className="text-xl font-semibold mt-6 mb-4">Dead Reckoning Variants Comparison</h3>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Variant</TableHead>
-                    <TableHead>Primary Sensors</TableHead>
-                    <TableHead>Typical Accuracy</TableHead>
-                    <TableHead>Best For</TableHead>
-                    <TableHead>Limitations</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Pedestrian Dead Reckoning (PDR)</TableCell>
-                    <TableCell>IMU + Step detection</TableCell>
-                    <TableCell>1-5% of distance traveled</TableCell>
-                    <TableCell>Indoor personnel tracking</TableCell>
-                    <TableCell>Requires consistent walking pattern</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Vehicular Dead Reckoning</TableCell>
-                    <TableCell>IMU + Wheel encoders</TableCell>
-                    <TableCell>0.5-2% of distance traveled</TableCell>
-                    <TableCell>Warehouse vehicles, forklifts</TableCell>
-                    <TableCell>Wheel slip affects accuracy</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Visual-Inertial Odometry</TableCell>
-                    <TableCell>IMU + Camera</TableCell>
-                    <TableCell>0.5-3% of distance traveled</TableCell>
-                    <TableCell>Feature-rich environments</TableCell>
-                    <TableCell>Sensitive to lighting conditions</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Map-Matched Dead Reckoning</TableCell>
-                    <TableCell>IMU + Digital maps</TableCell>
-                    <TableCell>1-3 meters</TableCell>
-                    <TableCell>Constrained movement areas</TableCell>
-                    <TableCell>Requires accurate maps</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Multi-Sensor Dead Reckoning</TableCell>
-                    <TableCell>IMU + Multiple complementary sensors</TableCell>
-                    <TableCell>0.5-2% of distance traveled</TableCell>
-                    <TableCell>High-reliability applications</TableCell>
-                    <TableCell>Complexity, higher cost</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Key Industry Applications</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Warehouse Operations</h3>
-                <p className="text-sm mb-3">
-                  Tracking forklifts and personnel with sparse anchor deployment for cost-effective coverage
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>High ROI application</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Healthcare</h3>
-                <p className="text-sm mb-3">
-                  Staff and equipment tracking across hospital floors with minimal infrastructure
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Growing adoption</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Retail Analytics</h3>
-                <p className="text-sm mb-3">
-                  Customer journey tracking with strategic anchor placement at key locations
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Emerging application</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Underground Mining</h3>
-                <p className="text-sm mb-3">Personnel and vehicle tracking in challenging RF environments</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Safety-critical use case</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Multi-Floor Buildings</h3>
-                <p className="text-sm mb-3">Continuous tracking across floors with vertical movement detection</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Solves 3D tracking challenges</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Emergency Response</h3>
-                <p className="text-sm mb-3">
-                  First responder tracking in buildings with limited or damaged infrastructure
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Life-saving potential</span>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in Dead Reckoning + RTLS</h2>
-
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4">Emerging Developments</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold mb-2">MEMS Sensor Improvements</h4>
-                  <p className="text-sm mb-4">
-                    Higher quality, lower cost inertial sensors reducing drift and extending tracking duration
-                  </p>
-
-                  <h4 className="font-semibold mb-2">AI-Enhanced Motion Models</h4>
-                  <p className="text-sm mb-4">
-                    Machine learning algorithms improving dead reckoning accuracy for various movement patterns
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Opportunistic Anchoring</h4>
-                  <p className="text-sm">
-                    Using dynamic objects with known positions as temporary anchors for correction
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-2">Collaborative Positioning</h4>
-                  <p className="text-sm mb-4">
-                    Multiple devices sharing position information to improve collective accuracy
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Context-Aware Algorithms</h4>
-                  <p className="text-sm mb-4">
-                    Using environmental context and activity recognition to enhance positioning accuracy
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Edge Computing Integration</h4>
-                  <p className="text-sm">
-                    More sophisticated algorithms running on low-power edge devices for better real-time performance
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Comparison with Other RTLS Technologies</h2>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Feature</TableHead>
-                    <TableHead>Dead Reckoning + Anchors</TableHead>
-                    <TableHead>Pure UWB</TableHead>
-                    <TableHead>Pure BLE</TableHead>
-                    <TableHead>Wi-Fi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Infrastructure Density</TableCell>
-                    <TableCell>Low (sparse anchors)</TableCell>
-                    <TableCell>High (dense anchors)</TableCell>
-                    <TableCell>Medium-High</TableCell>
-                    <TableCell>Low-Medium</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Typical Accuracy</TableCell>
-                    <TableCell>1-3 m (varies with time since correction)</TableCell>
-                    <TableCell>10-30 cm</TableCell>
-                    <TableCell>1-3 m</TableCell>
-                    <TableCell>3-15 m</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Continuous Tracking</TableCell>
-                    <TableCell>Yes (between anchors)</TableCell>
-                    <TableCell>Only in coverage areas</TableCell>
-                    <TableCell>Only in coverage areas</TableCell>
-                    <TableCell>Only in coverage areas</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Power Consumption</TableCell>
-                    <TableCell>Medium-High</TableCell>
-                    <TableCell>Medium</TableCell>
-                    <TableCell>Low</TableCell>
-                    <TableCell>High</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Deployment Complexity</TableCell>
-                    <TableCell>Medium (algorithm tuning)</TableCell>
-                    <TableCell>High (precise anchor placement)</TableCell>
-                    <TableCell>Medium (beacon deployment)</TableCell>
-                    <TableCell>Low (if existing)</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Resilience to Signal Loss</TableCell>
-                    <TableCell>High (continues functioning)</TableCell>
-                    <TableCell>Low (requires constant signal)</TableCell>
-                    <TableCell>Low (requires constant signal)</TableCell>
-                    <TableCell>Low (requires constant signal)</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Implementation Best Practices</h2>
-
-            <div className="space-y-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Strategic Anchor Placement</h3>
-                <p className="text-sm">
-                  Place anchors at key locations such as doorways, intersections, and decision points. This maximizes
-                  correction opportunities while minimizing infrastructure requirements. Consider traffic patterns and
-                  dwell times when planning anchor locations.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Sensor Calibration Routines</h3>
-                <p className="text-sm">
-                  Implement regular calibration procedures to account for sensor drift and bias. Use anchor encounters
-                  as opportunities for dynamic recalibration. Consider environmental factors like temperature that may
-                  affect sensor performance.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Motion Model Selection</h3>
-                <p className="text-sm">
-                  Choose appropriate motion models based on the expected movement patterns. Pedestrian dead reckoning
-                  works well for people, while different models are needed for vehicles or equipment. Consider
-                  implementing multiple models with automatic selection.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Fusion Algorithm Optimization</h3>
-                <p className="text-sm">
-                  Tune sensor fusion algorithms for your specific environment and use case. Balance between
-                  responsiveness and stability. Consider extended or unscented Kalman filters for non-linear motion, or
-                  particle filters for complex environments.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Environmental Constraints</h3>
-                <p className="text-sm">
-                  Incorporate map constraints and environmental knowledge to improve dead reckoning accuracy. Techniques
-                  like map-matching can significantly reduce drift by constraining possible positions to valid areas
-                  like hallways and rooms.
-                </p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
-            <p className="mb-4">
-              Dead Reckoning combined with RTLS anchors represents a powerful hybrid approach to real-time location
-              systems, offering a balance between infrastructure requirements and positioning performance. By leveraging
-              the continuous tracking capabilities of inertial navigation with periodic corrections from fixed reference
-              points, this approach addresses the limitations of each individual technology.
-            </p>
-            <p className="mb-4">
-              This hybrid solution is particularly valuable in environments where continuous tracking is essential but
-              full infrastructure coverage is impractical or cost-prohibitive. It enables applications ranging from
-              warehouse optimization and healthcare asset tracking to retail analytics and emergency response.
-            </p>
-            <p>
-              As inertial sensors continue to improve in quality while decreasing in cost, and as fusion algorithms
-              become more sophisticated, the dead reckoning with RTLS anchors approach is poised to become an
-              increasingly important component in the RTLS ecosystem, particularly for applications requiring continuous
-              tracking with minimal infrastructure.
-            </p>
           </div>
-        </div>
+        </section>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">Dead Reckoning + RTLS Overview</h3>
+        {/* How Dead Reckoning Works */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">How Dead Reckoning Works for RTLS</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Inertial Navigation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Dead reckoning uses inertial measurement units (IMUs) containing accelerometers, gyroscopes, and
+                  magnetometers to detect movement. Accelerometers measure linear acceleration, gyroscopes track
+                  rotational movement, and magnetometers provide heading information. These measurements are integrated
+                  over time to calculate displacement from a known starting point.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Hybrid Correction</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  To prevent cumulative errors, dead reckoning in RTLS is typically combined with periodic position
+                  corrections from fixed reference points (anchors). When a tag or device comes within range of an
+                  anchor, its position is recalibrated. This hybrid approach maintains continuous tracking while
+                  limiting error growth.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <Building className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Infrastructure</h4>
-                  <p className="text-sm text-gray-600">Sparse anchors (reduced density)</p>
-                </div>
-              </div>
+        {/* Advantages & Limitations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Continuous positioning without constant infrastructure coverage</li>
+                  <li>Reduced infrastructure requirements and associated costs</li>
+                  <li>Functions in challenging RF environments (tunnels, metal structures)</li>
+                  <li>Effective for tracking across multiple floors and elevations</li>
+                  <li>High update rates for real-time movement tracking</li>
+                  <li>Privacy-preserving (no constant external signals required)</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Cumulative error growth without periodic corrections</li>
+                  <li>Sensor quality significantly impacts accuracy</li>
+                  <li>Requires sophisticated algorithms for optimal performance</li>
+                  <li>Motion pattern sensitivity affects accuracy</li>
+                  <li>Initial position and orientation must be known</li>
+                  <li>Higher computational requirements than simple proximity systems</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Ruler className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Accuracy Range</h4>
-                  <p className="text-sm text-gray-600">1-3 meters (varies with time since correction)</p>
-                </div>
-              </div>
+        {/* Industry Applications */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
+          <Tabs defaultValue="manufacturing" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
+              <TabsTrigger value="manufacturing" className="flex flex-col py-2 h-auto">
+                <Factory className="h-5 w-5 mb-1" />
+                Manufacturing
+              </TabsTrigger>
+              <TabsTrigger value="logistics" className="flex flex-col py-2 h-auto">
+                <Truck className="h-5 w-5 mb-1" />
+                Logistics
+              </TabsTrigger>
+              <TabsTrigger value="healthcare" className="flex flex-col py-2 h-auto">
+                <Hospital className="h-5 w-5 mb-1" />
+                Healthcare
+              </TabsTrigger>
+              <TabsTrigger value="retail" className="flex flex-col py-2 h-auto">
+                <ShoppingBag className="h-5 w-5 mb-1" />
+                Retail
+              </TabsTrigger>
+              <TabsTrigger value="commercial" className="flex flex-col py-2 h-auto">
+                <Building2 className="h-5 w-5 mb-1" />
+                Commercial
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="manufacturing" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Manufacturing Applications</CardTitle>
+                  <CardDescription>
+                    Dead reckoning enhances tracking in complex industrial environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In manufacturing facilities, dead reckoning combined with sparse RTLS anchors enables continuous
+                    tracking of assets, vehicles, and personnel across large factory floors with minimal infrastructure.
+                    This approach is particularly valuable for tracking forklifts and automated guided vehicles (AGVs)
+                    in environments with metal structures and changing layouts.
+                  </p>
+                  <p>
+                    The technology helps optimize material flow, reduce search times for critical tools, and improve
+                    safety by maintaining position awareness even in areas with poor signal coverage.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Forklift and AGV tracking in large facilities</li>
+                        <li>Tool and equipment positioning</li>
+                        <li>Worker safety in signal-challenged areas</li>
+                        <li>Material flow optimization</li>
+                        <li>Multi-level factory tracking</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Continuous tracking with minimal infrastructure</li>
+                        <li>Reduced search time for critical assets</li>
+                        <li>Improved safety in RF-challenged environments</li>
+                        <li>Enhanced process visibility</li>
+                        <li>Lower total cost of ownership</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Logistics Applications</CardTitle>
+                  <CardDescription>
+                    Dead reckoning provides continuous tracking in complex warehouse environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In logistics and warehousing, dead reckoning with sparse anchor correction enables efficient
+                    tracking of forklifts, pallet jacks, and other material handling equipment across large facilities.
+                    The technology maintains positioning even when moving between zones with different coverage levels.
+                  </p>
+                  <p>
+                    This approach is particularly valuable for multi-level warehouses and distribution centers where
+                    continuous vertical tracking is essential. It helps optimize picking routes, reduce congestion, and
+                    improve overall operational efficiency.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Material handling equipment tracking</li>
+                        <li>Multi-level warehouse operations</li>
+                        <li>Yard management with indoor/outdoor transitions</li>
+                        <li>Cold storage and RF-challenging environments</li>
+                        <li>High-bay warehouse navigation</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Seamless indoor/outdoor tracking</li>
+                        <li>Reduced infrastructure costs</li>
+                        <li>Improved vertical tracking between levels</li>
+                        <li>Enhanced operational visibility</li>
+                        <li>Optimized resource utilization</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    Dead reckoning enhances staff and equipment tracking across healthcare facilities.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In healthcare environments, dead reckoning with strategic anchor placement enables continuous
+                    tracking of staff, patients, and mobile equipment across complex hospital layouts. This approach is
+                    particularly valuable for maintaining positioning when moving between floors or in areas with
+                    limited infrastructure coverage.
+                  </p>
+                  <p>
+                    The technology helps improve response times, optimize workflow, and ensure critical equipment can be
+                    located quickly, even in areas with challenging RF conditions like imaging suites or basement
+                    levels.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Staff duress and emergency response</li>
+                        <li>Mobile medical equipment tracking</li>
+                        <li>Patient flow and journey mapping</li>
+                        <li>Multi-floor hospital navigation</li>
+                        <li>Tracking in RF-challenging areas (MRI suites)</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Continuous staff safety monitoring</li>
+                        <li>Reduced equipment search time</li>
+                        <li>Improved emergency response</li>
+                        <li>Enhanced patient experience</li>
+                        <li>Lower infrastructure maintenance costs</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="retail" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Retail Applications</CardTitle>
+                  <CardDescription>
+                    Dead reckoning enables detailed customer journey analysis with minimal infrastructure.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In retail environments, dead reckoning with strategic beacon placement allows detailed tracking of
+                    shopping carts, staff, and assets with minimal infrastructure. This approach provides continuous
+                    customer journey mapping even in areas with limited beacon coverage.
+                  </p>
+                  <p>
+                    The technology helps retailers understand shopper behavior, optimize store layouts, and improve
+                    staff responsiveness while maintaining a non-intrusive customer experience and controlling
+                    deployment costs.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Shopping cart path analysis</li>
+                        <li>Staff activity and responsiveness tracking</li>
+                        <li>Multi-floor retail navigation</li>
+                        <li>Stockroom to sales floor movement</li>
+                        <li>Customer dwell time analysis</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Detailed customer journey insights</li>
+                        <li>Reduced infrastructure costs</li>
+                        <li>Improved staff efficiency</li>
+                        <li>Enhanced store layout optimization</li>
+                        <li>Better conversion rate analysis</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="commercial" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Commercial Building Applications</CardTitle>
+                  <CardDescription>
+                    Dead reckoning enhances occupant tracking across complex building layouts.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In commercial buildings, dead reckoning with strategic anchor placement enables continuous tracking
+                    of occupants, visitors, and assets across multi-floor environments. This approach is particularly
+                    valuable for maintaining positioning in stairwells, elevators, and areas with limited infrastructure
+                    coverage.
+                  </p>
+                  <p>
+                    The technology helps improve emergency response, optimize space utilization, and enhance building
+                    security while minimizing infrastructure deployment and maintenance costs.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Emergency evacuation and mustering</li>
+                        <li>Visitor wayfinding and navigation</li>
+                        <li>Space utilization analysis</li>
+                        <li>Security personnel tracking</li>
+                        <li>Asset movement monitoring</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Improved emergency response</li>
+                        <li>Enhanced occupant experience</li>
+                        <li>Optimized space utilization</li>
+                        <li>Reduced infrastructure costs</li>
+                        <li>Better vertical movement tracking</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </section>
 
-              <div className="flex items-start">
-                <Compass className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Environment</h4>
-                  <p className="text-sm text-gray-600">Indoor/outdoor, multi-floor, challenging RF environments</p>
-                </div>
-              </div>
+        {/* Case Studies */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Multi-Floor Hospital Tracking</CardTitle>
+                <CardDescription>Regional Medical Center</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A 450-bed hospital implemented a hybrid dead reckoning system with strategic UWB anchors to track
+                  3,000+ mobile medical devices across 8 floors. The system maintained continuous tracking in elevators,
+                  stairwells, and RF-challenging areas like MRI suites.
+                </p>
+                <p>
+                  Equipment search time decreased by 73%, while infrastructure costs were 42% lower than a traditional
+                  full-coverage RTLS. Staff reported higher satisfaction with equipment availability, and the hospital
+                  achieved ROI within 11 months through improved asset utilization.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Warehouse Vehicle Tracking</CardTitle>
+                <CardDescription>Global Distribution Company</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A distribution company deployed dead reckoning with sparse BLE anchors to track 75 forklifts across a
+                  320,000 sq ft multi-level facility. The system maintained continuous positioning during vertical
+                  movement between floors and in areas with metal racking.
+                </p>
+                <p>
+                  Operational efficiency improved by 18% through optimized routing and resource allocation. The company
+                  reduced infrastructure costs by 65% compared to traditional RTLS while achieving 2-3 meter accuracy
+                  throughout the facility. The system integrated with their warehouse management system for real-time
+                  optimization.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Zap className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Power Requirements</h4>
-                  <p className="text-sm text-gray-600">Medium (sensor sampling rate dependent)</p>
-                </div>
-              </div>
+        {/* Implementation Considerations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Inertial measurement units (IMUs) in tracked devices</li>
+                  <li>Strategic anchor placement at key locations</li>
+                  <li>Calibration zones for initial positioning</li>
+                  <li>Server infrastructure for data processing</li>
+                  <li>Network connectivity for anchor communication</li>
+                  <li>Software platform with sensor fusion capabilities</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct thorough site survey for anchor placement</li>
+                  <li>Place anchors at decision points and high-traffic areas</li>
+                  <li>Implement regular calibration procedures</li>
+                  <li>Use map constraints to improve accuracy</li>
+                  <li>Select appropriate motion models for tracked objects</li>
+                  <li>Tune algorithms for specific environment conditions</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Sensor drift between anchor corrections</li>
+                  <li>Initial position acquisition reliability</li>
+                  <li>Algorithm tuning for different movement patterns</li>
+                  <li>Integration with existing systems</li>
+                  <li>Battery life management for mobile devices</li>
+                  <li>Maintaining accuracy during rapid movements</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Clock className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Setup Time</h4>
-                  <p className="text-sm text-gray-600">Medium (anchor placement + algorithm tuning)</p>
-                </div>
-              </div>
-            </div>
-
-            <h4 className="font-semibold mb-3">Ideal Applications</h4>
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Large facilities with partial coverage</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Multi-floor tracking</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Cost-sensitive deployments</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Challenging RF environments</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Continuous tracking requirements</span>
-              </li>
-            </ul>
-
-            <Link href="/contact">
-              <Button className="w-full">Contact RTLS Expert</Button>
+        {/* Technology Comparison */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Dead Reckoning + Anchors</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Infrastructure Density</td>
+                  <td className="border px-4 py-2">Low (sparse anchors)</td>
+                  <td className="border px-4 py-2">High (dense anchors)</td>
+                  <td className="border px-4 py-2">Medium-High</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-2">1-3m (varies with time since correction)</td>
+                  <td className="border px-4 py-2">10-30cm</td>
+                  <td className="border px-4 py-2">1-3m</td>
+                  <td className="border px-4 py-2">3-5m</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Continuous Tracking</td>
+                  <td className="border px-4 py-2">Yes (between anchors)</td>
+                  <td className="border px-4 py-2">Only in coverage areas</td>
+                  <td className="border px-4 py-2">Only in coverage areas</td>
+                  <td className="border px-4 py-2">Only in coverage areas</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-2">Medium-High</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Low</td>
+                  <td className="border px-4 py-2">High</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Infrastructure Cost</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Low (if existing)</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Multi-Floor Tracking</td>
+                  <td className="border px-4 py-2">Excellent</td>
+                  <td className="border px-4 py-2">Limited</td>
+                  <td className="border px-4 py-2">Limited</td>
+                  <td className="border px-4 py-2">Limited</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">RF Interference Resilience</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Low</td>
+                  <td className="border px-4 py-2">Low</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
+              View all RTLS technologies →
             </Link>
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">Related Technologies</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/sensor-fusion"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Layers className="h-4 w-4 mr-2" />
-                  <span>Sensor Fusion</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/slam"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Map className="h-4 w-4 mr-2" />
-                  <span>SLAM</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/uwb"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Radio className="h-4 w-4 mr-2" />
-                  <span>Ultra-Wideband (UWB)</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/ble"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Radio className="h-4 w-4 mr-2" />
-                  <span>Bluetooth Low Energy (BLE)</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/magnetic-field"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Compass className="h-4 w-4 mr-2" />
-                  <span>Magnetic Field Mapping</span>
-                </Link>
-              </li>
-            </ul>
+        {/* Future Trends */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">MEMS Sensor Improvements:</span> Higher quality, lower cost inertial
+                    sensors reducing drift and extending tracking duration
+                  </li>
+                  <li>
+                    <span className="font-medium">AI-Enhanced Motion Models:</span> Machine learning algorithms
+                    improving dead reckoning accuracy for various movement patterns
+                  </li>
+                  <li>
+                    <span className="font-medium">Opportunistic Anchoring:</span> Using dynamic objects with known
+                    positions as temporary anchors for correction
+                  </li>
+                  <li>
+                    <span className="font-medium">Edge Computing Integration:</span> More sophisticated algorithms
+                    running on low-power edge devices for better real-time performance
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Hybrid Solutions:</span> Increasing integration of dead reckoning with
+                    other technologies for comprehensive coverage
+                  </li>
+                  <li>
+                    <span className="font-medium">Collaborative Positioning:</span> Multiple devices sharing position
+                    information to improve collective accuracy
+                  </li>
+                  <li>
+                    <span className="font-medium">Context-Aware Algorithms:</span> Using environmental context and
+                    activity recognition to enhance positioning accuracy
+                  </li>
+                  <li>
+                    <span className="font-medium">Standardization:</span> Development of industry standards for dead
+                    reckoning integration with RTLS systems
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h3 className="text-lg font-bold mb-4">Resources</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>RTLS Implementation Guide</span>
-                </Link>
-              </li>
-            </ul>
+        {/* Learn More */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About Dead Reckoning Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/resources/indoor-outdoor-tracking-seamless-positioning-solutions"
+                    className="text-primary hover:underline"
+                  >
+                    Indoor-Outdoor Tracking: Seamless Positioning Solutions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-101-core-components-protocols-deployment-models"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS 101: Core Components, Protocols & Deployment Models
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/sensor-fusion-multi-technology-rtls-implementation-guide"
+                    className="text-primary hover:underline"
+                  >
+                    Sensor Fusion: Multi-Technology RTLS Implementation Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/enterprise-rtls-step-by-step-implementation-guide"
+                    className="text-primary hover:underline"
+                  >
+                    Enterprise RTLS: Step-by-Step Implementation Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-infrastructure-planning-optimization-strategies"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS Infrastructure Planning: Optimization Strategies
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">
+                Need help determining if Dead Reckoning is the right technology for your RTLS project?
+              </p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </article>
     </div>
   )
 }
