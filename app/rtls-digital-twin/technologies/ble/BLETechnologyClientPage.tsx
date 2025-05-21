@@ -607,36 +607,42 @@ export default function BLETechnologyClientPage() {
           </div>
         </section>
 
-        {/* Learn More - Updated with real resource links from article-data.ts and removed Card component */}
+        {/* Learn More - Updated with real resource links from article-data.ts */}
         <section className="mt-12">
-          <h2 className="text-2xl font-semibold mb-6">Learn More About BLE Technology</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
-              <ul className="space-y-2">
-                {bleRelatedArticles.map((article) => (
-                  <li key={article.slug}>
-                    <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
-                      {article.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
-              <p className="mb-4">
-                Need help determining if BLE is the right technology for your RTLS project? RTLS Alliance Practitioners
-                can provide personalized guidance based on your specific requirements.
-              </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                Ask an Alliance Member
-              </Link>
-            </div>
-          </div>
+          <Card className="border">
+            <CardHeader>
+              <CardTitle>Learn More About BLE Technology</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+                  <ul className="space-y-2">
+                    {bleRelatedArticles.map((article) => (
+                      <li key={article.slug}>
+                        <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
+                          {article.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+                  <p className="mb-4">
+                    Need help determining if BLE is the right technology for your RTLS project? <p>RTLS Alliance
+                    Practitioners can provide personalized guidance based on your specific requirements.</p>
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                  >
+                    Ask an Alliance Member
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </section>
       </article>
     </div>
