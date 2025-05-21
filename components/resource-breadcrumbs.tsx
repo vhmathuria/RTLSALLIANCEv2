@@ -56,3 +56,5 @@ export function ResourceBreadcrumbs() {
   // Show breadcrumbs with custom path if available
   return <Breadcrumbs customPath={customPath} />
 }
+// Check if this component is somehow rendering multiple breadcrumb sets
+// Look for multiple instances of Breadcrumbs or nested breadcrumb components
