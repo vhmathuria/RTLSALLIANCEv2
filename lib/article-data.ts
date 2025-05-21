@@ -441,6 +441,16 @@ export function getBLERelatedArticles(): ArticleData[] {
 }
 
 /**
+ * Helper function to get UWB-related articles
+ * Returns articles that have "uwb" in their slug or title (case insensitive)
+ */
+export function getUWBRelatedArticles(): ArticleData[] {
+  return articles.filter(
+    (article) => article.slug.toLowerCase().includes("uwb") || article.title.toLowerCase().includes("uwb"),
+  )
+}
+
+/**
  * Helper function to get related articles for a specific technology
  * @param technology - The technology to find related articles for (e.g., "ble", "uwb", "wifi")
  */

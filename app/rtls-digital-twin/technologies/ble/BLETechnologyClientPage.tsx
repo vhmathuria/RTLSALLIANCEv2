@@ -384,7 +384,7 @@ export default function BLETechnologyClientPage() {
 
         {/* Case Studies */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Case Studies</h2>
+          <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="border">
               <CardHeader>

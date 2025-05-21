@@ -101,7 +101,7 @@ export default function UWBTechnologyClientPage() {
           </div>
         </section>
 
-        {/* Advantages & Limitations - Now in separate boxes */}
+        {/* Advantages & Limitations */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -382,7 +382,7 @@ export default function UWBTechnologyClientPage() {
 
         {/* Case Studies */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Case Studies</h2>
+          <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="border">
               <CardHeader>
@@ -421,7 +421,7 @@ export default function UWBTechnologyClientPage() {
           </div>
         </section>
 
-        {/* Implementation Considerations - Now in separate boxes */}
+        {/* Implementation Considerations */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -558,16 +558,16 @@ export default function UWBTechnologyClientPage() {
               <CardContent>
                 <ul className="list-disc pl-5 space-y-2">
                   <li>
-                    <span className="font-medium">Enhanced Accuracy:</span> Advanced algorithms and techniques to
-                    achieve sub-centimeter accuracy in real-world environments
+                    <span className="font-medium">Smartphone Integration:</span> Increasing adoption of UWB in
+                    smartphones and wearables, expanding potential applications
                   </li>
                   <li>
-                    <span className="font-medium">Lower Power Consumption:</span> New UWB chipsets with significantly
-                    reduced power requirements
+                    <span className="font-medium">Miniaturization:</span> Smaller, more energy-efficient UWB chips
+                    enabling new form factors and use cases
                   </li>
                   <li>
-                    <span className="font-medium">Improved Security:</span> Enhanced security features to prevent
-                    spoofing and jamming attacks
+                    <span className="font-medium">Enhanced Algorithms:</span> Advanced positioning algorithms to achieve
+                    sub-10 cm accuracy in complex environments
                   </li>
                   <li>
                     <span className="font-medium">Sensor Fusion:</span> Integration with other sensors (IMU, cameras)
@@ -583,16 +583,16 @@ export default function UWBTechnologyClientPage() {
               <CardContent>
                 <ul className="list-disc pl-5 space-y-2">
                   <li>
-                    <span className="font-medium">Smartphone Integration:</span> Increasing adoption of UWB in
-                    smartphones and wearables, expanding potential applications
-                  </li>
-                  <li>
-                    <span className="font-medium">Standardization:</span> Development of more robust standards for
-                    interoperability between different UWB systems
-                  </li>
-                  <li>
-                    <span className="font-medium">Lower Costs:</span> Decreasing hardware costs as adoption increases
+                    <span className="font-medium">Cost Reduction:</span> Decreasing hardware costs as adoption increases
                     and manufacturing scales
+                  </li>
+                  <li>
+                    <span className="font-medium">Industry Standardization:</span> Development of more robust standards
+                    for interoperability between different UWB systems
+                  </li>
+                  <li>
+                    <span className="font-medium">Hybrid Solutions:</span> Increasing integration of UWB with other
+                    technologies like BLE for comprehensive coverage
                   </li>
                   <li>
                     <span className="font-medium">Expanded Applications:</span> Growth in automotive, AR/VR, and smart
@@ -604,7 +604,7 @@ export default function UWBTechnologyClientPage() {
           </div>
         </section>
 
-        {/* Learn More - Updated with real resource links from article-data.ts and removed Card component */}
+        {/* Learn More - Updated with real resource links from article-data.ts */}
         <section className="mt-12">
           <h2 className="text-2xl font-semibold mb-6">Learn More About UWB Technology</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -623,7 +623,9 @@ export default function UWBTechnologyClientPage() {
             <div>
               <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
               <p className="mb-4">Need help determining if UWB is the right technology for your RTLS project?</p>
-              <p>RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
