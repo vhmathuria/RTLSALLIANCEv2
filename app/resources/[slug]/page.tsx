@@ -8,6 +8,9 @@ import MemberInsightRenderer from "@/components/renderers/member-insight/member-
 import ContentGate from "@/components/content-gate"
 import type { Metadata } from "next"
 
+// Add revalidation - regenerate this page once per day
+export const revalidate = 86400
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticleBySlug(params.slug)
 

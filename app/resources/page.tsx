@@ -6,6 +6,9 @@ import { ResourcesClientPage } from "./resources-client"
 import { PageSEO } from "@/components/seo/page-seo"
 import type { Metadata } from "next"
 
+// Add revalidation - regenerate this page once per day
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: "Resources - RTLS Alliance",
   description: "Explore guides, case studies, and insights about Real-Time Location Systems (RTLS).",
