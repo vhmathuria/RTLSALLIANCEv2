@@ -3,71 +3,79 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
+import { getUWBRelatedArticles } from "@/lib/article-data"
 
 export default function UWBTechnologyClientPage() {
+  // Get UWB-related articles for the related resources section
+  const uwbRelatedArticles = getUWBRelatedArticles().slice(0, 5)
+
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="grid gap-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold">Ultra-Wideband (UWB) Technology</h1>
-          <p className="text-xl text-muted-foreground">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">Ultra-Wideband (UWB) Technology</h1>
+          <p className="text-base text-muted-foreground">
             Ultra-Wideband (UWB) is a high-precision radio technology that enables centimeter-level location accuracy
             for real-time tracking.
           </p>
-        </div>
+        </header>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-            <p className="mb-4">
-              UWB operates by transmitting ultra-short pulses across a wide spectrum of frequencies, typically between
-              3.1 and 10.6 GHz. This wide bandwidth allows for precise time-of-flight measurements, enabling exceptional
-              positioning accuracy.
-            </p>
-            <p className="mb-4">
-              For RTLS applications, UWB typically achieves 10-30 centimeter accuracy in real-world environments, making
-              it the technology of choice for high-precision tracking requirements.
-            </p>
-            <div className="mt-6 space-y-4">
-              <h3 className="text-xl font-semibold">Key Specifications</h3>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>
-                  <span className="font-medium">Frequency:</span> 3.1-10.6 GHz
+        {/* Overview and Key Specifications */}
+        <section className="mb-12">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+              <p className="mb-4">
+                UWB operates by transmitting ultra-short pulses across a wide spectrum of frequencies, typically between
+                3.1 and 10.6 GHz. This wide bandwidth allows for precise time-of-flight measurements, enabling
+                exceptional positioning accuracy.
+              </p>
+              <p>
+                For RTLS applications, UWB typically achieves 10-30 centimeter accuracy in real-world environments,
+                making it the technology of choice for high-precision tracking requirements.
+              </p>
+            </div>
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
+              <ul className="space-y-2">
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Frequency:</span>
+                  <span>3.1-10.6 GHz</span>
                 </li>
-                <li>
-                  <span className="font-medium">Range:</span> 10-50 meters (indoor)
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Range:</span>
+                  <span>10-50 meters (indoor)</span>
                 </li>
-                <li>
-                  <span className="font-medium">Data Rate:</span> 6.8 Mbps to 27.2 Mbps
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Data Rate:</span>
+                  <span>6.8 Mbps to 27.2 Mbps</span>
                 </li>
-                <li>
-                  <span className="font-medium">Typical Accuracy:</span> 10-30 centimeters
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Typical Accuracy:</span>
+                  <span>10-30 centimeters</span>
                 </li>
-                <li>
-                  <span className="font-medium">Power Consumption:</span> 100-500 mW (transmit)
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>100-500 mW (transmit)</span>
                 </li>
-                <li>
-                  <span className="font-medium">Battery Life:</span> 6 months to 3 years (depending on tag type and
-                  configuration)
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Battery Life:</span>
+                  <span>6 months to 3 years (depending on tag type and configuration)</span>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="flex justify-center items-center">
-            <div className="relative w-full h-64 md:h-80">
-              <Image src="/images/uwb-positioning.png" alt="UWB Positioning System" fill className="object-contain" />
-            </div>
-          </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">How UWB Works for RTLS</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Time Difference of Arrival (TDoA)</CardTitle>
+        {/* How UWB Works */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">How UWB Works for RTLS</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Time Difference of Arrival (TDoA)</CardTitle>
               </CardHeader>
               <CardContent>
                 <p>
@@ -78,9 +86,9 @@ export default function UWBTechnologyClientPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Two-Way Ranging (TWR)</CardTitle>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Two-Way Ranging (TWR)</CardTitle>
               </CardHeader>
               <CardContent>
                 <p>
@@ -91,17 +99,18 @@ export default function UWBTechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Advantages & Limitations</h2>
+        {/* Advantages & Limitations - Now in separate boxes */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+            <Card className="border">
               <CardHeader>
-                <CardTitle className="text-green-600">Advantages</CardTitle>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc pl-5 space-y-2">
+                <ul className="list-disc pl-5 space-y-1">
                   <li>Superior accuracy (10-30 cm) compared to other RF technologies</li>
                   <li>Reliable performance in complex environments with obstacles</li>
                   <li>Low susceptibility to multipath interference</li>
@@ -111,12 +120,12 @@ export default function UWBTechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border">
               <CardHeader>
-                <CardTitle className="text-red-600">Limitations</CardTitle>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc pl-5 space-y-2">
+                <ul className="list-disc pl-5 space-y-1">
                   <li>Higher infrastructure cost compared to BLE or Wi-Fi</li>
                   <li>Higher tag costs ($15-50 per tag)</li>
                   <li>Limited smartphone compatibility (improving with newer models)</li>
@@ -127,12 +136,13 @@ export default function UWBTechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Industry Applications</h2>
-          <Tabs defaultValue="manufacturing">
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto">
+        {/* Industry Applications */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
+          <Tabs defaultValue="manufacturing" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
               <TabsTrigger value="manufacturing" className="flex flex-col py-2 h-auto">
                 <Factory className="h-5 w-5 mb-1" />
                 Manufacturing
@@ -154,8 +164,8 @@ export default function UWBTechnologyClientPage() {
                 Commercial
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="manufacturing" className="mt-4">
-              <Card>
+            <TabsContent value="manufacturing" className="mt-2">
+              <Card className="border">
                 <CardHeader>
                   <CardTitle>Manufacturing Applications</CardTitle>
                   <CardDescription>
@@ -172,7 +182,7 @@ export default function UWBTechnologyClientPage() {
                     UWB is also used for worker safety applications in hazardous areas, providing real-time location
                     data to prevent accidents and ensure compliance with safety protocols.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -197,8 +207,8 @@ export default function UWBTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="healthcare" className="mt-4">
-              <Card>
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
                 <CardHeader>
                   <CardTitle>Healthcare Applications</CardTitle>
                   <CardDescription>
@@ -215,7 +225,7 @@ export default function UWBTechnologyClientPage() {
                     UWB is also used for contact tracing and infection control applications, providing accurate data on
                     interactions between staff, patients, and visitors.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -240,8 +250,8 @@ export default function UWBTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="logistics" className="mt-4">
-              <Card>
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
                 <CardHeader>
                   <CardTitle>Logistics Applications</CardTitle>
                   <CardDescription>
@@ -258,7 +268,7 @@ export default function UWBTechnologyClientPage() {
                     UWB is particularly valuable for automated warehouse systems, providing the precision needed for
                     robotic picking and autonomous vehicle navigation in dense storage environments.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -283,8 +293,8 @@ export default function UWBTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="retail" className="mt-4">
-              <Card>
+            <TabsContent value="retail" className="mt-2">
+              <Card className="border">
                 <CardHeader>
                   <CardTitle>Retail Applications</CardTitle>
                   <CardDescription>UWB provides precise customer analytics and inventory management.</CardDescription>
@@ -299,7 +309,7 @@ export default function UWBTechnologyClientPage() {
                     UWB is also used for automated checkout systems and smart shopping carts, providing the precision
                     needed to track items as customers move through the store.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -324,8 +334,8 @@ export default function UWBTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="commercial" className="mt-4">
-              <Card>
+            <TabsContent value="commercial" className="mt-2">
+              <Card className="border">
                 <CardHeader>
                   <CardTitle>Commercial Building Applications</CardTitle>
                   <CardDescription>
@@ -342,7 +352,7 @@ export default function UWBTechnologyClientPage() {
                     UWB is also used for touchless access control systems, providing secure and convenient entry based
                     on precise location data.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -368,12 +378,13 @@ export default function UWBTechnologyClientPage() {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Food for Thought</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+        {/* Case Studies */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Case Studies</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
               <CardHeader>
                 <CardTitle>Automotive Manufacturing</CardTitle>
                 <CardDescription>European Luxury Car Manufacturer</CardDescription>
@@ -390,7 +401,7 @@ export default function UWBTechnologyClientPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border">
               <CardHeader>
                 <CardTitle>Warehouse Automation</CardTitle>
                 <CardDescription>E-commerce Fulfillment Center</CardDescription>
@@ -408,17 +419,18 @@ export default function UWBTechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Implementation Considerations</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card>
+        {/* Implementation Considerations - Now in separate boxes */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
               <CardHeader>
-                <CardTitle>Infrastructure Requirements</CardTitle>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc pl-5 space-y-2">
+                <ul className="list-disc pl-5 space-y-1">
                   <li>UWB tags for tracked assets</li>
                   <li>UWB anchors (typically 1 per 100-200 m²)</li>
                   <li>Network infrastructure (typically PoE)</li>
@@ -428,13 +440,13 @@ export default function UWBTechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border">
               <CardHeader>
-                <CardTitle>Deployment Best Practices</CardTitle>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li>Conduct site survey before installation</li>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct RF site survey before installation</li>
                   <li>Ensure proper anchor placement for optimal coverage</li>
                   <li>Calibrate the system after installation</li>
                   <li>Implement redundancy for critical applications</li>
@@ -443,12 +455,12 @@ export default function UWBTechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border">
               <CardHeader>
-                <CardTitle>Common Challenges</CardTitle>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc pl-5 space-y-2">
+                <ul className="list-disc pl-5 space-y-1">
                   <li>Higher infrastructure cost compared to other technologies</li>
                   <li>Complex installation and calibration</li>
                   <li>Potential interference from dense metal environments</li>
@@ -459,19 +471,20 @@ export default function UWBTechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Technology Comparison</h2>
+        {/* Technology Comparison */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead>
-                <tr className="bg-muted">
-                  <th className="border px-4 py-2 text-left">Feature</th>
-                  <th className="border px-4 py-2 text-left">UWB</th>
-                  <th className="border px-4 py-2 text-left">BLE</th>
-                  <th className="border px-4 py-2 text-left">Wi-Fi</th>
-                  <th className="border px-4 py-2 text-left">RFID</th>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                  <th className="border px-4 py-2 text-left font-semibold">RFID</th>
                 </tr>
               </thead>
               <tbody>
@@ -532,28 +545,29 @@ export default function UWBTechnologyClientPage() {
               View all RTLS technologies →
             </Link>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Future Trends</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+        {/* Future Trends */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
               <CardHeader>
                 <CardTitle>Technological Advancements</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="list-disc pl-5 space-y-2">
                   <li>
-                    <span className="font-medium">Smartphone Integration:</span> Increasing adoption of UWB in
-                    smartphones and wearables, expanding potential applications
+                    <span className="font-medium">Enhanced Accuracy:</span> Advanced algorithms and techniques to
+                    achieve sub-centimeter accuracy in real-world environments
                   </li>
                   <li>
-                    <span className="font-medium">Miniaturization:</span> Smaller, more energy-efficient UWB chips
-                    enabling new form factors and use cases
+                    <span className="font-medium">Lower Power Consumption:</span> New UWB chipsets with significantly
+                    reduced power requirements
                   </li>
                   <li>
-                    <span className="font-medium">Enhanced Algorithms:</span> Advanced positioning algorithms to achieve
-                    sub-10 cm accuracy in complex environments
+                    <span className="font-medium">Improved Security:</span> Enhanced security features to prevent
+                    spoofing and jamming attacks
                   </li>
                   <li>
                     <span className="font-medium">Sensor Fusion:</span> Integration with other sensors (IMU, cameras)
@@ -562,23 +576,23 @@ export default function UWBTechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border">
               <CardHeader>
                 <CardTitle>Market Evolution</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="list-disc pl-5 space-y-2">
                   <li>
-                    <span className="font-medium">Cost Reduction:</span> Decreasing hardware costs as adoption increases
+                    <span className="font-medium">Smartphone Integration:</span> Increasing adoption of UWB in
+                    smartphones and wearables, expanding potential applications
+                  </li>
+                  <li>
+                    <span className="font-medium">Standardization:</span> Development of more robust standards for
+                    interoperability between different UWB systems
+                  </li>
+                  <li>
+                    <span className="font-medium">Lower Costs:</span> Decreasing hardware costs as adoption increases
                     and manufacturing scales
-                  </li>
-                  <li>
-                    <span className="font-medium">Industry Standardization:</span> Development of more robust standards
-                    for interoperability between different UWB systems
-                  </li>
-                  <li>
-                    <span className="font-medium">Hybrid Solutions:</span> Increasing integration of UWB with other
-                    technologies like BLE for comprehensive coverage
                   </li>
                   <li>
                     <span className="font-medium">Expanded Applications:</span> Growth in automotive, AR/VR, and smart
@@ -588,62 +602,38 @@ export default function UWBTechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="mt-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Learn More About UWB Technology</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-medium mb-2">Related Resources</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <Link
-                        href="/resources/uwb-positioning-tdoa-twr-explained"
-                        className="text-primary hover:underline"
-                      >
-                        UWB Positioning: TDoA & TWR Explained
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/ble-vs-uwb-choosing-right-rtls-technology"
-                        className="text-primary hover:underline"
-                      >
-                        BLE vs UWB: Choosing the Right RTLS Technology
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/resources/uwb-vs-optical-high-precision-tracking-comparison"
-                        className="text-primary hover:underline"
-                      >
-                        UWB vs Optical: High-Precision Tracking Comparison
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium mb-2">Expert Guidance</h3>
-                  <p className="mb-4">
-                    Need help determining if UWB is the right technology for your RTLS project? Our experts can provide
-                    personalized guidance based on your specific requirements.
-                  </p>
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                  >
-                    Request Expert Consultation
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+        {/* Learn More - Updated with real resource links from article-data.ts and removed Card component */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About UWB Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                {uwbRelatedArticles.map((article) => (
+                  <li key={article.slug}>
+                    <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
+                      {article.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">Need help determining if UWB is the right technology for your RTLS project?</p>
+              <p>RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.</p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
+              </Link>
+            </div>
+          </div>
+        </section>
+      </article>
     </div>
   )
 }
