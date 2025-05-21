@@ -7,8 +7,8 @@ export default function ResourceLayout({
 }: {
   children: React.ReactNode
 }) {
-  // We're setting showBreadcrumbs to false to disable the default breadcrumbs
-  // from the root layout, and then manually adding ResourceBreadcrumbs
+  // Disable the default breadcrumbs from PageLayout
+  // and manually add the ResourceBreadcrumbs component
   return (
     <PageLayout showBreadcrumbs={false}>
       <ResourceBreadcrumbs />
