@@ -1,37 +1,28 @@
 "use client"
 
-import { useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowLeft, Wifi, Building2, Hospital, ShoppingBag, Truck, Factory } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
+import Link from "next/link"
 import { getTechnologyRelatedArticles } from "@/lib/article-data"
 
 export default function WiFiTechnologyClientPage() {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  // Get WiFi-related articles from article-data.ts
-  const wifiRelatedArticles = getTechnologyRelatedArticles("wifi")
+  // Get WiFi-related articles for the related resources section
+  const wifiRelatedArticles = getTechnologyRelatedArticles("wifi").slice(0, 5)
 
   return (
-    <main className="bg-white pb-16">
-      <div className="container mx-auto px-4 py-12">
-        <Link href="/rtls-digital-twin" className="flex items-center text-blue-600 hover:text-blue-800 mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to RTLS + Digital Twin
-        </Link>
+    <div className="container mx-auto py-8 px-4">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">Wi-Fi Technology for RTLS</h1>
+          <p className="text-base text-muted-foreground">
+            Wi-Fi based RTLS leverages existing wireless network infrastructure to provide cost-effective indoor
+            positioning with 3-5 meter accuracy.
+          </p>
+        </header>
 
-        <div className="flex items-center mb-8">
-          <Wifi className="h-10 w-10 text-blue-600 mr-4" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            Wi-Fi Technology for RTLS
-          </h1>
-        </div>
-
+        {/* Overview and Key Specifications */}
         <section className="mb-12">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -41,187 +32,120 @@ export default function WiFiTechnologyClientPage() {
                 through signal strength measurements, fingerprinting, or round-trip time calculations. It offers a
                 practical solution for environments with existing Wi-Fi infrastructure.
               </p>
-              <p className="mb-4">
+              <p>
                 For RTLS applications, Wi-Fi typically achieves 3-5 meter accuracy in real-world environments, making it
                 suitable for zone-level tracking and presence detection.
               </p>
-              <div className="bg-blue-50 p-6 rounded-xl shadow-sm mt-6">
-                <h3 className="text-xl font-semibold mb-4">Key Specifications</h3>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4">
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Frequency:</span>
-                    <span>2.4 GHz and 5 GHz bands</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Range:</span>
-                    <span>30-50 meters (indoor)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Data Rate:</span>
-                    <span>Up to 9.6 Gbps (Wi-Fi 6)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Accuracy:</span>
-                    <span>3-5 meters (RSSI), 1-2 meters (RTT)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Power:</span>
-                    <span>Medium to high</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Battery Life:</span>
-                    <span>3 months to 2 years (tag dependent)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Cost:</span>
-                    <span>Low-Medium (leverages existing infrastructure)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="font-medium mr-2">Standards:</span>
-                    <span>IEEE 802.11 (a/b/g/n/ac/ax)</span>
-                  </li>
-                </ul>
-              </div>
             </div>
-            <div className="flex justify-center items-center">
-              <div className="relative w-full h-64 md:h-80">
-                <Image
-                  src="/images/wifi-positioning.png"
-                  alt="Wi-Fi Positioning System"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
+              <ul className="space-y-2">
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Frequency:</span>
+                  <span>2.4 GHz and 5 GHz bands</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Range:</span>
+                  <span>30-50 meters (indoor)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Data Rate:</span>
+                  <span>Up to 9.6 Gbps (Wi-Fi 6)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Typical Accuracy:</span>
+                  <span>3-5 meters (RSSI), 1-2 meters (RTT)</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>Medium to high</span>
+                </li>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Battery Life:</span>
+                  <span>3 months to 2 years (depending on tag type)</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
 
+        {/* How Wi-Fi Works */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">How Wi-Fi Works for RTLS</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">RSSI-Based Positioning</h3>
-              <p>
-                Wi-Fi devices measure the Received Signal Strength Indicator (RSSI) from multiple access points. Using
-                signal propagation models or fingerprinting techniques, the system estimates the device's position. This
-                approach leverages existing Wi-Fi infrastructure but is susceptible to environmental changes.
-              </p>
-            </div>
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Wi-Fi RTT (802.11mc/FTM)</h3>
-              <p>
-                Wi-Fi Round-Trip Time (RTT), also known as Fine Time Measurement (FTM), measures the time it takes for a
-                signal to travel from a device to an access point and back. This time-based approach provides better
-                accuracy than RSSI methods but requires compatible hardware supporting the 802.11mc protocol.
-              </p>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Fingerprinting</h3>
-              <p>
-                Wi-Fi fingerprinting creates a database of signal strength measurements at known locations throughout a
-                facility. When a device reports its observed signal strengths, the system compares them to the database
-                to determine the closest match. This method can achieve better accuracy than basic RSSI but requires
-                extensive calibration and maintenance.
-              </p>
-            </div>
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Triangulation</h3>
-              <p>
-                By measuring the signal from a device at multiple access points, Wi-Fi positioning can use triangulation
-                to calculate the device's location. This approach combines data from multiple sources to improve
-                accuracy beyond what a single measurement could provide, but still faces challenges from signal
-                reflection and interference.
-              </p>
-            </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">RSSI-Based Positioning</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Wi-Fi devices measure the Received Signal Strength Indicator (RSSI) from multiple access points. Using
+                  signal propagation models or fingerprinting techniques, the system estimates the device's position.
+                  This approach leverages existing Wi-Fi infrastructure but is susceptible to environmental changes.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Wi-Fi RTT (802.11mc/FTM)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  Wi-Fi Round-Trip Time (RTT), also known as Fine Time Measurement (FTM), measures the time it takes for
+                  a signal to travel from a device to an access point and back. This time-based approach provides better
+                  accuracy than RSSI methods but requires compatible hardware supporting the 802.11mc protocol.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Advantages & Limitations */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-green-50 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3 text-green-700">Advantages</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Leverages existing Wi-Fi infrastructure</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Lower deployment cost compared to dedicated RTLS</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Wide coverage area</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Compatible with standard Wi-Fi devices</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Supports both asset tracking and people tracking</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Dual-purpose infrastructure (data + location)</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Mature technology with widespread adoption</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  <span>Continuous improvement with new Wi-Fi standards</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-red-50 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3 text-red-700">Limitations</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Lower accuracy compared to UWB or BLE AoA</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Susceptible to environmental changes</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Higher power consumption for mobile devices</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Signal interference in crowded Wi-Fi environments</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Requires multiple access points for reliable positioning</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Fingerprinting requires regular maintenance</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Limited update rate compared to dedicated RTLS</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-2">✗</span>
-                  <span>Accuracy degrades in complex environments</span>
-                </li>
-              </ul>
-            </div>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Leverages existing Wi-Fi infrastructure</li>
+                  <li>Lower deployment cost compared to dedicated RTLS</li>
+                  <li>Wide coverage area</li>
+                  <li>Compatible with standard Wi-Fi devices</li>
+                  <li>Supports both asset tracking and people tracking</li>
+                  <li>Dual-purpose infrastructure (data + location)</li>
+                  <li>Mature technology with widespread adoption</li>
+                  <li>Continuous improvement with new Wi-Fi standards</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Lower accuracy compared to UWB or BLE AoA</li>
+                  <li>Susceptible to environmental changes</li>
+                  <li>Higher power consumption for mobile devices</li>
+                  <li>Signal interference in crowded Wi-Fi environments</li>
+                  <li>Requires multiple access points for reliable positioning</li>
+                  <li>Fingerprinting requires regular maintenance</li>
+                  <li>Limited update rate compared to dedicated RTLS</li>
+                  <li>Accuracy degrades in complex environments</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Industry Applications */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
-          <Tabs defaultValue="commercial">
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto">
+          <Tabs defaultValue="commercial" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
               <TabsTrigger value="commercial" className="flex flex-col py-2 h-auto">
                 <Building2 className="h-5 w-5 mb-1" />
                 Commercial
@@ -243,16 +167,25 @@ export default function WiFiTechnologyClientPage() {
                 Manufacturing
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="commercial" className="mt-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">Commercial Building Applications</h3>
-                  <p className="mb-4">
+            <TabsContent value="commercial" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Commercial Building Applications</CardTitle>
+                  <CardDescription>
+                    Wi-Fi RTLS enables space utilization analysis and visitor management in commercial buildings.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
                     Commercial buildings leverage Wi-Fi RTLS for space utilization analysis, visitor wayfinding, and
                     employee hot-desking solutions. The technology provides valuable insights into how spaces are used,
                     helping optimize real estate investments.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <p>
+                    Wi-Fi positioning also supports building automation systems, adjusting lighting, HVAC, and security
+                    based on occupancy patterns detected through the wireless network.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -277,16 +210,25 @@ export default function WiFiTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="healthcare" className="mt-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">Healthcare Applications</h3>
-                  <p className="mb-4">
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    Wi-Fi RTLS supports asset tracking and workflow optimization in healthcare facilities.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
                     Healthcare facilities use Wi-Fi RTLS to track mobile equipment, monitor patient flow, and analyze
                     staff workflows. The technology leverages existing wireless infrastructure to provide zone-level
                     location data.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <p>
+                    Wi-Fi positioning also supports patient wayfinding applications and visitor management systems,
+                    improving the overall hospital experience while providing valuable operational data.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -311,15 +253,25 @@ export default function WiFiTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="retail" className="mt-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">Retail Applications</h3>
-                  <p className="mb-4">
+            <TabsContent value="retail" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Retail Applications</CardTitle>
+                  <CardDescription>
+                    Wi-Fi RTLS provides customer analytics and marketing insights in retail environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
                     Retailers use Wi-Fi positioning to analyze customer movement patterns, dwell times, and visit
                     frequencies. This data helps optimize store layouts, staffing, and promotional placements.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <p>
+                    Wi-Fi RTLS also supports proximity marketing applications, delivering targeted promotions to
+                    customers based on their location within the store, and provides analytics on customer engagement
+                    with different departments.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -344,16 +296,25 @@ export default function WiFiTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="logistics" className="mt-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">Logistics Applications</h3>
-                  <p className="mb-4">
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Logistics Applications</CardTitle>
+                  <CardDescription>
+                    Wi-Fi RTLS enables asset tracking and workflow optimization in warehouses and distribution centers.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
                     Logistics operations use Wi-Fi positioning to track assets, vehicles, and personnel within
                     warehouses and distribution centers. The technology provides zone-level location data to optimize
                     workflows and resource allocation.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <p>
+                    Wi-Fi RTLS also supports yard management applications, tracking the location of trailers and
+                    containers in outdoor areas covered by the wireless network.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -378,16 +339,25 @@ export default function WiFiTechnologyClientPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="manufacturing" className="mt-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-semibold mb-2">Manufacturing Applications</h3>
-                  <p className="mb-4">
+            <TabsContent value="manufacturing" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Manufacturing Applications</CardTitle>
+                  <CardDescription>
+                    Wi-Fi RTLS supports workflow analysis and asset tracking in manufacturing environments.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
                     Manufacturing facilities use Wi-Fi positioning to track mobile equipment, monitor work-in-progress
                     items, and analyze production workflows. The technology provides valuable insights into process
                     efficiency and bottlenecks.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <p>
+                    Wi-Fi RTLS also supports worker safety applications, monitoring access to restricted areas and
+                    providing location data for emergency response situations.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
                     <div>
                       <h4 className="font-medium mb-2">Common Use Cases:</h4>
                       <ul className="list-disc pl-5 space-y-1">
@@ -415,146 +385,114 @@ export default function WiFiTechnologyClientPage() {
           </Tabs>
         </section>
 
+        {/* Mini Case Studies */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">University Campus Navigation</h3>
-              <p className="text-gray-500 mb-2">Large Public University</p>
-              <p className="mb-4">
-                A large public university with over 50,000 students implemented a Wi-Fi-based indoor positioning system
-                across their 200-acre campus. The system leveraged existing wireless infrastructure to provide
-                wayfinding services through a mobile app.
-              </p>
-              <p>
-                <strong>Results:</strong> The implementation improved the student experience, particularly for new
-                students and visitors, while providing valuable data on space utilization that helped optimize classroom
-                scheduling and identify underutilized facilities. The university reported a 35% reduction in late
-                arrivals to classes and a 22% improvement in facility utilization.
-              </p>
-            </div>
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Hospital Equipment Tracking</h3>
-              <p className="text-gray-500 mb-2">Regional Medical Center</p>
-              <p className="mb-4">
-                A 450-bed regional medical center implemented Wi-Fi RTLS to track 3,000 mobile medical devices across
-                their facility. The system utilized the hospital's existing wireless network infrastructure,
-                supplemented with additional access points for better coverage.
-              </p>
-              <p>
-                <strong>Results:</strong> The implementation reduced equipment search time by 65% and improved
-                utilization rates by 22%. The hospital achieved ROI within 18 months through reduced equipment purchases
-                and improved staff productivity. Nurses saved an average of 30 minutes per shift previously spent
-                searching for equipment.
-              </p>
-            </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>University Campus Navigation</CardTitle>
+                <CardDescription>Large Public University</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A large public university with over 50,000 students implemented a Wi-Fi-based indoor positioning
+                  system across their 200-acre campus. The system leveraged existing wireless infrastructure to provide
+                  wayfinding services through a mobile app.
+                </p>
+                <p>
+                  The implementation improved the student experience, particularly for new students and visitors, while
+                  providing valuable data on space utilization that helped optimize classroom scheduling and identify
+                  underutilized facilities. The university reported a 35% reduction in late arrivals to classes.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Hospital Equipment Tracking</CardTitle>
+                <CardDescription>Regional Medical Center</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A 450-bed regional medical center implemented Wi-Fi RTLS to track 3,000 mobile medical devices across
+                  their facility. The system utilized the hospital's existing wireless network infrastructure,
+                  supplemented with additional access points for better coverage.
+                </p>
+                <p>
+                  The implementation reduced equipment search time by 65% and improved utilization rates by 22%. The
+                  hospital achieved ROI within 18 months through reduced equipment purchases and improved staff
+                  productivity. Nurses saved an average of 30 minutes per shift previously spent searching for
+                  equipment.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Implementation Considerations */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Infrastructure Requirements</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Wi-Fi access points (typically 1 per 1,000-2,000 sq ft)</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Wi-Fi tags for non-Wi-Fi assets</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Network infrastructure</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Location engine software</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Application platform</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Optional: calibration tools for fingerprinting</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Deployment Best Practices</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Conduct RF site survey before installation</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Optimize access point placement for location</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Create and maintain fingerprinting database</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Implement proper security measures</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Balance location accuracy with network performance</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Regularly update calibration as environment changes</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Common Challenges</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Environmental changes affecting signal propagation</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Interference from other Wi-Fi networks</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Balancing network performance with location needs</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Power consumption for mobile devices</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Maintaining fingerprinting database</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Accuracy limitations compared to dedicated RTLS</span>
-                </li>
-              </ul>
-            </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Wi-Fi access points (typically 1 per 1,000-2,000 sq ft)</li>
+                  <li>Wi-Fi tags for non-Wi-Fi assets</li>
+                  <li>Network infrastructure</li>
+                  <li>Location engine software</li>
+                  <li>Application platform</li>
+                  <li>Optional: calibration tools for fingerprinting</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Conduct RF site survey before installation</li>
+                  <li>Optimize access point placement for location</li>
+                  <li>Create and maintain fingerprinting database</li>
+                  <li>Implement proper security measures</li>
+                  <li>Balance location accuracy with network performance</li>
+                  <li>Regularly update calibration as environment changes</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Environmental changes affecting signal propagation</li>
+                  <li>Interference from other Wi-Fi networks</li>
+                  <li>Balancing network performance with location needs</li>
+                  <li>Power consumption for mobile devices</li>
+                  <li>Maintaining fingerprinting database</li>
+                  <li>Accuracy limitations compared to dedicated RTLS</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
+        {/* Technology Comparison */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="border px-4 py-2 text-left">Feature</th>
-                  <th className="border px-4 py-2 text-left">Wi-Fi</th>
-                  <th className="border px-4 py-2 text-left">BLE</th>
-                  <th className="border px-4 py-2 text-left">UWB</th>
-                  <th className="border px-4 py-2 text-left">RFID</th>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
+                  <th className="border px-4 py-2 text-left font-semibold">RFID</th>
                 </tr>
               </thead>
               <tbody>
@@ -611,142 +549,130 @@ export default function WiFiTechnologyClientPage() {
             </table>
           </div>
           <div className="text-center mt-4">
-            <Link href="/rtls-digital-twin/technologies" className="text-blue-600 hover:underline">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
               View all RTLS technologies →
             </Link>
           </div>
         </section>
 
+        {/* Future Trends */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Technological Advancements</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Wi-Fi 6E and Wi-Fi 7:</strong> Expanded spectrum and higher bandwidth improving positioning
-                    capabilities
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Enhanced RTT Support:</strong> Wider adoption of 802.11mc/FTM for improved accuracy
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>AI-Enhanced Positioning:</strong> Machine learning algorithms to improve accuracy and adapt
-                    to environmental changes
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Sensor Fusion:</strong> Integration with other sensors (IMU, BLE) for improved accuracy and
-                    context awareness
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Market Evolution</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Integrated Solutions:</strong> Wi-Fi vendors incorporating location capabilities as standard
-                    features
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Hybrid Systems:</strong> Increasing integration of Wi-Fi with other technologies like BLE
-                    for comprehensive coverage
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Cloud-Based Processing:</strong> Shift toward cloud processing of location data for improved
-                    scalability
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>
-                    <strong>Privacy-Focused Design:</strong> Enhanced security and privacy features to address growing
-                    concerns about location tracking
-                  </span>
-                </li>
-              </ul>
-            </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Wi-Fi 6E and Wi-Fi 7:</span> Expanded spectrum and higher bandwidth
+                    improving positioning capabilities
+                  </li>
+                  <li>
+                    <span className="font-medium">Enhanced RTT Support:</span> Wider adoption of 802.11mc/FTM for
+                    improved accuracy
+                  </li>
+                  <li>
+                    <span className="font-medium">AI-Enhanced Positioning:</span> Machine learning algorithms to improve
+                    accuracy and adapt to environmental changes
+                  </li>
+                  <li>
+                    <span className="font-medium">Sensor Fusion:</span> Integration with other sensors (IMU, BLE) for
+                    improved accuracy and context awareness
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Integrated Solutions:</span> Wi-Fi vendors incorporating location
+                    capabilities as standard features
+                  </li>
+                  <li>
+                    <span className="font-medium">Hybrid Systems:</span> Increasing integration of Wi-Fi with other
+                    technologies like BLE for comprehensive coverage
+                  </li>
+                  <li>
+                    <span className="font-medium">Cloud-Based Processing:</span> Shift toward cloud processing of
+                    location data for improved scalability
+                  </li>
+                  <li>
+                    <span className="font-medium">Privacy-Focused Design:</span> Enhanced security and privacy features
+                    to address growing concerns about location tracking
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        <section className="mb-12">
-          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl">
-            <h2 className="text-2xl font-semibold mb-4">Learn More About Wi-Fi Technology</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-medium mb-2">Related Resources</h3>
-                <ul className="space-y-2">
-                  {wifiRelatedArticles.length > 0 ? (
-                    wifiRelatedArticles.slice(0, 3).map((article, index) => (
-                      <li key={index}>
-                        <Link href={`/resources/${article.slug}`} className="text-blue-600 hover:underline">
-                          {article.title}
-                        </Link>
-                      </li>
-                    ))
-                  ) : (
-                    <>
-                      <li>
-                        <Link
-                          href="/resources/wifi-positioning-rssi-rtt-fingerprinting-explained"
-                          className="text-blue-600 hover:underline"
-                        >
-                          Wi-Fi Positioning: RSSI, RTT & Fingerprinting Explained
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/resources/wifi-vs-ble-rtls-technology-comparison"
-                          className="text-blue-600 hover:underline"
-                        >
-                          Wi-Fi vs BLE: RTLS Technology Comparison
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/resources/wifi-rtt-vs-ble-best-indoor-navigation"
-                          className="text-blue-600 hover:underline"
-                        >
-                          Wi-Fi RTT vs BLE: Best Choice for Indoor Navigation
-                        </Link>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium mb-2">Expert Guidance</h3>
-                <p className="mb-4">
-                  Need help determining if Wi-Fi is the right technology for your RTLS project? Our experts can provide
-                  personalized guidance based on your specific requirements.
-                </p>
-                <Link href="/contact">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">Request Expert Consultation</Button>
-                </Link>
-              </div>
+        {/* Learn More */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About Wi-Fi Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                {wifiRelatedArticles.length > 0 ? (
+                  wifiRelatedArticles.map((article) => (
+                    <li key={article.slug}>
+                      <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
+                        {article.title}
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <>
+                    <li>
+                      <Link
+                        href="/resources/wifi-positioning-rssi-rtt-fingerprinting-explained"
+                        className="text-primary hover:underline"
+                      >
+                        Wi-Fi Positioning: RSSI, RTT & Fingerprinting Explained
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/wifi-vs-ble-rtls-technology-comparison"
+                        className="text-primary hover:underline"
+                      >
+                        Wi-Fi vs BLE: RTLS Technology Comparison
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/wifi-rtt-vs-ble-best-indoor-navigation"
+                        className="text-primary hover:underline"
+                      >
+                        Wi-Fi RTT vs BLE: Best Choice for Indoor Navigation
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">Need help determining if Wi-Fi is the right technology for your RTLS project?</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
+              </Link>
             </div>
           </div>
         </section>
-      </div>
-    </main>
+      </article>
+    </div>
   )
 }
