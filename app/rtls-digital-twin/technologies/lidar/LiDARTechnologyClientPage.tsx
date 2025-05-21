@@ -659,14 +659,6 @@ export default function LiDARTechnologyClientPage() {
                     </li>
                     <li>
                       <Link
-                        href="/resources/lidar-rtls-warehouse-30-minute-forklift-savings"
-                        className="text-primary hover:underline"
-                      >
-                        LiDAR RTLS: 30 Min/Day Forklift Savings in Warehousing
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
                         href="/resources/visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning"
                         className="text-primary hover:underline"
                       >
