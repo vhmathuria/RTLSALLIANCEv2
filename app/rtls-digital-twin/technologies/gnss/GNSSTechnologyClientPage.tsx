@@ -1,803 +1,663 @@
 "use client"
-import Image from "next/image"
-import Link from "next/link"
-import {
-  ArrowRight,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Navigation,
-  Satellite,
-  Clock,
-  Zap,
-  Building,
-  Ruler,
-  Radio,
-  Smartphone,
-  Server,
-  Layers,
-  Compass,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
+import Link from "next/link"
+import { getTechnologyRelatedArticles } from "@/lib/article-data"
 import { useScrollToTop } from "@/hooks/useScrollToTop"
 
 export default function GNSSTechnologyClientPage() {
   useScrollToTop()
 
+  // Get GNSS-related articles for the related resources section
+  const gnssRelatedArticles = getTechnologyRelatedArticles("gps").slice(0, 5)
+
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          <h1 className="text-3xl font-bold mb-6">GNSS Technology for Real-Time Location Systems</h1>
+    <div className="container mx-auto py-8 px-4">
+      <article>
+        {/* Page Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold mb-4">Global Navigation Satellite System (GNSS) Technology</h1>
+          <p className="text-base text-muted-foreground">
+            Global Navigation Satellite Systems (GNSS) provide worldwide positioning capabilities through satellite
+            constellations, enabling outdoor location tracking with meter-level accuracy.
+          </p>
+        </header>
 
-          <div className="prose max-w-none">
-            <p className="lead text-xl text-gray-700 mb-8">
-              Global Navigation Satellite Systems (GNSS) provide worldwide positioning capabilities through satellite
-              constellations, enabling outdoor location tracking with meter-level accuracy for a wide range of
-              applications.
-            </p>
-
-            <div className="relative h-80 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/placeholder-yj8h8.png"
-                alt="GNSS satellite constellations providing global positioning"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">What is GNSS Technology?</h2>
-            <p>
-              Global Navigation Satellite Systems (GNSS) is an umbrella term that encompasses various satellite
-              navigation systems operated by different countries and regions. The most well-known GNSS is the Global
-              Positioning System (GPS) operated by the United States, but there are several other systems:
-            </p>
-
-            <ul className="list-disc pl-6 mb-6">
-              <li>
-                <strong>GPS (United States)</strong> - The original and most widely used GNSS with 31+ operational
-                satellites
-              </li>
-              <li>
-                <strong>GLONASS (Russia)</strong> - 24+ satellites providing global coverage
-              </li>
-              <li>
-                <strong>Galileo (European Union)</strong> - Europe's civilian GNSS with 30 planned satellites
-              </li>
-              <li>
-                <strong>BeiDou/Compass (China)</strong> - 35+ satellites providing global service
-              </li>
-              <li>
-                <strong>NavIC (India)</strong> - Regional navigation system with 7 satellites
-              </li>
-              <li>
-                <strong>QZSS (Japan)</strong> - Regional system enhancing GPS in East Asia
-              </li>
-            </ul>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">How GNSS Works for RTLS</h2>
-
-            <div className="bg-blue-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4">Core Principles of GNSS Positioning</h3>
+        {/* Overview and Key Specifications */}
+        <section className="mb-12">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
               <p className="mb-4">
-                GNSS receivers determine their position through a process called trilateration, which involves measuring
-                the time it takes for signals to travel from multiple satellites to the receiver:
+                GNSS is an umbrella term encompassing various satellite navigation systems operated by different
+                countries, including GPS (United States), GLONASS (Russia), Galileo (European Union), BeiDou (China),
+                NavIC (India), and QZSS (Japan).
               </p>
-              <ol className="list-decimal pl-6 mb-4">
-                <li>
-                  <strong>Signal Transmission</strong> - Satellites continuously broadcast signals containing their
-                  position and precise time from atomic clocks
+              <p>
+                These systems provide global positioning through a network of satellites that transmit signals
+                containing time and location data. Receivers on Earth use these signals to calculate their position
+                through a process called trilateration.
+              </p>
+            </div>
+            <div className="border rounded-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
+              <ul className="space-y-2">
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Coverage:</span>
+                  <span>Global (outdoor areas with clear sky view)</span>
                 </li>
-                <li>
-                  <strong>Signal Reception</strong> - GNSS receivers capture these signals
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Accuracy:</span>
+                  <span>2-10 meters (standard), 1-3cm (RTK)</span>
                 </li>
-                <li>
-                  <strong>Time Calculation</strong> - The receiver calculates the time difference between when the
-                  signal was sent and when it was received
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Update Rate:</span>
+                  <span>1-20 Hz typical</span>
                 </li>
-                <li>
-                  <strong>Distance Determination</strong> - This time difference is converted to distance (signal travel
-                  time × speed of light)
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Power Consumption:</span>
+                  <span>Medium to high (50-150 mW typical)</span>
                 </li>
-                <li>
-                  <strong>Position Calculation</strong> - With distances from at least four satellites, the receiver can
-                  determine its 3D position (latitude, longitude, altitude) and time
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Infrastructure:</span>
+                  <span>No local infrastructure required</span>
                 </li>
-              </ol>
+                <li className="flex">
+                  <span className="font-medium min-w-[140px]">Frequency Bands:</span>
+                  <span>L1 (1575.42 MHz), L2 (1227.60 MHz), L5 (1176.45 MHz)</span>
+                </li>
+              </ul>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <Satellite className="mr-2 h-5 w-5 text-blue-600" />
-                    GNSS Signal Components
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Carrier Wave</strong> - High-frequency radio waves
-                    </li>
-                    <li>
-                      <strong>Ranging Code</strong> - Unique patterns for satellite identification
-                    </li>
-                    <li>
-                      <strong>Navigation Message</strong> - Satellite ephemeris, clock corrections, almanac
-                    </li>
-                    <li>
-                      <strong>Multiple Frequencies</strong> - L1, L2, L5 bands for improved accuracy
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <AlertTriangle className="mr-2 h-5 w-5 text-amber-600" />
-                    Error Sources
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Atmospheric Delays</strong> - Ionospheric and tropospheric effects
-                    </li>
-                    <li>
-                      <strong>Multipath</strong> - Signal reflections from buildings and terrain
-                    </li>
-                    <li>
-                      <strong>Satellite Clock Errors</strong> - Small inaccuracies in satellite clocks
-                    </li>
-                    <li>
-                      <strong>Orbital Errors</strong> - Inaccuracies in satellite position data
-                    </li>
-                    <li>
-                      <strong>Receiver Noise</strong> - Electronic noise in the receiver
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">GNSS for Real-Time Location Systems</h2>
-            <p className="mb-4">
-              When implemented as part of an RTLS solution, GNSS technology offers several key capabilities and
-              integration points:
-            </p>
-
-            <div className="relative h-64 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/placeholder-gwyj5.png"
-                alt="GNSS integration with IoT and cloud services"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Smartphone className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Device Integration</h3>
-                </div>
-                <p className="text-sm">
-                  GNSS receivers embedded in tracking devices, vehicles, smartphones, and wearables
-                </p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Radio className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Data Transmission</h3>
-                </div>
-                <p className="text-sm">
-                  Position data transmitted via cellular, LoRaWAN, or other communication networks
-                </p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Server className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Backend Processing</h3>
-                </div>
-                <p className="text-sm">Cloud platforms for data storage, analysis, and visualization</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Advantages and Limitations</h2>
-
-            <Tabs defaultValue="advantages" className="mb-8">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="advantages">Advantages</TabsTrigger>
-                <TabsTrigger value="limitations">Limitations</TabsTrigger>
-              </TabsList>
-              <TabsContent value="advantages" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Global Coverage</strong> - Works anywhere with clear sky view, requiring no local
-                      infrastructure
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Mature Technology</strong> - Well-established, reliable systems with widespread adoption
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Cost-Effective</strong> - Receivers are inexpensive and widely available
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>No Subscription Fees</strong> - Basic GNSS services are free to use
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Multi-Constellation Support</strong> - Modern receivers can use multiple GNSS systems
-                      simultaneously for improved performance
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-              <TabsContent value="limitations" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Indoor Performance</strong> - Signals are blocked or severely attenuated by buildings and
-                      structures
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Urban Canyon Effects</strong> - Tall buildings can block signals and cause multipath
-                      errors
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Standard Accuracy Limitations</strong> - Typical accuracy of 3-5 meters may be
-                      insufficient for precise applications
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Power Consumption</strong> - Continuous GNSS operation can drain battery life in mobile
-                      devices
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Signal Acquisition Time</strong> - Cold starts can take 30+ seconds to acquire position
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-            </Tabs>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">GNSS Accuracy Enhancement Techniques</h2>
-            <p className="mb-4">Several techniques can improve the accuracy of standard GNSS positioning:</p>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Technique</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Typical Accuracy</TableHead>
-                    <TableHead>Applications</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">SBAS</TableCell>
-                    <TableCell>
-                      Satellite-Based Augmentation Systems (WAAS, EGNOS, MSAS) provide correction data via geostationary
-                      satellites
-                    </TableCell>
-                    <TableCell>1-3 meters</TableCell>
-                    <TableCell>Aviation, maritime, consumer navigation</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">DGPS</TableCell>
-                    <TableCell>
-                      Differential GPS uses ground-based reference stations to broadcast correction data
-                    </TableCell>
-                    <TableCell>0.5-2 meters</TableCell>
-                    <TableCell>Precision agriculture, surveying, marine navigation</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">RTK</TableCell>
-                    <TableCell>
-                      Real-Time Kinematic positioning uses carrier phase measurements with local base stations
-                    </TableCell>
-                    <TableCell>1-2 centimeters</TableCell>
-                    <TableCell>Surveying, precision agriculture, construction</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">PPP</TableCell>
-                    <TableCell>Precise Point Positioning uses precise satellite orbit and clock data</TableCell>
-                    <TableCell>10-20 centimeters</TableCell>
-                    <TableCell>Offshore operations, remote areas</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">A-GNSS</TableCell>
-                    <TableCell>Assisted GNSS uses cellular network data to speed up acquisition</TableCell>
-                    <TableCell>3-5 meters</TableCell>
-                    <TableCell>Smartphones, emergency services</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Implementation Considerations</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Hardware Selection</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Receiver Type</strong> - Single or multi-frequency, multi-constellation support
-                    </li>
-                    <li>
-                      <strong>Antenna Quality</strong> - Critical for signal reception quality
-                    </li>
-                    <li>
-                      <strong>Form Factor</strong> - Size, weight, and power constraints
-                    </li>
-                    <li>
-                      <strong>Environmental Durability</strong> - IP rating for outdoor use
-                    </li>
-                    <li>
-                      <strong>Integration Capabilities</strong> - Communication interfaces (UART, I2C, SPI)
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Software & Integration</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Data Formats</strong> - NMEA 0183, proprietary protocols
-                    </li>
-                    <li>
-                      <strong>Update Rate</strong> - Position refresh frequency (1-20 Hz typical)
-                    </li>
-                    <li>
-                      <strong>Filtering Algorithms</strong> - Kalman filters for smoother tracking
-                    </li>
-                    <li>
-                      <strong>Map Matching</strong> - Aligning positions to known routes/roads
-                    </li>
-                    <li>
-                      <strong>Hybrid Positioning</strong> - Integration with other sensors
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Key Industry Applications</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Fleet Management</h3>
-                <p className="text-sm mb-3">
-                  Real-time tracking of vehicles, route optimization, and driver behavior monitoring
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>High adoption rate</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Asset Tracking</h3>
-                <p className="text-sm mb-3">
-                  Monitoring high-value equipment, containers, and shipments across global supply chains
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Growing rapidly</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Precision Agriculture</h3>
-                <p className="text-sm mb-3">
-                  Automated guidance for farm equipment, variable rate application, and field mapping
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>High ROI potential</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Construction</h3>
-                <p className="text-sm mb-3">Equipment tracking, site monitoring, and machine control systems</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Increasing adoption</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Emergency Services</h3>
-                <p className="text-sm mb-3">Dispatch optimization, personnel tracking, and incident location</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Critical application</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Outdoor Recreation</h3>
-                <p className="text-sm mb-3">Hiking, cycling, and adventure sports tracking and safety applications</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Consumer growth</span>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends in GNSS Technology</h2>
-
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4">Emerging Developments</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold mb-2">Multi-Frequency Receivers</h4>
-                  <p className="text-sm mb-4">
-                    Increasing adoption of dual and triple-frequency receivers in consumer devices, improving accuracy
-                    and resilience
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Advanced Anti-Jamming</h4>
-                  <p className="text-sm mb-4">
-                    New techniques to protect against signal interference and spoofing attacks
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Miniaturization</h4>
-                  <p className="text-sm">
-                    Smaller, more power-efficient receivers enabling new wearable and IoT applications
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-2">Satellite Modernization</h4>
-                  <p className="text-sm mb-4">
-                    Next-generation satellites with improved signals, accuracy, and reliability
-                  </p>
-
-                  <h4 className="font-semibold mb-2">Precise Point Positioning (PPP)</h4>
-                  <p className="text-sm mb-4">
-                    Democratization of centimeter-level accuracy without local base stations
-                  </p>
-
-                  <h4 className="font-semibold mb-2">AI Integration</h4>
-                  <p className="text-sm">
-                    Machine learning algorithms improving position estimation in challenging environments
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Comparison with Other RTLS Technologies</h2>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Feature</TableHead>
-                    <TableHead>GNSS</TableHead>
-                    <TableHead>UWB</TableHead>
-                    <TableHead>BLE</TableHead>
-                    <TableHead>Wi-Fi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Typical Accuracy</TableCell>
-                    <TableCell>
-                      3-5 meters (standard)
-                      <br />
-                      1-3cm (RTK)
-                    </TableCell>
-                    <TableCell>10-30 cm</TableCell>
-                    <TableCell>1-3 meters</TableCell>
-                    <TableCell>3-15 meters</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Indoor Performance</TableCell>
-                    <TableCell>Poor</TableCell>
-                    <TableCell>Excellent</TableCell>
-                    <TableCell>Good</TableCell>
-                    <TableCell>Good</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Outdoor Performance</TableCell>
-                    <TableCell>Excellent</TableCell>
-                    <TableCell>Good</TableCell>
-                    <TableCell>Fair</TableCell>
-                    <TableCell>Fair</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Range</TableCell>
-                    <TableCell>Global</TableCell>
-                    <TableCell>10-100 meters</TableCell>
-                    <TableCell>10-50 meters</TableCell>
-                    <TableCell>30-100 meters</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Power Consumption</TableCell>
-                    <TableCell>High</TableCell>
-                    <TableCell>Medium</TableCell>
-                    <TableCell>Low</TableCell>
-                    <TableCell>Medium</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Infrastructure</TableCell>
-                    <TableCell>None required</TableCell>
-                    <TableCell>Anchors needed</TableCell>
-                    <TableCell>Beacons needed</TableCell>
-                    <TableCell>Access points</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Implementation Best Practices</h2>
-
-            <div className="space-y-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Conduct Site Survey</h3>
-                <p className="text-sm">
-                  Assess the deployment environment for potential signal obstructions, multipath issues, and sky
-                  visibility. Identify areas where GNSS performance may be compromised.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Select Appropriate Hardware</h3>
-                <p className="text-sm">
-                  Choose receivers and antennas based on accuracy requirements, environmental conditions, and power
-                  constraints. Consider multi-constellation support for improved reliability.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Implement Hybrid Solutions</h3>
-                <p className="text-sm">
-                  Combine GNSS with complementary technologies like inertial sensors, cellular positioning, or Wi-Fi for
-                  continuous tracking in GNSS-challenged environments.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Optimize Power Management</h3>
-                <p className="text-sm">
-                  Implement intelligent duty cycling, assisted GNSS, and context-aware positioning to extend battery
-                  life in mobile applications.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border-l-4 border-blue-600">
-                <h3 className="font-semibold mb-2">Apply Filtering and Smoothing</h3>
-                <p className="text-sm">
-                  Use Kalman filters and other algorithms to reduce position noise and improve tracking consistency,
-                  especially in challenging environments.
-                </p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
-            <p className="mb-4">
-              GNSS technology provides a robust foundation for outdoor real-time location systems with global coverage
-              and no infrastructure requirements. While it faces limitations in indoor and urban canyon environments,
-              its integration with complementary technologies and ongoing advancements continue to expand its
-              capabilities and applications.
-            </p>
-            <p className="mb-4">
-              For organizations implementing RTLS solutions, GNSS offers a mature, cost-effective option for outdoor
-              tracking needs. The selection of appropriate hardware, software integration approaches, and complementary
-              technologies is critical to maximizing the benefits of GNSS-based positioning systems.
-            </p>
-            <p>
-              As satellite systems continue to modernize and receiver technology advances, GNSS will remain a
-              cornerstone technology in the RTLS ecosystem, providing essential outdoor positioning capabilities for a
-              wide range of applications.
-            </p>
           </div>
-        </div>
+        </section>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">GNSS Technology Overview</h3>
+        {/* How GNSS Works */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">How GNSS Works for RTLS</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Trilateration Positioning</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  GNSS receivers determine position by measuring the time it takes for signals to travel from multiple
+                  satellites to the receiver. Each satellite broadcasts its position and precise time from atomic
+                  clocks. The receiver calculates the distance to each satellite based on signal travel time, and with
+                  signals from at least four satellites, determines its 3D position (latitude, longitude, altitude) and
+                  time.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">RTLS Integration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  For RTLS applications, GNSS receivers are integrated into tracking devices that transmit their
+                  position to a central system via cellular, LoRaWAN, or other communication networks. This enables
+                  real-time tracking of assets, vehicles, and personnel in outdoor environments. Advanced systems
+                  combine GNSS with other sensors for improved accuracy and indoor-outdoor transitions.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <Building className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Infrastructure</h4>
-                  <p className="text-sm text-gray-600">Satellite-based (no local infrastructure)</p>
-                </div>
-              </div>
+        {/* Advantages & Limitations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Advantages & Limitations</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Global coverage with no local infrastructure required</li>
+                  <li>Mature, well-established technology with widespread adoption</li>
+                  <li>No subscription fees for basic GNSS services</li>
+                  <li>Receivers are relatively inexpensive and widely available</li>
+                  <li>Modern receivers can use multiple GNSS systems simultaneously</li>
+                  <li>Ideal for outdoor tracking of vehicles and high-value assets</li>
+                  <li>Seamless tracking across large geographic areas</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Poor or no performance indoors and in urban canyons</li>
+                  <li>Signal can be blocked by buildings, dense foliage, and terrain</li>
+                  <li>Standard accuracy (3-5 meters) may be insufficient for precise applications</li>
+                  <li>Susceptible to multipath errors from signal reflections</li>
+                  <li>Relatively high power consumption compared to some RTLS technologies</li>
+                  <li>Signal acquisition can take 30+ seconds from cold start</li>
+                  <li>Vulnerable to jamming and spoofing attacks</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Ruler className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Accuracy Range</h4>
-                  <p className="text-sm text-gray-600">2-10 meters typical</p>
-                </div>
-              </div>
+        {/* Industry Applications */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Industry Applications</h2>
+          <Tabs defaultValue="logistics" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto mb-4">
+              <TabsTrigger value="logistics" className="flex flex-col py-2 h-auto">
+                <Truck className="h-5 w-5 mb-1" />
+                Logistics
+              </TabsTrigger>
+              <TabsTrigger value="agriculture" className="flex flex-col py-2 h-auto">
+                <Factory className="h-5 w-5 mb-1" />
+                Agriculture
+              </TabsTrigger>
+              <TabsTrigger value="construction" className="flex flex-col py-2 h-auto">
+                <Building2 className="h-5 w-5 mb-1" />
+                Construction
+              </TabsTrigger>
+              <TabsTrigger value="retail" className="flex flex-col py-2 h-auto">
+                <ShoppingBag className="h-5 w-5 mb-1" />
+                Retail
+              </TabsTrigger>
+              <TabsTrigger value="healthcare" className="flex flex-col py-2 h-auto">
+                <Hospital className="h-5 w-5 mb-1" />
+                Healthcare
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="logistics" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Logistics & Transportation Applications</CardTitle>
+                  <CardDescription>
+                    GNSS technology enables efficient fleet management and supply chain visibility.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In logistics and transportation, GNSS is the foundation of fleet management systems, providing
+                    real-time location tracking of vehicles across vast geographic areas. This enables route
+                    optimization, delivery time estimation, and efficient dispatch operations.
+                  </p>
+                  <p>
+                    For supply chain management, GNSS tracking of containers, trailers, and high-value shipments
+                    provides end-to-end visibility and security. The technology also supports geofencing applications
+                    for automated notifications when assets enter or leave designated areas.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Fleet tracking and management</li>
+                        <li>Route optimization and navigation</li>
+                        <li>Delivery time estimation</li>
+                        <li>Container and trailer tracking</li>
+                        <li>Cold chain monitoring with location</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Reduced fuel consumption (10-15% typical)</li>
+                        <li>Improved delivery times and reliability</li>
+                        <li>Enhanced security for high-value cargo</li>
+                        <li>Better resource utilization</li>
+                        <li>Reduced insurance costs</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="agriculture" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Agriculture Applications</CardTitle>
+                  <CardDescription>
+                    Precision agriculture relies on GNSS for field operations and asset management.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In agriculture, GNSS enables precision farming through accurate positioning of equipment for
+                    planting, spraying, and harvesting. RTK-enhanced GNSS provides centimeter-level accuracy for
+                    automated guidance systems, reducing overlap and improving efficiency.
+                  </p>
+                  <p>
+                    GNSS also supports variable rate application of seeds, fertilizers, and pesticides based on field
+                    mapping data. For livestock operations, GNSS tracking helps monitor animal movements and grazing
+                    patterns across large areas.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Automated guidance for farm equipment</li>
+                        <li>Variable rate application</li>
+                        <li>Field mapping and boundary management</li>
+                        <li>Livestock tracking and management</li>
+                        <li>Irrigation system optimization</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Reduced input costs (5-15% typical)</li>
+                        <li>Increased crop yields</li>
+                        <li>Minimized environmental impact</li>
+                        <li>Extended equipment operating hours</li>
+                        <li>Improved farm management decisions</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="construction" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Construction Applications</CardTitle>
+                  <CardDescription>
+                    GNSS technology improves efficiency and accuracy in construction projects.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Construction sites use GNSS for equipment tracking, site monitoring, and machine control systems.
+                    High-precision GNSS receivers guide excavators, bulldozers, and graders for accurate earthmoving
+                    operations according to digital site plans.
+                  </p>
+                  <p>
+                    GNSS also supports site surveying, progress monitoring, and asset management across large
+                    construction projects. The technology enables real-time coordination between different teams and
+                    equipment on complex job sites.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Machine control and guidance</li>
+                        <li>Equipment tracking and utilization</li>
+                        <li>Site surveying and mapping</li>
+                        <li>Progress monitoring and reporting</li>
+                        <li>Safety zone management</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Increased productivity (20-30% typical)</li>
+                        <li>Reduced rework and material waste</li>
+                        <li>Improved project timeline adherence</li>
+                        <li>Enhanced site safety</li>
+                        <li>Better resource allocation</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="retail" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Retail Applications</CardTitle>
+                  <CardDescription>GNSS supports last-mile delivery and outdoor retail operations.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In retail, GNSS technology powers last-mile delivery tracking and optimization, providing customers
+                    with real-time updates on their order status. For retail chains, GNSS helps manage delivery fleets
+                    between distribution centers and stores.
+                  </p>
+                  <p>
+                    Outdoor retail operations like garden centers and car dealerships use GNSS for inventory management
+                    and loss prevention. The technology also supports location-based marketing and customer analytics
+                    for retail businesses.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Last-mile delivery tracking</li>
+                        <li>Store-to-store transfer management</li>
+                        <li>Outdoor inventory management</li>
+                        <li>Customer delivery notifications</li>
+                        <li>Location-based marketing</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Improved delivery efficiency</li>
+                        <li>Enhanced customer experience</li>
+                        <li>Reduced delivery exceptions</li>
+                        <li>Better inventory visibility</li>
+                        <li>Optimized delivery routes</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="healthcare" className="mt-2">
+              <Card className="border">
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    GNSS enables efficient mobile healthcare services and emergency response.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Healthcare organizations use GNSS for ambulance fleet management, optimizing emergency response
+                    times and routing. Mobile healthcare services rely on GNSS for efficient scheduling and navigation
+                    between patient locations.
+                  </p>
+                  <p>
+                    For home healthcare providers, GNSS helps optimize visit schedules and provides proof of service
+                    through location verification. The technology also supports patient transport services and medical
+                    equipment delivery logistics.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 border-t pt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Ambulance fleet management</li>
+                        <li>Mobile healthcare service routing</li>
+                        <li>Home healthcare visit verification</li>
+                        <li>Medical equipment delivery</li>
+                        <li>Emergency response optimization</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Reduced response times</li>
+                        <li>Improved patient outcomes</li>
+                        <li>Enhanced service coverage</li>
+                        <li>Better resource utilization</li>
+                        <li>Increased number of patient visits per day</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </section>
 
-              <div className="flex items-start">
-                <Compass className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Environment</h4>
-                  <p className="text-sm text-gray-600">Outdoor, open-sky conditions</p>
-                </div>
-              </div>
+        {/* Case Studies */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Mini Case Studies</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Fleet Optimization for Logistics Company</CardTitle>
+                <CardDescription>National Distribution Services</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  National Distribution Services implemented a GNSS-based fleet management system for their 350 delivery
+                  vehicles across 12 states. The system provided real-time location tracking, route optimization, and
+                  driver behavior monitoring.
+                </p>
+                <p>
+                  Within six months, the company reduced fuel consumption by 12%, decreased idle time by 23%, and
+                  improved on-time deliveries from 89% to 96%. The system paid for itself within 9 months through
+                  operational savings of approximately $425,000 annually.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Precision Agriculture Implementation</CardTitle>
+                <CardDescription>Midwest Farming Cooperative</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A farming cooperative in the Midwest equipped 45 tractors and harvesters with RTK-enhanced GNSS
+                  guidance systems for precision agriculture operations across 28,000 acres of cropland. The system
+                  enabled centimeter-level accuracy for planting, spraying, and harvesting.
+                </p>
+                <p>
+                  The implementation resulted in a 7% reduction in seed and fertilizer usage, 9% decrease in fuel
+                  consumption, and 5% increase in crop yields. Annual savings were estimated at $32 per acre, with a
+                  total return on investment period of 2.5 growing seasons.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Zap className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Power Requirements</h4>
-                  <p className="text-sm text-gray-600">Medium (active receivers)</p>
-                </div>
-              </div>
+        {/* Implementation Considerations */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Implementation Considerations</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Hardware Selection</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Single vs. multi-frequency receivers</li>
+                  <li>Multi-constellation support capabilities</li>
+                  <li>Antenna quality and placement</li>
+                  <li>Power requirements and battery life</li>
+                  <li>Environmental durability (IP rating)</li>
+                  <li>Size and form factor constraints</li>
+                  <li>Integration interfaces (UART, I2C, SPI)</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Software & Integration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Data formats (NMEA 0183, proprietary)</li>
+                  <li>Position update rate requirements</li>
+                  <li>Communication network selection</li>
+                  <li>Backend system integration</li>
+                  <li>Filtering algorithms for smoother tracking</li>
+                  <li>Map matching for road-based applications</li>
+                  <li>Geofencing and alerting capabilities</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle className="text-lg">Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Indoor and urban canyon performance</li>
+                  <li>Signal multipath in dense environments</li>
+                  <li>Power management for mobile devices</li>
+                  <li>Cold start acquisition time</li>
+                  <li>Accuracy limitations for precise applications</li>
+                  <li>Connectivity in remote areas</li>
+                  <li>Security concerns (jamming/spoofing)</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-              <div className="flex items-start">
-                <Clock className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Setup Time</h4>
-                  <p className="text-sm text-gray-600">Low (receivers only)</p>
-                </div>
-              </div>
-            </div>
-
-            <h4 className="font-semibold mb-3">Ideal Applications</h4>
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Fleet management</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Outdoor asset tracking</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Logistics and supply chain</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Construction equipment</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Agriculture and forestry</span>
-              </li>
-            </ul>
-
-            <Link href="/contact">
-              <Button className="w-full">Contact RTLS Expert</Button>
+        {/* Technology Comparison */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Technology Comparison</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="border px-4 py-2 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-2 text-left font-semibold">GNSS</th>
+                  <th className="border px-4 py-2 text-left font-semibold">UWB</th>
+                  <th className="border px-4 py-2 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-2 text-left font-semibold">Wi-Fi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-2">
+                    2-10 meters (standard)
+                    <br />
+                    1-3cm (RTK)
+                  </td>
+                  <td className="border px-4 py-2">10-30 cm</td>
+                  <td className="border px-4 py-2">1-3 meters</td>
+                  <td className="border px-4 py-2">3-5 meters</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Indoor Performance</td>
+                  <td className="border px-4 py-2">Poor</td>
+                  <td className="border px-4 py-2">Excellent</td>
+                  <td className="border px-4 py-2">Good</td>
+                  <td className="border px-4 py-2">Good</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Outdoor Performance</td>
+                  <td className="border px-4 py-2">Excellent</td>
+                  <td className="border px-4 py-2">Good</td>
+                  <td className="border px-4 py-2">Fair</td>
+                  <td className="border px-4 py-2">Fair</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Range</td>
+                  <td className="border px-4 py-2">Global</td>
+                  <td className="border px-4 py-2">10-100 meters</td>
+                  <td className="border px-4 py-2">10-50 meters</td>
+                  <td className="border px-4 py-2">30-100 meters</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-2">Medium-High</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Very Low</td>
+                  <td className="border px-4 py-2">High</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Infrastructure</td>
+                  <td className="border px-4 py-2">None required</td>
+                  <td className="border px-4 py-2">Anchors needed</td>
+                  <td className="border px-4 py-2">Beacons needed</td>
+                  <td className="border px-4 py-2">Access points</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Smartphone Compatible</td>
+                  <td className="border px-4 py-2">Yes</td>
+                  <td className="border px-4 py-2">Limited</td>
+                  <td className="border px-4 py-2">Yes</td>
+                  <td className="border px-4 py-2">Yes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
+              View all RTLS technologies →
             </Link>
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">Related Technologies</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/rtk-gps"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Satellite className="h-4 w-4 mr-2" />
-                  <span>RTK-GPS / DGPS</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/sensor-fusion"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Layers className="h-4 w-4 mr-2" />
-                  <span>Sensor Fusion</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/dead-reckoning"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Navigation className="h-4 w-4 mr-2" />
-                  <span>Dead Reckoning + RTLS Anchors</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/lora"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Radio className="h-4 w-4 mr-2" />
-                  <span>LoRa</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/uwb"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Radio className="h-4 w-4 mr-2" />
-                  <span>Ultra-Wideband (UWB)</span>
-                </Link>
-              </li>
-            </ul>
+        {/* Future Trends */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Future Trends</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Multi-Frequency Receivers:</span> Increasing adoption of dual and
+                    triple-frequency receivers in consumer devices for improved accuracy
+                  </li>
+                  <li>
+                    <span className="font-medium">Precise Point Positioning (PPP):</span> Democratization of
+                    centimeter-level accuracy without local base stations
+                  </li>
+                  <li>
+                    <span className="font-medium">Advanced Anti-Jamming:</span> New techniques to protect against signal
+                    interference and spoofing attacks
+                  </li>
+                  <li>
+                    <span className="font-medium">Miniaturization:</span> Smaller, more power-efficient receivers
+                    enabling new wearable and IoT applications
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border">
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Hybrid Positioning:</span> Integration with other technologies
+                    (inertial sensors, cameras, LiDAR) for seamless indoor-outdoor tracking
+                  </li>
+                  <li>
+                    <span className="font-medium">AI Integration:</span> Machine learning algorithms improving position
+                    estimation in challenging environments
+                  </li>
+                  <li>
+                    <span className="font-medium">Satellite Modernization:</span> Next-generation satellites with
+                    improved signals, accuracy, and reliability
+                  </li>
+                  <li>
+                    <span className="font-medium">Low-Power GNSS:</span> New techniques to reduce power consumption for
+                    IoT and long-life applications
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h3 className="text-lg font-bold mb-4">Resources</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/resources/enterprise-rtls-step-by-step-implementation-guide"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>RTLS Deployment Guide</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/rtls-accuracy-precision-explained-sub-meter-positioning"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>RTLS Accuracy Guide</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/uwb-vs-gps-indoor-outdoor-tracking-guide"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>GNSS (GPS) vs UWB Analysis</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/automotive-oem-40-throughput-boost-uwb-rtls"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>RTLS Success Story</span>
-                </Link>
-              </li>
-            </ul>
+        {/* Learn More */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold mb-6">Learn More About GNSS Technology</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+              <ul className="space-y-2">
+                {gnssRelatedArticles.map((article) => (
+                  <li key={article.slug}>
+                    <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
+                      {article.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Unbiased Guidance</h3>
+              <p className="mb-4">Need help determining if GNSS is the right technology for your RTLS project?</p>
+              <p className="mb-6">
+                RTLS Alliance Practitioners can provide personalized guidance based on your specific requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 mt-2"
+              >
+                Ask an Alliance Member
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </article>
     </div>
   )
 }
