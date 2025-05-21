@@ -3,22 +3,23 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 
 export default function BLETechnologyClientPage() {
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="grid gap-8">
-        <div className="space-y-4">
+      <article className="grid gap-8">
+        {/* Page Header - SEO optimized with semantic HTML */}
+        <header className="space-y-4">
           <h1 className="text-4xl font-bold">Bluetooth Low Energy (BLE) Technology</h1>
           <p className="text-xl text-muted-foreground">
             Bluetooth Low Energy (BLE) is a wireless technology designed for short-range communication with minimal
             power consumption.
           </p>
-        </div>
+        </header>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Overview and Key Specifications - Restructured for better layout */}
+        <section className="grid md:grid-cols-2 gap-8">
           <div>
             <h2 className="text-2xl font-semibold mb-4">Overview</h2>
             <p className="mb-4">
@@ -30,42 +31,38 @@ export default function BLETechnologyClientPage() {
               For RTLS applications, BLE typically achieves 1-3 meter accuracy using signal strength (RSSI)
               measurements, with enhanced accuracy possible through Angle of Arrival (AoA) techniques.
             </p>
-            <div className="mt-6 space-y-4">
-              <h3 className="text-xl font-semibold">Key Specifications</h3>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>
-                  <span className="font-medium">Frequency:</span> 2.4 GHz ISM band
-                </li>
-                <li>
-                  <span className="font-medium">Range:</span> 10-30 meters (indoor)
-                </li>
-                <li>
-                  <span className="font-medium">Data Rate:</span> 1 Mbps (BLE 4.2), 2 Mbps (BLE 5.0+)
-                </li>
-                <li>
-                  <span className="font-medium">Typical Accuracy:</span> 1-3 meters (RSSI), 0.5-1 meter (AoA)
-                </li>
-                <li>
-                  <span className="font-medium">Power Consumption:</span> 0.01-0.5 W (transmit)
-                </li>
-                <li>
-                  <span className="font-medium">Battery Life:</span> 6 months to 5+ years (depending on beacon type and
-                  configuration)
-                </li>
-              </ul>
-            </div>
           </div>
-          <div className="flex justify-center items-center">
-            <div className="relative w-full h-64 md:h-80">
-              <Image src="/images/ble-beacons.png" alt="BLE Beacons and Gateway" fill className="object-contain" />
-            </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Key Specifications</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>
+                <span className="font-medium">Frequency:</span> 2.4 GHz ISM band
+              </li>
+              <li>
+                <span className="font-medium">Range:</span> 10-30 meters (indoor)
+              </li>
+              <li>
+                <span className="font-medium">Data Rate:</span> 1 Mbps (BLE 4.2), 2 Mbps (BLE 5.0+)
+              </li>
+              <li>
+                <span className="font-medium">Typical Accuracy:</span> 1-3 meters (RSSI), 0.5-1 meter (AoA)
+              </li>
+              <li>
+                <span className="font-medium">Power Consumption:</span> 0.01-0.5 W (transmit)
+              </li>
+              <li>
+                <span className="font-medium">Battery Life:</span> 6 months to 5+ years (depending on beacon type and
+                configuration)
+              </li>
+            </ul>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
+        {/* How BLE Works - Enhanced with better spacing and structure */}
+        <section className="grid gap-6">
           <h2 className="text-2xl font-semibold">How BLE Works for RTLS</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+            <Card className="shadow-md">
               <CardHeader>
                 <CardTitle>RSSI-Based Positioning</CardTitle>
               </CardHeader>
@@ -77,7 +74,7 @@ export default function BLETechnologyClientPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-md">
               <CardHeader>
                 <CardTitle>Angle of Arrival (AoA)</CardTitle>
               </CardHeader>
@@ -90,12 +87,13 @@ export default function BLETechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
+        {/* Advantages & Limitations - Enhanced with better visual distinction */}
+        <section className="grid gap-6">
           <h2 className="text-2xl font-semibold">Advantages & Limitations</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+            <Card className="border-l-4 border-l-green-500 shadow-md">
               <CardHeader>
                 <CardTitle className="text-green-600">Advantages</CardTitle>
               </CardHeader>
@@ -110,7 +108,7 @@ export default function BLETechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-l-4 border-l-red-500 shadow-md">
               <CardHeader>
                 <CardTitle className="text-red-600">Limitations</CardTitle>
               </CardHeader>
@@ -125,9 +123,10 @@ export default function BLETechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
+        {/* Industry Applications - Tabbed interface preserved */}
+        <section className="grid gap-6">
           <h2 className="text-2xl font-semibold">Industry Applications</h2>
           <Tabs defaultValue="healthcare">
             <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto">
@@ -153,7 +152,7 @@ export default function BLETechnologyClientPage() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="healthcare" className="mt-4">
-              <Card>
+              <Card className="shadow-md">
                 <CardHeader>
                   <CardTitle>Healthcare Applications</CardTitle>
                   <CardDescription>
@@ -197,7 +196,7 @@ export default function BLETechnologyClientPage() {
               </Card>
             </TabsContent>
             <TabsContent value="retail" className="mt-4">
-              <Card>
+              <Card className="shadow-md">
                 <CardHeader>
                   <CardTitle>Retail Applications</CardTitle>
                   <CardDescription>
@@ -240,7 +239,7 @@ export default function BLETechnologyClientPage() {
               </Card>
             </TabsContent>
             <TabsContent value="manufacturing" className="mt-4">
-              <Card>
+              <Card className="shadow-md">
                 <CardHeader>
                   <CardTitle>Manufacturing Applications</CardTitle>
                   <CardDescription>
@@ -284,7 +283,7 @@ export default function BLETechnologyClientPage() {
               </Card>
             </TabsContent>
             <TabsContent value="logistics" className="mt-4">
-              <Card>
+              <Card className="shadow-md">
                 <CardHeader>
                   <CardTitle>Logistics Applications</CardTitle>
                   <CardDescription>
@@ -328,7 +327,7 @@ export default function BLETechnologyClientPage() {
               </Card>
             </TabsContent>
             <TabsContent value="commercial" className="mt-4">
-              <Card>
+              <Card className="shadow-md">
                 <CardHeader>
                   <CardTitle>Commercial Building Applications</CardTitle>
                   <CardDescription>BLE enables smart building functionality and space optimization.</CardDescription>
@@ -370,12 +369,13 @@ export default function BLETechnologyClientPage() {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
-          <h2 className="text-2xl font-semibold">Food for Thought</h2>
+        {/* Case Studies - Enhanced with better visual styling */}
+        <section className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Case Studies</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+            <Card className="shadow-md border-t-4 border-t-blue-500">
               <CardHeader>
                 <CardTitle>Healthcare Equipment Tracking</CardTitle>
                 <CardDescription>Memorial Hospital</CardDescription>
@@ -392,7 +392,7 @@ export default function BLETechnologyClientPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-md border-t-4 border-t-blue-500">
               <CardHeader>
                 <CardTitle>Manufacturing Tool Tracking</CardTitle>
                 <CardDescription>Aerospace Components Manufacturer</CardDescription>
@@ -411,16 +411,17 @@ export default function BLETechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
+        {/* Implementation Considerations - Enhanced with better visual hierarchy */}
+        <section className="grid gap-6">
           <h2 className="text-2xl font-semibold">Implementation Considerations</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
+            <Card className="shadow-md">
+              <CardHeader className="bg-gray-50 border-b">
                 <CardTitle>Infrastructure Requirements</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-4">
                 <ul className="list-disc pl-5 space-y-2">
                   <li>BLE beacons/tags for tracked assets</li>
                   <li>BLE gateways or receivers</li>
@@ -431,11 +432,11 @@ export default function BLETechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader>
+            <Card className="shadow-md">
+              <CardHeader className="bg-gray-50 border-b">
                 <CardTitle>Deployment Best Practices</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-4">
                 <ul className="list-disc pl-5 space-y-2">
                   <li>Conduct RF site survey before installation</li>
                   <li>Place gateways strategically for optimal coverage</li>
@@ -446,11 +447,11 @@ export default function BLETechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader>
+            <Card className="shadow-md">
+              <CardHeader className="bg-gray-50 border-b">
                 <CardTitle>Common Challenges</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-4">
                 <ul className="list-disc pl-5 space-y-2">
                   <li>Signal interference in dense environments</li>
                   <li>Accuracy limitations in complex layouts</li>
@@ -462,70 +463,71 @@ export default function BLETechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
+        {/* Technology Comparison - Enhanced with better table styling */}
+        <section className="grid gap-6">
           <h2 className="text-2xl font-semibold">Technology Comparison</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full border-collapse">
+            <table className="min-w-full border-collapse shadow-sm">
               <thead>
-                <tr className="bg-muted">
-                  <th className="border px-4 py-2 text-left">Feature</th>
-                  <th className="border px-4 py-2 text-left">BLE</th>
-                  <th className="border px-4 py-2 text-left">UWB</th>
-                  <th className="border px-4 py-2 text-left">Wi-Fi</th>
-                  <th className="border px-4 py-2 text-left">RFID</th>
+                <tr className="bg-gray-100">
+                  <th className="border px-4 py-3 text-left font-semibold">Feature</th>
+                  <th className="border px-4 py-3 text-left font-semibold">BLE</th>
+                  <th className="border px-4 py-3 text-left font-semibold">UWB</th>
+                  <th className="border px-4 py-3 text-left font-semibold">Wi-Fi</th>
+                  <th className="border px-4 py-3 text-left font-semibold">RFID</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
-                  <td className="border px-4 py-2">1-3 meters</td>
-                  <td className="border px-4 py-2">10-30 cm</td>
-                  <td className="border px-4 py-2">3-5 meters</td>
-                  <td className="border px-4 py-2">Proximity to reader</td>
+                <tr className="even:bg-gray-50">
+                  <td className="border px-4 py-3 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-3">1-3 meters</td>
+                  <td className="border px-4 py-3">10-30 cm</td>
+                  <td className="border px-4 py-3">3-5 meters</td>
+                  <td className="border px-4 py-3">Proximity to reader</td>
                 </tr>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Range</td>
-                  <td className="border px-4 py-2">10-30 meters</td>
-                  <td className="border px-4 py-2">10-50 meters</td>
-                  <td className="border px-4 py-2">30-50 meters</td>
-                  <td className="border px-4 py-2">1-10 meters</td>
+                <tr className="odd:bg-white">
+                  <td className="border px-4 py-3 font-medium">Range</td>
+                  <td className="border px-4 py-3">10-30 meters</td>
+                  <td className="border px-4 py-3">10-50 meters</td>
+                  <td className="border px-4 py-3">30-50 meters</td>
+                  <td className="border px-4 py-3">1-10 meters</td>
                 </tr>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
-                  <td className="border px-4 py-2">Very Low</td>
-                  <td className="border px-4 py-2">Medium</td>
-                  <td className="border px-4 py-2">High</td>
-                  <td className="border px-4 py-2">Passive/Low</td>
+                <tr className="even:bg-gray-50">
+                  <td className="border px-4 py-3 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-3">Very Low</td>
+                  <td className="border px-4 py-3">Medium</td>
+                  <td className="border px-4 py-3">High</td>
+                  <td className="border px-4 py-3">Passive/Low</td>
                 </tr>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Infrastructure Cost</td>
-                  <td className="border px-4 py-2">Low-Medium</td>
-                  <td className="border px-4 py-2">High</td>
-                  <td className="border px-4 py-2">Medium</td>
-                  <td className="border px-4 py-2">Medium</td>
+                <tr className="odd:bg-white">
+                  <td className="border px-4 py-3 font-medium">Infrastructure Cost</td>
+                  <td className="border px-4 py-3">Low-Medium</td>
+                  <td className="border px-4 py-3">High</td>
+                  <td className="border px-4 py-3">Medium</td>
+                  <td className="border px-4 py-3">Medium</td>
                 </tr>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Tag Cost</td>
-                  <td className="border px-4 py-2">$5-15</td>
-                  <td className="border px-4 py-2">$15-50</td>
-                  <td className="border px-4 py-2">$10-30</td>
-                  <td className="border px-4 py-2">$0.10-20</td>
+                <tr className="even:bg-gray-50">
+                  <td className="border px-4 py-3 font-medium">Tag Cost</td>
+                  <td className="border px-4 py-3">$5-15</td>
+                  <td className="border px-4 py-3">$15-50</td>
+                  <td className="border px-4 py-3">$10-30</td>
+                  <td className="border px-4 py-3">$0.10-20</td>
                 </tr>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Battery Life</td>
-                  <td className="border px-4 py-2">6 months - 5 years</td>
-                  <td className="border px-4 py-2">6 months - 3 years</td>
-                  <td className="border px-4 py-2">3 months - 2 years</td>
-                  <td className="border px-4 py-2">Passive/1-5 years</td>
+                <tr className="odd:bg-white">
+                  <td className="border px-4 py-3 font-medium">Battery Life</td>
+                  <td className="border px-4 py-3">6 months - 5 years</td>
+                  <td className="border px-4 py-3">6 months - 3 years</td>
+                  <td className="border px-4 py-3">3 months - 2 years</td>
+                  <td className="border px-4 py-3">Passive/1-5 years</td>
                 </tr>
-                <tr>
-                  <td className="border px-4 py-2 font-medium">Smartphone Compatible</td>
-                  <td className="border px-4 py-2">Yes</td>
-                  <td className="border px-4 py-2">Limited</td>
-                  <td className="border px-4 py-2">Yes</td>
-                  <td className="border px-4 py-2">Limited (NFC)</td>
+                <tr className="even:bg-gray-50">
+                  <td className="border px-4 py-3 font-medium">Smartphone Compatible</td>
+                  <td className="border px-4 py-3">Yes</td>
+                  <td className="border px-4 py-3">Limited</td>
+                  <td className="border px-4 py-3">Yes</td>
+                  <td className="border px-4 py-3">Limited (NFC)</td>
                 </tr>
               </tbody>
             </table>
@@ -535,12 +537,13 @@ export default function BLETechnologyClientPage() {
               View all RTLS technologies →
             </Link>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-6">
+        {/* Future Trends - Enhanced with better visual styling */}
+        <section className="grid gap-6">
           <h2 className="text-2xl font-semibold">Future Trends</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+            <Card className="shadow-md bg-gradient-to-br from-white to-gray-50">
               <CardHeader>
                 <CardTitle>Technological Advancements</CardTitle>
               </CardHeader>
@@ -565,7 +568,7 @@ export default function BLETechnologyClientPage() {
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-md bg-gradient-to-br from-white to-gray-50">
               <CardHeader>
                 <CardTitle>Market Evolution</CardTitle>
               </CardHeader>
@@ -591,10 +594,11 @@ export default function BLETechnologyClientPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </section>
 
-        <div className="mt-8">
-          <Card>
+        {/* Learn More - Updated with real resource links and new CTA text */}
+        <section className="mt-8">
+          <Card className="shadow-md">
             <CardHeader>
               <CardTitle>Learn More About BLE Technology</CardTitle>
             </CardHeader>
@@ -604,27 +608,18 @@ export default function BLETechnologyClientPage() {
                   <h3 className="text-lg font-medium mb-2">Related Resources</h3>
                   <ul className="space-y-2">
                     <li>
-                      <Link
-                        href="/resources/ble-positioning-rssi-aoa-fingerprinting-explained"
-                        className="text-primary hover:underline"
-                      >
-                        BLE Positioning: RSSI, AoA & Fingerprinting Explained
+                      <Link href="/resources/rtls-implementation-guide" className="text-primary hover:underline">
+                        RTLS Implementation Guide
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        href="/resources/ble-vs-uwb-choosing-right-rtls-technology"
-                        className="text-primary hover:underline"
-                      >
-                        BLE vs UWB: Choosing the Right RTLS Technology
+                      <Link href="/resources/uwb-vs-ble-comparison" className="text-primary hover:underline">
+                        Comparing UWB and BLE Technologies
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        href="/resources/ble-vs-rfid-pros-cons-asset-tracking"
-                        className="text-primary hover:underline"
-                      >
-                        BLE vs RFID: Pros & Cons for Asset Tracking
+                      <Link href="/resources/rtls-roi-calculator-guide" className="text-primary hover:underline">
+                        RTLS ROI Calculator Guide
                       </Link>
                     </li>
                   </ul>
@@ -632,21 +627,20 @@ export default function BLETechnologyClientPage() {
                 <div>
                   <h3 className="text-lg font-medium mb-2">Expert Guidance</h3>
                   <p className="mb-4">
-                    Need help determining if BLE is the right technology for your RTLS project? Our experts can provide
-                    personalized guidance based on your specific requirements.
+                    Need unbiased advice to determine if BLE is the right technology for your RTLS project?
                   </p>
                   <Link
                     href="/contact"
                     className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                   >
-                    Request Expert Consultation
+                    Ask an Alliance member
                   </Link>
                 </div>
               </div>
             </CardContent>
           </Card>
-        </div>
-      </div>
+        </section>
+      </article>
     </div>
   )
 }
