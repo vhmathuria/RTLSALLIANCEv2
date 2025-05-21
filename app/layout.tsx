@@ -4,7 +4,6 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
-import PageLayout from "@/components/layout/page-layout"
 import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -79,9 +78,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <Header />
-        <div className="flex-1">
-          <PageLayout>{children}</PageLayout>
-        </div>
+        <div className="flex-1">{children}</div>
         <Footer />
 
         {/* Global site tag (gtag.js) - Google Analytics */}
