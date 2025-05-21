@@ -219,15 +219,17 @@ export default function GuideRenderer({ article }: GuideRendererProps) {
               />
             </div>
 
-            {content.citations && content.citations.length > 0 && (
-              <section id="citations">
-                <GuideCitations citations={content.citations} />
+            {/* Related Reads section - positioned before Citations */}
+            {content.relatedReads && content.relatedReads.articles && content.relatedReads.articles.length > 0 && (
+              <section id={sectionIds[9]}>
+                <GuideRelatedReads relatedReads={content.relatedReads.articles} />
               </section>
             )}
 
-            {content.relatedReads && Array.isArray(content.relatedReads) && content.relatedReads.length > 0 && (
-              <section id={sectionIds[9]}>
-                <GuideRelatedReads relatedReads={content.relatedReads} />
+            {/* Citations section - now appears after Related Reads */}
+            {content.citations && content.citations.length > 0 && (
+              <section id="citations">
+                <GuideCitations citations={content.citations} />
               </section>
             )}
           </div>

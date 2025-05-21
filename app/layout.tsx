@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
+    shortcut: "/favicon.ico",
   },
   openGraph: {
     type: "website",
@@ -72,6 +73,9 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <link rel="canonical" href="https://rtlsalliance.com" />
+        <link rel="icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <Header />

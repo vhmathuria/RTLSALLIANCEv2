@@ -1,636 +1,647 @@
 "use client"
-import Link from "next/link"
-import {
-  ArrowRight,
-  CheckCircle,
-  XCircle,
-  Compass,
-  Clock,
-  Zap,
-  Building,
-  Ruler,
-  Radio,
-  Smartphone,
-  Server,
-  Layers,
-  AlertTriangle,
-  Wifi,
-  Satellite,
-  Camera,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useScrollToTop } from "@/hooks/useScrollToTop"
+import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function UWBTechnologyClientPage() {
-  useScrollToTop()
-
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          <h1 className="text-3xl font-bold mb-6">UWB Technology for Real-Time Location Systems</h1>
+    <div className="container mx-auto py-8 px-4">
+      <div className="grid gap-8">
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold">Ultra-Wideband (UWB) Technology</h1>
+          <p className="text-xl text-muted-foreground">
+            Ultra-Wideband (UWB) is a high-precision radio technology that enables centimeter-level location accuracy
+            for real-time tracking.
+          </p>
+        </div>
 
-          <div className="prose max-w-none">
-            <p className="lead text-xl text-gray-700 mb-8">
-              Ultra-Wideband (UWB) is a radio technology that uses very low energy levels for short-range,
-              high-bandwidth communications over a large portion of the radio spectrum.
-            </p>
-
-            <div className="relative h-80 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/placeholder-yj8h8.png"
-                alt="UWB satellite constellations providing global positioning"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">What is UWB Technology?</h2>
-            <p>
-              Ultra-Wideband (UWB) is a radio technology that uses very low energy levels for short-range,
-              high-bandwidth communications over a large portion of the radio spectrum.
-            </p>
-
-            <ul className="list-disc pl-6 mb-6">
-              <li>
-                <strong>High Bandwidth</strong> - Exceeding 500 MHz
-              </li>
-              <li>
-                <strong>Short Range</strong> - Typically 10-50 meters
-              </li>
-              <li>
-                <strong>Precise Positioning</strong> - Centimeter-level accuracy
-              </li>
-              <li>
-                <strong>Time-Based Measurements</strong> - Relies on time-of-flight for accuracy
-              </li>
-            </ul>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">How UWB Works for RTLS</h2>
-
-            <div className="bg-blue-50 p-6 rounded-xl mb-8">
-              <h3 className="text-xl font-semibold mb-4">Core Principles of UWB Positioning</h3>
-              <p className="mb-4">
-                UWB receivers determine their position through a process called trilateration, which involves measuring
-                the time it takes for signals to travel from multiple anchors to the receiver:
-              </p>
-              <ol className="list-decimal pl-6 mb-4">
-                <li>
-                  <strong>Signal Transmission</strong> - Anchors continuously broadcast signals containing their
-                  position and unique identifier
-                </li>
-                <li>
-                  <strong>Signal Reception</strong> - UWB receivers capture these signals
-                </li>
-                <li>
-                  <strong>Time Calculation</strong> - The receiver calculates the time it takes for the signal to travel
-                  from each anchor
-                </li>
-                <li>
-                  <strong>Distance Determination</strong> - This time is converted to distance using the speed of light
-                </li>
-                <li>
-                  <strong>Position Calculation</strong> - With distances from at least three anchors, the receiver can
-                  determine its 2D position (latitude, longitude)
-                </li>
-              </ol>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <Radio className="mr-2 h-5 w-5 text-blue-600" />
-                    UWB Signal Components
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Short Pulses</strong> - Very short duration radio pulses
-                    </li>
-                    <li>
-                      <strong>Wide Bandwidth</strong> - Occupies a large portion of the radio spectrum
-                    </li>
-                    <li>
-                      <strong>Time of Arrival (ToA)</strong> - Precise timing measurements
-                    </li>
-                    <li>
-                      <strong>Channel Impulse Response (CIR)</strong> - Characterizes the signal propagation
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <AlertTriangle className="mr-2 h-5 w-5 text-amber-600" />
-                    Error Sources
-                  </h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <strong>Multipath</strong> - Signal reflections from buildings and terrain
-                    </li>
-                    <li>
-                      <strong>Non-Line-of-Sight (NLOS)</strong> - Obstructions blocking direct signal path
-                    </li>
-                    <li>
-                      <strong>Clock Drift</strong> - Inaccuracies in anchor and tag clocks
-                    </li>
-                    <li>
-                      <strong>Calibration Errors</strong> - Inaccuracies in anchor positions
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">UWB for Real-Time Location Systems</h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Overview</h2>
             <p className="mb-4">
-              When implemented as part of an RTLS solution, UWB technology offers several key capabilities and
-              integration points:
+              UWB operates by transmitting ultra-short pulses across a wide spectrum of frequencies, typically between
+              3.1 and 10.6 GHz. This wide bandwidth allows for precise time-of-flight measurements, enabling exceptional
+              positioning accuracy.
             </p>
-
-            <div className="relative h-64 w-full rounded-xl overflow-hidden mb-8">
-              <Image
-                src="/placeholder-gwyj5.png"
-                alt="UWB integration with IoT and cloud services"
-                fill
-                className="object-cover"
-              />
+            <p className="mb-4">
+              For RTLS applications, UWB typically achieves 10-30 centimeter accuracy in real-world environments, making
+              it the technology of choice for high-precision tracking requirements.
+            </p>
+            <div className="mt-6 space-y-4">
+              <h3 className="text-xl font-semibold">Key Specifications</h3>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-medium">Frequency:</span> 3.1-10.6 GHz
+                </li>
+                <li>
+                  <span className="font-medium">Range:</span> 10-50 meters (indoor)
+                </li>
+                <li>
+                  <span className="font-medium">Data Rate:</span> 6.8 Mbps to 27.2 Mbps
+                </li>
+                <li>
+                  <span className="font-medium">Typical Accuracy:</span> 10-30 centimeters
+                </li>
+                <li>
+                  <span className="font-medium">Power Consumption:</span> 100-500 mW (transmit)
+                </li>
+                <li>
+                  <span className="font-medium">Battery Life:</span> 6 months to 3 years (depending on tag type and
+                  configuration)
+                </li>
+              </ul>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Smartphone className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Device Integration</h3>
-                </div>
-                <p className="text-sm">
-                  UWB receivers embedded in tracking devices, vehicles, smartphones, and wearables
-                </p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Radio className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Data Transmission</h3>
-                </div>
-                <p className="text-sm">
-                  Position data transmitted via cellular, LoRaWAN, or other communication networks
-                </p>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-3">
-                  <Server className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="font-semibold">Backend Processing</h3>
-                </div>
-                <p className="text-sm">Cloud platforms for data storage, analysis, and visualization</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Advantages and Limitations</h2>
-
-            <Tabs defaultValue="advantages" className="mb-8">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="advantages">Advantages</TabsTrigger>
-                <TabsTrigger value="limitations">Limitations</TabsTrigger>
-              </TabsList>
-              <TabsContent value="advantages" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>High Accuracy</strong> - Centimeter-level positioning for precise tracking
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Robustness</strong> - Resistant to multipath and interference
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>High Update Rate</strong> - Real-time tracking of fast-moving objects
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Secure Ranging</strong> - Prevents spoofing and relay attacks
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-              <TabsContent value="limitations" className="p-4 bg-white border rounded-b-lg">
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Infrastructure Required</strong> - Needs dedicated anchors throughout the coverage area
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Higher Cost</strong> - More expensive than alternatives like BLE or Wi-Fi
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Limited Range</strong> - Typical effective range of 10-50 meters
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong>Power Consumption</strong> - Higher power usage than BLE
-                    </span>
-                  </li>
-                </ul>
-              </TabsContent>
-            </Tabs>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">UWB Positioning Methods</h2>
-            <p className="mb-4">Several methods can be used to determine location with UWB:</p>
-
-            <div className="overflow-x-auto mb-8">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Method</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Accuracy</TableHead>
-                    <TableHead>Requirements</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Time of Flight (ToF)</TableCell>
-                    <TableCell>Measures signal travel time between transmitter and receiver</TableCell>
-                    <TableCell>10-30 cm</TableCell>
-                    <TableCell>Precise timing synchronization</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Time Difference of Arrival (TDoA)</TableCell>
-                    <TableCell>Compares arrival times of signal at multiple receivers</TableCell>
-                    <TableCell>10-50 cm</TableCell>
-                    <TableCell>Precise time synchronization between receivers</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Two-Way Ranging (TWR)</TableCell>
-                    <TableCell>Measures round-trip time between two devices</TableCell>
-                    <TableCell>10-30 cm</TableCell>
-                    <TableCell>No clock synchronization needed</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Angle of Arrival (AoA)</TableCell>
-                    <TableCell>Uses antenna arrays to determine signal direction</TableCell>
-                    <TableCell>5-15 cm</TableCell>
-                    <TableCell>Specialized antenna arrays required</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Key Industry Applications</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Manufacturing</h3>
-                <p className="text-sm mb-3">
-                  Precise tool tracking, worker safety zones, and automated guided vehicles
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>High accuracy requirements</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Healthcare</h3>
-                <p className="text-sm mb-3">
-                  Real-time tracking of medical equipment, patients, and staff in hospitals
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Critical for asset management</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Logistics</h3>
-                <p className="text-sm mb-3">
-                  High-precision tracking of inventory and assets in warehouses and distribution centers
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Improves efficiency and reduces losses</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Automotive</h3>
-                <p className="text-sm mb-3">Secure access systems, keyless entry, and in-cabin passenger detection</p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Enhanced security and convenience</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Sports Analytics</h3>
-                <p className="text-sm mb-3">
-                  Precise tracking of players, balls, and equipment for performance analysis
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Real-time data for coaching and training</span>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Robotics</h3>
-                <p className="text-sm mb-3">
-                  Precise positioning for autonomous robots and collaborative robot systems
-                </p>
-                <div className="flex items-center text-blue-600 text-sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  <span>Enables advanced automation</span>
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Case Studies</h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Automotive Manufacturing</h3>
-                <p className="mb-4">
-                  A major automotive manufacturer implemented UWB-based RTLS to track vehicles through the assembly
-                  process. The system provided centimeter-level positioning of vehicles and critical tools across a
-                  100,000 square meter facility.
-                </p>
-                <h4 className="font-semibold mb-2">Results:</h4>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Reduced production errors by 37% through precise tool positioning verification</li>
-                  <li>Improved production throughput by 12% with optimized workflow</li>
-                  <li>Enhanced quality control with accurate vehicle history tracking</li>
-                  <li>ROI achieved in 14 months despite higher initial investment</li>
-                </ul>
-                <Link href="/resources/automotive-manufacturing-case-study" className="text-blue-600 hover:underline">
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">Warehouse Automation</h3>
-                <p className="mb-4">
-                  A distribution center deployed UWB technology to create a digital twin of their operation, tracking
-                  forklifts, AGVs, and high-value inventory in real-time with 15cm accuracy.
-                </p>
-                <h4 className="font-semibold mb-2">Results:</h4>
-                <ul className="list-disc pl-5 mb-4">
-                  <li>Reduced picking errors by 82% through precise location guidance</li>
-                  <li>Improved forklift utilization by 23% with optimized routing</li>
-                  <li>Decreased safety incidents by 45% with proximity warnings</li>
-                  <li>Enhanced inventory accuracy to 99.98% with real-time tracking</li>
-                </ul>
-                <Link href="/resources/warehouse-automation-case-study" className="text-blue-600 hover:underline">
-                  Read full case study <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold mt-8 mb-4">Future Trends</h2>
-            <p>The UWB RTLS market continues to evolve with several emerging trends:</p>
-            <ul>
-              <li>
-                <strong>Consumer Device Integration:</strong> Increasing adoption in smartphones, wearables, and IoT
-                devices, creating new possibilities for seamless indoor navigation and interaction
-              </li>
-              <li>
-                <strong>Miniaturization:</strong> Smaller, more energy-efficient UWB chips enabling new form factors and
-                applications
-              </li>
-              <li>
-                <strong>AI Integration:</strong> Machine learning algorithms enhancing positioning accuracy and enabling
-                predictive analytics based on movement patterns
-              </li>
-              <li>
-                <strong>Sensor Fusion:</strong> Combining UWB with complementary technologies like inertial sensors,
-                cameras, and LiDAR for enhanced performance
-              </li>
-              <li>
-                <strong>Edge Computing:</strong> Moving processing closer to the data source for reduced latency and
-                improved privacy
-              </li>
-              <li>
-                <strong>Standardization:</strong> Continued development of interoperability standards through
-                organizations like FiRa and omlox
-              </li>
-              <li>
-                <strong>Battery-free Tags:</strong> Research into energy harvesting and passive UWB tags to reduce
-                maintenance requirements
-              </li>
-            </ul>
-
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl my-8">
-              <h2 className="mb-4">Need VendorNeutral RTLS Advice</h2>
-              <p className="mb-4">
-                The RTLS Alliance can connect you with certified providers and implementation experts who specialize in
-                UWB-based high-precision location systems.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link href="/contact">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">Contact Us</Button>
-                </Link>
-                <Link href="/ecosystem/directory">
-                  <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                    Find UWB Providers
-                  </Button>
-                </Link>
-              </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="relative w-full h-64 md:h-80">
+              <Image src="/images/uwb-positioning.png" alt="UWB Positioning System" fill className="object-contain" />
             </div>
           </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">UWB Technology Overview</h3>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">How UWB Works for RTLS</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Time Difference of Arrival (TDoA)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  In TDoA systems, UWB tags transmit signals that are received by multiple anchors. The system
+                  calculates the time differences between signal arrivals at different anchors to determine the tag's
+                  position through multilateration. This approach requires precise time synchronization between anchors
+                  but allows for longer battery life in tags.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Two-Way Ranging (TWR)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  TWR involves a direct exchange of signals between the tag and each anchor, measuring the round-trip
+                  time to calculate distance. This method doesn't require time synchronization between anchors but
+                  results in higher power consumption for the tags due to more active transmissions.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <Building className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Infrastructure</h4>
-                  <p className="text-sm text-gray-600">Anchors and tags</p>
-                </div>
-              </div>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Advantages & Limitations</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-green-600">Advantages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Superior accuracy (10-30 cm) compared to other RF technologies</li>
+                  <li>Reliable performance in complex environments with obstacles</li>
+                  <li>Low susceptibility to multipath interference</li>
+                  <li>High update rates for real-time tracking</li>
+                  <li>Ability to track thousands of tags simultaneously</li>
+                  <li>Resistance to narrowband interference</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-red-600">Limitations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Higher infrastructure cost compared to BLE or Wi-Fi</li>
+                  <li>Higher tag costs ($15-50 per tag)</li>
+                  <li>Limited smartphone compatibility (improving with newer models)</li>
+                  <li>Higher power consumption than BLE</li>
+                  <li>Requires dedicated infrastructure</li>
+                  <li>More complex deployment and calibration</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-              <div className="flex items-start">
-                <Ruler className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Accuracy Range</h4>
-                  <p className="text-sm text-gray-600">10-30 cm typical</p>
-                </div>
-              </div>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Industry Applications</h2>
+          <Tabs defaultValue="manufacturing">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 h-auto">
+              <TabsTrigger value="manufacturing" className="flex flex-col py-2 h-auto">
+                <Factory className="h-5 w-5 mb-1" />
+                Manufacturing
+              </TabsTrigger>
+              <TabsTrigger value="healthcare" className="flex flex-col py-2 h-auto">
+                <Hospital className="h-5 w-5 mb-1" />
+                Healthcare
+              </TabsTrigger>
+              <TabsTrigger value="logistics" className="flex flex-col py-2 h-auto">
+                <Truck className="h-5 w-5 mb-1" />
+                Logistics
+              </TabsTrigger>
+              <TabsTrigger value="retail" className="flex flex-col py-2 h-auto">
+                <ShoppingBag className="h-5 w-5 mb-1" />
+                Retail
+              </TabsTrigger>
+              <TabsTrigger value="commercial" className="flex flex-col py-2 h-auto">
+                <Building2 className="h-5 w-5 mb-1" />
+                Commercial
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="manufacturing" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Manufacturing Applications</CardTitle>
+                  <CardDescription>
+                    UWB enables high-precision tracking for advanced manufacturing operations.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In manufacturing environments, UWB provides centimeter-level tracking of tools, assets, and
+                    personnel. This precision is crucial for applications like automated guided vehicles (AGVs), robotic
+                    collision avoidance, and precision assembly processes.
+                  </p>
+                  <p>
+                    UWB is also used for worker safety applications in hazardous areas, providing real-time location
+                    data to prevent accidents and ensure compliance with safety protocols.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>AGV navigation and collision avoidance</li>
+                        <li>Precision tool tracking and management</li>
+                        <li>Worker safety in hazardous areas</li>
+                        <li>Quality control process tracking</li>
+                        <li>High-value asset monitoring</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Improved production accuracy</li>
+                        <li>Enhanced worker safety</li>
+                        <li>Reduced equipment collisions</li>
+                        <li>Optimized workflow efficiency</li>
+                        <li>Better quality control</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="healthcare" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Healthcare Applications</CardTitle>
+                  <CardDescription>
+                    UWB provides precise tracking for critical healthcare assets and workflows.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Healthcare facilities use UWB for tracking high-value medical equipment, monitoring patient flow,
+                    and optimizing staff workflows. The technology's high precision is particularly valuable for
+                    tracking specialized equipment in complex hospital environments.
+                  </p>
+                  <p>
+                    UWB is also used for contact tracing and infection control applications, providing accurate data on
+                    interactions between staff, patients, and visitors.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>High-value medical equipment tracking</li>
+                        <li>Patient flow optimization</li>
+                        <li>Staff workflow analysis</li>
+                        <li>Contact tracing and infection control</li>
+                        <li>Surgical instrument tracking</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Reduced equipment search time</li>
+                        <li>Improved patient care efficiency</li>
+                        <li>Enhanced infection control</li>
+                        <li>Better resource utilization</li>
+                        <li>Increased operational visibility</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="logistics" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Logistics Applications</CardTitle>
+                  <CardDescription>
+                    UWB enables precise tracking in warehouses and distribution centers.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    In logistics operations, UWB provides accurate tracking of goods, vehicles, and personnel within
+                    warehouses and distribution centers. The technology enables precise inventory location management
+                    and optimizes picking routes.
+                  </p>
+                  <p>
+                    UWB is particularly valuable for automated warehouse systems, providing the precision needed for
+                    robotic picking and autonomous vehicle navigation in dense storage environments.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Precise inventory location management</li>
+                        <li>Forklift and AGV navigation</li>
+                        <li>Automated picking systems</li>
+                        <li>Yard management</li>
+                        <li>Worker safety and efficiency</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Improved inventory accuracy</li>
+                        <li>Reduced picking errors</li>
+                        <li>Enhanced operational efficiency</li>
+                        <li>Better space utilization</li>
+                        <li>Increased throughput</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="retail" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Retail Applications</CardTitle>
+                  <CardDescription>UWB provides precise customer analytics and inventory management.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Retailers use UWB for high-precision customer journey analysis, inventory management, and loss
+                    prevention. The technology enables detailed heatmapping of customer movements and interactions with
+                    products.
+                  </p>
+                  <p>
+                    UWB is also used for automated checkout systems and smart shopping carts, providing the precision
+                    needed to track items as customers move through the store.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Detailed customer journey analysis</li>
+                        <li>High-value inventory tracking</li>
+                        <li>Automated checkout systems</li>
+                        <li>Smart shopping carts</li>
+                        <li>Loss prevention</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Enhanced customer insights</li>
+                        <li>Reduced shrinkage</li>
+                        <li>Improved inventory accuracy</li>
+                        <li>Streamlined checkout experience</li>
+                        <li>Better store layout optimization</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="commercial" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Commercial Building Applications</CardTitle>
+                  <CardDescription>
+                    UWB enables precise indoor navigation and space utilization analysis.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    Commercial buildings implement UWB for high-precision indoor navigation, space utilization analysis,
+                    and access control. The technology provides detailed insights into how spaces are used and optimizes
+                    facility management.
+                  </p>
+                  <p>
+                    UWB is also used for touchless access control systems, providing secure and convenient entry based
+                    on precise location data.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h4 className="font-medium mb-2">Common Use Cases:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Precise indoor navigation</li>
+                        <li>Detailed space utilization analysis</li>
+                        <li>Touchless access control</li>
+                        <li>Asset and equipment tracking</li>
+                        <li>Emergency response management</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Key Benefits:</h4>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Improved visitor experience</li>
+                        <li>Enhanced security</li>
+                        <li>Optimized space utilization</li>
+                        <li>Better emergency response</li>
+                        <li>Efficient facility management</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
 
-              <div className="flex items-start">
-                <Compass className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Environment</h4>
-                  <p className="text-sm text-gray-600">Indoor industrial, healthcare, manufacturing</p>
-                </div>
-              </div>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Food for Thought</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Automotive Manufacturing</CardTitle>
+                <CardDescription>European Luxury Car Manufacturer</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A European luxury car manufacturer implemented UWB RTLS across their 200,000 sq ft assembly plant to
+                  track vehicles through the production process. The system achieved 15 cm accuracy, enabling precise
+                  positioning for automated tool operations and quality control.
+                </p>
+                <p>
+                  The implementation reduced production errors by 37% and improved throughput by 12%. The manufacturer
+                  estimated annual savings of €2.3 million through improved efficiency and quality.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Warehouse Automation</CardTitle>
+                <CardDescription>E-commerce Fulfillment Center</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">
+                  A major e-commerce company deployed UWB RTLS in their 500,000 sq ft fulfillment center to track 120
+                  autonomous mobile robots (AMRs) and coordinate their movements with human pickers. The system achieved
+                  10 cm positioning accuracy.
+                </p>
+                <p>
+                  The implementation increased picking efficiency by 28% and reduced robot-related incidents by 94%. The
+                  company achieved full ROI within 18 months and expanded the system to additional facilities.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-              <div className="flex items-start">
-                <Zap className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Power Requirements</h4>
-                  <p className="text-sm text-gray-600">Medium (active tags)</p>
-                </div>
-              </div>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Implementation Considerations</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Infrastructure Requirements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>UWB tags for tracked assets</li>
+                  <li>UWB anchors (typically 1 per 100-200 m²)</li>
+                  <li>Network infrastructure (typically PoE)</li>
+                  <li>Time synchronization system</li>
+                  <li>Server for location engine (on-premises or cloud)</li>
+                  <li>Software platform for location management</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Deployment Best Practices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Conduct site survey before installation</li>
+                  <li>Ensure proper anchor placement for optimal coverage</li>
+                  <li>Calibrate the system after installation</li>
+                  <li>Implement redundancy for critical applications</li>
+                  <li>Establish regular maintenance procedures</li>
+                  <li>Train staff on proper tag handling</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Common Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Higher infrastructure cost compared to other technologies</li>
+                  <li>Complex installation and calibration</li>
+                  <li>Potential interference from dense metal environments</li>
+                  <li>Battery management for mobile tags</li>
+                  <li>Integration with existing systems</li>
+                  <li>Maintaining system performance over time</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-              <div className="flex items-start">
-                <Clock className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold">Setup Time</h4>
-                  <p className="text-sm text-gray-600">Medium to high (precise anchor placement)</p>
-                </div>
-              </div>
-            </div>
-
-            <h4 className="font-semibold mb-3">Ideal Applications</h4>
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">High-precision manufacturing</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Surgical tool tracking</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Automated guided vehicles</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Worker safety zones</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                <span className="text-sm">Robotic positioning</span>
-              </li>
-            </ul>
-
-            <Link href="/contact">
-              <Button className="w-full">Contact RTLS Expert</Button>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Technology Comparison</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse">
+              <thead>
+                <tr className="bg-muted">
+                  <th className="border px-4 py-2 text-left">Feature</th>
+                  <th className="border px-4 py-2 text-left">UWB</th>
+                  <th className="border px-4 py-2 text-left">BLE</th>
+                  <th className="border px-4 py-2 text-left">Wi-Fi</th>
+                  <th className="border px-4 py-2 text-left">RFID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Typical Accuracy</td>
+                  <td className="border px-4 py-2">10-30 cm</td>
+                  <td className="border px-4 py-2">1-3 meters</td>
+                  <td className="border px-4 py-2">3-5 meters</td>
+                  <td className="border px-4 py-2">Proximity to reader</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Range</td>
+                  <td className="border px-4 py-2">10-50 meters</td>
+                  <td className="border px-4 py-2">10-30 meters</td>
+                  <td className="border px-4 py-2">30-50 meters</td>
+                  <td className="border px-4 py-2">1-10 meters</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Power Consumption</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Very Low</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Passive/Low</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Infrastructure Cost</td>
+                  <td className="border px-4 py-2">High</td>
+                  <td className="border px-4 py-2">Low-Medium</td>
+                  <td className="border px-4 py-2">Medium</td>
+                  <td className="border px-4 py-2">Medium</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Tag Cost</td>
+                  <td className="border px-4 py-2">$15-50</td>
+                  <td className="border px-4 py-2">$5-15</td>
+                  <td className="border px-4 py-2">$10-30</td>
+                  <td className="border px-4 py-2">$0.10-20</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Battery Life</td>
+                  <td className="border px-4 py-2">6 months - 3 years</td>
+                  <td className="border px-4 py-2">6 months - 5 years</td>
+                  <td className="border px-4 py-2">3 months - 2 years</td>
+                  <td className="border px-4 py-2">Passive/1-5 years</td>
+                </tr>
+                <tr>
+                  <td className="border px-4 py-2 font-medium">Smartphone Compatible</td>
+                  <td className="border px-4 py-2">Limited</td>
+                  <td className="border px-4 py-2">Yes</td>
+                  <td className="border px-4 py-2">Yes</td>
+                  <td className="border px-4 py-2">Limited (NFC)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="text-center mt-4">
+            <Link href="/rtls-digital-twin/technologies" className="text-primary hover:underline">
+              View all RTLS technologies →
             </Link>
           </div>
+        </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-            <h3 className="text-lg font-bold mb-4">Related Technologies</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/ble"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Radio className="h-4 w-4 mr-2" />
-                  <span>Bluetooth Low Energy (BLE)</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/wifi"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Wifi className="h-4 w-4 mr-2" />
-                  <span>Wi-Fi</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/rtk-gps"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Satellite className="h-4 w-4 mr-2" />
-                  <span>RTK-GPS / DGPS</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/sensor-fusion"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Layers className="h-4 w-4 mr-2" />
-                  <span>Sensor Fusion</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rtls-digital-twin/technologies/lidar"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <Camera className="h-4 w-4 mr-2" />
-                  <span>LiDAR</span>
-                </Link>
-              </li>
-            </ul>
+        <div className="grid gap-6">
+          <h2 className="text-2xl font-semibold">Future Trends</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Technological Advancements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Smartphone Integration:</span> Increasing adoption of UWB in
+                    smartphones and wearables, expanding potential applications
+                  </li>
+                  <li>
+                    <span className="font-medium">Miniaturization:</span> Smaller, more energy-efficient UWB chips
+                    enabling new form factors and use cases
+                  </li>
+                  <li>
+                    <span className="font-medium">Enhanced Algorithms:</span> Advanced positioning algorithms to achieve
+                    sub-10 cm accuracy in complex environments
+                  </li>
+                  <li>
+                    <span className="font-medium">Sensor Fusion:</span> Integration with other sensors (IMU, cameras)
+                    for improved accuracy and context awareness
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Market Evolution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>
+                    <span className="font-medium">Cost Reduction:</span> Decreasing hardware costs as adoption increases
+                    and manufacturing scales
+                  </li>
+                  <li>
+                    <span className="font-medium">Industry Standardization:</span> Development of more robust standards
+                    for interoperability between different UWB systems
+                  </li>
+                  <li>
+                    <span className="font-medium">Hybrid Solutions:</span> Increasing integration of UWB with other
+                    technologies like BLE for comprehensive coverage
+                  </li>
+                  <li>
+                    <span className="font-medium">Expanded Applications:</span> Growth in automotive, AR/VR, and smart
+                    home applications leveraging UWB's precision
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
+        </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h3 className="text-lg font-bold mb-4">Resources</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/resources/how-uwb-works-time-of-flight-tdoa-deep-dive"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>UWB Technical Overview</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/rf-site-survey-rtls-planning-density-best-practices"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>Anchor Deployment Strategies</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/ble-vs-uwb-cost-accuracy-deployment-comparison"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>UWB vs BLE Analysis</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/automotive-oem-40-throughput-boost-uwb-rtls"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  <span>UWB Success Stories</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+        <div className="mt-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Learn More About UWB Technology</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Related Resources</h3>
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        href="/resources/uwb-positioning-tdoa-twr-explained"
+                        className="text-primary hover:underline"
+                      >
+                        UWB Positioning: TDoA & TWR Explained
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/ble-vs-uwb-choosing-right-rtls-technology"
+                        className="text-primary hover:underline"
+                      >
+                        BLE vs UWB: Choosing the Right RTLS Technology
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/resources/uwb-vs-optical-high-precision-tracking-comparison"
+                        className="text-primary hover:underline"
+                      >
+                        UWB vs Optical: High-Precision Tracking Comparison
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Expert Guidance</h3>
+                  <p className="mb-4">
+                    Need help determining if UWB is the right technology for your RTLS project? Our experts can provide
+                    personalized guidance based on your specific requirements.
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                  >
+                    Request Expert Consultation
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

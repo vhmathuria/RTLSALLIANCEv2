@@ -43,7 +43,7 @@ export async function checkMembershipAccess(requiredTier: string): Promise<boole
   }
 
   // Check for active status (case insensitive)
-  const isActive = profile.membership_status?.toUpperCase() === "ACTIVE"
+  const isActive = profile.membership_status?.toLowerCase() === "active" // Changed to lowercase comparison
 
   if (!isActive) {
     return requiredTier === "public"
@@ -52,7 +52,7 @@ export async function checkMembershipAccess(requiredTier: string): Promise<boole
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
     // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "EXPIRED" }).eq("id", user.id)
+    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
 
     return requiredTier === "public"
   }
@@ -99,12 +99,11 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
   // Check if user already has a Stripe customer ID
   const { data: profile } = await supabase
     .from("profiles")
-    .select("stripe_customer_id, email") // Use the correct column name
+    .select("stripe_customer_id, email")
     .eq("id", user.id)
     .single()
 
   if (profile?.stripe_customer_id) {
-    // Use the correct column name
     stripeCustomerId = profile.stripe_customer_id
   } else {
     // Create new Stripe customer
@@ -118,7 +117,7 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
     stripeCustomerId = customer.id
 
     // Save Stripe customer ID to profile
-    await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id) // Use the correct column name
+    await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
   }
 
   // Create checkout session
@@ -153,7 +152,7 @@ export async function updateMembership(userId: string, tier: string, expiryDate?
       .from("profiles")
       .update({
         membership_tier: tier,
-        membership_status: "ACTIVE", // Ensure consistent casing
+        membership_status: "active", // Changed to lowercase
         membership_expiry: expiryDate?.toISOString() || null,
         last_payment_date: new Date().toISOString(),
       })
@@ -204,7 +203,7 @@ export async function getCurrentMembership() {
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
     // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "EXPIRED" }).eq("id", user.id)
+    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
 
     return { tier: "public", status: "expired", expiryDate: profile.membership_expiry }
   }
@@ -254,10 +253,10 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
       .from("profiles")
       .update({
         membership_tier: membershipTier,
-        membership_status: "ACTIVE",
+        membership_status: "active", // Changed to lowercase
         membership_expiry: expiryDate.toISOString(),
         last_payment_date: new Date().toISOString(),
-        stripe_customer_id: session.customer as string, // Use the correct column name
+        stripe_customer_id: session.customer as string,
       })
       .eq("id", userId)
 

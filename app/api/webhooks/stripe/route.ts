@@ -60,10 +60,9 @@ export async function POST(req: NextRequest) {
             .from("profiles")
             .update({
               membership_tier: membershipTier,
-              membership_status: "ACTIVE", // Ensure consistent casing
+              membership_status: "active", // Changed to lowercase
               membership_expiry: expiryDate.toISOString(),
               last_payment_date: new Date().toISOString(),
-              // Use the correct column name
               stripe_customer_id: session.customer as string,
             })
             .eq("id", userId)
@@ -98,7 +97,7 @@ export async function POST(req: NextRequest) {
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
-          .eq("stripe_customer_id", customer.id) // Use the correct column name
+          .eq("stripe_customer_id", customer.id)
           .single()
 
         if (profileError || !profile) {
@@ -143,7 +142,7 @@ export async function POST(req: NextRequest) {
           .from("profiles")
           .update({
             membership_tier: membershipTier,
-            membership_status: "ACTIVE", // Ensure consistent casing
+            membership_status: "active", // Changed to lowercase
             membership_expiry: expiryDate.toISOString(),
             last_payment_date: new Date().toISOString(),
           })
@@ -176,7 +175,7 @@ export async function POST(req: NextRequest) {
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
-          .eq("stripe_customer_id", customer.id) // Use the correct column name
+          .eq("stripe_customer_id", customer.id)
           .single()
 
         if (profileError || !profile) {
@@ -189,7 +188,7 @@ export async function POST(req: NextRequest) {
           .from("profiles")
           .update({
             membership_tier: "public",
-            membership_status: "INACTIVE",
+            membership_status: "inactive", // Changed to lowercase
           })
           .eq("id", profile.id)
 

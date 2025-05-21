@@ -3,7 +3,8 @@ import { ArrowRight } from "lucide-react"
 
 interface RelatedRead {
   title: string
-  slug: string
+  slug?: string
+  link?: string
 }
 
 interface GuideRelatedReadsProps {
@@ -17,16 +18,21 @@ export default function GuideRelatedReads({ relatedReads }: GuideRelatedReadsPro
     <section id="related-reads" className="my-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Reads</h2>
       <div className="grid md:grid-cols-2 gap-4">
-        {relatedReads.map((article, index) => (
-          <Link
-            key={index}
-            href={`/resources/${article.slug}`}
-            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex justify-between items-center bg-white"
-          >
-            <span className="text-gray-900 font-medium">{article.title}</span>
-            <ArrowRight className="h-4 w-4 text-blue-600" />
-          </Link>
-        ))}
+        {relatedReads.map((article, index) => {
+          // Use link if available, otherwise construct from slug
+          const href = article.link || (article.slug ? `/resources/${article.slug}` : "#")
+
+          return (
+            <Link
+              key={index}
+              href={href}
+              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex justify-between items-center bg-white"
+            >
+              <span className="text-gray-900 font-medium">{article.title}</span>
+              <ArrowRight className="h-4 w-4 text-blue-600" />
+            </Link>
+          )
+        })}
       </div>
     </section>
   )

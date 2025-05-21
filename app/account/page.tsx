@@ -24,7 +24,7 @@ export default async function AccountPage() {
       id: user.id,
       email: user.email,
       membership_tier: "public",
-      membership_status: "ACTIVE", // Changed from INACTIVE to ACTIVE
+      membership_status: "active", // Changed to lowercase
     })
   }
 
