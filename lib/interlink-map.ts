@@ -1,447 +1,281 @@
 /**
- * Comprehensive interlinking map for RTLS Alliance website
- * This file defines the relationships between different sections of the site
- * to optimize internal linking for SEO and user navigation
+ * Comprehensive interlink map for RTLS Alliance website
+ * This file defines relationships between different sections of the site
+ * to facilitate structured internal linking for SEO optimization
  */
 
-export interface InterlinkSection {
-  section: string
-  path: string
-  relatedSections: string[]
-  relatedTechnologies: string[]
-  relatedResources: string[]
-  keyTopics: string[]
-}
-
-export interface TechnologyInterlink {
-  technology: string
-  path: string
-  relatedTechnologies: string[]
-  complementaryTechnologies: string[]
-  competingTechnologies: string[]
-  relatedResources: string[]
-  relatedIndustries: string[]
-  relatedModules: string[]
-}
-
-/**
- * Main sections of the website and their interrelationships
- */
-export const sectionInterlinks: InterlinkSection[] = [
-  {
-    section: "Home",
-    path: "/",
-    relatedSections: ["RTLS Digital Twin", "Resources", "Membership", "Ecosystem"],
-    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "AI Cameras"],
-    relatedResources: [
-      "rtls-101-core-components-protocols-deployment-models",
-      "indoor-positioning-basics",
-      "rtls-roi-quantify-efficiency-gains-cost-savings",
-    ],
-    keyTopics: ["RTLS Overview", "Digital Twin", "Indoor Positioning", "Asset Tracking"],
-  },
-  {
-    section: "RTLS Digital Twin",
-    path: "/rtls-digital-twin",
-    relatedSections: ["Technologies", "Modules", "Resources", "Ecosystem"],
-    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "AI Cameras", "Sensor Fusion"],
-    relatedResources: [
-      "rtls-101-core-components-protocols-deployment-models",
-      "building-rtls-dashboards-kpis-analytics",
-      "integrating-rtls-with-iot-apis-middleware-data-flows",
-    ],
-    keyTopics: ["Digital Twin", "Real-time Tracking", "Asset Visualization", "Process Optimization"],
-  },
-  {
-    section: "Resources",
-    path: "/resources",
-    relatedSections: ["RTLS Digital Twin", "Technologies", "Certification", "Membership"],
-    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "AI Cameras"],
-    relatedResources: [], // All resources are already interlinked in article-data.ts
-    keyTopics: ["RTLS Guides", "Technology Comparisons", "Case Studies", "Member Insights"],
-  },
-  {
-    section: "Certification",
-    path: "/certification",
-    relatedSections: ["Membership", "Resources", "RTLS Digital Twin"],
-    relatedTechnologies: [],
-    relatedResources: ["rtls-101-core-components-protocols-deployment-models", "rtls-deployment-guide"],
-    keyTopics: ["RTLS Certification", "Professional Development", "Industry Standards"],
-  },
-  {
-    section: "Membership",
-    path: "/membership",
-    relatedSections: ["Certification", "Resources", "Ecosystem"],
-    relatedTechnologies: [],
-    relatedResources: [],
-    keyTopics: ["Alliance Benefits", "Membership Tiers", "Industry Access"],
-  },
-  {
-    section: "Ecosystem",
-    path: "/ecosystem",
-    relatedSections: ["Membership", "RTLS Digital Twin", "Resources"],
-    relatedTechnologies: ["BLE", "UWB", "WiFi"],
-    relatedResources: ["rtls-vendor-evaluation-checklist", "rtls-technology-selection-guide"],
-    keyTopics: ["RTLS Vendors", "Technology Providers", "Industry Partners"],
-  },
-  {
-    section: "Contact",
-    path: "/contact",
-    relatedSections: ["Membership", "Resources", "Certification"],
-    relatedTechnologies: [],
-    relatedResources: [],
-    keyTopics: ["Support", "Inquiries", "Consultation"],
-  },
-]
-
-/**
- * Technology pages and their interrelationships
- */
-export const technologyInterlinks: TechnologyInterlink[] = [
+// Technology interlinking structure
+export const technologyInterlinks = [
   {
     technology: "BLE",
     path: "/rtls-digital-twin/technologies/ble",
-    relatedTechnologies: ["UWB", "WiFi", "NFC", "Zigbee"],
-    complementaryTechnologies: ["Sensor Fusion", "GNSS", "Dead Reckoning"],
-    competingTechnologies: ["UWB", "WiFi", "RFID"],
-    relatedResources: [
-      "ble-positioning-rssi-aoa-fingerprinting-explained",
-      "uwb-vs-ble-which-rtls-tech-fits-use-case",
-      "rfid-vs-barcode-vs-ble-asset-tracking-comparison",
-      "zigbee-vs-ble-low-power-rtls-iot",
-    ],
-    relatedIndustries: ["Healthcare", "Retail", "Warehousing", "Manufacturing"],
+    relatedTechnologies: ["WiFi", "UWB", "GNSS", "NFC"],
     relatedModules: ["Fleet Manager", "Rules Engine", "Dashboard Reports"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Logistics", "Retail"],
+    keyFeatures: ["Low power", "Widespread adoption", "Moderate accuracy", "Beacons"],
+    bestFor: ["Indoor asset tracking", "Personnel tracking", "Proximity detection", "Wayfinding"],
   },
   {
     technology: "UWB",
     path: "/rtls-digital-twin/technologies/uwb",
-    relatedTechnologies: ["BLE", "WiFi", "RFID", "GNSS"],
-    complementaryTechnologies: ["Sensor Fusion", "GNSS", "Dead Reckoning"],
-    competingTechnologies: ["BLE", "WiFi", "RFID"],
-    relatedResources: [
-      "how-uwb-works-time-of-flight-tdoa-deep-dive",
-      "uwb-vs-ble-which-rtls-tech-fits-use-case",
-      "uwb-vs-rfid-cost-benefit-rtls",
-      "uwb-vs-wifi-rtt-precision-showdown",
-    ],
+    relatedTechnologies: ["BLE", "WiFi", "GNSS", "Sensor Fusion"],
+    relatedModules: ["Fleet Manager", "Rules Engine", "Process Control"],
     relatedIndustries: ["Manufacturing", "Automotive", "Healthcare", "Warehousing"],
-    relatedModules: ["Fleet Manager", "Rules Engine", "Dashboard Reports"],
+    keyFeatures: ["High accuracy", "Real-time tracking", "Resistant to interference", "Precise ranging"],
+    bestFor: ["Precision tracking", "Safety applications", "Collision avoidance", "Tool tracking"],
   },
   {
     technology: "WiFi",
     path: "/rtls-digital-twin/technologies/wifi",
-    relatedTechnologies: ["BLE", "UWB", "RFID"],
-    complementaryTechnologies: ["Sensor Fusion", "GNSS"],
-    competingTechnologies: ["BLE", "UWB"],
-    relatedResources: [
-      "uwb-vs-wifi-rtt-latency-accuracy-infrastructure-cost",
-      "uwb-vs-wifi-rtt-precision-showdown",
-      "wifi-rtt-vs-ble-best-indoor-navigation",
-    ],
-    relatedIndustries: ["Retail", "Hospitality", "Corporate Offices", "Education"],
-    relatedModules: ["Dashboard Reports", "Rules Engine"],
+    relatedTechnologies: ["BLE", "UWB", "GNSS", "LoRa"],
+    relatedModules: ["Dashboard Reports", "Rules Engine", "Fleet Manager"],
+    relatedIndustries: ["Hospitality", "Education", "Corporate", "Retail"],
+    keyFeatures: ["Existing infrastructure", "Wide coverage", "Moderate accuracy", "Device-free tracking"],
+    bestFor: ["Large area coverage", "Visitor analytics", "Asset tracking", "Space utilization"],
   },
   {
     technology: "GNSS",
     path: "/rtls-digital-twin/technologies/gnss",
-    relatedTechnologies: ["RTK-GPS", "BLE", "UWB", "Dead Reckoning"],
-    complementaryTechnologies: ["Sensor Fusion", "BLE", "UWB", "Dead Reckoning"],
-    competingTechnologies: ["RTK-GPS"],
-    relatedResources: [
-      "uwb-vs-gps-indoor-outdoor-tracking-guide",
-      "rtls-use-cases-smart-cities",
-      "rtls-use-cases-transportation-logistics",
-    ],
-    relatedIndustries: ["Transportation", "Logistics", "Agriculture", "Construction"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
+    relatedTechnologies: ["RTK-GPS", "BLE", "LoRa", "Sensor Fusion"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
+    relatedIndustries: ["Logistics", "Agriculture", "Construction", "Mining"],
+    keyFeatures: ["Outdoor tracking", "Global coverage", "No infrastructure", "Weather resistant"],
+    bestFor: ["Vehicle tracking", "Outdoor asset management", "Supply chain visibility", "Field service"],
   },
   {
     technology: "RTK-GPS",
     path: "/rtls-digital-twin/technologies/rtk-gps",
-    relatedTechnologies: ["GNSS", "Sensor Fusion", "Dead Reckoning"],
-    complementaryTechnologies: ["Sensor Fusion", "Dead Reckoning"],
-    competingTechnologies: ["GNSS"],
-    relatedResources: [
-      "uwb-vs-gps-indoor-outdoor-tracking-guide",
-      "rtls-use-cases-smart-cities",
-      "rtls-use-cases-transportation-logistics",
-    ],
+    relatedTechnologies: ["GNSS", "Sensor Fusion", "UWB", "Dead Reckoning"],
+    relatedModules: ["Fleet Manager", "Production Planning", "Dashboard Reports"],
     relatedIndustries: ["Agriculture", "Construction", "Mining", "Surveying"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
-  },
-  {
-    technology: "AI Cameras",
-    path: "/rtls-digital-twin/technologies/ai-cameras",
-    relatedTechnologies: ["SLAM", "LiDAR", "Sensor Fusion"],
-    complementaryTechnologies: ["SLAM", "Sensor Fusion", "BLE", "UWB"],
-    competingTechnologies: ["LiDAR", "UWB"],
-    relatedResources: [
-      "uwb-vs-vision-rtls-accuracy-vs-contextual-tracking",
-      "vision-rtls-warehousing-60-percent-pick-time-improvement",
-      "vision-slam-vs-lidar-choosing-ideal-rtls",
-    ],
-    relatedIndustries: ["Retail", "Manufacturing", "Warehousing", "Security"],
-    relatedModules: ["Dashboard Reports", "Rules Engine"],
-  },
-  {
-    technology: "LiDAR",
-    path: "/rtls-digital-twin/technologies/lidar",
-    relatedTechnologies: ["AI Cameras", "SLAM", "Sensor Fusion"],
-    complementaryTechnologies: ["SLAM", "Sensor Fusion", "Dead Reckoning"],
-    competingTechnologies: ["AI Cameras", "SLAM"],
-    relatedResources: [
-      "lidar-rtls-warehouse-30-minute-forklift-savings",
-      "vision-slam-vs-lidar-choosing-ideal-rtls",
-      "vision-slam-vs-lidar-vio-3d-mapping-rtls",
-    ],
-    relatedIndustries: ["Warehousing", "Manufacturing", "Robotics", "Autonomous Vehicles"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
-  },
-  {
-    technology: "SLAM",
-    path: "/rtls-digital-twin/technologies/slam",
-    relatedTechnologies: ["AI Cameras", "LiDAR", "Sensor Fusion", "Dead Reckoning"],
-    complementaryTechnologies: ["LiDAR", "Sensor Fusion", "Dead Reckoning"],
-    competingTechnologies: ["AI Cameras", "LiDAR"],
-    relatedResources: [
-      "vision-slam-vs-lidar-choosing-ideal-rtls",
-      "vision-slam-vs-lidar-vio-3d-mapping-rtls",
-      "visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning",
-    ],
-    relatedIndustries: ["Robotics", "Autonomous Vehicles", "Warehousing", "Manufacturing"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
-  },
-  {
-    technology: "Magnetic Field",
-    path: "/rtls-digital-twin/technologies/magnetic-field",
-    relatedTechnologies: ["Sensor Fusion", "Dead Reckoning", "BLE"],
-    complementaryTechnologies: ["Sensor Fusion", "BLE", "WiFi"],
-    competingTechnologies: ["BLE", "WiFi"],
-    relatedResources: ["indoor-positioning-basics", "rtls-101-core-components-protocols-deployment-models"],
-    relatedIndustries: ["Retail", "Healthcare", "Corporate Offices"],
-    relatedModules: ["Dashboard Reports"],
-  },
-  {
-    technology: "Ultrasound",
-    path: "/rtls-digital-twin/technologies/ultrasound",
-    relatedTechnologies: ["BLE", "Sensor Fusion", "UWB"],
-    complementaryTechnologies: ["Sensor Fusion", "BLE"],
-    competingTechnologies: ["UWB", "BLE"],
-    relatedResources: ["indoor-positioning-basics", "rtls-101-core-components-protocols-deployment-models"],
-    relatedIndustries: ["Healthcare", "Manufacturing", "Laboratories"],
-    relatedModules: ["Dashboard Reports", "Rules Engine"],
-  },
-  {
-    technology: "Sensor Fusion",
-    path: "/rtls-digital-twin/technologies/sensor-fusion",
-    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "AI Cameras", "LiDAR", "SLAM", "Dead Reckoning"],
-    complementaryTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "AI Cameras", "LiDAR", "SLAM", "Dead Reckoning"],
-    competingTechnologies: [],
-    relatedResources: [
-      "5-rtls-trends-2025-ai-5g-nr-tag-free-tracking",
-      "uwb-vs-vision-rtls-accuracy-vs-contextual-tracking",
-      "integrating-rtls-with-iot-apis-middleware-data-flows",
-    ],
-    relatedIndustries: ["Robotics", "Autonomous Vehicles", "Manufacturing", "Healthcare"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
-  },
-  {
-    technology: "Dead Reckoning",
-    path: "/rtls-digital-twin/technologies/dead-reckoning",
-    relatedTechnologies: ["Sensor Fusion", "GNSS", "RTK-GPS", "SLAM"],
-    complementaryTechnologies: ["Sensor Fusion", "GNSS", "RTK-GPS", "BLE", "UWB"],
-    competingTechnologies: [],
-    relatedResources: ["indoor-positioning-basics", "rtls-101-core-components-protocols-deployment-models"],
-    relatedIndustries: ["Robotics", "Autonomous Vehicles", "Indoor Navigation"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
+    keyFeatures: ["Centimeter accuracy", "Outdoor precision", "Real-time corrections", "Base stations"],
+    bestFor: ["Precision agriculture", "Machine control", "Surveying", "Autonomous vehicles"],
   },
   {
     technology: "LoRa",
     path: "/rtls-digital-twin/technologies/lora",
-    relatedTechnologies: ["BLE", "Zigbee", "NFC"],
-    complementaryTechnologies: ["Sensor Fusion", "GNSS"],
-    competingTechnologies: ["BLE", "Zigbee"],
-    relatedResources: ["zigbee-vs-ble-low-power-rtls-iot", "integrating-rtls-with-iot-apis-middleware-data-flows"],
+    relatedTechnologies: ["BLE", "WiFi", "GNSS", "NFC"],
+    relatedModules: ["Rules Engine", "Dashboard Reports", "Fleet Manager"],
     relatedIndustries: ["Smart Cities", "Agriculture", "Utilities", "Logistics"],
-    relatedModules: ["Rules Engine", "Dashboard Reports"],
+    keyFeatures: ["Long range", "Low power", "Low bandwidth", "Low cost"],
+    bestFor: ["Wide area tracking", "Remote monitoring", "Supply chain", "Environmental monitoring"],
   },
   {
     technology: "NFC",
     path: "/rtls-digital-twin/technologies/nfc",
-    relatedTechnologies: ["BLE", "RFID"],
-    complementaryTechnologies: ["BLE", "Sensor Fusion"],
-    competingTechnologies: ["RFID"],
-    relatedResources: ["rfid-vs-barcode-vs-ble-asset-tracking-comparison"],
-    relatedIndustries: ["Retail", "Access Control", "Payments", "Healthcare"],
-    relatedModules: ["Rules Engine"],
+    relatedTechnologies: ["BLE", "RFID", "UWB", "QR Codes"],
+    relatedModules: ["Rules Engine", "Process Control", "Dashboard Reports"],
+    relatedIndustries: ["Retail", "Healthcare", "Access Control", "Payments"],
+    keyFeatures: ["Very short range", "Low cost", "Simple deployment", "Secure"],
+    bestFor: ["Access control", "Payments", "Authentication", "Asset verification"],
   },
   {
     technology: "Infrared",
     path: "/rtls-digital-twin/technologies/infrared",
-    relatedTechnologies: ["BLE", "Ultrasound"],
-    complementaryTechnologies: ["BLE", "Sensor Fusion"],
-    competingTechnologies: ["Ultrasound"],
-    relatedResources: ["indoor-positioning-basics", "rtls-101-core-components-protocols-deployment-models"],
-    relatedIndustries: ["Healthcare", "Retail", "Corporate Offices"],
-    relatedModules: ["Rules Engine", "Dashboard Reports"],
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "AI Cameras"],
+    relatedModules: ["Rules Engine", "Dashboard Reports", "Process Control"],
+    relatedIndustries: ["Healthcare", "Retail", "Hospitality", "Manufacturing"],
+    keyFeatures: ["Line of sight", "Room-level accuracy", "Simple deployment", "Low interference"],
+    bestFor: ["Room presence detection", "Staff tracking", "Patient monitoring", "Occupancy sensing"],
+  },
+  {
+    technology: "LiDAR",
+    path: "/rtls-digital-twin/technologies/lidar",
+    relatedTechnologies: ["AI Cameras", "SLAM", "UWB", "Sensor Fusion"],
+    relatedModules: ["Process Control", "Production Planning", "Rules Engine"],
+    relatedIndustries: ["Manufacturing", "Warehousing", "Robotics", "Automotive"],
+    keyFeatures: ["High accuracy", "3D mapping", "No tags required", "Works in darkness"],
+    bestFor: ["Autonomous navigation", "People counting", "Facility mapping", "Safety zones"],
+  },
+  {
+    technology: "AI Cameras",
+    path: "/rtls-digital-twin/technologies/ai-cameras",
+    relatedTechnologies: ["LiDAR", "SLAM", "Infrared", "Sensor Fusion"],
+    relatedModules: ["Process Control", "Rules Engine", "Dashboard Reports"],
+    relatedIndustries: ["Retail", "Manufacturing", "Security", "Healthcare"],
+    keyFeatures: ["Visual identification", "No tags required", "Behavior analysis", "Multiple object tracking"],
+    bestFor: ["People counting", "Process monitoring", "Security", "Customer analytics"],
+  },
+  {
+    technology: "Magnetic Field",
+    path: "/rtls-digital-twin/technologies/magnetic-field",
+    relatedTechnologies: ["BLE", "WiFi", "Sensor Fusion", "Dead Reckoning"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
+    relatedIndustries: ["Retail", "Healthcare", "Warehousing", "Manufacturing"],
+    keyFeatures: ["Infrastructure-free", "Works indoors", "Not affected by obstacles", "Unique signatures"],
+    bestFor: ["Indoor navigation", "Asset tracking", "Wayfinding", "Location fingerprinting"],
+  },
+  {
+    technology: "Ultrasound",
+    path: "/rtls-digital-twin/technologies/ultrasound",
+    relatedTechnologies: ["UWB", "BLE", "Infrared", "Sensor Fusion"],
+    relatedModules: ["Process Control", "Rules Engine", "Fleet Manager"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Laboratories", "Clean rooms"],
+    keyFeatures: ["High accuracy", "Room containment", "Low interference", "Reliable in complex environments"],
+    bestFor: ["Room-level tracking", "Asset management", "Staff tracking", "Equipment monitoring"],
+  },
+  {
+    technology: "Sensor Fusion",
+    path: "/rtls-digital-twin/technologies/sensor-fusion",
+    relatedTechnologies: ["BLE", "UWB", "GNSS", "WiFi", "Magnetic Field"],
+    relatedModules: ["Fleet Manager", "Rules Engine", "Dashboard Reports"],
+    relatedIndustries: ["Manufacturing", "Logistics", "Healthcare", "Retail"],
+    keyFeatures: ["Multi-technology", "Seamless transitions", "Improved accuracy", "Redundancy"],
+    bestFor: ["Indoor-outdoor tracking", "Critical assets", "Complex environments", "High-value applications"],
+  },
+  {
+    technology: "SLAM",
+    path: "/rtls-digital-twin/technologies/slam",
+    relatedTechnologies: ["LiDAR", "AI Cameras", "Sensor Fusion", "Dead Reckoning"],
+    relatedModules: ["Process Control", "Production Planning", "Rules Engine"],
+    relatedIndustries: ["Robotics", "Warehousing", "Manufacturing", "Logistics"],
+    keyFeatures: ["Simultaneous localization and mapping", "No infrastructure", "Dynamic environments", "3D mapping"],
+    bestFor: ["Autonomous robots", "Facility mapping", "Dynamic environments", "Indoor navigation"],
+  },
+  {
+    technology: "Dead Reckoning",
+    path: "/rtls-digital-twin/technologies/dead-reckoning",
+    relatedTechnologies: ["GNSS", "Sensor Fusion", "SLAM", "Magnetic Field"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
+    relatedIndustries: ["Automotive", "Warehousing", "Manufacturing", "Logistics"],
+    keyFeatures: ["No external references", "Continuous tracking", "Works in signal-denied areas", "Inertial sensors"],
+    bestFor: ["Signal-denied areas", "Temporary tracking", "Vehicle navigation", "Backup positioning"],
   },
 ]
 
-/**
- * Module pages and their interrelationships
- */
+// Module interlinking structure
 export const moduleInterlinks = [
   {
     module: "Fleet Manager",
     path: "/rtls-digital-twin/modules/fleet-manager",
-    relatedModules: ["Rules Engine", "Dashboard Reports"],
-    relatedTechnologies: ["BLE", "UWB", "GNSS", "RTK-GPS", "LiDAR", "SLAM"],
-    relatedResources: ["rtls-use-cases-transportation-logistics", "lidar-rtls-warehouse-30-minute-forklift-savings"],
-    relatedIndustries: ["Logistics", "Manufacturing", "Warehousing", "Healthcare"],
+    relatedTechnologies: ["BLE", "UWB", "GNSS", "WiFi", "LoRa"],
+    relatedModules: ["Rules Engine", "Dashboard Reports", "Process Control"],
+    relatedIndustries: ["Logistics", "Healthcare", "Manufacturing", "Warehousing"],
+    keyFeatures: ["Asset tracking", "Utilization analytics", "Maintenance scheduling", "Location history"],
   },
   {
     module: "Rules Engine",
     path: "/rtls-digital-twin/modules/rules-engine",
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
-    relatedTechnologies: ["BLE", "UWB", "WiFi", "AI Cameras"],
-    relatedResources: [
-      "building-rtls-dashboards-kpis-analytics",
-      "integrating-rtls-with-iot-apis-middleware-data-flows",
-    ],
-    relatedIndustries: ["Manufacturing", "Healthcare", "Warehousing", "Retail"],
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "Sensor Fusion"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Process Control"],
+    relatedIndustries: ["Manufacturing", "Healthcare", "Logistics", "Retail"],
+    keyFeatures: ["Automated alerts", "Geofencing", "Workflow automation", "Compliance monitoring"],
   },
   {
     module: "Dashboard Reports",
     path: "/rtls-digital-twin/modules/dashboard-reports",
-    relatedModules: ["Fleet Manager", "Rules Engine"],
-    relatedTechnologies: ["BLE", "UWB", "WiFi", "AI Cameras", "Sensor Fusion"],
-    relatedResources: ["building-rtls-dashboards-kpis-analytics", "rtls-roi-quantify-efficiency-gains-cost-savings"],
-    relatedIndustries: ["All Industries"],
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "AI Cameras"],
+    relatedModules: ["Fleet Manager", "Rules Engine", "Process Control"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Logistics", "Retail"],
+    keyFeatures: ["Real-time analytics", "Custom KPIs", "Data visualization", "Trend analysis"],
   },
   {
     module: "Production Planning",
     path: "/rtls-digital-twin/modules/production-planning",
-    relatedModules: ["Fleet Manager", "Rules Engine", "Process Control"],
-    relatedTechnologies: ["UWB", "BLE", "AI Cameras", "LiDAR"],
-    relatedResources: ["rtls-use-cases-manufacturing", "rtls-roi-quantify-efficiency-gains-cost-savings"],
-    relatedIndustries: ["Manufacturing", "Automotive", "Aerospace"],
+    relatedTechnologies: ["UWB", "BLE", "SLAM", "LiDAR", "Sensor Fusion"],
+    relatedModules: ["Process Control", "Fleet Manager", "Rules Engine"],
+    relatedIndustries: ["Manufacturing", "Automotive", "Aerospace", "Electronics"],
+    keyFeatures: ["Workflow optimization", "Resource allocation", "Bottleneck identification", "Simulation"],
   },
   {
     module: "Process Control",
     path: "/rtls-digital-twin/modules/process-control",
+    relatedTechnologies: ["UWB", "AI Cameras", "LiDAR", "SLAM", "Sensor Fusion"],
     relatedModules: ["Production Planning", "Rules Engine", "Dashboard Reports"],
-    relatedTechnologies: ["UWB", "BLE", "AI Cameras", "LiDAR"],
-    relatedResources: ["rtls-use-cases-manufacturing", "rtls-roi-quantify-efficiency-gains-cost-savings"],
-    relatedIndustries: ["Manufacturing", "Automotive", "Aerospace", "Pharmaceuticals"],
+    relatedIndustries: ["Manufacturing", "Pharmaceuticals", "Food & Beverage", "Automotive"],
+    keyFeatures: ["Quality control", "Process monitoring", "Compliance tracking", "Error prevention"],
   },
 ]
 
-/**
- * Industry-specific interlinks
- */
+// Industry interlinking structure
 export const industryInterlinks = [
   {
     industry: "Healthcare",
-    relatedTechnologies: ["BLE", "UWB", "RFID", "Ultrasound", "AI Cameras"],
-    relatedResources: ["rtls-use-cases-healthcare", "hospital-rtls-ble-uwb-hybrid"],
+    relatedTechnologies: ["BLE", "UWB", "RFID", "Ultrasound", "Infrared"],
     relatedModules: ["Fleet Manager", "Rules Engine", "Dashboard Reports"],
+    usesCases: ["Asset tracking", "Staff safety", "Patient flow", "Infection control"],
   },
   {
     industry: "Manufacturing",
-    relatedTechnologies: ["UWB", "BLE", "AI Cameras", "LiDAR", "SLAM"],
-    relatedResources: ["rtls-use-cases-manufacturing", "automotive-oem-uwb-45-minute-fod-savings"],
-    relatedModules: ["Production Planning", "Process Control", "Fleet Manager"],
+    relatedTechnologies: ["UWB", "BLE", "SLAM", "LiDAR", "AI Cameras"],
+    relatedModules: ["Process Control", "Production Planning", "Fleet Manager"],
+    usesCases: ["Tool tracking", "WIP tracking", "Safety zones", "Process optimization"],
   },
   {
-    industry: "Warehousing",
-    relatedTechnologies: ["UWB", "BLE", "AI Cameras", "LiDAR", "SLAM"],
-    relatedResources: [
-      "smart-warehousing-rtls-use-cases-automated-fulfillment",
-      "vision-rtls-warehousing-60-percent-pick-time-improvement",
-      "lidar-rtls-warehouse-30-minute-forklift-savings",
-    ],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
+    industry: "Logistics",
+    relatedTechnologies: ["GNSS", "BLE", "UWB", "LoRa", "RFID"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
+    usesCases: ["Fleet management", "Yard management", "Inventory tracking", "Supply chain visibility"],
   },
   {
     industry: "Retail",
-    relatedTechnologies: ["BLE", "WiFi", "NFC", "AI Cameras"],
-    relatedResources: ["rtls-use-cases-retail"],
-    relatedModules: ["Dashboard Reports", "Rules Engine"],
+    relatedTechnologies: ["BLE", "WiFi", "AI Cameras", "RFID", "NFC"],
+    relatedModules: ["Dashboard Reports", "Rules Engine", "Fleet Manager"],
+    usesCases: ["Customer analytics", "Inventory management", "Loss prevention", "Omnichannel fulfillment"],
   },
   {
-    industry: "Transportation & Logistics",
-    relatedTechnologies: ["GNSS", "RTK-GPS", "BLE", "UWB", "Sensor Fusion"],
-    relatedResources: ["rtls-use-cases-transportation-logistics"],
-    relatedModules: ["Fleet Manager", "Dashboard Reports"],
+    industry: "Warehousing",
+    relatedTechnologies: ["UWB", "BLE", "SLAM", "LiDAR", "RFID"],
+    relatedModules: ["Fleet Manager", "Process Control", "Dashboard Reports"],
+    usesCases: ["Inventory management", "Forklift tracking", "Pick optimization", "Space utilization"],
   },
   {
-    industry: "Smart Cities",
-    relatedTechnologies: ["GNSS", "LoRa", "WiFi", "Sensor Fusion"],
-    relatedResources: ["rtls-use-cases-smart-cities"],
-    relatedModules: ["Dashboard Reports", "Rules Engine"],
+    industry: "Agriculture",
+    relatedTechnologies: ["GNSS", "RTK-GPS", "LoRa", "Sensor Fusion", "Drones"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
+    usesCases: ["Equipment tracking", "Precision farming", "Livestock monitoring", "Field mapping"],
+  },
+  {
+    industry: "Construction",
+    relatedTechnologies: ["GNSS", "RTK-GPS", "UWB", "BLE", "SLAM"],
+    relatedModules: ["Fleet Manager", "Dashboard Reports", "Rules Engine"],
+    usesCases: ["Equipment tracking", "Worker safety", "Site monitoring", "Progress tracking"],
+  },
+  {
+    industry: "Mining",
+    relatedTechnologies: ["GNSS", "UWB", "SLAM", "LiDAR", "Sensor Fusion"],
+    relatedModules: ["Fleet Manager", "Process Control", "Rules Engine"],
+    usesCases: ["Personnel safety", "Equipment tracking", "Ventilation monitoring", "Production optimization"],
+  },
+  {
+    industry: "Automotive",
+    relatedTechnologies: ["UWB", "GNSS", "Dead Reckoning", "SLAM", "Sensor Fusion"],
+    relatedModules: ["Process Control", "Production Planning", "Fleet Manager"],
+    usesCases: ["Production tracking", "Tool management", "Quality control", "Vehicle assembly"],
+  },
+  {
+    industry: "Education",
+    relatedTechnologies: ["WiFi", "BLE", "NFC", "AI Cameras", "RFID"],
+    relatedModules: ["Dashboard Reports", "Rules Engine", "Fleet Manager"],
+    usesCases: ["Attendance tracking", "Asset management", "Campus navigation", "Space utilization"],
   },
 ]
 
-/**
- * Helper function to get related technologies for a specific technology
- * @param technology - The technology to find related technologies for
- */
-export function getRelatedTechnologies(technology: string): string[] {
-  const techInfo = technologyInterlinks.find((tech) => tech.technology.toLowerCase() === technology.toLowerCase())
-  return techInfo ? techInfo.relatedTechnologies : []
-}
-
-/**
- * Helper function to get complementary technologies for a specific technology
- * @param technology - The technology to find complementary technologies for
- */
-export function getComplementaryTechnologies(technology: string): string[] {
-  const techInfo = technologyInterlinks.find((tech) => tech.technology.toLowerCase() === technology.toLowerCase())
-  return techInfo ? techInfo.complementaryTechnologies : []
-}
-
-/**
- * Helper function to get competing technologies for a specific technology
- * @param technology - The technology to find competing technologies for
- */
-export function getCompetingTechnologies(technology: string): string[] {
-  const techInfo = technologyInterlinks.find((tech) => tech.technology.toLowerCase() === technology.toLowerCase())
-  return techInfo ? techInfo.competingTechnologies : []
-}
-
-/**
- * Helper function to get related resources for a specific technology
- * @param technology - The technology to find related resources for
- */
-export function getRelatedResourcesForTechnology(technology: string): string[] {
-  const techInfo = technologyInterlinks.find((tech) => tech.technology.toLowerCase() === technology.toLowerCase())
-  return techInfo ? techInfo.relatedResources : []
-}
-
-/**
- * Helper function to get related modules for a specific technology
- * @param technology - The technology to find related modules for
- */
-export function getRelatedModulesForTechnology(technology: string): string[] {
-  const techInfo = technologyInterlinks.find((tech) => tech.technology.toLowerCase() === technology.toLowerCase())
-  return techInfo ? techInfo.relatedModules : []
-}
-
-/**
- * Helper function to get technologies related to a specific industry
- * @param industry - The industry to find related technologies for
- */
-export function getTechnologiesForIndustry(industry: string): string[] {
-  const industryInfo = industryInterlinks.find((ind) => ind.industry.toLowerCase() === industry.toLowerCase())
-  return industryInfo ? industryInfo.relatedTechnologies : []
-}
-
-/**
- * Helper function to get resources related to a specific industry
- * @param industry - The industry to find related resources for
- */
-export function getResourcesForIndustry(industry: string): string[] {
-  const industryInfo = industryInterlinks.find((ind) => ind.industry.toLowerCase() === industry.toLowerCase())
-  return industryInfo ? industryInfo.relatedResources : []
-}
+// Resource article categories for interlinking
+export const articleCategories = [
+  {
+    category: "Technology Guides",
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "LoRa", "NFC", "AI Cameras", "LiDAR", "SLAM"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Logistics", "Retail", "Warehousing"],
+  },
+  {
+    category: "Implementation Guides",
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "Sensor Fusion"],
+    relatedModules: ["Fleet Manager", "Rules Engine", "Dashboard Reports"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Logistics", "Retail"],
+  },
+  {
+    category: "Case Studies",
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "LoRa", "AI Cameras"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Logistics", "Retail", "Warehousing"],
+  },
+  {
+    category: "Industry Insights",
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "Sensor Fusion"],
+    relatedIndustries: ["Healthcare", "Manufacturing", "Logistics", "Retail", "Warehousing"],
+  },
+  {
+    category: "Technology Comparisons",
+    relatedTechnologies: ["BLE", "UWB", "WiFi", "GNSS", "LoRa", "NFC", "AI Cameras", "LiDAR"],
+  },
+]
