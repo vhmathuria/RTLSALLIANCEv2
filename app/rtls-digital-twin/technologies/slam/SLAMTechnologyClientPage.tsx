@@ -1,6 +1,4 @@
 "use client"
-
-import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Building, Cpu, Database, Layers, Map } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -39,14 +37,6 @@ export default function SLAMTechnologyClientPage() {
                 unmapped environments. It combines data from various sensors such as cameras, LiDAR, radar, and inertial
                 measurement units to create a coherent understanding of the surrounding space.
               </p>
-              <div className="relative h-60 w-full rounded-lg overflow-hidden mb-4">
-                <Image
-                  src="/placeholder-krmsq.png"
-                  alt="SLAM algorithm visualization showing robot mapping and localization"
-                  fill
-                  className="object-cover"
-                />
-              </div>
             </div>
             <div className="border rounded-md p-6">
               <h3 className="text-lg font-semibold mb-4">Key Specifications</h3>
@@ -711,13 +701,13 @@ export default function SLAMTechnologyClientPage() {
               </ul>
             </div>
             <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-lg mb-4">Unbiased Guidance</h3>
+              <h3 className="font-semibold text-lg mb-4">Get Expert Guidance</h3>
               <p className="mb-6">
-                Need help determining if SLAM is the right technology for your RTLS project? Our vendor-neutral experts
-                can provide personalized guidance based on your specific requirements and constraints.
+                Need help determining if SLAM technology is right for your specific use case? Our alliance experts can
+                provide vendor-neutral advice tailored to your requirements.
               </p>
               <Link href="/contact">
-                <Button>Schedule a Consultation</Button>
+                <Button>Request Consultation</Button>
               </Link>
             </div>
           </div>
