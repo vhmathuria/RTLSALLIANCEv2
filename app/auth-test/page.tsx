@@ -36,27 +36,6 @@ export default async function AuthTestPage() {
         <h2 className="text-xl font-semibold mb-2">Client-side Auth Status:</h2>
         <AuthDebug />
       </div>
-
-      <div className="mt-6 space-y-4">
-        <h2 className="text-xl font-semibold">Authentication Links</h2>
-        <div className="space-y-2">
-          <div>
-            <a href="/login" className="text-blue-600 hover:underline">
-              Login Page
-            </a>
-          </div>
-          <div>
-            <a href="/account" className="text-blue-600 hover:underline">
-              Account Page
-            </a>
-          </div>
-          <div>
-            <a href="/membership/upgrade" className="text-blue-600 hover:underline">
-              Membership Upgrade
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
