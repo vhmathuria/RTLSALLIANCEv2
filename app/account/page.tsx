@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { createServerSupabaseClient } from "@/lib/supabase-client"
+import { createServerSupabaseClient, supabase, getUserProfile } from "@/lib/supabase-client"
 import AccountProfile from "./account-profile"
 
 export const dynamic = "force-dynamic"
@@ -8,14 +8,15 @@ export default async function AccountPage() {
   console.log("[Account Page] Rendering account page")
 
   // Get the user server-side
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.auth.getUser()
+  const supabaseClient = createServerSupabaseClient()
+  const {
+    data: { user },
+    error,
+  } = await supabaseClient.auth.getUser()
 
   if (error) {
     console.error("[Account Page] Error getting user:", error)
   }
-
-  const user = data?.user
 
   // Debug log the auth state
   console.log(`[Account Page] User authenticated: ${!!user}`)
@@ -26,11 +27,31 @@ export default async function AccountPage() {
     redirect("/login?redirectTo=/account&from=account-page")
   }
 
-  // Fetch the user's profile
-  const { data: profile, error: profileError } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+  // Get the user's profile
+  let profile = await getUserProfile(user.id)
 
-  if (profileError) {
-    console.error("[Account Page] Error fetching profile:", profileError)
+  // If no profile exists, create one
+  if (!profile) {
+    // Create a basic profile
+    const newProfile = {
+      id: user.id,
+      email: user.email,
+      full_name: user.user_metadata?.full_name || "",
+      membership_tier: "public",
+      membership_status: "active",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }
+
+    // Insert the profile
+    const { error: insertError } = await supabase.from("profiles").insert(newProfile)
+
+    if (insertError) {
+      console.error("Error creating profile:", insertError)
+    }
+
+    // Get the latest profile data
+    profile = await getUserProfile(user.id)
   }
 
   return (

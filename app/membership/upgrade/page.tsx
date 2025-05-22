@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase-server"
+import { supabase, getUserProfile } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Briefcase, Building, Check } from "lucide-react"
@@ -13,20 +13,39 @@ export const metadata = {
 export const dynamic = "force-dynamic"
 
 export default async function MembershipUpgradePage({ searchParams }: { searchParams: { tier?: string } }) {
-  // Check if user is logged in
-  const supabase = createClient()
+  // Get the current user
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // If user is not logged in, redirect to login
+  // If no user is found, redirect to login
   if (!user) {
-    console.log("No user found in membership upgrade page, redirecting to login")
-    redirect("/login?redirectTo=/membership/upgrade&from=upgrade-page")
+    redirect("/login?redirectTo=/membership/upgrade")
   }
 
-  // Get user profile
-  const { data: profile } = await supabase.from("profiles").select("membership_tier").eq("id", user.id).single()
+  // Get the user's profile
+  const profile = await getUserProfile(user.id)
+
+  // If no profile exists, create one
+  if (!profile) {
+    // Create a basic profile
+    const newProfile = {
+      id: user.id,
+      email: user.email,
+      full_name: user.user_metadata?.full_name || "",
+      membership_tier: "public",
+      membership_status: "active",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }
+
+    // Insert the profile
+    const { error } = await supabase.from("profiles").insert(newProfile)
+
+    if (error) {
+      console.error("Error creating profile:", error)
+    }
+  }
 
   const currentTier = profile?.membership_tier || "public"
 

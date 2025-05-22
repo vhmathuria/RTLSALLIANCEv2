@@ -1,40 +1,35 @@
 import { redirect } from "next/navigation"
-import { createServerSupabaseClient } from "@/lib/supabase-client"
-import LoginForm from "@/components/auth/login-form"
-
-export const dynamic = "force-dynamic"
+import { supabase } from "@/lib/supabase"
+import LoginForm from "./login-form"
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { redirectTo?: string; from?: string }
+  searchParams: { redirectTo?: string; error?: string }
 }) {
-  console.log(`[Login Page] Rendering login page, redirect to: ${searchParams.redirectTo}, from: ${searchParams.from}`)
-
   // Check if user is already logged in
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.auth.getUser()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  if (error) {
-    console.error("[Login Page] Error getting user:", error)
-  }
-
-  const user = data?.user
-
-  // Debug log the auth state
-  console.log(`[Login Page] User authenticated: ${!!user}`)
-
-  // If user is already logged in, redirect to the requested page or dashboard
-  if (user) {
-    const redirectTo = searchParams.redirectTo || "/account"
-    console.log(`[Login Page] User already logged in, redirecting to: ${redirectTo}`)
-    redirect(redirectTo)
+  if (session) {
+    // If already logged in, redirect to the requested page or home
+    redirect(searchParams.redirectTo || "/")
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-12">
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold mb-6 text-center">Log In to RTLS Alliance</h1>
+
+        {searchParams.error && (
+          <div className="bg-red-100 text-red-800 p-4 rounded-md mb-6">
+            {searchParams.error === "missing_code" && "Authentication code is missing."}
+            {searchParams.error === "unexpected_error" && "An unexpected error occurred."}
+            {searchParams.error !== "missing_code" && searchParams.error !== "unexpected_error" && searchParams.error}
+          </div>
+        )}
+
         <LoginForm redirectTo={searchParams.redirectTo} />
       </div>
     </div>

@@ -1,13 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
-import { createAdminClient } from "@/lib/supabase-server-admin"
+import { supabaseAdmin } from "@/lib/supabase"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 })
 
-// Webhook endpoint for Stripe events
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const signature = req.headers.get("stripe-signature") as string
@@ -45,13 +44,12 @@ export async function POST(req: NextRequest) {
           // Calculate expiry date (end of current period)
           const expiryDate = new Date(subscription.current_period_end * 1000)
 
-          // Update user membership directly - use admin client to bypass RLS
-          const supabaseAdmin = createAdminClient()
+          // Update user membership
           const { error: updateError } = await supabaseAdmin
             .from("profiles")
             .update({
               membership_tier: membershipTier,
-              membership_status: "active", // Changed to lowercase
+              membership_status: "active",
               membership_expiry: expiryDate.toISOString(),
               last_payment_date: new Date().toISOString(),
               stripe_customer_id: session.customer as string,
@@ -59,7 +57,7 @@ export async function POST(req: NextRequest) {
             .eq("id", userId)
 
           if (updateError) {
-            console.error("Error updating profile directly:", updateError)
+            console.error("Error updating profile:", updateError)
             throw updateError
           }
 
@@ -84,7 +82,6 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const supabaseAdmin = createAdminClient()
         const { data: profile, error: profileError } = await supabaseAdmin
           .from("profiles")
           .select("id")
@@ -117,19 +114,19 @@ export async function POST(req: NextRequest) {
         // Calculate expiry date (end of current period)
         const expiryDate = new Date(subscription.current_period_end * 1000)
 
-        // Update user membership directly - use admin client to bypass RLS
+        // Update user membership
         const { error: updateError } = await supabaseAdmin
           .from("profiles")
           .update({
             membership_tier: membershipTier,
-            membership_status: "active", // Changed to lowercase
+            membership_status: "active",
             membership_expiry: expiryDate.toISOString(),
             last_payment_date: new Date().toISOString(),
           })
           .eq("id", profile.id)
 
         if (updateError) {
-          console.error("Error updating profile directly for subscription update:", updateError)
+          console.error("Error updating profile for subscription update:", updateError)
           throw updateError
         }
 
@@ -150,7 +147,6 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const supabaseAdmin = createAdminClient()
         const { data: profile, error: profileError } = await supabaseAdmin
           .from("profiles")
           .select("id")
@@ -167,7 +163,7 @@ export async function POST(req: NextRequest) {
           .from("profiles")
           .update({
             membership_tier: "public",
-            membership_status: "inactive", // Changed to lowercase
+            membership_status: "inactive",
           })
           .eq("id", profile.id)
 
