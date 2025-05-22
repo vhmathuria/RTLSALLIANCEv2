@@ -73,6 +73,19 @@ export async function POST(req: NextRequest) {
           }
 
           console.log("Profile updated successfully for user:", userId)
+
+          try {
+            // Attempt to revalidate paths
+            await fetch(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?path=/resources&path=/membership&path=/account`,
+              {
+                method: "POST",
+              },
+            )
+            console.log("Revalidation triggered from webhook")
+          } catch (revalidateError) {
+            console.error("Failed to trigger revalidation:", revalidateError)
+          }
         } else {
           console.error("No subscription found in session:", session.id)
         }
@@ -155,6 +168,19 @@ export async function POST(req: NextRequest) {
 
         console.log("Profile updated successfully for subscription update, user:", profile.id)
 
+        try {
+          // Attempt to revalidate paths
+          await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?path=/resources&path=/membership&path=/account`,
+            {
+              method: "POST",
+            },
+          )
+          console.log("Revalidation triggered from webhook")
+        } catch (revalidateError) {
+          console.error("Failed to trigger revalidation:", revalidateError)
+        }
+
         break
       }
 
@@ -198,6 +224,19 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("Profile downgraded successfully for subscription deletion, user:", profile.id)
+
+        try {
+          // Attempt to revalidate paths
+          await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?path=/resources&path=/membership&path=/account`,
+            {
+              method: "POST",
+            },
+          )
+          console.log("Revalidation triggered from webhook")
+        } catch (revalidateError) {
+          console.error("Failed to trigger revalidation:", revalidateError)
+        }
 
         break
       }

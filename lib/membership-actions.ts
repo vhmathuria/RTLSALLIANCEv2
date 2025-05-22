@@ -1,6 +1,7 @@
 "use server"
 
-import { createClient, createAdminClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase-server"
+import { createAdminClient } from "@/lib/supabase-server-admin"
 import { revalidatePath } from "next/cache"
 import Stripe from "stripe"
 
@@ -166,7 +167,7 @@ export async function updateMembership(userId: string, tier: string, expiryDate?
       throw error
     }
 
-    // Revalidate paths that might show different content based on membership
+    // Revalidate paths to ensure the UI updates
     revalidatePath("/resources")
     revalidatePath("/membership")
     revalidatePath("/account")
@@ -269,7 +270,7 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
       return { success: false, error: error.message }
     }
 
-    // Revalidate paths
+    // Revalidate paths to ensure the UI updates
     revalidatePath("/resources")
     revalidatePath("/membership")
     revalidatePath("/account")
@@ -279,5 +280,22 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
   } catch (error: any) {
     console.error("Error verifying session:", error)
     return { success: false, error: error.message }
+  }
+}
+
+// Force refresh membership status
+export async function forceRefreshMembership(userId: string) {
+  "use server"
+
+  try {
+    // Revalidate paths to ensure the UI updates
+    revalidatePath("/resources")
+    revalidatePath("/membership")
+    revalidatePath("/account")
+
+    return { success: true }
+  } catch (error) {
+    console.error("Failed to refresh membership:", error)
+    return { success: false, error }
   }
 }
