@@ -2,8 +2,13 @@
 
 import { Button } from "@/components/ui/button"
 import { Check, Users, Building, Lightbulb, Clock } from "lucide-react"
+import { FAQSection } from "@/components/ui/faq-section"
+import { getFAQsByPage } from "@/lib/faq-data"
+import { FAQSchema } from "@/components/seo/faq-schema"
 
 export default function CertificationPage() {
+  const certificationFAQs = getFAQsByPage("certification")
+
   return (
     <main className="bg-white pb-16">
       <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
@@ -311,6 +316,18 @@ export default function CertificationPage() {
             <Clock className="mr-2 h-4 w-4" />
             Join Waitlist
           </Button>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <FAQSection
+            faqs={certificationFAQs}
+            title="Frequently Asked Questions About Certification"
+            className="bg-transparent"
+          />
+          <FAQSchema faqs={certificationFAQs} pageId="certification" />
         </div>
       </section>
     </main>

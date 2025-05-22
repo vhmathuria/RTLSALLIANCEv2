@@ -461,6 +461,60 @@ export const technologyFAQs: Record<string, FAQItem[]> = {
   // Additional technologies will follow the same pattern
 }
 
+// Certification FAQs
+export const certificationFAQs: FAQItem[] = [
+  {
+    question: "Who is eligible for RTLS Alliance certification?",
+    answer:
+      "Anyone working with or interested in RTLS technologies is eligible for certification. This includes engineers, technicians, IT professionals, project managers, consultants, and students. There are no strict prerequisites, though basic technical knowledge is recommended for the Professional level, and prior experience with RTLS implementations is beneficial for the Expert level certification.",
+  },
+  {
+    question: "How long does the certification process take?",
+    answer:
+      "The certification timeline varies by level. The Certified RTLS Professional program requires approximately 4 hours of online coursework plus exam time. The Certified RTLS Expert program involves 16 hours of coursework spread over multiple modules, plus exam preparation and testing. Most candidates complete the Professional certification within 1-2 weeks and the Expert certification within 4-8 weeks, depending on their schedule and prior experience.",
+  },
+  {
+    question: "What topics are covered in the certification exams?",
+    answer:
+      "The Professional certification covers RTLS fundamentals, technology comparisons, basic implementation principles, and industry applications. The Expert certification delves deeper into system architecture, advanced deployment strategies, integration methodologies, performance optimization, troubleshooting, and specialized industry solutions. Both certifications include theoretical knowledge and practical application scenarios.",
+  },
+  {
+    question: "How are the certification exams administered?",
+    answer:
+      "Certification exams are administered online through our secure testing platform. The exams combine multiple-choice questions, scenario-based problems, and practical exercises. Candidates can take the exams from any location with a reliable internet connection. The Professional exam takes approximately 90 minutes, while the Expert exam is divided into modules totaling about 3 hours. Proctoring is required for both certification levels.",
+  },
+  {
+    question: "How long are the certifications valid?",
+    answer:
+      "RTLS Alliance certifications are valid for three years from the date of issuance. To maintain certification status, certified individuals must complete continuing education requirements or recertify through an abbreviated renewal exam. This ensures that certified professionals stay current with evolving RTLS technologies and industry best practices.",
+  },
+  {
+    question: "What study materials are available for certification preparation?",
+    answer:
+      "The certification programs include comprehensive study materials as part of the registration fee. These include video lectures, reading materials, practice exercises, and sample questions. Additional resources include study guides, practice exams, and optional instructor-led virtual workshops. Alliance members receive supplementary preparation resources as part of their membership benefits.",
+  },
+  {
+    question: "What is the difference between Professional and Expert certifications?",
+    answer:
+      "The Professional certification establishes foundational knowledge for implementing and working with RTLS technologies. It's ideal for those newer to the field or implementing specific solutions. The Expert certification demonstrates advanced mastery of RTLS principles, system design, enterprise integration, and optimization strategies. Expert certification is designed for professionals who architect complex solutions, lead implementation teams, or provide consulting services.",
+  },
+  {
+    question: "Are there prerequisites for taking the certification exams?",
+    answer:
+      "There are no formal prerequisites for the Professional certification beyond basic technical literacy. For the Expert certification, we recommend either holding the Professional certification first or having at least two years of hands-on experience with RTLS technologies. This ensures candidates have the foundational knowledge necessary to succeed with the more advanced material.",
+  },
+  {
+    question: "What are the benefits of becoming certified?",
+    answer:
+      "Certification benefits include: professional recognition of your expertise; enhanced career opportunities and earning potential; listing in the RTLS Alliance directory of certified professionals; access to exclusive resources and networking opportunities; use of certification logos on professional profiles; and demonstrated commitment to RTLS best practices. Organizations often prefer certified professionals for their demonstrated knowledge and adherence to industry standards.",
+  },
+  {
+    question: "Is there a discount for Alliance members?",
+    answer:
+      "Yes, RTLS Alliance members receive significant discounts on certification programs. Student members receive a 50% discount, Professional members receive a 25% discount, and Corporate members receive a 15% discount per employee. Additionally, Corporate members can access volume licensing options for certifying multiple team members simultaneously.",
+  },
+]
+
 // Helper function to get FAQs by page/section
 export function getFAQsByPage(page: string): FAQItem[] {
   switch (page) {
@@ -498,6 +552,8 @@ export function getFAQsByPage(page: string): FAQItem[] {
       return technologyFAQs.slam || []
     case "dead_reckoning":
       return technologyFAQs.dead_reckoning || []
+    case "certification":
+      return certificationFAQs
     default:
       return []
   }

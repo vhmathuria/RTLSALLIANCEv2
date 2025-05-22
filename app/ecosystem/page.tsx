@@ -5,15 +5,15 @@ import type { Metadata } from "next"
 
 // Define metadata for the page
 export const metadata: Metadata = {
-  title: "RTLS Ecosystem - Partners & Vendors",
+  title: "RTLS Directory - Real-Time Location System Providers & Technologies",
   description:
-    "Explore the RTLS ecosystem of technology providers, system integrators, and solution partners for real-time location systems.",
+    "Explore our comprehensive directory of real-time location system providers, technologies, and specialists. Find the perfect RTLS solution for your specific industry needs.",
   keywords:
-    "RTLS ecosystem, real-time location systems vendors, RTLS partners, RTLS technology providers, RTLS system integrators, location tracking solutions",
+    "RTLS directory, real-time location systems vendors, RTLS providers, RTLS technology companies, location tracking solutions, indoor positioning systems, UWB, BLE, RFID, WiFi positioning",
   openGraph: {
-    title: "RTLS Ecosystem - Partners & Vendors",
+    title: "RTLS Directory - Real-Time Location System Providers & Technologies",
     description:
-      "Explore the RTLS ecosystem of technology providers, system integrators, and solution partners for real-time location systems.",
+      "Explore our comprehensive directory of real-time location system providers, technologies, and specialists. Find the perfect RTLS solution for your specific industry needs.",
     url: "https://rtlsalliance.com/ecosystem",
     siteName: "RTLS Alliance",
     images: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
         width: 1200,
         height: 630,
-        alt: "RTLS Ecosystem",
+        alt: "RTLS Directory",
       },
     ],
     locale: "en_US",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "RTLS Ecosystem - Partners & Vendors",
+    title: "RTLS Directory - Real-Time Location System Providers & Technologies",
     description:
-      "Explore the RTLS ecosystem of technology providers, system integrators, and solution partners for real-time location systems.",
+      "Explore our comprehensive directory of real-time location system providers, technologies, and specialists. Find the perfect RTLS solution for your specific industry needs.",
     images: ["https://rtlsalliance.com/images/rtls-alliance-logo.png"],
   },
   alternates: {
@@ -46,7 +46,7 @@ export default function EcosystemPageWrapper() {
   // Define breadcrumbs for structured data
   const breadcrumbs = [
     { name: "Home", url: "https://rtlsalliance.com" },
-    { name: "Ecosystem", url: "https://rtlsalliance.com/ecosystem" },
+    { name: "RTLS Directory", url: "https://rtlsalliance.com/ecosystem" },
   ]
 
   // Define vendor list data for structured data

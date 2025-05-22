@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Building2, User, Globe, MapPin, Briefcase, Search, X } from "lucide-react"
+import { Building2, User, MapPin, Briefcase, Search, X, ArrowRight } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -818,6 +818,12 @@ const practitioners = [
   },
 ]
 
+// Sort vendors alphabetically by name
+const sortedVendors = [...vendors].sort((a, b) => a.name.localeCompare(b.name))
+
+// Sort practitioners alphabetically by name
+const sortedPractitioners = [...practitioners].sort((a, b) => a.name.localeCompare(b.name))
+
 // Extract unique values for filters
 const getUniqueValues = (array, key) => {
   if (key === "specialties" || key === "industries") {
@@ -865,8 +871,8 @@ export default function EcosystemClientPage() {
   const [selectedTechnology, setSelectedTechnology] = useState("All Technologies")
   const [selectedRegion, setSelectedRegion] = useState("All Regions")
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries")
-  const [filteredVendors, setFilteredVendors] = useState(vendors)
-  const [filteredPractitioners, setFilteredPractitioners] = useState(practitioners)
+  const [filteredVendors, setFilteredVendors] = useState(sortedVendors)
+  const [filteredPractitioners, setFilteredPractitioners] = useState(sortedPractitioners)
 
   // Get unique values for filters
   const technologies = getTechnologyValues(vendors)
@@ -875,7 +881,7 @@ export default function EcosystemClientPage() {
 
   // Filter vendors when search or filters change
   useEffect(() => {
-    let result = [...vendors]
+    let result = [...sortedVendors]
 
     // Filter by search query
     if (searchQuery) {
@@ -916,12 +922,12 @@ export default function EcosystemClientPage() {
   // Filter practitioners when search changes
   useEffect(() => {
     if (!searchQuery) {
-      setFilteredPractitioners(practitioners)
+      setFilteredPractitioners(sortedPractitioners)
       return
     }
 
     const query = searchQuery.toLowerCase()
-    const result = practitioners.filter(
+    const result = sortedPractitioners.filter(
       (practitioner) =>
         practitioner.name.toLowerCase().includes(query) ||
         practitioner.title.toLowerCase().includes(query) ||
@@ -943,28 +949,52 @@ export default function EcosystemClientPage() {
 
   return (
     <main className="bg-white pb-16">
-      <section className="py-12 text-center">
+      <section className="py-12 text-center bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            RTLS Alliance Ecosystem
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+            RTLS Directory
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Connect with leading vendors, practitioners, and partners in the RTLS community
+
+          {/* Improved hero subtitle styling */}
+          <div className="max-w-3xl mx-auto mb-8 bg-white p-6 rounded-lg shadow-sm">
+            <p className="text-xl text-gray-700 leading-relaxed">
+              We're here to help you find the perfect RTLS vendor to transform your operations and unlock new
+              possibilities. Explore the innovators shaping the future of real-time location technology—from UWB and BLE
+              to WiFi and RFID—and discover the solution that fits your unique needs.
+            </p>
+          </div>
+
+          {/* Moved text above CTA button and increased size */}
+          <p className="text-lg font-medium text-blue-800 mb-4">
+            Are you an RTLS provider or specialist but don't see your company in the public directory below?
           </p>
+
+          <Link href="/contact">
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 mx-auto">
+              Contact Us to get listed for free <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </section>
 
       <section className="py-8">
         <div className="container mx-auto px-4">
+          {/* More prominent tabs */}
           <Tabs defaultValue="vendors" className="w-full" onValueChange={setActiveTab}>
             <div className="flex justify-center mb-8">
-              <TabsList>
-                <TabsTrigger value="vendors" className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4" />
+              <TabsList className="bg-blue-100 p-1 rounded-lg">
+                <TabsTrigger
+                  value="vendors"
+                  className="flex items-center gap-2 px-6 py-3 text-base font-medium data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                >
+                  <Building2 className="h-5 w-5" />
                   Vendors
                 </TabsTrigger>
-                <TabsTrigger value="practitioners" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
+                <TabsTrigger
+                  value="practitioners"
+                  className="flex items-center gap-2 px-6 py-3 text-base font-medium data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                >
+                  <User className="h-5 w-5" />
                   Practitioners
                 </TabsTrigger>
               </TabsList>
@@ -977,7 +1007,7 @@ export default function EcosystemClientPage() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                   <Input
                     type="text"
-                    placeholder="Search ecosystem..."
+                    placeholder="Search directory..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -1076,7 +1106,7 @@ export default function EcosystemClientPage() {
                     selectedRegion !== "All Regions" ||
                     selectedIndustry !== "All Industries") && (
                     <span className="text-sm text-gray-500">
-                      Showing {filteredVendors.length} of {vendors.length} vendors
+                      Showing {filteredVendors.length} of {sortedVendors.length} vendors
                     </span>
                   )}
                 </div>
@@ -1101,18 +1131,6 @@ export default function EcosystemClientPage() {
                     >
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{vendor.name}</h3>
                       <p className="text-gray-700 mb-4">{vendor.description}</p>
-
-                      <div className="flex items-center text-gray-600 mb-2">
-                        <Globe className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <a
-                          href={vendor.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          {vendor.website.replace(/^https?:\/\//, "")}
-                        </a>
-                      </div>
 
                       <div className="flex items-center text-gray-600 mb-4">
                         <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -1183,14 +1201,19 @@ export default function EcosystemClientPage() {
       {/* CTA Section */}
       <section className="py-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white mt-12">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Join the RTLS Alliance</h2>
+          <h2 className="text-3xl font-bold mb-6">Showcase Your RTLS Solutions</h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Join a global community of RTLS professionals and solution providers. Get listed, establish yourself as a
-            leading RTLS voice, and unlock new business opportunities in real-time location systems.
+            Are you an RTLS provider or specialist but don't see your company listed in the public directory above?
+            Contact us to get listed for free and connect with potential clients looking for your solutions.
           </p>
-          <div className="flex justify-center">
-            <Link href="/membership">
+          <div className="flex justify-center gap-4">
+            <Link href="/contact">
               <Button className="bg-white text-blue-900 hover:bg-gray-100 font-semibold text-lg px-6 py-2">
+                Contact Us
+              </Button>
+            </Link>
+            <Link href="/membership">
+              <Button className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold text-lg px-6 py-2">
                 Join The Alliance
               </Button>
             </Link>
@@ -1202,8 +1225,8 @@ export default function EcosystemClientPage() {
       <section className="py-4 bg-white border-t">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm text-gray-500">
-            The RTLS Alliance is an independent industry community. Listing in this directory does not imply endorsement
-            or partnership.
+            This directory is provided as a resource for the RTLS community. Listing in this directory does not imply
+            endorsement by the RTLS Alliance.
           </p>
         </div>
       </section>

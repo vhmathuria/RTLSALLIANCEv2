@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, User, LogOut } from "lucide-react"
+import { Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { createSupabaseClient } from "@/lib/supabase-auth"
@@ -45,6 +45,7 @@ export default function Header() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<any>(null)
+  const [expandedDropdown, setExpandedDropdown] = useState<string | null>(null)
 
   useEffect(() => {
     async function loadUserProfile() {
@@ -84,13 +85,21 @@ export default function Header() {
     return pathname.startsWith(path)
   }
 
+  const toggleDropdown = (name: string) => {
+    if (expandedDropdown === name) {
+      setExpandedDropdown(null)
+    } else {
+      setExpandedDropdown(name)
+    }
+  }
+
   // Check if user has a public membership tier
   const hasPublicTier = profile?.membership_tier === "public"
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <nav className="container mx-auto px-4 flex items-center justify-between py-3" aria-label="Global">
-        <div className="flex lg:flex-1">
+      <nav className="container mx-auto px-3 sm:px-4 flex items-center justify-between py-3" aria-label="Global">
+        <div className="flex xl:flex-1">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center">
             <span className="sr-only">RTLS Alliance</span>
             <Image
@@ -106,7 +115,7 @@ export default function Header() {
           </Link>
         </div>
 
-        <div className="flex lg:hidden">
+        <div className="flex xl:hidden">
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
@@ -117,7 +126,7 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="hidden lg:flex lg:gap-x-8">
+        <div className="hidden xl:flex xl:gap-x-5">
           {navigation.map((item) =>
             item.dropdown ? (
               <DropdownMenu key={item.name}>
@@ -157,14 +166,14 @@ export default function Header() {
           )}
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden xl:flex xl:flex-1 xl:justify-end xl:items-center">
           {!loading && user ? (
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    <span>{profile?.full_name || user.email}</span>
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 max-w-[200px]">
+                    <User className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{profile?.full_name || user.email}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -179,8 +188,11 @@ export default function Header() {
               </DropdownMenu>
               {hasPublicTier && (
                 <Link href="/membership/upgrade">
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                    Upgrade Membership
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 whitespace-nowrap"
+                  >
+                    Upgrade
                   </Button>
                 </Link>
               )}
@@ -188,10 +200,15 @@ export default function Header() {
           ) : (
             <div className="flex gap-2">
               <Link href="/auth?tab=login">
-                <Button variant="outline">Sign In</Button>
+                <Button variant="outline" size="sm">
+                  Sign In
+                </Button>
               </Link>
               <Link href="/auth?tab=signup">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                >
                   Join Alliance
                 </Button>
               </Link>
@@ -202,9 +219,9 @@ export default function Header() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-white">
+        <div className="xl:hidden fixed inset-0 z-50 bg-white">
           <div className="fixed inset-0 flex">
-            <div className="w-full">
+            <div className="w-full flex flex-col">
               <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200">
                 <Link href="/" className="-m-1.5 p-1.5 flex items-center">
                   <span className="sr-only">RTLS Alliance</span>
@@ -228,11 +245,50 @@ export default function Header() {
                   <X className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
-              <div className="py-6 px-4 space-y-4">
-                {navigation.map((item) => (
-                  <div key={item.name}>
-                    {item.dropdown ? (
-                      <div className="space-y-2">
+              <div className="flex-1 overflow-y-auto py-6 px-4">
+                <div className="space-y-4">
+                  {navigation.map((item) => (
+                    <div key={item.name}>
+                      {item.dropdown ? (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Link
+                              href={item.href}
+                              className={`text-base font-medium leading-7 ${
+                                isActive(item.href) ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
+                              }`}
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {item.name}
+                            </Link>
+                            <button
+                              onClick={() => toggleDropdown(item.name)}
+                              className="p-1 rounded-md text-gray-500 hover:bg-gray-100"
+                              aria-expanded={expandedDropdown === item.name}
+                            >
+                              {expandedDropdown === item.name ? (
+                                <ChevronDown className="h-5 w-5" />
+                              ) : (
+                                <ChevronRight className="h-5 w-5" />
+                              )}
+                            </button>
+                          </div>
+                          {expandedDropdown === item.name && (
+                            <div className="pl-4 space-y-2 border-l-2 border-gray-200">
+                              {item.dropdown.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="block text-sm font-medium text-gray-700 hover:text-blue-600"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
                         <Link
                           href={item.href}
                           className={`block text-base font-medium leading-7 ${
@@ -240,35 +296,13 @@ export default function Header() {
                           }`}
                           onClick={() => setMobileMenuOpen(false)}
                         >
-                          {item.name} - Overview
+                          {item.name}
                         </Link>
-                        <div className="pl-4 space-y-2 border-l-2 border-gray-200">
-                          {item.dropdown.map((subItem) => (
-                            <Link
-                              key={subItem.name}
-                              href={subItem.href}
-                              className="block text-sm font-medium text-gray-700 hover:text-blue-600"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={`block text-base font-medium leading-7 ${
-                          isActive(item.href) ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
-                        }`}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-                <div className="pt-4 border-t border-gray-200">
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-6 border-t border-gray-200 mt-6">
                   {!loading && user ? (
                     <div className="space-y-2">
                       <Link
