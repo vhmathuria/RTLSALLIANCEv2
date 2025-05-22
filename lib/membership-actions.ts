@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient } from "@/lib/supabase-server"
+import { createClient, createAdminClient } from "@/lib/supabase-server"
 import { revalidatePath } from "next/cache"
 import Stripe from "stripe"
 
@@ -51,8 +51,9 @@ export async function checkMembershipAccess(requiredTier: string): Promise<boole
 
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
-    // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
+    // Update membership status to expired - use admin client to bypass RLS
+    const supabaseAdmin = createAdminClient()
+    await supabaseAdmin.from("profiles").update({ membership_status: "expired" }).eq("id", user.id)
 
     return requiredTier === "public"
   }
@@ -116,8 +117,9 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
 
     stripeCustomerId = customer.id
 
-    // Save Stripe customer ID to profile
-    await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
+    // Save Stripe customer ID to profile - use admin client to bypass RLS
+    const supabaseAdmin = createAdminClient()
+    await supabaseAdmin.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
   }
 
   // Create checkout session
@@ -143,12 +145,13 @@ export async function createCheckoutSession(tier: "student" | "professional" | "
 
 // Update user membership after successful payment
 export async function updateMembership(userId: string, tier: string, expiryDate?: Date) {
-  const supabase = createClient()
+  // Use admin client to bypass RLS
+  const supabaseAdmin = createAdminClient()
 
   try {
     console.log("Updating membership for user:", userId, "to tier:", tier)
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("profiles")
       .update({
         membership_tier: tier,
@@ -202,8 +205,9 @@ export async function getCurrentMembership() {
 
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
-    // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
+    // Update membership status to expired - use admin client to bypass RLS
+    const supabaseAdmin = createAdminClient()
+    await supabaseAdmin.from("profiles").update({ membership_status: "expired" }).eq("id", user.id)
 
     return { tier: "public", status: "expired", expiryDate: profile.membership_expiry }
   }
@@ -248,8 +252,8 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
     const expiryDate = new Date(subscription.current_period_end * 1000)
 
     // Update the membership
-    const supabase = createClient()
-    const { error } = await supabase
+    const supabaseAdmin = createAdminClient()
+    const { error } = await supabaseAdmin
       .from("profiles")
       .update({
         membership_tier: membershipTier,

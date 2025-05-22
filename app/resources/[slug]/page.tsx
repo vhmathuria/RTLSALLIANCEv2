@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { createServerClient } from "@/lib/supabase-server"
 import { getArticleBySlug } from "@/lib/supabase"
+import { createAdminClient } from "@/lib/supabase-server-admin"
 import GuideRenderer from "@/components/renderers/guide/guide-renderer"
 import SuccessStoryRenderer from "@/components/renderers/success-story/success-story-renderer"
 import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
@@ -12,9 +13,15 @@ import type { Metadata } from "next"
 export const revalidate = 86400
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug)
+  // Use admin client to fetch article metadata for SEO
+  const supabaseAdmin = createAdminClient()
+  const { data: article, error } = await supabaseAdmin
+    .from("staging_articles")
+    .select("title, meta_description, excerpt, featured_image, slug, published_at, updated_at, content_type")
+    .eq("slug", params.slug)
+    .single()
 
-  if (!article) {
+  if (error || !article) {
     return {
       title: "Article Not Found - RTLS Alliance",
       description: "The requested article could not be found.",

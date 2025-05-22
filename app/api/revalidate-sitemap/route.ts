@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const token = request.nextUrl.searchParams.get("token")
@@ -13,13 +13,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   try {
     // Revalidate the sitemap and sitemap index
-    revalidatePath("/sitemap.xml")
-    revalidatePath("/sitemap-index.xml")
+    revalidatePath("/sitemap.xml", "page")
+    revalidatePath("/sitemap.xml", "layout")
+    revalidatePath("/", "layout")
 
-    // Also revalidate the individual sitemaps if they exist
-    revalidatePath("/sitemap-main.xml")
-    revalidatePath("/sitemap-technologies.xml")
-    revalidatePath("/sitemap-resources.xml")
+    // Revalidate by tags if they exist
+    try {
+      revalidateTag("sitemap")
+      revalidateTag("resources")
+    } catch (e) {
+      console.log("Tag revalidation not supported or failed:", e)
+    }
 
     console.log("Sitemap revalidation triggered successfully at", new Date().toISOString())
 

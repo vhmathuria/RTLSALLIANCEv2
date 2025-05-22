@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     "RTLS Alliance is a community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
   keywords: "RTLS, real-time location systems, indoor positioning, location tracking, IoT, digital twin",
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
-    shortcut: "/favicon.ico",
+    icon: "/RA-favicon.png",
+    apple: "/RA-favicon.png",
+    shortcut: "/RA-favicon.png",
   },
   openGraph: {
     type: "website",
@@ -72,9 +72,9 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <link rel="canonical" href="https://rtlsalliance.com" />
-        <link rel="icon" href="/favicon.png" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="icon" href="/RA-favicon.png" />
+        <link rel="shortcut icon" href="/RA-favicon.png" />
+        <link rel="apple-touch-icon" href="/RA-favicon.png" />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <Header />

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
-import { createClient } from "@/lib/supabase-server"
+import { createAdminClient } from "@/lib/supabase-server-admin"
 import { updateMembership } from "@/lib/membership-actions"
 
 // Initialize Stripe
@@ -54,9 +54,9 @@ export async function POST(req: NextRequest) {
             console.error("Server action failed, falling back to direct update:", serverActionError)
           }
 
-          // Always perform direct update as a fallback
-          const supabase = createClient()
-          const { error: updateError } = await supabase
+          // Always perform direct update as a fallback - use admin client to bypass RLS
+          const supabaseAdmin = createAdminClient()
+          const { error: updateError } = await supabaseAdmin
             .from("profiles")
             .update({
               membership_tier: membershipTier,
@@ -93,8 +93,8 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const supabase = createClient()
-        const { data: profile, error: profileError } = await supabase
+        const supabaseAdmin = createAdminClient()
+        const { data: profile, error: profileError } = await supabaseAdmin
           .from("profiles")
           .select("id")
           .eq("stripe_customer_id", customer.id)
@@ -137,8 +137,8 @@ export async function POST(req: NextRequest) {
           )
         }
 
-        // Always perform direct update as a fallback
-        const { error: updateError } = await supabase
+        // Always perform direct update as a fallback - use admin client to bypass RLS
+        const { error: updateError } = await supabaseAdmin
           .from("profiles")
           .update({
             membership_tier: membershipTier,
@@ -171,8 +171,8 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const supabase = createClient()
-        const { data: profile, error: profileError } = await supabase
+        const supabaseAdmin = createAdminClient()
+        const { data: profile, error: profileError } = await supabaseAdmin
           .from("profiles")
           .select("id")
           .eq("stripe_customer_id", customer.id)
@@ -184,7 +184,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Downgrade user to public tier
-        const { error: updateError } = await supabase
+        const { error: updateError } = await supabaseAdmin
           .from("profiles")
           .update({
             membership_tier: "public",

@@ -1,4 +1,7 @@
-import { supabase } from "@/lib/supabase"
+import { createAdminClient } from "@/lib/supabase-server-admin"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export async function GET(): Promise<Response> {
   console.log("Sitemap generation started at", new Date().toISOString())
@@ -106,15 +109,18 @@ export async function GET(): Promise<Response> {
     priority: 0.7,
   }))
 
-  // Fetch all resource articles directly from Supabase
+  // Fetch all resource articles using the admin client to bypass RLS
   let resourcePages = []
   try {
-    console.log("Directly querying Supabase for articles...")
+    console.log("Querying Supabase for articles using admin client...")
 
-    // Use a direct query to Supabase instead of the helper function
-    const { data: articles, error } = await supabase
+    // Use the admin client to bypass RLS
+    const supabaseAdmin = createAdminClient()
+
+    const { data: articles, error } = await supabaseAdmin
       .from("staging_articles")
-      .select("slug, title, updated_at, publish_date")
+      .select("slug, updated_at, publish_date")
+      .eq("is_published", true) // Only include published articles
 
     if (error) {
       console.error("Supabase query error:", error)
@@ -125,9 +131,6 @@ export async function GET(): Promise<Response> {
       console.log("No articles found in the database")
     } else {
       console.log(`Found ${articles.length} articles in the database`)
-
-      // Log the first few articles for debugging
-      console.log("Sample articles:", articles.slice(0, 3))
 
       resourcePages = articles.map((article) => ({
         url: `${baseUrl}/resources/${article.slug}`,
@@ -151,6 +154,11 @@ export async function GET(): Promise<Response> {
       { slug: "how-uwb-works-time-of-flight-tdoa-deep-dive" },
       { slug: "ble-positioning-rssi-aoa-fingerprinting-explained" },
       { slug: "indoor-positioning-basics" },
+      { slug: "success-story-ble-rtls-retail-conversion-rate" },
+      { slug: "equipment-search-time-healthcare-ble-rtls" },
+      { slug: "enterprise-rtls-step-by-step-implementation-guide" },
+      { slug: "ble-vs-uwb-cost-accuracy-deployment-comparison" },
+      { slug: "ble-vs-visual-slam-rtls-healthcare-asset-tracking" },
     ]
 
     console.log("Using fallback article list with", fallbackArticles.length, "articles")
@@ -188,7 +196,7 @@ ${allPages
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml",
-      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Cache-Control": "no-store, must-revalidate",
     },
   })
 }

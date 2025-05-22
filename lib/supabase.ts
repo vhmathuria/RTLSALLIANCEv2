@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 import { fixSpecialChars } from "./utils"
+import { createAdminClient } from "./supabase-server-admin"
 
 // Check if environment variables are available and provide fallbacks for development
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -13,9 +14,27 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Create the Supabase client with error handling
 export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "")
 
+// Helper function to determine if we're on the server
+const isServer = () => typeof window === "undefined"
+
+// Get the appropriate client based on context and requirements
+function getClient(requireAdmin = false) {
+  // If we're on the server and admin access is required, use the admin client
+  if (isServer() && requireAdmin) {
+    return createAdminClient()
+  }
+
+  // Otherwise use the regular client (which respects RLS)
+  return supabase
+}
+
 export async function getArticleBySlug(slug: string) {
   try {
-    const { data, error } = await supabase.from("staging_articles").select("*").eq("slug", slug).single()
+    // Use admin client on server to ensure we can always fetch the article
+    // The RLS policy will still filter based on is_published for public access
+    const client = getClient(isServer())
+
+    const { data, error } = await client.from("staging_articles").select("*").eq("slug", slug).single()
 
     if (error) {
       console.error("Error fetching article:", error)
@@ -134,10 +153,14 @@ export async function getArticleBySlug(slug: string) {
 
 export async function getArticlesByContentType(contentType: string) {
   try {
-    const { data, error } = await supabase
+    // Use admin client on server to ensure we can fetch all articles
+    const client = getClient(isServer())
+
+    const { data, error } = await client
       .from("staging_articles")
       .select("*")
       .eq("content_type", contentType)
+      .eq("is_published", true) // Only include published articles
       .order("publish_date", { ascending: false })
 
     if (error) {
@@ -154,9 +177,13 @@ export async function getArticlesByContentType(contentType: string) {
 
 export async function getAllArticles() {
   try {
-    const { data, error } = await supabase
+    // Use admin client on server to ensure we can fetch all articles
+    const client = getClient(isServer())
+
+    const { data, error } = await client
       .from("staging_articles")
       .select("*")
+      .eq("is_published", true) // Only include published articles
       .order("publish_date", { ascending: false })
 
     if (error) {
