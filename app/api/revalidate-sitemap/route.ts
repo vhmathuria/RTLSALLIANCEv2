@@ -3,15 +3,25 @@ import { revalidatePath } from "next/cache"
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const token = request.nextUrl.searchParams.get("token")
+  const secret = process.env.CONTENTFUL_REVALIDATE_SECRET || process.env.REVALIDATION_TOKEN
 
   // Verify the token matches your secret
-  if (token !== process.env.CONTENTFUL_REVALIDATE_SECRET) {
+  if (!token || token !== secret) {
+    console.error("Invalid token provided for sitemap revalidation")
     return NextResponse.json({ message: "Invalid token" }, { status: 401 })
   }
 
   try {
-    // Revalidate the sitemap
+    // Revalidate the sitemap and sitemap index
     revalidatePath("/sitemap.xml")
+    revalidatePath("/sitemap-index.xml")
+
+    // Also revalidate the individual sitemaps if they exist
+    revalidatePath("/sitemap-main.xml")
+    revalidatePath("/sitemap-technologies.xml")
+    revalidatePath("/sitemap-resources.xml")
+
+    console.log("Sitemap revalidation triggered successfully at", new Date().toISOString())
 
     return NextResponse.json({
       revalidated: true,
@@ -19,6 +29,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       timestamp: new Date().toISOString(),
     })
   } catch (err) {
+    console.error("Error during sitemap revalidation:", err)
+
     return NextResponse.json(
       {
         revalidated: false,

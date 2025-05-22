@@ -1,6 +1,8 @@
-import { getAllArticles } from "@/lib/supabase"
+import { supabase } from "@/lib/supabase"
 
 export async function GET(): Promise<Response> {
+  console.log("Sitemap generation started at", new Date().toISOString())
+
   const baseUrl = "https://rtlsalliance.com"
   const currentDate = new Date().toISOString()
 
@@ -104,24 +106,66 @@ export async function GET(): Promise<Response> {
     priority: 0.7,
   }))
 
-  // Fetch all resource articles from Supabase
+  // Fetch all resource articles directly from Supabase
   let resourcePages = []
   try {
-    const articles = await getAllArticles()
+    console.log("Directly querying Supabase for articles...")
 
-    resourcePages = articles.map((article) => ({
+    // Use a direct query to Supabase instead of the helper function
+    const { data: articles, error } = await supabase
+      .from("staging_articles")
+      .select("slug, title, updated_at, publish_date")
+
+    if (error) {
+      console.error("Supabase query error:", error)
+      throw error
+    }
+
+    if (!articles || articles.length === 0) {
+      console.log("No articles found in the database")
+    } else {
+      console.log(`Found ${articles.length} articles in the database`)
+
+      // Log the first few articles for debugging
+      console.log("Sample articles:", articles.slice(0, 3))
+
+      resourcePages = articles.map((article) => ({
+        url: `${baseUrl}/resources/${article.slug}`,
+        lastmod: article.updated_at || article.publish_date || currentDate,
+        changefreq: "monthly",
+        priority: 0.8,
+      }))
+    }
+  } catch (error) {
+    console.error("Error fetching articles for sitemap:", error)
+
+    // Add hardcoded resource pages as fallback
+    const fallbackArticles = [
+      { slug: "rtls-101-core-components-protocols-deployment-models" },
+      { slug: "uwb-vs-ble-which-rtls-tech-fits-use-case" },
+      { slug: "smart-warehousing-rtls-use-cases-automated-fulfillment" },
+      { slug: "rtls-roi-quantify-efficiency-gains-cost-savings" },
+      { slug: "building-rtls-dashboards-kpis-analytics" },
+      { slug: "rtls-security-encryption-authentication-privacy-best-practices" },
+      { slug: "uwb-ble-rfid-wifi-rtt-ultimate-rtls-showdown" },
+      { slug: "how-uwb-works-time-of-flight-tdoa-deep-dive" },
+      { slug: "ble-positioning-rssi-aoa-fingerprinting-explained" },
+      { slug: "indoor-positioning-basics" },
+    ]
+
+    console.log("Using fallback article list with", fallbackArticles.length, "articles")
+
+    resourcePages = fallbackArticles.map((article) => ({
       url: `${baseUrl}/resources/${article.slug}`,
-      lastmod: article.updated_at || article.publish_date || currentDate,
+      lastmod: currentDate,
       changefreq: "monthly",
       priority: 0.8,
     }))
-  } catch (error) {
-    console.error("Error fetching articles for sitemap:", error)
-    // Continue with empty resource pages if there's an error
   }
 
   // Combine all pages
   const allPages = [...mainPages, ...technologyPages, ...modulePages, ...resourcePages]
+  console.log(`Total URLs in sitemap: ${allPages.length} (including ${resourcePages.length} resource pages)`)
 
   // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -138,11 +182,13 @@ ${allPages
   .join("\n")}
 </urlset>`
 
-  // Return XML response
+  console.log("Sitemap generation completed at", new Date().toISOString())
+
+  // Return XML response with no caching
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
     },
   })
 }
