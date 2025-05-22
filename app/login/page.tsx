@@ -1,11 +1,6 @@
 import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase-server"
+import { createServerSupabaseClient } from "@/lib/supabase-client"
 import LoginForm from "@/components/auth/login-form"
-
-export const metadata = {
-  title: "Login - RTLS Alliance",
-  description: "Log in to your RTLS Alliance account",
-}
 
 export const dynamic = "force-dynamic"
 
@@ -14,16 +9,25 @@ export default async function LoginPage({
 }: {
   searchParams: { redirectTo?: string; from?: string }
 }) {
+  console.log(`[Login Page] Rendering login page, redirect to: ${searchParams.redirectTo}, from: ${searchParams.from}`)
+
   // Check if user is already logged in
-  const supabase = createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const supabase = createServerSupabaseClient()
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error) {
+    console.error("[Login Page] Error getting user:", error)
+  }
+
+  const user = data?.user
+
+  // Debug log the auth state
+  console.log(`[Login Page] User authenticated: ${!!user}`)
 
   // If user is already logged in, redirect to the requested page or dashboard
   if (user) {
     const redirectTo = searchParams.redirectTo || "/account"
-    console.log(`User already logged in, redirecting to ${redirectTo} from login page`)
+    console.log(`[Login Page] User already logged in, redirecting to: ${redirectTo}`)
     redirect(redirectTo)
   }
 

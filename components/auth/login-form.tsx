@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { signInWithEmail, signInWithProvider, signUpWithEmail } from "@/lib/supabase-auth"
+import { createBrowserSupabaseClient } from "@/lib/supabase-client"
 import { FaGoogle, FaLinkedin } from "react-icons/fa"
 
 export default function LoginForm({ redirectTo = "/account" }: { redirectTo?: string }) {
@@ -28,15 +28,20 @@ export default function LoginForm({ redirectTo = "/account" }: { redirectTo?: st
     setError(null)
 
     try {
-      const { error } = await signInWithEmail(email, password)
+      console.log(`[Login Form] Attempting email login for: ${email}`)
+      const supabase = createBrowserSupabaseClient()
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
       if (error) throw error
 
-      // Redirect after successful login
+      console.log(`[Login Form] Login successful, redirecting to: ${redirectTo}`)
       router.push(redirectTo)
       router.refresh()
     } catch (error: any) {
-      console.error("Login error:", error)
+      console.error("[Login Form] Login error:", error)
       setError(error.message || "Failed to log in")
     } finally {
       setIsLoading(false)
@@ -55,14 +60,22 @@ export default function LoginForm({ redirectTo = "/account" }: { redirectTo?: st
     }
 
     try {
-      const { error } = await signUpWithEmail(email, password)
+      console.log(`[Login Form] Attempting email signup for: ${email}`)
+      const supabase = createBrowserSupabaseClient()
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback?returnTo=/account`,
+        },
+      })
 
       if (error) throw error
 
-      // Show success message or redirect
+      console.log(`[Login Form] Signup successful, showing confirmation`)
       router.push("/auth?tab=check-email")
     } catch (error: any) {
-      console.error("Signup error:", error)
+      console.error("[Login Form] Signup error:", error)
       setError(error.message || "Failed to sign up")
     } finally {
       setIsLoading(false)
@@ -74,13 +87,22 @@ export default function LoginForm({ redirectTo = "/account" }: { redirectTo?: st
     setError(null)
 
     try {
-      const { error } = await signInWithProvider(provider)
+      console.log(`[Login Form] Attempting ${provider} login`)
+      const supabase = createBrowserSupabaseClient()
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?returnTo=${encodeURIComponent(redirectTo || "/account")}`,
+        },
+      })
 
       if (error) throw error
 
+      console.log(`[Login Form] ${provider} auth initiated`)
       // The redirect is handled by the provider
     } catch (error: any) {
-      console.error(`${provider} login error:`, error)
+      console.error(`[Login Form] ${provider} login error:`, error)
       setError(error.message || `Failed to log in with ${provider}`)
       setIsLoading(false)
     }

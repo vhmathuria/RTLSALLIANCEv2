@@ -1,66 +1,50 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
+import { createMiddlewareClient } from "@/lib/supabase-client"
 
 // Define which routes require authentication
-const protectedRoutes = ["/account", "/membership/upgrade", "/membership/success", "/membership/cancel"]
-
-// Define which routes are public (no auth required)
-const publicRoutes = [
-  "/",
-  "/login",
-  "/register",
-  "/auth/callback",
-  "/membership",
-  "/contact",
-  "/ecosystem",
-  "/rtls-digital-twin",
-]
+const PROTECTED_ROUTES = ["/account", "/membership/upgrade", "/membership/success", "/membership/cancel"]
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-
-  // Only check auth for protected routes to avoid unnecessary processing
+  // Only check auth for protected routes
   const { pathname } = req.nextUrl
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
 
-  // If it's not a protected route, just proceed
-  if (!isProtectedRoute) {
-    return res
+  // Skip middleware for non-protected routes
+  if (!PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next()
   }
 
-  // Create a Supabase client for the middleware
-  const supabase = createMiddlewareClient({ req, res })
+  console.log(`[Middleware] Checking auth for protected route: ${pathname}`)
 
-  // Get session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient(req, res)
 
-  // If user is authenticated, allow access to protected routes
-  if (session) {
-    return res
+  // Get session with debug logging
+  const { data, error } = await supabase.auth.getSession()
+
+  if (error) {
+    console.error(`[Middleware] Error getting session:`, error)
   }
 
-  // If user is not authenticated and trying to access a protected route, redirect to login
-  const redirectUrl = new URL("/login", req.url)
-  redirectUrl.searchParams.set("redirectTo", pathname)
+  const session = data?.session
 
-  // Add a debug parameter to track redirects
-  redirectUrl.searchParams.set("from", "middleware")
+  // Debug log the session state
+  console.log(`[Middleware] Session exists: ${!!session}`)
 
-  console.log(`Middleware redirecting unauthenticated user from ${pathname} to ${redirectUrl.pathname}`)
-  return NextResponse.redirect(redirectUrl)
+  // If no session, redirect to login
+  if (!session) {
+    const redirectUrl = new URL("/login", req.url)
+    redirectUrl.searchParams.set("redirectTo", pathname)
+    redirectUrl.searchParams.set("from", "middleware")
+
+    console.log(`[Middleware] No session, redirecting to: ${redirectUrl.toString()}`)
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  console.log(`[Middleware] User authenticated, proceeding to: ${pathname}`)
+  return res
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Only match specific protected routes to avoid unnecessary middleware execution
-     */
-    "/account/:path*",
-    "/membership/upgrade/:path*",
-    "/membership/success/:path*",
-    "/membership/cancel/:path*",
-  ],
+  matcher: ["/account/:path*", "/membership/upgrade/:path*", "/membership/success/:path*", "/membership/cancel/:path*"],
 }

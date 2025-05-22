@@ -1,6 +1,5 @@
-import { createClient } from "@/lib/supabase-server"
-import { handleAuthCallback } from "@/lib/supabase-auth"
 import { NextResponse, type NextRequest } from "next/server"
+import { createRouteHandlerClient } from "@/lib/supabase-client"
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
@@ -8,44 +7,59 @@ export async function GET(request: NextRequest) {
   const returnTo = requestUrl.searchParams.get("returnTo") || "/"
 
   if (!code) {
-    console.error("No code provided in auth callback")
-    return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=No_code_provided`)
+    console.error("[Auth Callback] No code provided")
+    return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=no_code`)
   }
 
-  console.log("Auth callback initiated with returnTo path:", returnTo)
-
-  // Create a client without using cookies from next/headers
-  const supabase = createClient()
+  console.log(`[Auth Callback] Processing code for redirect to: ${returnTo}`)
 
   try {
+    // Create a supabase client specifically for route handlers
+    const supabase = createRouteHandlerClient()
+
     // Exchange the code for a session
-    console.log("Exchanging code for session")
+    console.log("[Auth Callback] Exchanging code for session")
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (error) {
-      console.error("Error exchanging code for session:", error)
+      console.error("[Auth Callback] Error exchanging code:", error)
       return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=${encodeURIComponent(error.message)}`)
     }
 
-    // Get the user from the session
-    console.log("Getting user from session")
-    const user = data.user
-
-    if (!user) {
-      console.error("No user found after exchanging code for session")
-      return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=No_user_found`)
+    if (!data.session) {
+      console.error("[Auth Callback] No session returned")
+      return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=no_session`)
     }
 
-    console.log("User authenticated:", user.id)
+    console.log(`[Auth Callback] Session established for user: ${data.user?.id}`)
 
-    // Immediately create profile if user exists
-    await handleAuthCallback(user)
+    // Create or update user profile
+    if (data.user) {
+      console.log(`[Auth Callback] Creating/updating profile for user: ${data.user.id}`)
 
-    // Redirect to the specified returnTo page
-    console.log("Redirecting to:", `${requestUrl.origin}${returnTo}`)
+      const { error: profileError } = await supabase.from("profiles").upsert(
+        {
+          id: data.user.id,
+          email: data.user.email,
+          full_name: data.user.user_metadata?.full_name,
+          membership_tier: "public",
+          membership_status: "active",
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "id" },
+      )
+
+      if (profileError) {
+        console.error("[Auth Callback] Error updating profile:", profileError)
+      } else {
+        console.log("[Auth Callback] Profile updated successfully")
+      }
+    }
+
+    console.log(`[Auth Callback] Redirecting to: ${returnTo}`)
     return NextResponse.redirect(new URL(returnTo, request.url))
   } catch (error) {
-    console.error("Unexpected error during auth callback:", error)
-    return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=Unexpected_error`)
+    console.error("[Auth Callback] Unexpected error:", error)
+    return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=unexpected`)
   }
 }
