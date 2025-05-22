@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { createSupabaseClient } from "@/lib/supabase-auth"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import type { Database } from "@/types/supabase"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -46,34 +47,41 @@ export default function Header() {
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<any>(null)
   const [expandedDropdown, setExpandedDropdown] = useState<string | null>(null)
+  const supabase = createClientComponentClient<Database>()
 
   useEffect(() => {
     async function loadUserProfile() {
-      const supabase = createSupabaseClient()
-
-      // Get current user
       const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
+        data: { session },
+      } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+      setLoading(false)
 
-      if (user) {
-        // Get user profile
-        const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-
-        if (data) {
-          setProfile(data)
-        }
+      if (session?.user) {
+        const { data } = await supabase.from("profiles").select("*").eq("id", session.user.id).single()
+        setProfile(data)
       }
 
-      setLoading(false)
+      // Set up auth state listener
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user || null)
+        if (session?.user) {
+          const { data } = supabase.from("profiles").select("*").eq("id", session.user.id).single()
+          setProfile(data)
+        }
+      })
+
+      return () => {
+        subscription.unsubscribe()
+      }
     }
 
     loadUserProfile()
-  }, [])
+  }, [supabase])
 
   const handleSignOut = async () => {
-    const supabase = createSupabaseClient()
     await supabase.auth.signOut()
     window.location.href = "/"
   }
@@ -97,7 +105,7 @@ export default function Header() {
   const hasPublicTier = profile?.membership_tier === "public"
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-white shadow-sm">
       <nav className="container mx-auto px-3 sm:px-4 flex items-center justify-between py-3" aria-label="Global">
         <div className="flex xl:flex-1">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center">
@@ -199,12 +207,12 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link href="/auth?tab=login">
+              <Link href="/login">
                 <Button variant="outline" size="sm">
                   Sign In
                 </Button>
               </Link>
-              <Link href="/auth?tab=signup">
+              <Link href="/join-alliance">
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -332,13 +340,13 @@ export default function Header() {
                   ) : (
                     <div className="space-y-2">
                       <Link
-                        href="/auth?tab=login"
+                        href="/login"
                         className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Sign In
                       </Link>
-                      <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                      <Link href="/join-alliance" className="w-full" onClick={() => setMobileMenuOpen(false)}>
                         <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                           Join Alliance
                         </Button>

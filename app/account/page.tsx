@@ -1,63 +1,65 @@
 import { redirect } from "next/navigation"
-import { createServerSupabaseClient, supabase, getUserProfile } from "@/lib/supabase-client"
-import AccountProfile from "./account-profile"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import type { Database } from "@/types/supabase"
 
 export const dynamic = "force-dynamic"
 
 export default async function AccountPage() {
-  console.log("[Account Page] Rendering account page")
+  try {
+    // Create a Supabase client using the server component client with cookies
+    const supabase = createServerComponentClient<Database>({ cookies })
 
-  // Get the user server-side
-  const supabaseClient = createServerSupabaseClient()
-  const {
-    data: { user },
-    error,
-  } = await supabaseClient.auth.getUser()
+    // Get the session directly
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
 
-  if (error) {
-    console.error("[Account Page] Error getting user:", error)
-  }
+    // Debug log
+    console.log(`[Account Page] Session exists: ${!!session}`)
 
-  // Debug log the auth state
-  console.log(`[Account Page] User authenticated: ${!!user}`)
-
-  // If no user is found, redirect to login
-  if (!user) {
-    console.log("[Account Page] No user found, redirecting to login")
-    redirect("/login?redirectTo=/account&from=account-page")
-  }
-
-  // Get the user's profile
-  let profile = await getUserProfile(user.id)
-
-  // If no profile exists, create one
-  if (!profile) {
-    // Create a basic profile
-    const newProfile = {
-      id: user.id,
-      email: user.email,
-      full_name: user.user_metadata?.full_name || "",
-      membership_tier: "public",
-      membership_status: "active",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+    // If no session, redirect to login
+    if (!session) {
+      redirect("/login?redirectTo=/account")
     }
 
-    // Insert the profile
-    const { error: insertError } = await supabase.from("profiles").insert(newProfile)
+    // Get the user from the session
+    const user = session.user
 
-    if (insertError) {
-      console.error("Error creating profile:", insertError)
+    // Get the user's profile
+    const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+
+    // If no profile exists, create one
+    if (!profile) {
+      // Create a basic profile
+      const { error } = await supabase.from("profiles").insert({
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata?.full_name || "",
+        membership_tier: "public",
+        membership_status: "active",
+        created_at: new Date().toISOString(),
+      })
+
+      if (error) {
+        console.error("Error creating profile:", error)
+      }
     }
 
     // Get the latest profile data
-    profile = await getUserProfile(user.id)
-  }
+    const { data: updatedProfile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Your Account</h1>
-      <AccountProfile user={user} profile={profile || {}} />
-    </div>
-  )
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-6">Your Account</h1>
+        {/* Render account profile component with user and profile data */}
+        <pre>{JSON.stringify({ user, profile: updatedProfile }, null, 2)}</pre>
+      </div>
+    )
+  } catch (error) {
+    console.error("[Account Page] Error:", error)
+
+    // On error, redirect to login
+    redirect("/login?redirectTo=/account&error=server_error")
+  }
 }
