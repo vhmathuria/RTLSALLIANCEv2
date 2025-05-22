@@ -23,18 +23,15 @@ import {
 } from "lucide-react"
 import { useMembership } from "@/contexts/membership-context"
 
-interface AccountProfileProps {
-  user: {
-    id: string
-    name: string
-    email: string
-    membershipStatus: string
-  }
-  profile: any
-}
+export default function AccountProfile({ user, profile: initialProfile }: { user: any; profile: any }) {
+  console.log("AccountProfile: Initial profile data:", initialProfile)
+  console.log("Membership details:", {
+    tier: initialProfile?.membership_tier,
+    status: initialProfile?.membership_status,
+    expiry: initialProfile?.membership_expiry,
+  })
 
-const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialProfile }) => {
-  const [profile, setProfile] = useState(initialProfile)
+  const [profile, setProfile] = useState(initialProfile || {})
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     full_name: initialProfile?.full_name || "",
@@ -45,6 +42,7 @@ const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialP
   })
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState({ type: "", text: "" })
+  const [isLoadingPortal, setIsLoadingPortal] = useState(false)
 
   // Use the membership context for real-time updates
   const membership = useMembership()
@@ -54,9 +52,13 @@ const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialP
     expiry: initialProfile?.membership_expiry || null,
   })
 
+  console.log("AccountProfile: Membership context:", membership)
+
   // Update membership details when context changes
   useEffect(() => {
     if (membership.loading) return
+
+    console.log("AccountProfile: Updating membership details from context", membership)
 
     setMembershipDetails({
       tier: membership.tier,
@@ -124,7 +126,7 @@ const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialP
       },
     }
 
-    const config = tierConfig[tier as keyof typeof tierConfig] || tierConfig.public
+    const config = tierConfig[tier.toLowerCase() as keyof typeof tierConfig] || tierConfig.public
 
     return (
       <Badge className={`${config.color} flex items-center`}>
@@ -143,6 +145,36 @@ const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialP
   // Manual refresh function
   const handleRefresh = () => {
     window.location.reload()
+  }
+
+  // Function to handle Stripe customer portal
+  const handleManageSubscription = async () => {
+    setIsLoadingPortal(true)
+    try {
+      const response = await fetch("/api/create-portal-session", {
+        method: "POST",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to create portal session")
+      }
+
+      const data = await response.json()
+
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        throw new Error("No portal URL returned")
+      }
+    } catch (error: any) {
+      console.error("Error creating portal session:", error)
+      setMessage({
+        type: "error",
+        text: error.message || "Failed to open subscription management",
+      })
+    } finally {
+      setIsLoadingPortal(false)
+    }
   }
 
   return (
@@ -362,8 +394,8 @@ const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialP
                 <div className="bg-green-50 p-4 rounded-lg">
                   <h4 className="font-medium text-green-800 mb-2">Active Membership</h4>
                   <p className="text-green-700 mb-4">Thank you for being a valued member of the RTLS Alliance.</p>
-                  <Button variant="outline" asChild>
-                    <a href="/membership/manage">Manage Subscription</a>
+                  <Button variant="outline" onClick={handleManageSubscription} disabled={isLoadingPortal}>
+                    {isLoadingPortal ? "Loading..." : "Manage Subscription"}
                   </Button>
                 </div>
               )}
@@ -374,5 +406,3 @@ const AccountProfile: React.FC<AccountProfileProps> = ({ user, profile: initialP
     </Tabs>
   )
 }
-
-export default AccountProfile

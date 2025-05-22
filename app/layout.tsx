@@ -70,13 +70,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="canonical" href="https://rtlsalliance.com" />
-        <link rel="icon" href="/RA-favicon.png" />
-        <link rel="shortcut icon" href="/RA-favicon.png" />
-        <link rel="apple-touch-icon" href="/RA-favicon.png" />
-      </head>
+    <html lang="en">
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <MembershipProvider>
           <Header />
