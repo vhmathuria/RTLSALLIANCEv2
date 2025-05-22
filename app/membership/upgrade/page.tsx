@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { supabase, getUserProfile } from "@/lib/supabase"
+import { createServerClient } from "@/lib/supabase-server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Briefcase, Building, Check } from "lucide-react"
@@ -10,42 +10,20 @@ export const metadata = {
   description: "Upgrade your RTLS Alliance membership to access premium content",
 }
 
-export const dynamic = "force-dynamic"
-
 export default async function MembershipUpgradePage({ searchParams }: { searchParams: { tier?: string } }) {
-  // Get the current user
+  // Check if user is logged in
+  const supabase = createServerClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // If no user is found, redirect to login
+  // If user is not logged in, redirect to login
   if (!user) {
     redirect("/login?redirectTo=/membership/upgrade")
   }
 
-  // Get the user's profile
-  const profile = await getUserProfile(user.id)
-
-  // If no profile exists, create one
-  if (!profile) {
-    // Create a basic profile
-    const newProfile = {
-      id: user.id,
-      email: user.email,
-      full_name: user.user_metadata?.full_name || "",
-      membership_tier: "public",
-      membership_status: "active",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
-
-    // Insert the profile
-    const { error } = await supabase.from("profiles").insert(newProfile)
-
-    if (error) {
-      console.error("Error creating profile:", error)
-    }
-  }
+  // Get user profile
+  const { data: profile } = await supabase.from("profiles").select("membership_tier").eq("id", user.id).single()
 
   const currentTier = profile?.membership_tier || "public"
 
@@ -165,7 +143,6 @@ export default async function MembershipUpgradePage({ searchParams }: { searchPa
                   <form action="/api/create-checkout" method="POST" className="w-full">
                     <input type="hidden" name="priceId" value={tier.priceId} />
                     <input type="hidden" name="tier" value={tier.id} />
-                    <input type="hidden" name="userId" value={user.id} />
                     <Button className="w-full" disabled={tier.disabled} type={tier.disabled ? "button" : "submit"}>
                       {tier.buttonText}
                     </Button>

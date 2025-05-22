@@ -1,23 +1,44 @@
+import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
-import { createServerClient } from "@/lib/supabase"
-import AccountClient from "./account-client"
-
-export const dynamic = "force-dynamic"
+import AccountProfile from "./account-profile"
 
 export default async function AccountPage() {
-  // Server-side auth check
-  const supabase = createServerClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const supabase = createClient()
 
-  if (!session) {
-    // If not logged in, redirect to login
-    redirect("/auth?redirectTo=/account")
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    redirect("/login?redirect=/account")
   }
 
-  // Get profile data
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", session.user.id).single()
+  // Get user profile
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
 
-  return <AccountClient initialProfile={profile} user={session.user} />
+  // If no profile exists, create one
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      id: user.id,
+      email: user.email,
+      membership_tier: "public",
+      membership_status: "active", // Changed to lowercase
+    })
+  }
+
+  // Get the latest profile data
+  const { data: updatedProfile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+
+  return (
+    <main className="py-12">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-8">Your Account</h1>
+          <AccountProfile user={user} profile={updatedProfile} />
+        </div>
+      </div>
+    </main>
+  )
 }

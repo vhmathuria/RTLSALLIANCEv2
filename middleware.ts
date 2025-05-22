@@ -1,44 +1,62 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
-import type { Database } from "@/types/supabase"
 
-// Define protected routes
-const PROTECTED_ROUTES = ["/account", "/membership/upgrade", "/membership/success"]
+// Define which routes require authentication
+const protectedRoutes = ["/account", "/membership/upgrade", "/membership/success", "/membership/cancel"]
+
+// Define which routes are public (no auth required)
+const publicRoutes = [
+  "/",
+  "/login",
+  "/register",
+  "/auth/callback",
+  "/membership",
+  "/contact",
+  "/ecosystem",
+  "/rtls-digital-twin",
+]
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
-  const pathname = req.nextUrl.pathname
+  const supabase = createMiddlewareClient({ req, res })
 
-  // Only check auth for protected routes
-  if (!PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
-    return res
+  // Get session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const url = req.nextUrl.clone()
+  const { pathname } = url
+
+  // Check if the route requires authentication
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
+  const isPublicRoute = publicRoutes.some((route) => pathname === route || pathname.startsWith(route))
+
+  // If it's a protected route and user is not authenticated, redirect to login
+  if (isProtectedRoute && !session) {
+    url.pathname = "/login"
+    url.searchParams.set("redirectTo", pathname)
+    return NextResponse.redirect(url)
   }
 
-  try {
-    // Create a Supabase client for auth checking
-    const supabase = createMiddlewareClient<Database>({ req, res })
+  // For resource routes, we'll check access in the page component
+  // This allows us to show a paywall instead of redirecting
 
-    // Get the session
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
-
-    // If no session and on a protected route, redirect to login
-    if (!session) {
-      const redirectUrl = new URL("/auth", req.url)
-      redirectUrl.searchParams.set("redirectTo", pathname)
-      return NextResponse.redirect(redirectUrl)
-    }
-
-    return res
-  } catch (error) {
-    console.error("[Middleware] Auth check error:", error)
-    // On error, allow the request to proceed
-    return res
-  }
+  return res
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/membership/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     * - public files
+     * - api routes that don't require auth
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|api/webhooks).*)",
+  ],
 }

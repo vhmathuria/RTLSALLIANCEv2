@@ -1,70 +1,15 @@
-"use client"
-
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Lock, GraduationCap, Briefcase, Building } from "lucide-react"
-import { useMembership } from "@/contexts/membership-context"
-import { useState, useEffect } from "react"
 
 type MembershipTier = "public" | "student" | "professional" | "corporate"
 
 interface ContentGateProps {
   requiredTier: MembershipTier
-  userTier?: MembershipTier
-  initialAccess?: boolean
+  userTier: MembershipTier
 }
 
-export default function ContentGate({
-  requiredTier,
-  userTier: initialUserTier,
-  initialAccess = false,
-}: ContentGateProps) {
-  const [hasAccess, setHasAccess] = useState(initialAccess)
-  const [isChecking, setIsChecking] = useState(true)
-  const membership = useMembership()
-
-  useEffect(() => {
-    if (membership.loading) return
-
-    console.log("ContentGate: Checking access", {
-      requiredTier,
-      userTier: membership.tier,
-      userStatus: membership.status,
-      isActive: membership.isActive,
-    })
-
-    // Check access based on membership context
-    if (requiredTier === "public") {
-      console.log("ContentGate: Public content, granting access")
-      setHasAccess(true)
-      setIsChecking(false)
-      return
-    }
-
-    if (!membership.isActive) {
-      console.log("ContentGate: Membership not active, denying access")
-      setHasAccess(false)
-      setIsChecking(false)
-      return
-    }
-
-    // Simple tier check with better logging
-    const TIERS = { public: 0, student: 1, professional: 2, corporate: 3 }
-    const userLevel = TIERS[membership.tier.toLowerCase() as keyof typeof TIERS] || 0
-    const requiredLevel = TIERS[requiredTier.toLowerCase() as keyof typeof TIERS] || 0
-
-    console.log("ContentGate: Comparing tiers", {
-      userTier: membership.tier,
-      userLevel,
-      requiredTier,
-      requiredLevel,
-      hasAccess: userLevel >= requiredLevel,
-    })
-
-    setHasAccess(userLevel >= requiredLevel)
-    setIsChecking(false)
-  }, [membership, requiredTier, initialAccess])
-
+export default function ContentGate({ requiredTier, userTier }: ContentGateProps) {
   const tierInfo = {
     student: {
       name: "Student",
@@ -87,22 +32,6 @@ export default function ContentGate({
   }
 
   const tierToShow = tierInfo[requiredTier as keyof typeof tierInfo] || tierInfo.professional
-
-  // Show loading state
-  if (isChecking) {
-    return (
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-3xl mx-auto">
-        <div className="text-center">
-          <div className="inline-block animate-spin h-8 w-8 border-4 border-gray-300 border-t-blue-500 rounded-full mb-4"></div>
-          <p className="text-gray-600">Checking access...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (hasAccess) {
-    return null // If user has access, don't render the gate
-  }
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-3xl mx-auto">
@@ -134,24 +63,7 @@ export default function ContentGate({
           Sign in
         </Link>{" "}
         to access this content.
-        <div className="mt-2">
-          <Button variant="outline" size="sm" onClick={() => window.location.reload()} className="text-xs">
-            Refresh Access
-          </Button>
-        </div>
       </div>
     </div>
   )
-}
-
-// Server wrapper component for initial server-side check
-export async function getContentGateProps(requiredTier: MembershipTier) {
-  // Import server-side only
-  const { checkMembershipAccess } = await import("@/lib/membership-actions")
-  const hasAccess = await checkMembershipAccess(requiredTier)
-
-  return {
-    initialAccess: hasAccess,
-    requiredTier,
-  }
 }

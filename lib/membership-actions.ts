@@ -1,8 +1,15 @@
 "use server"
 
 import { createClient } from "@/lib/supabase-server"
+import { revalidatePath } from "next/cache"
 import Stripe from "stripe"
 
+// Initialize Stripe
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16",
+})
+
+// Define membership tiers and their hierarchy
 const MEMBERSHIP_TIERS = {
   public: 0,
   student: 1,
@@ -10,158 +17,263 @@ const MEMBERSHIP_TIERS = {
   corporate: 3,
 }
 
+// Check if user has access to content with specified tier
 export async function checkMembershipAccess(requiredTier: string): Promise<boolean> {
-  console.log("checkMembershipAccess: Checking access for tier", requiredTier)
+  const supabase = createClient()
 
-  try {
-    // Public content is always accessible
-    if (requiredTier === "public") {
-      return true
-    }
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-    const supabase = createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+  if (!user) {
+    return requiredTier === "public"
+  }
 
-    if (!user) {
-      console.log("checkMembershipAccess: No user found, denying access")
-      return false
-    }
+  // Get user profile with membership info
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("membership_tier, membership_status, membership_expiry")
+    .eq("id", user.id)
+    .single()
 
-    console.log("checkMembershipAccess: User found, checking profile", user.id)
-    const { data: profile, error } = await supabase
-      .from("profiles")
-      .select("membership_tier, membership_status, membership_expiry")
-      .eq("id", user.id)
-      .single()
+  // If no profile or inactive membership, only allow public content
+  if (!profile) {
+    return requiredTier === "public"
+  }
 
-    if (error || !profile) {
-      console.error("checkMembershipAccess: Error fetching profile", error)
-      return false
-    }
+  // Check for active status (case insensitive)
+  const isActive = profile.membership_status?.toLowerCase() === "active" // Changed to lowercase comparison
 
-    console.log("checkMembershipAccess: Profile data", profile)
+  if (!isActive) {
+    return requiredTier === "public"
+  }
 
-    // Check if membership is active
-    const isActive = profile.membership_status?.toLowerCase() === "active"
-    if (!isActive) {
-      console.log("checkMembershipAccess: Membership not active, denying access")
-      return false
-    }
+  // Check if membership has expired
+  if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
+    // Update membership status to expired
+    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
 
-    // Check if membership has expired
-    if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
-      console.log("checkMembershipAccess: Membership expired, denying access")
-      return false
-    }
+    return requiredTier === "public"
+  }
 
-    // Check if user's tier is sufficient
-    const userTierLevel = MEMBERSHIP_TIERS[profile.membership_tier?.toLowerCase() as keyof typeof MEMBERSHIP_TIERS] || 0
-    const requiredTierLevel = MEMBERSHIP_TIERS[requiredTier.toLowerCase() as keyof typeof MEMBERSHIP_TIERS] || 0
+  // Check if user's tier is sufficient for the required tier
+  const userTierLevel = MEMBERSHIP_TIERS[profile.membership_tier as keyof typeof MEMBERSHIP_TIERS] || 0
+  const requiredTierLevel = MEMBERSHIP_TIERS[requiredTier as keyof typeof MEMBERSHIP_TIERS] || 0
 
-    console.log("checkMembershipAccess: Comparing tiers", {
-      userTier: profile.membership_tier,
-      userLevel: userTierLevel,
-      requiredTier,
-      requiredLevel: requiredTierLevel,
+  return userTierLevel >= requiredTierLevel
+}
+
+// Create a Stripe checkout session for membership upgrade
+export async function createCheckoutSession(tier: "student" | "professional" | "corporate") {
+  const supabase = createClient()
+
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error("User must be logged in to upgrade membership")
+  }
+
+  // Get price ID based on selected tier
+  let priceId: string
+  switch (tier) {
+    case "student":
+      priceId = process.env.STRIPE_STUDENT_PRICE_ID!
+      break
+    case "professional":
+      priceId = process.env.STRIPE_PROFESSIONAL_PRICE_ID!
+      break
+    case "corporate":
+      priceId = process.env.STRIPE_CORPORATE_PRICE_ID!
+      break
+    default:
+      throw new Error("Invalid membership tier")
+  }
+
+  // Get or create Stripe customer
+  let stripeCustomerId: string
+
+  // Check if user already has a Stripe customer ID
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("stripe_customer_id, email")
+    .eq("id", user.id)
+    .single()
+
+  if (profile?.stripe_customer_id) {
+    stripeCustomerId = profile.stripe_customer_id
+  } else {
+    // Create new Stripe customer
+    const customer = await stripe.customers.create({
+      email: user.email,
+      metadata: {
+        supabase_id: user.id,
+      },
     })
 
-    return userTierLevel >= requiredTierLevel
+    stripeCustomerId = customer.id
+
+    // Save Stripe customer ID to profile
+    await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
+  }
+
+  // Create checkout session
+  const session = await stripe.checkout.sessions.create({
+    customer: stripeCustomerId,
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    mode: "subscription",
+    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/membership/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/membership/cancel`,
+    metadata: {
+      user_id: user.id,
+      membership_tier: tier,
+    },
+  })
+
+  return { url: session.url }
+}
+
+// Update user membership after successful payment
+export async function updateMembership(userId: string, tier: string, expiryDate?: Date) {
+  const supabase = createClient()
+
+  try {
+    console.log("Updating membership for user:", userId, "to tier:", tier)
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        membership_tier: tier,
+        membership_status: "active", // Changed to lowercase
+        membership_expiry: expiryDate?.toISOString() || null,
+        last_payment_date: new Date().toISOString(),
+      })
+      .eq("id", userId)
+
+    if (error) {
+      console.error("Error updating membership:", error)
+      throw error
+    }
+
+    // Revalidate paths that might show different content based on membership
+    revalidatePath("/resources")
+    revalidatePath("/membership")
+    revalidatePath("/account")
+
+    console.log("Membership updated successfully for user:", userId)
+    return { success: true }
   } catch (error) {
-    console.error("checkMembershipAccess: Unexpected error", error)
-    return false
+    console.error("Failed to update membership:", error)
+    return { success: false, error }
   }
 }
 
-export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
-  console.log("verifyAndUpdateMembershipFromSession: Verifying session", sessionId)
+// Get current user's membership info
+export async function getCurrentMembership() {
+  const supabase = createClient()
 
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { tier: "public", status: "inactive" }
+  }
+
+  // Get user profile with membership info
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("membership_tier, membership_status, membership_expiry")
+    .eq("id", user.id)
+    .single()
+
+  if (!profile) {
+    return { tier: "public", status: "inactive" }
+  }
+
+  // Check if membership has expired
+  if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
+    // Update membership status to expired
+    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
+
+    return { tier: "public", status: "expired", expiryDate: profile.membership_expiry }
+  }
+
+  return {
+    tier: profile.membership_tier || "public",
+    status: profile.membership_status || "inactive",
+    expiryDate: profile.membership_expiry,
+  }
+}
+
+// Verify and update membership from success page
+export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2023-10-16",
-    })
+    console.log("Verifying session:", sessionId)
 
     // Retrieve the checkout session
-    const session = await stripe.checkout.sessions.retrieve(sessionId)
-
-    if (!session || session.status !== "complete") {
-      console.error("verifyAndUpdateMembershipFromSession: Invalid or incomplete session", session)
-      return { success: false, error: "Invalid or incomplete session" }
-    }
-
-    // Get the customer and subscription details
-    const customerId = session.customer as string
-    const subscriptionId = session.subscription as string
-
-    if (!customerId || !subscriptionId) {
-      console.error("verifyAndUpdateMembershipFromSession: Missing customer or subscription ID", {
-        customerId,
-        subscriptionId,
-      })
-      return { success: false, error: "Missing customer or subscription ID" }
-    }
-
-    // Get the subscription details
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
-
-    if (!subscription) {
-      console.error("verifyAndUpdateMembershipFromSession: Subscription not found", subscriptionId)
-      return { success: false, error: "Subscription not found" }
-    }
-
-    // Determine membership tier from price ID
-    const priceId = subscription.items.data[0]?.price.id
-    let membershipTier = "public"
-
-    if (priceId === process.env.STRIPE_STUDENT_PRICE_ID) {
-      membershipTier = "student"
-    } else if (priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) {
-      membershipTier = "professional"
-    } else if (priceId === process.env.STRIPE_CORPORATE_PRICE_ID) {
-      membershipTier = "corporate"
-    }
-
-    // Calculate expiry date (1 year from now)
-    const expiryDate = new Date()
-    expiryDate.setFullYear(expiryDate.getFullYear() + 1)
-
-    // Get the user ID from metadata
-    const userId = session.client_reference_id || session.metadata?.userId
-
-    if (!userId) {
-      console.error("verifyAndUpdateMembershipFromSession: User ID not found in session", session)
-      return { success: false, error: "User ID not found in session" }
-    }
-
-    console.log("verifyAndUpdateMembershipFromSession: Updating membership", {
-      userId,
-      membershipTier,
-      expiryDate,
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["subscription"],
     })
 
-    // Update the user's membership in Supabase
+    if (!session || session.status !== "complete") {
+      console.error("Session not complete:", session?.status)
+      return { success: false, error: "Payment not completed" }
+    }
+
+    const userId = session.metadata?.user_id
+    const membershipTier = session.metadata?.membership_tier
+
+    if (!userId || !membershipTier) {
+      console.error("Missing metadata in session:", session.id)
+      return { success: false, error: "Missing user information" }
+    }
+
+    const subscription = session.subscription as Stripe.Subscription
+    if (!subscription) {
+      console.error("No subscription in session:", session.id)
+      return { success: false, error: "No subscription found" }
+    }
+
+    // Calculate expiry date
+    const expiryDate = new Date(subscription.current_period_end * 1000)
+
+    // Update the membership
     const supabase = createClient()
     const { error } = await supabase
       .from("profiles")
       .update({
         membership_tier: membershipTier,
-        membership_status: "active",
+        membership_status: "active", // Changed to lowercase
         membership_expiry: expiryDate.toISOString(),
         last_payment_date: new Date().toISOString(),
-        stripe_customer_id: customerId,
+        stripe_customer_id: session.customer as string,
       })
       .eq("id", userId)
 
     if (error) {
-      console.error("verifyAndUpdateMembershipFromSession: Error updating profile", error)
+      console.error("Error updating profile from success page:", error)
       return { success: false, error: error.message }
     }
 
-    console.log("verifyAndUpdateMembershipFromSession: Membership updated successfully")
-    return { success: true, membershipTier }
+    // Revalidate paths
+    revalidatePath("/resources")
+    revalidatePath("/membership")
+    revalidatePath("/account")
+
+    console.log("Membership verified and updated from success page for user:", userId)
+    return { success: true, tier: membershipTier }
   } catch (error: any) {
-    console.error("verifyAndUpdateMembershipFromSession: Unexpected error", error)
-    return { success: false, error: error.message || "An unexpected error occurred" }
+    console.error("Error verifying session:", error)
+    return { success: false, error: error.message }
   }
 }

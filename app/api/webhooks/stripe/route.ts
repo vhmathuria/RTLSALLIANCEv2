@@ -1,12 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
-import { supabaseAdmin } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase-server"
+import { updateMembership } from "@/lib/membership-actions"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 })
 
+// Webhook endpoint for Stripe events
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const signature = req.headers.get("stripe-signature") as string
@@ -44,12 +46,21 @@ export async function POST(req: NextRequest) {
           // Calculate expiry date (end of current period)
           const expiryDate = new Date(subscription.current_period_end * 1000)
 
-          // Update user membership
-          const { error: updateError } = await supabaseAdmin
+          // Update user membership using both methods for redundancy
+          try {
+            await updateMembership(userId, membershipTier, expiryDate)
+            console.log("Updated membership via server action")
+          } catch (serverActionError) {
+            console.error("Server action failed, falling back to direct update:", serverActionError)
+          }
+
+          // Always perform direct update as a fallback
+          const supabase = createClient()
+          const { error: updateError } = await supabase
             .from("profiles")
             .update({
               membership_tier: membershipTier,
-              membership_status: "active",
+              membership_status: "active", // Changed to lowercase
               membership_expiry: expiryDate.toISOString(),
               last_payment_date: new Date().toISOString(),
               stripe_customer_id: session.customer as string,
@@ -57,7 +68,7 @@ export async function POST(req: NextRequest) {
             .eq("id", userId)
 
           if (updateError) {
-            console.error("Error updating profile:", updateError)
+            console.error("Error updating profile directly:", updateError)
             throw updateError
           }
 
@@ -82,7 +93,8 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const { data: profile, error: profileError } = await supabaseAdmin
+        const supabase = createClient()
+        const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
           .eq("stripe_customer_id", customer.id)
@@ -114,23 +126,35 @@ export async function POST(req: NextRequest) {
         // Calculate expiry date (end of current period)
         const expiryDate = new Date(subscription.current_period_end * 1000)
 
-        // Update user membership
-        const { error: updateError } = await supabaseAdmin
+        // Update user membership using both methods for redundancy
+        try {
+          await updateMembership(profile.id, membershipTier, expiryDate)
+          console.log("Updated membership via server action for subscription update")
+        } catch (serverActionError) {
+          console.error(
+            "Server action failed for subscription update, falling back to direct update:",
+            serverActionError,
+          )
+        }
+
+        // Always perform direct update as a fallback
+        const { error: updateError } = await supabase
           .from("profiles")
           .update({
             membership_tier: membershipTier,
-            membership_status: "active",
+            membership_status: "active", // Changed to lowercase
             membership_expiry: expiryDate.toISOString(),
             last_payment_date: new Date().toISOString(),
           })
           .eq("id", profile.id)
 
         if (updateError) {
-          console.error("Error updating profile for subscription update:", updateError)
+          console.error("Error updating profile directly for subscription update:", updateError)
           throw updateError
         }
 
         console.log("Profile updated successfully for subscription update, user:", profile.id)
+
         break
       }
 
@@ -147,7 +171,8 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const { data: profile, error: profileError } = await supabaseAdmin
+        const supabase = createClient()
+        const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
           .eq("stripe_customer_id", customer.id)
@@ -159,11 +184,11 @@ export async function POST(req: NextRequest) {
         }
 
         // Downgrade user to public tier
-        const { error: updateError } = await supabaseAdmin
+        const { error: updateError } = await supabase
           .from("profiles")
           .update({
             membership_tier: "public",
-            membership_status: "inactive",
+            membership_status: "inactive", // Changed to lowercase
           })
           .eq("id", profile.id)
 
@@ -173,6 +198,7 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("Profile downgraded successfully for subscription deletion, user:", profile.id)
+
         break
       }
     }

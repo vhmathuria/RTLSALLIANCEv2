@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useAuth } from "@/contexts/auth-context"
+import { createSupabaseClient } from "@/lib/supabase-auth"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -42,8 +42,41 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [profile, setProfile] = useState<any>(null)
   const [expandedDropdown, setExpandedDropdown] = useState<string | null>(null)
-  const { user, profile, loading, signOut } = useAuth()
+
+  useEffect(() => {
+    async function loadUserProfile() {
+      const supabase = createSupabaseClient()
+
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+
+      if (user) {
+        // Get user profile
+        const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+
+        if (data) {
+          setProfile(data)
+        }
+      }
+
+      setLoading(false)
+    }
+
+    loadUserProfile()
+  }, [])
+
+  const handleSignOut = async () => {
+    const supabase = createSupabaseClient()
+    await supabase.auth.signOut()
+    window.location.href = "/"
+  }
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -147,7 +180,7 @@ export default function Header() {
                   <Link href="/account">
                     <DropdownMenuItem>My Account</DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem onClick={signOut}>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>
@@ -281,7 +314,7 @@ export default function Header() {
                       </Link>
                       <button
                         onClick={() => {
-                          signOut()
+                          handleSignOut()
                           setMobileMenuOpen(false)
                         }}
                         className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"

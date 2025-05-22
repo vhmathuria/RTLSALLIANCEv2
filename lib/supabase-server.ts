@@ -1,17 +1,15 @@
-import { createClient as createClientBase } from "@supabase/supabase-js"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
 import type { Database } from "@/types/supabase"
 
-// Create a client that doesn't rely on headers
-export function createClient() {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
-    console.error("Missing Supabase environment variables")
-    throw new Error("Missing Supabase environment variables")
-  }
-
-  return createClientBase<Database>(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
+// Export the function with the name that's being imported elsewhere
+export function createServerClient() {
+  const cookieStore = cookies()
+  return createServerComponentClient<Database>({ cookies: () => cookieStore })
 }
 
-// For compatibility with existing code that expects the createServerClient function
-export function createServerClient() {
-  return createClient()
+// Keep the original function for backward compatibility
+export function createClient() {
+  const cookieStore = cookies()
+  return createServerComponentClient<Database>({ cookies: () => cookieStore })
 }

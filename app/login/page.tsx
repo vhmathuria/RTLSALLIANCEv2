@@ -1,35 +1,20 @@
-import { redirect } from "next/navigation"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
-import type { Database } from "@/types/supabase"
-import LoginForm from "@/components/auth/login-form"
+"use client"
 
-export const dynamic = "force-dynamic"
+import { useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: { redirectTo?: string }
-}) {
-  // Create a Supabase client
-  const supabase = createServerComponentClient<Database>({ cookies })
+export default function LoginRedirect() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") || "/"
 
-  // Check if user is already logged in
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  // If already logged in, redirect to the requested page or home
-  if (session) {
-    redirect(searchParams.redirectTo || "/")
-  }
+  useEffect(() => {
+    router.replace(`/auth?tab=login&redirectTo=${encodeURIComponent(redirectTo)}`)
+  }, [router, redirectTo])
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-2xl font-bold mb-6 text-center">Log In to RTLS Alliance</h1>
-        <LoginForm redirectTo={searchParams.redirectTo} />
-      </div>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
     </div>
   )
 }
