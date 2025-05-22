@@ -5,6 +5,7 @@ import "./globals.css"
 import Header from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
 import Script from "next/script"
+import { MembershipProvider } from "@/contexts/membership-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -77,9 +78,11 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/RA-favicon.png" />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
+        <MembershipProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </MembershipProvider>
 
         {/* Global site tag (gtag.js) - Google Analytics */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID" strategy="afterInteractive" />

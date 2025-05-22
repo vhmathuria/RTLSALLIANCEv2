@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { createAdminClient } from "@/lib/supabase-server-admin"
-import { updateMembership } from "@/lib/membership-actions"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -46,15 +45,7 @@ export async function POST(req: NextRequest) {
           // Calculate expiry date (end of current period)
           const expiryDate = new Date(subscription.current_period_end * 1000)
 
-          // Update user membership using both methods for redundancy
-          try {
-            await updateMembership(userId, membershipTier, expiryDate)
-            console.log("Updated membership via server action")
-          } catch (serverActionError) {
-            console.error("Server action failed, falling back to direct update:", serverActionError)
-          }
-
-          // Always perform direct update as a fallback - use admin client to bypass RLS
+          // Update user membership directly - use admin client to bypass RLS
           const supabaseAdmin = createAdminClient()
           const { error: updateError } = await supabaseAdmin
             .from("profiles")
@@ -73,19 +64,6 @@ export async function POST(req: NextRequest) {
           }
 
           console.log("Profile updated successfully for user:", userId)
-
-          try {
-            // Attempt to revalidate paths
-            await fetch(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?path=/resources&path=/membership&path=/account`,
-              {
-                method: "POST",
-              },
-            )
-            console.log("Revalidation triggered from webhook")
-          } catch (revalidateError) {
-            console.error("Failed to trigger revalidation:", revalidateError)
-          }
         } else {
           console.error("No subscription found in session:", session.id)
         }
@@ -139,18 +117,7 @@ export async function POST(req: NextRequest) {
         // Calculate expiry date (end of current period)
         const expiryDate = new Date(subscription.current_period_end * 1000)
 
-        // Update user membership using both methods for redundancy
-        try {
-          await updateMembership(profile.id, membershipTier, expiryDate)
-          console.log("Updated membership via server action for subscription update")
-        } catch (serverActionError) {
-          console.error(
-            "Server action failed for subscription update, falling back to direct update:",
-            serverActionError,
-          )
-        }
-
-        // Always perform direct update as a fallback - use admin client to bypass RLS
+        // Update user membership directly - use admin client to bypass RLS
         const { error: updateError } = await supabaseAdmin
           .from("profiles")
           .update({
@@ -167,20 +134,6 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("Profile updated successfully for subscription update, user:", profile.id)
-
-        try {
-          // Attempt to revalidate paths
-          await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?path=/resources&path=/membership&path=/account`,
-            {
-              method: "POST",
-            },
-          )
-          console.log("Revalidation triggered from webhook")
-        } catch (revalidateError) {
-          console.error("Failed to trigger revalidation:", revalidateError)
-        }
-
         break
       }
 
@@ -224,20 +177,6 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("Profile downgraded successfully for subscription deletion, user:", profile.id)
-
-        try {
-          // Attempt to revalidate paths
-          await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/revalidate?path=/resources&path=/membership&path=/account`,
-            {
-              method: "POST",
-            },
-          )
-          console.log("Revalidation triggered from webhook")
-        } catch (revalidateError) {
-          console.error("Failed to trigger revalidation:", revalidateError)
-        }
-
         break
       }
     }

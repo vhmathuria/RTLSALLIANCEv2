@@ -1,3 +1,6 @@
+// Debug endpoint that should be removed in production
+// DELETE THIS FILE
+
 import { NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 

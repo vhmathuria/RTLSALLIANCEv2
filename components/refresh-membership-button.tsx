@@ -3,23 +3,21 @@
 import { Button } from "@/components/ui/button"
 import { RefreshCw } from "lucide-react"
 import { useState } from "react"
-import { forceRefreshMembership } from "@/lib/membership-actions"
-import { useRouter } from "next/navigation"
 
-export function RefreshMembershipButton({ userId }: { userId: string }) {
+export function RefreshMembershipButton() {
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const router = useRouter()
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
     try {
-      await forceRefreshMembership(userId)
-      // Force a hard refresh of the page
-      router.refresh()
+      // Force a hard refresh by reloading the page
+      window.location.reload()
     } catch (error) {
-      console.error("Error refreshing membership:", error)
+      console.error("Error refreshing:", error)
     } finally {
-      setIsRefreshing(false)
+      setTimeout(() => {
+        setIsRefreshing(false)
+      }, 1000)
     }
   }
 
@@ -32,7 +30,7 @@ export function RefreshMembershipButton({ userId }: { userId: string }) {
       className="flex items-center gap-2"
     >
       <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
-      {isRefreshing ? "Refreshing..." : "Refresh Membership Status"}
+      {isRefreshing ? "Refreshing..." : "Refresh Membership"}
     </Button>
   )
 }

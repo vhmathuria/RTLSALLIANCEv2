@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react"
 import { getSupabaseBrowser } from "@/lib/supabase-browser"
 
+// Debug page that should be removed in production
+// DELETE THIS FILE
+
 export default function DebugPage() {
   const [envStatus, setEnvStatus] = useState({
     supabaseUrl: false,
