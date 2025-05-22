@@ -1,62 +1,41 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
 import Stripe from "stripe"
+import { createClient } from "@/lib/supabase-server"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 })
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     // Get form data
     const formData = await request.formData()
     const priceId = formData.get("priceId") as string
     const tier = formData.get("tier") as string
+    const userId = formData.get("userId") as string
 
-    // Validate inputs
     if (!priceId || !tier) {
-      return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    // Get the current user
-    const supabase = createRouteHandlerClient({ cookies })
+    // Get the user from the request
+    const supabase = createClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()
 
-    if (!user) {
+    // If no user is found and no userId was provided, return error
+    if (!user && !userId) {
       return NextResponse.json({ error: "User not authenticated" }, { status: 401 })
     }
 
-    // Get or create Stripe customer
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("stripe_customer_id, email")
-      .eq("id", user.id)
-      .single()
-
-    let stripeCustomerId = profile?.stripe_customer_id
-
-    if (!stripeCustomerId) {
-      // Create a new customer
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          supabase_id: user.id,
-        },
-      })
-
-      stripeCustomerId = customer.id
-
-      // Save the customer ID to the profile
-      await supabase.from("profiles").update({ stripe_customer_id: stripeCustomerId }).eq("id", user.id)
-    }
+    // Use provided userId or fall back to authenticated user
+    const customerId = userId || user?.id
 
     // Create a checkout session
     const session = await stripe.checkout.sessions.create({
-      customer: stripeCustomerId,
+      payment_method_types: ["card"],
       line_items: [
         {
           price: priceId,
@@ -65,15 +44,19 @@ export async function POST(request: NextRequest) {
       ],
       mode: "subscription",
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/membership/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/membership/cancel`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/membership/upgrade`,
+      client_reference_id: customerId,
       metadata: {
-        user_id: user.id,
+        user_id: customerId,
         membership_tier: tier,
       },
     })
 
-    // Redirect to the checkout URL
-    return NextResponse.redirect(session.url!, 303)
+    if (!session.url) {
+      throw new Error("Failed to create checkout session")
+    }
+
+    return NextResponse.json({ url: session.url })
   } catch (error: any) {
     console.error("Error creating checkout session:", error)
     return NextResponse.json({ error: error.message || "Failed to create checkout session" }, { status: 500 })

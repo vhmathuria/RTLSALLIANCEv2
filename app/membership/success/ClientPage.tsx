@@ -1,11 +1,12 @@
 "use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 
-export default function PaymentSuccessPage({
+export default function ClientPage({
   searchParams,
 }: {
   searchParams: { session_id?: string }
@@ -13,42 +14,75 @@ export default function PaymentSuccessPage({
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchData() {
-      const supabase = createSupabaseClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      try {
+        const supabase = createSupabaseClient()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
 
-      // If user is not logged in, redirect to login
-      if (!user) {
-        window.location.href = "/login?redirectTo=/membership"
-        return
+        // If user is not logged in, redirect to login
+        if (!user) {
+          window.location.href = `/login?redirectTo=/membership/success?session_id=${searchParams.session_id}&from=client-page`
+          return
+        }
+
+        setUser(user)
+
+        // Get user profile to display current membership
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("membership_tier, membership_status")
+          .eq("id", user.id)
+          .single()
+
+        if (profileError) {
+          console.error("Error fetching profile:", profileError)
+          setError("Failed to load profile data")
+        } else {
+          setProfile(profile)
+        }
+      } catch (err) {
+        console.error("Error in fetchData:", err)
+        setError("An unexpected error occurred")
+      } finally {
+        setIsLoading(false)
       }
-
-      setUser(user)
-
-      // Get user profile to display current membership
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("membership_tier, membership_status")
-        .eq("id", user.id)
-        .single()
-
-      setProfile(profile)
-      setIsLoading(false)
     }
 
     fetchData()
-  }, [])
+  }, [searchParams.session_id])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    )
   }
 
-  // Get session ID from URL
-  const sessionId = searchParams.session_id
+  if (error) {
+    return (
+      <div className="bg-gray-50 min-h-screen py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="p-6">
+              <h1 className="text-2xl font-bold text-center mb-4">Something went wrong</h1>
+              <p className="text-center text-red-600 mb-6">{error}</p>
+              <div className="space-y-4">
+                <Button asChild className="w-full">
+                  <Link href="/membership">Return to Membership</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Format membership tier for display
   const formatMembershipTier = (tier: string) => {
@@ -70,20 +104,10 @@ export default function PaymentSuccessPage({
             </div>
 
             <h1 className="text-2xl font-bold text-center mb-2">Payment Successful!</h1>
-
-            {sessionId ? (
-              <div className="text-center">
-                <p className="text-gray-600 mb-4">Processing your membership upgrade...</p>
-                <div className="flex justify-center">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                </div>
-              </div>
-            ) : (
-              <p className="text-center text-gray-600 mb-6">
-                Thank you for upgrading to {formatMembershipTier(membershipTier)} membership! Your account has been
-                successfully updated.
-              </p>
-            )}
+            <p className="text-center text-gray-600 mb-6">
+              Thank you for upgrading to {formatMembershipTier(membershipTier)} membership! Your account has been
+              successfully updated.
+            </p>
 
             <div className="space-y-4">
               <Button asChild className="w-full">

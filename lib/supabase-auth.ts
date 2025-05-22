@@ -1,17 +1,17 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import type { Provider, User } from "@supabase/supabase-js"
-import { createClient } from "@/lib/supabase-server"
+import type { Database } from "@/types/supabase"
 
 // Create a singleton instance of the Supabase client for client components
 export const createSupabaseClient = () => {
-  return createClientComponentClient()
+  return createClientComponentClient<Database>()
 }
 
 // New function to handle auth callback and create profile
 export async function handleAuthCallback(user: User) {
   try {
     console.log("Auth callback: Creating profile for", user.id)
-    const supabase = createClient()
+    const supabase = createSupabaseClient()
 
     // Check if profile already exists
     const { data: existingProfile } = await supabase.from("profiles").select("id").eq("id", user.id).single()

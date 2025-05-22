@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createServerClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase-server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Briefcase, Building, Check } from "lucide-react"
@@ -10,16 +10,19 @@ export const metadata = {
   description: "Upgrade your RTLS Alliance membership to access premium content",
 }
 
+export const dynamic = "force-dynamic"
+
 export default async function MembershipUpgradePage({ searchParams }: { searchParams: { tier?: string } }) {
   // Check if user is logged in
-  const supabase = createServerClient()
+  const supabase = createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   // If user is not logged in, redirect to login
   if (!user) {
-    redirect("/login?redirectTo=/membership/upgrade")
+    console.log("No user found in membership upgrade page, redirecting to login")
+    redirect("/login?redirectTo=/membership/upgrade&from=upgrade-page")
   }
 
   // Get user profile
@@ -143,6 +146,7 @@ export default async function MembershipUpgradePage({ searchParams }: { searchPa
                   <form action="/api/create-checkout" method="POST" className="w-full">
                     <input type="hidden" name="priceId" value={tier.priceId} />
                     <input type="hidden" name="tier" value={tier.id} />
+                    <input type="hidden" name="userId" value={user.id} />
                     <Button className="w-full" disabled={tier.disabled} type={tier.disabled ? "button" : "submit"}>
                       {tier.buttonText}
                     </Button>

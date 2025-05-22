@@ -1,20 +1,38 @@
-"use client"
+import { redirect } from "next/navigation"
+import { createClient } from "@/lib/supabase-server"
+import LoginForm from "@/components/auth/login-form"
 
-import { useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+export const metadata = {
+  title: "Login - RTLS Alliance",
+  description: "Log in to your RTLS Alliance account",
+}
 
-export default function LoginRedirect() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirectTo = searchParams.get("redirectTo") || "/"
+export const dynamic = "force-dynamic"
 
-  useEffect(() => {
-    router.replace(`/auth?tab=login&redirectTo=${encodeURIComponent(redirectTo)}`)
-  }, [router, redirectTo])
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: { redirectTo?: string; from?: string }
+}) {
+  // Check if user is already logged in
+  const supabase = createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  // If user is already logged in, redirect to the requested page or dashboard
+  if (user) {
+    const redirectTo = searchParams.redirectTo || "/account"
+    console.log(`User already logged in, redirecting to ${redirectTo} from login page`)
+    redirect(redirectTo)
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-md mx-auto">
+        <h1 className="text-2xl font-bold mb-6 text-center">Log In to RTLS Alliance</h1>
+        <LoginForm redirectTo={searchParams.redirectTo} />
+      </div>
     </div>
   )
 }

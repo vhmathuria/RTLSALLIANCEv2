@@ -20,6 +20,15 @@ const publicRoutes = [
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
 
+  // Only check auth for protected routes to avoid unnecessary processing
+  const { pathname } = req.nextUrl
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
+
+  // If it's not a protected route, just proceed
+  if (!isProtectedRoute) {
+    return res
+  }
+
   // Create a Supabase client for the middleware
   const supabase = createMiddlewareClient({ req, res })
 
@@ -28,37 +37,30 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const url = req.nextUrl.clone()
-  const { pathname } = url
-
-  // Check if the route requires authentication
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-  const isPublicRoute = publicRoutes.some((route) => pathname === route || pathname.startsWith(route))
-
-  // If it's a protected route and user is not authenticated, redirect to login
-  if (isProtectedRoute && !session) {
-    url.pathname = "/login"
-    url.searchParams.set("redirectTo", pathname)
-    return NextResponse.redirect(url)
+  // If user is authenticated, allow access to protected routes
+  if (session) {
+    return res
   }
 
-  // For resource routes, we'll check access in the page component
-  // This allows us to show a paywall instead of redirecting
+  // If user is not authenticated and trying to access a protected route, redirect to login
+  const redirectUrl = new URL("/login", req.url)
+  redirectUrl.searchParams.set("redirectTo", pathname)
 
-  return res
+  // Add a debug parameter to track redirects
+  redirectUrl.searchParams.set("from", "middleware")
+
+  console.log(`Middleware redirecting unauthenticated user from ${pathname} to ${redirectUrl.pathname}`)
+  return NextResponse.redirect(redirectUrl)
 }
 
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     * - public files
-     * - api routes that don't require auth
+     * Only match specific protected routes to avoid unnecessary middleware execution
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|api/webhooks).*)",
+    "/account/:path*",
+    "/membership/upgrade/:path*",
+    "/membership/success/:path*",
+    "/membership/cancel/:path*",
   ],
 }
