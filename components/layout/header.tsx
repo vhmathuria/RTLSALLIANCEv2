@@ -1,14 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import type { Database } from "@/types/supabase"
+import { useAuth } from "@/contexts/auth-context"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -43,48 +42,8 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<any>(null)
   const [expandedDropdown, setExpandedDropdown] = useState<string | null>(null)
-  const supabase = createClientComponentClient<Database>()
-
-  useEffect(() => {
-    async function loadUserProfile() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      setUser(session?.user || null)
-      setLoading(false)
-
-      if (session?.user) {
-        const { data } = await supabase.from("profiles").select("*").eq("id", session.user.id).single()
-        setProfile(data)
-      }
-
-      // Set up auth state listener
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user || null)
-        if (session?.user) {
-          const { data } = supabase.from("profiles").select("*").eq("id", session.user.id).single()
-          setProfile(data)
-        }
-      })
-
-      return () => {
-        subscription.unsubscribe()
-      }
-    }
-
-    loadUserProfile()
-  }, [supabase])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    window.location.href = "/"
-  }
+  const { user, profile, loading, signOut } = useAuth()
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -105,7 +64,7 @@ export default function Header() {
   const hasPublicTier = profile?.membership_tier === "public"
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <nav className="container mx-auto px-3 sm:px-4 flex items-center justify-between py-3" aria-label="Global">
         <div className="flex xl:flex-1">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center">
@@ -188,7 +147,7 @@ export default function Header() {
                   <Link href="/account">
                     <DropdownMenuItem>My Account</DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem onClick={handleSignOut}>
+                  <DropdownMenuItem onClick={signOut}>
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>
@@ -207,12 +166,12 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link href="/login">
+              <Link href="/auth?tab=login">
                 <Button variant="outline" size="sm">
                   Sign In
                 </Button>
               </Link>
-              <Link href="/join-alliance">
+              <Link href="/auth?tab=signup">
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -322,7 +281,7 @@ export default function Header() {
                       </Link>
                       <button
                         onClick={() => {
-                          handleSignOut()
+                          signOut()
                           setMobileMenuOpen(false)
                         }}
                         className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
@@ -340,13 +299,13 @@ export default function Header() {
                   ) : (
                     <div className="space-y-2">
                       <Link
-                        href="/login"
+                        href="/auth?tab=login"
                         className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Sign In
                       </Link>
-                      <Link href="/join-alliance" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                      <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
                         <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                           Join Alliance
                         </Button>

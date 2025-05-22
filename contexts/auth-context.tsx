@@ -1,18 +1,28 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import { supabase, getUserProfile } from "@/lib/supabase"
+import { createSupabaseClient, ensureUserProfile } from "@/lib/supabase-auth"
 import { useRouter } from "next/navigation"
+import type { User } from "@supabase/supabase-js"
 
-type User = any
-type Profile = any
+interface Profile {
+  id: string
+  email: string
+  full_name?: string
+  membership_tier: string
+  membership_status: string
+  membership_expiry?: string
+  last_payment_date?: string
+  stripe_customer_id?: string
+  created_at: string
+  updated_at: string
+}
 
 interface AuthContextType {
   user: User | null
   profile: Profile | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<{ error: any }>
-  signUp: (email: string, password: string) => Promise<{ error: any }>
+  signInWithProvider: (provider: "google" | "linkedin_oidc") => Promise<{ error: any }>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
 }
@@ -21,8 +31,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   profile: null,
   loading: true,
-  signIn: async () => ({ error: null }),
-  signUp: async () => ({ error: null }),
+  signInWithProvider: async () => ({ error: null }),
   signOut: async () => {},
   refreshProfile: async () => {},
 })
@@ -32,31 +41,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const supabase = createSupabaseClient()
 
-  // Load user on mount
+  // Load initial session and profile
   useEffect(() => {
-    async function loadUserAndProfile() {
+    async function loadSession() {
       try {
-        // Get initial session
         const {
           data: { session },
         } = await supabase.auth.getSession()
 
         if (session?.user) {
           setUser(session.user)
-
-          // Get profile
-          const profile = await getUserProfile(session.user.id)
-          setProfile(profile)
+          await loadProfile(session.user)
         }
       } catch (error) {
-        console.error("Error loading user:", error)
+        console.error("Error loading session:", error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadUserAndProfile()
+    loadSession()
 
     // Listen for auth changes
     const {
@@ -66,48 +72,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (session?.user) {
         setUser(session.user)
-
-        // Get profile
-        const profile = await getUserProfile(session.user.id)
-        setProfile(profile)
+        await loadProfile(session.user)
       } else {
         setUser(null)
         setProfile(null)
       }
 
-      // Force refresh
+      setLoading(false)
       router.refresh()
     })
 
     return () => {
       subscription.unsubscribe()
     }
-  }, [router])
+  }, [supabase, router])
 
-  // Sign in with email and password
-  async function signIn(email: string, password: string) {
+  // Load user profile
+  async function loadProfile(user: User) {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      return { error }
+      // Ensure profile exists
+      const fullName = user.user_metadata?.full_name || user.user_metadata?.name
+      const profile = await ensureUserProfile(user.id, user.email!, fullName)
+      setProfile(profile)
     } catch (error) {
-      console.error("Error signing in:", error)
-      return { error }
+      console.error("Error loading profile:", error)
     }
   }
 
-  // Sign up with email and password
-  async function signUp(email: string, password: string) {
+  // Sign in with OAuth provider
+  async function signInWithProvider(provider: "google" | "linkedin_oidc") {
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       })
       return { error }
     } catch (error) {
-      console.error("Error signing up:", error)
       return { error }
     }
   }
@@ -116,6 +118,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function signOut() {
     try {
       await supabase.auth.signOut()
+      setUser(null)
+      setProfile(null)
       router.push("/")
     } catch (error) {
       console.error("Error signing out:", error)
@@ -127,7 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return
 
     try {
-      const profile = await getUserProfile(user.id)
+      const fullName = user.user_metadata?.full_name || user.user_metadata?.name
+      const profile = await ensureUserProfile(user.id, user.email!, fullName)
       setProfile(profile)
     } catch (error) {
       console.error("Error refreshing profile:", error)
@@ -140,8 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         profile,
         loading,
-        signIn,
-        signUp,
+        signInWithProvider,
         signOut,
         refreshProfile,
       }}

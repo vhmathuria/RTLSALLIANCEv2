@@ -1,16 +1,17 @@
 import type React from "react"
-import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { AuthProvider } from "@/contexts/auth-context"
+import "./globals.css"
 import Header from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "RTLS Alliance",
-  description: "The global community for real-time location systems",
+  description:
+    "A community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
     generator: 'v0.dev'
 }
 
@@ -23,11 +24,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
+          <Header />
+          <main>{children}</main>
+          <Footer />
         </AuthProvider>
       </body>
     </html>
