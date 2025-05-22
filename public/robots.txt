@@ -1,15 +1,6 @@
-# Allow all web crawlers
+# Allow all crawlers
 User-agent: *
 Allow: /
 
-# Disallow admin and auth pages
-Disallow: /admin/
-Disallow: /auth/
-Disallow: /auth-error/
-Disallow: /login/
-Disallow: /account/
-
-# Sitemaps
+# Sitemap location
 Sitemap: https://rtlsalliance.com/sitemap.xml
-Sitemap: https://rtlsalliance.com/api/sitemap
-Sitemap: https://rtlsalliance.com/static-sitemap.xml

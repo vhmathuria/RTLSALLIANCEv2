@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase-server"
 import { handleAuthCallback } from "@/lib/supabase-auth"
-import { cookies } from "next/headers"
 import { NextResponse, type NextRequest } from "next/server"
 
 export async function GET(request: NextRequest) {
@@ -15,22 +14,8 @@ export async function GET(request: NextRequest) {
 
   console.log("Auth callback initiated with returnTo path:", returnTo)
 
-  const cookieStore = cookies()
-
-  // Create a client with cookies for session management
-  const supabase = createClient({
-    cookies: {
-      get(name) {
-        return cookieStore.get(name)?.value
-      },
-      set(name, value, options) {
-        cookieStore.set({ name, value, ...options })
-      },
-      remove(name, options) {
-        cookieStore.set({ name, value: "", ...options })
-      },
-    },
-  })
+  // Create a client without using cookies from next/headers
+  const supabase = createClient()
 
   try {
     // Exchange the code for a session

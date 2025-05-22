@@ -1,32 +1,30 @@
 "use client"
-
-import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createServerClient } from "@/lib/supabase-server"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 import { useEffect, useState } from "react"
+import { createSupabaseClient } from "@/lib/supabase-auth"
 
 export default function PaymentSuccessPage({
   searchParams,
 }: {
   searchParams: { session_id?: string }
 }) {
-  // Check if user is logged in
-  const supabase = createServerClient()
-
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
+      const supabase = createSupabaseClient()
       const {
         data: { user },
       } = await supabase.auth.getUser()
 
       // If user is not logged in, redirect to login
       if (!user) {
-        redirect("/login?redirectTo=/membership")
+        window.location.href = "/login?redirectTo=/membership"
+        return
       }
 
       setUser(user)
@@ -39,27 +37,26 @@ export default function PaymentSuccessPage({
         .single()
 
       setProfile(profile)
+      setIsLoading(false)
     }
 
     fetchData()
-  }, [supabase])
+  }, [])
 
-  if (!user || !profile) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
   // Get session ID from URL
   const sessionId = searchParams.session_id
 
-  // We'll use this to store the result of verification
-  const membershipTier = profile?.membership_tier || "unknown"
-  const verificationError = null
-
   // Format membership tier for display
   const formatMembershipTier = (tier: string) => {
     if (!tier || tier === "unknown") return "Unknown"
     return tier.charAt(0).toUpperCase() + tier.slice(1)
   }
+
+  const membershipTier = profile?.membership_tier || "unknown"
 
   return (
     <div className="bg-gray-50 min-h-screen py-12">

@@ -19,6 +19,8 @@ const publicRoutes = [
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
+
+  // Create a Supabase client for the middleware
   const supabase = createMiddlewareClient({ req, res })
 
   // Get session

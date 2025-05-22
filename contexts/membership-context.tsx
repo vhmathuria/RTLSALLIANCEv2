@@ -63,11 +63,7 @@ export function MembershipProvider({ children }: { children: ReactNode }) {
         if (error) {
           console.error("MembershipProvider: Error fetching profile", error)
           if (isMounted) {
-            setMembership((prev) => ({
-              ...prev,
-              loading: false,
-              error: error.message,
-            }))
+            setMembership((prev) => ({ ...prev, loading: false, error: error.message }))
           }
           return
         }

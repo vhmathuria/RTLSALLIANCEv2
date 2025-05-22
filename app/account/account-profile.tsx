@@ -151,6 +151,7 @@ export default function AccountProfile({ user, profile: initialProfile }: { user
   const handleManageSubscription = async () => {
     setIsLoadingPortal(true)
     try {
+      // Use the API route endpoint
       const response = await fetch("/api/create-portal-session", {
         method: "POST",
       })
