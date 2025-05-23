@@ -102,14 +102,30 @@ export default async function ArticlePage({ params }: { params: { slug: string }
       corporate: 3,
     }
 
-    // Check if user has access
+    // Check if user has access - COMPLETE VERSION
     const userTier = profile?.membership_tier || "public"
-    const userTierLevel = tierLevels[userTier as keyof typeof tierLevels] || 0
-    const requiredTierLevel = tierLevels[requiredTier as keyof typeof tierLevels] || 0
+    const userStatus = profile?.membership_status?.toLowerCase() || "inactive"
+    const userExpiry = profile?.membership_expiry
 
-    // If user's tier is lower than required, show content gate
-    if (userTierLevel < requiredTierLevel) {
-      return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
+    // Check if membership is active
+    const isActive = userStatus === "active"
+
+    // Check if membership has expired
+    const isExpired = userExpiry && new Date(userExpiry) < new Date()
+
+    // If membership is inactive or expired, treat as public tier
+    if (!isActive || isExpired) {
+      if (requiredTier !== "public") {
+        return <ContentGate requiredTier={requiredTier as any} userTier="public" />
+      }
+    } else {
+      // Check tier levels only if membership is active and not expired
+      const userTierLevel = tierLevels[userTier as keyof typeof tierLevels] || 0
+      const requiredTierLevel = tierLevels[requiredTier as keyof typeof tierLevels] || 0
+
+      if (userTierLevel < requiredTierLevel) {
+        return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
+      }
     }
   }
 

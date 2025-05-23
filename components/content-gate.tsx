@@ -1,6 +1,10 @@
+'use client'
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Lock, GraduationCap, Briefcase, Building } from "lucide-react"
+import { Lock, GraduationCap, Briefcase, Building, User } from 'lucide-react'
+import { getSupabaseBrowser } from "@/lib/supabase-browser"
 
 type MembershipTier = "public" | "student" | "professional" | "corporate"
 
@@ -9,7 +13,86 @@ interface ContentGateProps {
   userTier: MembershipTier
 }
 
-export default function ContentGate({ requiredTier, userTier }: ContentGateProps) {
+export default function ContentGate({ requiredTier, userTier: initialUserTier }: ContentGateProps) {
+  const [userTier, setUserTier] = useState<MembershipTier>(initialUserTier)
+  const [hasAccess, setHasAccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Define tier hierarchy
+  const tierHierarchy = {
+    public: 0,
+    student: 1,
+    professional: 2,
+    corporate: 3
+  }
+
+  useEffect(() => {
+    // Verify membership tier on client side
+    const verifyMembership = async () => {
+      try {
+        // If prop-based check already grants access, no need to fetch
+        if (tierHierarchy[initialUserTier] >= tierHierarchy[requiredTier]) {
+          setHasAccess(true)
+          setIsLoading(false)
+          return
+        }
+
+        // Otherwise, fetch fresh data from Supabase
+        const supabase = getSupabaseBrowser()
+        const { data: session } = await supabase.auth.getSession()
+        
+        if (!session.session) {
+          setIsLoading(false)
+          return
+        }
+        
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("membership_tier, membership_status")
+          .eq("id", session.session.user.id)
+          .single()
+          
+        if (error) {
+          console.error("Error verifying membership:", error)
+          setIsLoading(false)
+          return
+        }
+        
+        if (data) {
+          const fetchedTier = data.membership_tier as MembershipTier || "public"
+          const status = data.membership_status?.toLowerCase() || "inactive"
+          
+          console.log("Content gate verification:", {
+            fetchedTier,
+            status,
+            requiredTier
+          })
+          
+          // Only grant access if status is active and tier is sufficient
+          if (status === "active" && tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier]) {
+            setUserTier(fetchedTier)
+            setHasAccess(true)
+          }
+        }
+      } catch (err) {
+        console.error("Error in membership verification:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    verifyMembership()
+  }, [initialUserTier, requiredTier])
+
+  // If loading or has access, don't show the gate
+  if (isLoading) {
+    return <div className="p-8 text-center">Verifying access...</div>
+  }
+  
+  if (hasAccess) {
+    return null
+  }
+
   const tierInfo = {
     student: {
       name: "Student",
