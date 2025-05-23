@@ -1,152 +1,43 @@
-import { notFound } from "next/navigation"
-import { createServerClient } from "@/lib/supabase-server"
-import { getArticleBySlug } from "@/lib/supabase"
-import GuideRenderer from "@/components/renderers/guide/guide-renderer"
-import SuccessStoryRenderer from "@/components/renderers/success-story/success-story-renderer"
-import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
-import MemberInsightRenderer from "@/components/renderers/member-insight/member-insight-renderer"
+import { createClient } from "@/lib/supabase-server"
+import { checkMembershipAccess } from "@/lib/membership-actions"
 import ContentGate from "@/components/content-gate"
-import type { Metadata } from "next"
+import { getCurrentMembership } from "@/lib/membership-actions"
+import { revalidatePath } from "next/cache"
 
-// Add revalidation - regenerate this page once per day
-export const revalidate = 86400
+export default async function ResourcePage({ params }: { params: { slug: string } }) {
+  const supabase = createClient()
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug)
+  // Get article data
+  const { data: article, error } = await supabase.from("staging_articles").select("*").eq("slug", params.slug).single()
 
-  if (!article) {
-    return {
-      title: "Article Not Found - RTLS Alliance",
-      description: "The requested article could not be found.",
-    }
+  if (error || !article) {
+    return <div>Article not found</div>
   }
 
-  // Base URL for canonical and OG URLs
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
-  const canonicalUrl = `${baseUrl}/resources/${article.slug}`
+  // Get current user's membership
+  const membership = await getCurrentMembership()
 
-  // Determine content category
-  const contentCategory = article.content_type || "Article"
+  // Check if user has access to this content
+  const hasAccess = await checkMembershipAccess(article.membership_tier || "public")
 
-  // Format publication date
-  const pubDate = article.published_at ? new Date(article.published_at).toISOString() : new Date().toISOString()
+  // Force revalidation to ensure we have the latest membership status
+  revalidatePath(`/resources/${params.slug}`)
 
-  return {
-    title: `${article.title} - RTLS Alliance`,
-    description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
-    openGraph: {
-      title: article.title,
-      description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
-      url: canonicalUrl,
-      siteName: "RTLS Alliance",
-      images: [
-        {
-          url: article.featured_image || `${baseUrl}/images/rtls-alliance-logo.png`,
-          width: 1200,
-          height: 630,
-          alt: article.title,
-        },
-      ],
-      locale: "en_US",
-      type: "article",
-      publishedTime: pubDate,
-      modifiedTime: article.updated_at ? new Date(article.updated_at).toISOString() : pubDate,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: article.title,
-      description: article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`,
-      images: [article.featured_image || `${baseUrl}/images/rtls-alliance-logo.png`],
-    },
-    alternates: {
-      canonical: canonicalUrl,
-    },
-  }
-}
-
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
-  const article = await getArticleBySlug(params.slug)
-
-  if (!article) {
-    notFound()
+  // If user doesn't have access, show content gate
+  if (!hasAccess) {
+    return (
+      <ContentGate
+        requiredTier={(article.membership_tier as any) || "public"}
+        userTier={(membership.tier as any) || "public"}
+      />
+    )
   }
 
-  // Check if article requires membership
-  const requiredTier = article.membership_tier || "public"
-
-  // If article is public, no need to check membership
-  if (requiredTier !== "public") {
-    // Get current user
-    const supabase = createServerClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    // If no user is logged in and content is gated, show content gate
-    if (!user) {
-      return <ContentGate requiredTier={requiredTier as any} userTier="public" />
-    }
-
-    // Get user profile to check membership tier
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("membership_tier, membership_status, membership_expiry")
-      .eq("id", user.id)
-      .single()
-
-    // Define tier levels for comparison
-    const tierLevels = {
-      public: 0,
-      student: 1,
-      professional: 2,
-      corporate: 3,
-    }
-
-    // Check if user has access - COMPLETE VERSION
-    const userTier = profile?.membership_tier || "public"
-    const userStatus = profile?.membership_status?.toLowerCase() || "inactive"
-    const userExpiry = profile?.membership_expiry
-
-    // Check if membership is active
-    const isActive = userStatus === "active"
-
-    // Check if membership has expired
-    const isExpired = userExpiry && new Date(userExpiry) < new Date()
-
-    // If membership is inactive or expired, treat as public tier
-    if (!isActive || isExpired) {
-      if (requiredTier !== "public") {
-        return <ContentGate requiredTier={requiredTier as any} userTier="public" />
-      }
-    } else {
-      // Check tier levels only if membership is active and not expired
-      const userTierLevel = tierLevels[userTier as keyof typeof tierLevels] || 0
-      const requiredTierLevel = tierLevels[requiredTier as keyof typeof tierLevels] || 0
-
-      if (userTierLevel < requiredTierLevel) {
-        return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
-      }
-    }
-  }
-
-  // Render the appropriate article type
-  switch (article.content_type) {
-    case "Guide":
-      return <GuideRenderer article={article} />
-    case "Success Story":
-      return <SuccessStoryRenderer article={article} />
-    case "Technology Comparison":
-      return <TechnologyComparisonRenderer article={article} />
-    case "Member Insight":
-      return <MemberInsightRenderer article={article} />
-    default:
-      return (
-        <div className="container mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
-          <div className="prose max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: article.content }} />
-          </div>
-        </div>
-      )
-  }
+  // Otherwise, show the article content
+  return (
+    <div>
+      <h1>{article.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: article.content }} />
+    </div>
+  )
 }

@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Lock, GraduationCap, Briefcase, Building, User } from 'lucide-react'
+import { Lock, GraduationCap, Briefcase, Building } from "lucide-react"
 import { getSupabaseBrowser } from "@/lib/supabase-browser"
 
 type MembershipTier = "public" | "student" | "professional" | "corporate"
@@ -23,7 +23,7 @@ export default function ContentGate({ requiredTier, userTier: initialUserTier }:
     public: 0,
     student: 1,
     professional: 2,
-    corporate: 3
+    corporate: 3,
   }
 
   useEffect(() => {
@@ -40,34 +40,34 @@ export default function ContentGate({ requiredTier, userTier: initialUserTier }:
         // Otherwise, fetch fresh data from Supabase
         const supabase = getSupabaseBrowser()
         const { data: session } = await supabase.auth.getSession()
-        
+
         if (!session.session) {
           setIsLoading(false)
           return
         }
-        
+
         const { data, error } = await supabase
           .from("profiles")
           .select("membership_tier, membership_status")
           .eq("id", session.session.user.id)
           .single()
-          
+
         if (error) {
           console.error("Error verifying membership:", error)
           setIsLoading(false)
           return
         }
-        
+
         if (data) {
-          const fetchedTier = data.membership_tier as MembershipTier || "public"
+          const fetchedTier = (data.membership_tier as MembershipTier) || "public"
           const status = data.membership_status?.toLowerCase() || "inactive"
-          
+
           console.log("Content gate verification:", {
             fetchedTier,
             status,
-            requiredTier
+            requiredTier,
           })
-          
+
           // Only grant access if status is active and tier is sufficient
           if (status === "active" && tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier]) {
             setUserTier(fetchedTier)
@@ -80,7 +80,7 @@ export default function ContentGate({ requiredTier, userTier: initialUserTier }:
         setIsLoading(false)
       }
     }
-    
+
     verifyMembership()
   }, [initialUserTier, requiredTier])
 
@@ -88,7 +88,7 @@ export default function ContentGate({ requiredTier, userTier: initialUserTier }:
   if (isLoading) {
     return <div className="p-8 text-center">Verifying access...</div>
   }
-  
+
   if (hasAccess) {
     return null
   }

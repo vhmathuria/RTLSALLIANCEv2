@@ -15,17 +15,50 @@ export default async function AccountPage() {
     redirect("/login?redirect=/account")
   }
 
-  // Get user profile
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+  // Function to get user profile with retry
+  const getUserProfile = async (retryCount = 0) => {
+    try {
+      const { data: profile, error } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+
+      if (error) {
+        console.error(`Error fetching profile (attempt ${retryCount + 1}):`, error)
+        throw error
+      }
+
+      return profile
+    } catch (error) {
+      // Retry once after a short delay
+      if (retryCount < 1) {
+        console.log("Retrying profile fetch in 1 second...")
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return getUserProfile(retryCount + 1)
+      }
+
+      // If still failing, return null to trigger profile creation
+      console.error("Failed to fetch profile after retry:", error)
+      return null
+    }
+  }
+
+  // Get user profile with retry
+  const profile = await getUserProfile()
 
   // If no profile exists, create one
   if (!profile) {
-    await supabase.from("profiles").insert({
-      id: user.id,
-      email: user.email,
-      membership_tier: "public",
-      membership_status: "active", // Changed to lowercase
-    })
+    try {
+      await supabase.from("profiles").insert({
+        id: user.id,
+        email: user.email,
+        membership_tier: "public",
+        membership_status: "active", // Using lowercase consistently
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+
+      console.log("Created new profile for user:", user.id)
+    } catch (error) {
+      console.error("Error creating profile:", error)
+    }
   }
 
   // Get the latest profile data

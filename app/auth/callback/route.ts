@@ -1,158 +1,198 @@
-\
-## Issue 3: Content Gating Despite Active Membership
-\
-Let's modify the content-gate component to add client-side verification:
+import { createClient } from "@supabase/supabase-js"
+import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 
-```tsx file="components/content-gate.tsx"
-[v0-no-op-code-block-prefix]'use client'
+export async function GET(request: Request) {
+  const requestUrl = new URL(request.url)
+  const code = requestUrl.searchParams.get("code")
+  const next = requestUrl.searchParams.get("next") || "/"
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Lock, GraduationCap, Briefcase, Building } from "lucide-react"
-import { getSupabaseBrowser } from "@/lib/supabase-browser"
-
-type MembershipTier = "public" | "student" | "professional" | "corporate"
-
-interface ContentGateProps {
-  requiredTier: MembershipTier
-  userTier: MembershipTier
-}
-
-export default function ContentGate({ requiredTier, userTier: initialUserTier }: ContentGateProps) {
-  const [userTier, setUserTier] = useState<MembershipTier>(initialUserTier)
-  const [hasAccess, setHasAccess] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // Define tier hierarchy
-  const tierHierarchy = {
-    public: 0,
-    student: 1,
-    professional: 2,
-    corporate: 3,
+  if (!code) {
+    console.error("No code provided in auth callback")
+    return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=No_code_provided`)
   }
 
-  useEffect(() => {
-    // Verify membership tier on client side
-    const verifyMembership = async () => {
-      try {
-        // If prop-based check already grants access, no need to fetch
-        if (tierHierarchy[initialUserTier] >= tierHierarchy[requiredTier]) {
-          setHasAccess(true)
-          setIsLoading(false)
-          return
-        }
+  console.log("Auth callback initiated with next path:", next)
 
-        // Otherwise, fetch fresh data from Supabase
-        const supabase = getSupabaseBrowser()
-        const { data: session } = await supabase.auth.getSession()
+  const cookieStore = cookies()
 
-        if (!session.session) {
-          setIsLoading(false)
-          return
-        }
+  // Create a client with the service role key for admin operations
+  const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("membership_tier, membership_status")
-          .eq("id", session.session.user.id)
-          .single()
+  // Create a client with cookies for session management
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    cookies: {
+      get(name) {
+        return cookieStore.get(name)?.value
+      },
+      set(name, value, options) {
+        cookieStore.set({ name, value, ...options })
+      },
+      remove(name, options) {
+        cookieStore.set({ name, value: "", ...options })
+      },
+    },
+  })
 
-        if (error) {
-          console.error("Error verifying membership:", error)
-          setIsLoading(false)
-          return
-        }
+  try {
+    // Exchange the code for a session
+    console.log("Exchanging code for session")
+    const { error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
 
-        if (data) {
-          const fetchedTier = (data.membership_tier as MembershipTier) || "public"
-          const status = data.membership_status?.toLowerCase() || "inactive"
+    if (sessionError) {
+      console.error("Error exchanging code for session:", sessionError)
+      return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=${encodeURIComponent(sessionError.message)}`)
+    }
 
-          console.log("Content gate verification:", {
-            fetchedTier,
-            status,
-            requiredTier,
-          })
+    // Wait for session to propagate and get the user
+    console.log("Waiting for session to propagate...")
+    let user = null
+    let attempts = 0
+    const maxAttempts = 5
 
-          // Only grant access if status is active and tier is sufficient
-          if (status === "active" && tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier]) {
-            setUserTier(fetchedTier)
-            setHasAccess(true)
-          }
-        }
-      } catch (err) {
-        console.error("Error in membership verification:", err)
-      } finally {
-        setIsLoading(false)
+    while (!user && attempts < maxAttempts) {
+      attempts++
+      const { data } = await supabase.auth.getUser()
+      user = data.user
+
+      if (!user && attempts < maxAttempts) {
+        console.log(`Session not ready yet, attempt ${attempts}/${maxAttempts}. Waiting 500ms...`)
+        await new Promise((resolve) => setTimeout(resolve, 500))
       }
     }
 
-    verifyMembership()
-  }, [initialUserTier, requiredTier])
+    if (!user) {
+      console.error("No user found after exchanging code for session and waiting")
+      return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=No_user_found`)
+    }
 
-  // If loading or has access, don't show the gate
-  if (isLoading) {
-    return <div className="p-8 text-center">Verifying access...</div>
+    console.log("User authenticated:", user.id)
+
+    // Function to create or update profile with retry
+    const createOrUpdateProfile = async (retryCount = 0) => {
+      try {
+        // Check if profile exists
+        console.log("Checking if profile exists for user:", user.id)
+        const { data: existingProfile, error: profileCheckError } = await supabaseAdmin
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single()
+
+        if (profileCheckError && profileCheckError.code !== "PGRST116") {
+          console.error("Error checking for existing profile:", profileCheckError)
+          throw profileCheckError
+        }
+
+        // If profile doesn't exist, create one
+        if (!existingProfile) {
+          console.log("Creating new profile for user:", user.id)
+
+          // Extract name from user metadata if available
+          const fullName = user.user_metadata?.full_name || user.user_metadata?.name || "RTLS Member"
+
+          console.log("User metadata:", user.user_metadata)
+          console.log("Using name:", fullName)
+
+          const { error: insertError } = await supabaseAdmin.from("profiles").insert({
+            id: user.id,
+            email: user.email,
+            full_name: fullName,
+            membership_tier: "public",
+            membership_status: "active", // Using lowercase consistently
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+
+          if (insertError) {
+            console.error(`Error creating profile (attempt ${retryCount + 1}):`, insertError)
+            throw insertError
+          } else {
+            console.log("Profile created successfully for user:", user.id)
+          }
+        } else {
+          console.log("Profile already exists for user:", user.id)
+
+          // If profile exists but status is inactive for public tier, update it to active
+          if (
+            existingProfile.membership_tier === "public" &&
+            (existingProfile.membership_status?.toLowerCase() === "inactive" || !existingProfile.membership_status)
+          ) {
+            const { error: updateError } = await supabaseAdmin
+              .from("profiles")
+              .update({
+                membership_status: "active", // Using lowercase consistently
+                updated_at: new Date().toISOString(),
+              })
+              .eq("id", user.id)
+
+            if (updateError) {
+              console.error(`Error updating profile status (attempt ${retryCount + 1}):`, updateError)
+              throw updateError
+            } else {
+              console.log("Profile status updated to active for user:", user.id)
+            }
+          }
+        }
+
+        // Verify profile was created/updated correctly
+        const { data: verifiedProfile, error: verifyError } = await supabaseAdmin
+          .from("profiles")
+          .select("membership_status, membership_tier")
+          .eq("id", user.id)
+          .single()
+
+        if (verifyError) {
+          console.error("Error verifying profile:", verifyError)
+          throw verifyError
+        }
+
+        console.log("Verified profile:", verifiedProfile)
+
+        // If status is not active, try to fix it
+        if (verifiedProfile && verifiedProfile.membership_status?.toLowerCase() !== "active") {
+          console.log("Profile status not active, fixing...")
+          const { error: fixError } = await supabaseAdmin
+            .from("profiles")
+            .update({
+              membership_status: "active",
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", user.id)
+
+          if (fixError) {
+            console.error("Error fixing profile status:", fixError)
+          } else {
+            console.log("Fixed profile status to active")
+          }
+        }
+
+        // Revalidate paths that might show different content based on membership
+        revalidatePath("/resources")
+        revalidatePath("/membership")
+        revalidatePath("/account")
+      } catch (error) {
+        // Retry logic
+        if (retryCount < 2) {
+          console.log(`Retrying profile operation in 1 second (attempt ${retryCount + 1}/3)...`)
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+          return createOrUpdateProfile(retryCount + 1)
+        } else {
+          console.error("Failed to create/update profile after 3 attempts:", error)
+          throw error
+        }
+      }
+    }
+
+    // Create or update the profile with retry logic
+    await createOrUpdateProfile()
+
+    // Redirect to the specified next page
+    console.log("Redirecting to:", `${requestUrl.origin}${next}`)
+    return NextResponse.redirect(`${requestUrl.origin}${next}`)
+  } catch (error) {
+    console.error("Unexpected error during auth callback:", error)
+    return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=Unexpected_error`)
   }
-
-  if (hasAccess) {
-    return null
-  }
-
-  const tierInfo = {
-    student: {
-      name: "Student",
-      icon: <GraduationCap className="h-8 w-8 text-blue-500" />,
-      description: "Access to student-level content, perfect for academic research and learning.",
-      price: "$100/year",
-    },
-    professional: {
-      name: "Professional",
-      icon: <Briefcase className="h-8 w-8 text-purple-500" />,
-      description: "Full access to professional resources, case studies, and implementation guides.",
-      price: "$550/year",
-    },
-    corporate: {
-      name: "Corporate",
-      icon: <Building className="h-8 w-8 text-green-500" />,
-      description: "Complete access to all RTLS Alliance content plus team collaboration features.",
-      price: "$3,500/year",
-    },
-  }
-
-  const tierToShow = tierInfo[requiredTier as keyof typeof tierInfo] || tierInfo.professional
-
-  return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-3xl mx-auto">
-      <div className="text-center mb-6">
-        <div className="bg-gray-100 p-4 inline-block rounded-full mb-4">
-          <Lock className="h-10 w-10 text-gray-500" />
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Members-Only Content</h2>
-        <p className="text-gray-600">This content requires a {tierToShow.name} membership or higher to access.</p>
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-        <div className="flex items-center mb-4">
-          {tierToShow.icon}
-          <h3 className="text-xl font-semibold ml-3">{tierToShow.name} Membership</h3>
-        </div>
-        <p className="text-gray-600 mb-4">{tierToShow.description}</p>
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-bold">{tierToShow.price}</span>
-          <Link href="/membership/upgrade">
-            <Button>Upgrade Membership</Button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="text-center text-gray-500 text-sm">
-        Already have a membership?{" "}
-        <Link href="/login" className="text-blue-600 hover:underline">
-          Sign in
-        </Link>{" "}
-        to access this content.
-      </div>
-    </div>
-  )
 }
