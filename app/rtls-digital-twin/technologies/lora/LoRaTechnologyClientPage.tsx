@@ -9,7 +9,7 @@ import { FAQSection } from "@/components/ui/faq-section"
 import { FAQSchema } from "@/components/seo/faq-schema"
 import { technologyFAQs } from "@/lib/faq-data"
 
-export default function LoRaTechnologyClientPage() {
+const LoRaTechnologyClientPage = () => {
   // Get LoRa FAQs
   const loraFAQs = technologyFAQs.lora || []
 
@@ -631,7 +631,6 @@ export default function LoRaTechnologyClientPage() {
             <div>
               <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
               <ul className="space-y-2">
-                {/* Use general RTLS resources since we may not have LoRa-specific ones */}
                 <li>
                   <Link
                     href="/resources/rtls-101-core-components-protocols-deployment-models"
@@ -641,29 +640,35 @@ export default function LoRaTechnologyClientPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/resources/rtls-technology-selection-guide" className="text-primary hover:underline">
-                    RTLS Technology Selection Guide: Choosing the Right Solution
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/resources/rtls-deployment-guide" className="text-primary hover:underline">
-                    RTLS Deployment Guide: From Planning to Optimization
+                  <Link
+                    href="/resources/uwb-vs-ble-which-rtls-tech-fits-use-case"
+                    className="text-primary hover:underline"
+                  >
+                    UWB vs BLE: Which RTLS Tech Fits Your Use Case?
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/rtls-security-encryption-authentication-privacy-best-practices"
+                    href="/resources/rtls-digital-twins-synchronizing-spatial-operational-data"
                     className="text-primary hover:underline"
                   >
-                    RTLS Security: Encryption, Authentication & Privacy Best Practices
+                    RTLS & Digital Twins: Synchronizing Spatial and Operational Data
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/rtls-roi-quantify-efficiency-gains-cost-savings"
+                    href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                     className="text-primary hover:underline"
                   >
-                    RTLS ROI: Quantify Efficiency Gains & Cost Savings
+                    Enterprise RTLS: Step-by-Step Implementation Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking"
+                    className="text-primary hover:underline"
+                  >
+                    5 RTLS Trends 2025: AI, 5G NR & Tag-free Tracking
                   </Link>
                 </li>
               </ul>
@@ -702,3 +707,5 @@ export default function LoRaTechnologyClientPage() {
     </div>
   )
 }
+
+export default LoRaTechnologyClientPage

@@ -634,26 +634,26 @@ export default function LiDARTechnologyClientPage() {
               <ul className="space-y-2">
                 <li>
                   <Link
-                    href="/resources/vision-slam-vs-lidar-choosing-ideal-rtls"
+                    href="/resources/rtls-digital-twins-synchronizing-spatial-operational-data"
                     className="text-primary hover:underline"
                   >
-                    Vision SLAM vs LiDAR: Choosing the Ideal RTLS
+                    RTLS & Digital Twins: Synchronizing Spatial and Operational Data
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls"
+                    href="/resources/enterprise-rtls-step-by-step-implementation-guide"
                     className="text-primary hover:underline"
                   >
-                    Vision SLAM vs LiDAR vs VIO: 3D Mapping for RTLS
+                    Enterprise RTLS: Step-by-Step Implementation Guide
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/resources/visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning"
+                    href="/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking"
                     className="text-primary hover:underline"
                   >
-                    Visual SLAM vs UWB vs LiDAR: Next-Gen Indoor Positioning
+                    5 RTLS Trends 2025: AI, 5G NR & Tag-free Tracking
                   </Link>
                 </li>
                 <li>

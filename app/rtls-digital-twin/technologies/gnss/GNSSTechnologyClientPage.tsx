@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building2, Factory, Hospital, ShoppingBag, Truck } from "lucide-react"
 import Link from "next/link"
-import { getTechnologyRelatedArticles } from "@/lib/article-data"
 import { useScrollToTop } from "@/hooks/useScrollToTop"
 import { FAQSection } from "@/components/ui/faq-section"
 import { FAQSchema } from "@/components/seo/faq-schema"
@@ -13,10 +12,7 @@ import { technologyFAQs } from "@/lib/faq-data"
 export default function GNSSTechnologyClientPage() {
   useScrollToTop()
 
-  // Get GNSS-related articles for the related resources section
-  const gnssRelatedArticles = getTechnologyRelatedArticles("gps").slice(0, 5)
-
-  // Get GNSS FAQs
+  // GNSS FAQs
   const gnssFAQs = technologyFAQs.gnss || []
 
   return (
@@ -639,13 +635,46 @@ export default function GNSSTechnologyClientPage() {
             <div>
               <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
               <ul className="space-y-2">
-                {gnssRelatedArticles.map((article) => (
-                  <li key={article.slug}>
-                    <Link href={`/resources/${article.slug}`} className="text-primary hover:underline">
-                      {article.title}
-                    </Link>
-                  </li>
-                ))}
+                <li>
+                  <Link
+                    href="/resources/uwb-vs-gps-indoor-outdoor-tracking-guide"
+                    className="text-primary hover:underline"
+                  >
+                    UWB vs GPS: Indoor vs Outdoor Tracking Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-101-core-components-protocols-deployment-models"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS 101: Core Components, Protocols & Deployment Models
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/rtls-digital-twins-synchronizing-spatial-operational-data"
+                    className="text-primary hover:underline"
+                  >
+                    RTLS & Digital Twins: Synchronizing Spatial and Operational Data
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/enterprise-rtls-step-by-step-implementation-guide"
+                    className="text-primary hover:underline"
+                  >
+                    Enterprise RTLS: Step-by-Step Implementation Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking"
+                    className="text-primary hover:underline"
+                  >
+                    5 RTLS Trends 2025: AI, 5G NR & Tag-free Tracking
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>

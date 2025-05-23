@@ -642,10 +642,10 @@ export default function NFCTechnologyClientPage() {
                   <>
                     <li>
                       <Link
-                        href="/resources/rfid-vs-barcode-vs-ble-asset-tracking-comparison"
+                        href="/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking"
                         className="text-primary hover:underline"
                       >
-                        RFID vs Barcode vs BLE: Asset Tracking Technology Comparison
+                        5 RTLS Trends 2025: AI, 5G NR & Tag-free Tracking
                       </Link>
                     </li>
                     <li>

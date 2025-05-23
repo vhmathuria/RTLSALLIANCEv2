@@ -586,29 +586,26 @@ export default function SensorFusionTechnologyClientPage() {
               <ul className="space-y-4">
                 <li>
                   <Link
-                    href="/resources/rtls-accuracy-precision-explained-sub-meter-positioning"
+                    href="/resources/rtls-digital-twins-synchronizing-spatial-operational-data"
                     className="block group"
                   >
                     <h4 className="text-blue-600 group-hover:underline font-medium">
-                      RTLS Accuracy & Precision Explained: Sub-Meter Positioning
+                      RTLS & Digital Twins: Synchronizing Spatial and Operational Data
                     </h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      Learn how sensor fusion techniques can improve RTLS accuracy and reliability in challenging
-                      environments.
+                      Learn how sensor fusion techniques enable comprehensive digital twin creation with real-time
+                      location data.
                     </p>
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/resources/indoor-outdoor-positioning-seamless-tracking-solutions"
-                    className="block group"
-                  >
+                  <Link href="/resources/integrating-rtls-with-iot-apis-middleware-data-flows" className="block group">
                     <h4 className="text-blue-600 group-hover:underline font-medium">
-                      Indoor-Outdoor Positioning: Seamless Tracking Solutions
+                      Integrating RTLS with IoT: APIs, Middleware & Data Flows
                     </h4>
                     <p className="text-sm text-gray-600 mt-1">
-                      Discover how sensor fusion enables continuous tracking as assets move between indoor and outdoor
-                      environments.
+                      Discover how sensor fusion enables comprehensive IoT integration with multiple data sources for
+                      enhanced tracking.
                     </p>
                   </Link>
                 </li>

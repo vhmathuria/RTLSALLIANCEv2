@@ -680,25 +680,25 @@ export default function SLAMTechnologyClientPage() {
                 </li>
                 <li>
                   <Link
-                    href="/resources/indoor-outdoor-tracking-seamless-positioning"
+                    href="/resources/visual-slam-vs-uwb-vs-lidar-next-gen-indoor-positioning"
                     className="text-blue-600 hover:underline"
                   >
-                    Indoor-Outdoor Tracking: Seamless Positioning Solutions
+                    Visual SLAM vs UWB vs LiDAR: Next-Gen Indoor Positioning
                   </Link>
                   <p className="text-sm text-gray-600 mt-1">
-                    Discover how SLAM can bridge the gap between GPS-based outdoor tracking and indoor positioning
-                    systems.
+                    Discover how SLAM compares with other positioning technologies for advanced indoor tracking
+                    applications.
                   </p>
                 </li>
                 <li>
                   <Link
-                    href="/resources/3d-mapping-digital-twin-creation-guide"
+                    href="/resources/vision-slam-vs-lidar-vio-3d-mapping-rtls"
                     className="text-blue-600 hover:underline"
                   >
-                    3D Mapping & Digital Twin Creation Guide
+                    Vision SLAM vs LiDAR vs VIO: 3D Mapping for RTLS
                   </Link>
                   <p className="text-sm text-gray-600 mt-1">
-                    Explore how SLAM technology enables rapid 3D mapping for digital twin applications.
+                    Explore how different SLAM technologies enable 3D mapping for real-time location systems.
                   </p>
                 </li>
               </ul>

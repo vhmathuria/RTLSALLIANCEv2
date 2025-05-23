@@ -642,10 +642,14 @@ export default function MagneticFieldTechnologyClientPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-3">Related Resources</h3>
+
               <ul className="space-y-2">
                 <li>
-                  <Link href="/resources/indoor-positioning-basics" className="text-primary hover:underline">
-                    Indoor Positioning Basics: Technologies & Use Cases
+                  <Link
+                    href="/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking"
+                    className="text-primary hover:underline"
+                  >
+                    5 RTLS Trends 2025: AI, 5G NR & Tag-free Tracking
                   </Link>
                 </li>
                 <li>
@@ -674,10 +678,10 @@ export default function MagneticFieldTechnologyClientPage() {
                 </li>
                 <li>
                   <Link
-                    href="/resources/sensor-fusion-algorithms-rtls-accuracy"
+                    href="/resources/rtls-digital-twins-synchronizing-spatial-operational-data"
                     className="text-primary hover:underline"
                   >
-                    Sensor Fusion Algorithms for Enhanced RTLS Accuracy
+                    RTLS & Digital Twins: Synchronizing Spatial and Operational Data
                   </Link>
                 </li>
               </ul>

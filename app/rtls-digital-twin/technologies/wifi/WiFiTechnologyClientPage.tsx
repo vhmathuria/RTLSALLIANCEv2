@@ -637,26 +637,26 @@ export default function WiFiTechnologyClientPage() {
                   <>
                     <li>
                       <Link
-                        href="/resources/wifi-positioning-rssi-rtt-fingerprinting-explained"
+                        href="/resources/rtls-101-core-components-protocols-deployment-models"
                         className="text-primary hover:underline"
                       >
-                        Wi-Fi Positioning: RSSI, RTT & Fingerprinting Explained
+                        RTLS 101: Core Components, Protocols & Deployment Models
                       </Link>
                     </li>
                     <li>
                       <Link
-                        href="/resources/wifi-vs-ble-rtls-technology-comparison"
+                        href="/resources/uwb-ble-rfid-wifi-rtt-ultimate-rtls-showdown"
                         className="text-primary hover:underline"
                       >
-                        Wi-Fi vs BLE: RTLS Technology Comparison
+                        UWB, BLE, RFID & WiFi RTT: Ultimate RTLS Showdown
                       </Link>
                     </li>
                     <li>
                       <Link
-                        href="/resources/wifi-rtt-vs-ble-best-indoor-navigation"
+                        href="/resources/5-rtls-trends-2025-ai-5g-nr-tag-free-tracking"
                         className="text-primary hover:underline"
                       >
-                        Wi-Fi RTT vs BLE: Best Choice for Indoor Navigation
+                        5 RTLS Trends 2025: AI, 5G NR & Tag-free Tracking
                       </Link>
                     </li>
                   </>

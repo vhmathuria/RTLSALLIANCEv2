@@ -630,10 +630,10 @@ export default function DeadReckoningTechnologyClientPage() {
               <ul className="space-y-2">
                 <li>
                   <Link
-                    href="/resources/indoor-outdoor-tracking-seamless-positioning-solutions"
+                    href="/resources/uwb-vs-gps-indoor-outdoor-tracking-guide"
                     className="text-primary hover:underline"
                   >
-                    Indoor-Outdoor Tracking: Seamless Positioning Solutions
+                    UWB vs GPS: Indoor vs Outdoor Tracking Guide
                   </Link>
                 </li>
                 <li>
@@ -646,10 +646,10 @@ export default function DeadReckoningTechnologyClientPage() {
                 </li>
                 <li>
                   <Link
-                    href="/resources/sensor-fusion-multi-technology-rtls-implementation-guide"
+                    href="/resources/rtls-digital-twins-synchronizing-spatial-operational-data"
                     className="text-primary hover:underline"
                   >
-                    Sensor Fusion: Multi-Technology RTLS Implementation Guide
+                    RTLS & Digital Twins: Synchronizing Spatial and Operational Data
                   </Link>
                 </li>
                 <li>
@@ -662,10 +662,10 @@ export default function DeadReckoningTechnologyClientPage() {
                 </li>
                 <li>
                   <Link
-                    href="/resources/rtls-infrastructure-planning-optimization-strategies"
+                    href="/resources/rf-site-survey-rtls-planning-density-best-practices"
                     className="text-primary hover:underline"
                   >
-                    RTLS Infrastructure Planning: Optimization Strategies
+                    RF Site Survey for RTLS: Planning, Density & Best Practices
                   </Link>
                 </li>
               </ul>
