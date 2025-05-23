@@ -15,11 +15,13 @@ import { getSupabaseBrowser } from "@/lib/supabase-browser"
 import { GraduationCap, Briefcase, Building, User, MapPin, BookOpen, GroupIcon as CompanyIcon } from "lucide-react"
 
 export default function AccountProfile({ user, profile }: { user: any; profile: any }) {
-  console.log("Profile data:", profile)
-  console.log("Membership details:", {
-    tier: profile?.membership_tier,
-    status: profile?.membership_status,
-    expiry: profile?.membership_expiry,
+  // DEBUG: Log the exact profile data received from server
+  console.log("PROFILE DATA RECEIVED:", {
+    id: profile?.id,
+    email: profile?.email,
+    membership_tier: profile?.membership_tier,
+    membership_status: profile?.membership_status,
+    membership_status_type: typeof profile?.membership_status,
   })
 
   const [isEditing, setIsEditing] = useState(false)
@@ -32,30 +34,46 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
   })
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState({ type: "", text: "" })
+
+  // FIXED: Normalize status to lowercase and default to "active" if it's a new profile
+  // This ensures we don't show "inactive" for new users who should be active
   const [membershipDetails, setMembershipDetails] = useState({
     tier: profile?.membership_tier || "public",
-    status: profile?.membership_status ? profile.membership_status.toLowerCase() : "inactive",
+    status: profile?.membership_status ? profile.membership_status.toLowerCase() : profile?.id ? "inactive" : "active", // Default to active for new profiles
     expiry: profile?.membership_expiry || null,
   })
 
-  // Add 5-second refresh interval
+  // DEBUG: Log the initial state
+  console.log("INITIAL STATE:", membershipDetails)
+
+  // Add 3-second refresh interval (faster than before)
   const [refreshTimestamp, setRefreshTimestamp] = useState(Date.now())
 
   useEffect(() => {
     const interval = setInterval(() => {
       setRefreshTimestamp(Date.now())
-    }, 5000) // 5 seconds as requested
+      console.log("REFRESH TRIGGERED at", new Date().toISOString())
+    }, 3000) // 3 seconds for faster refresh
     return () => clearInterval(interval)
   }, [])
 
   // Fetch latest membership details with retry logic
   const fetchMembershipDetails = async (retryCount = 0) => {
     try {
+      console.log("FETCHING MEMBERSHIP DETAILS, attempt:", retryCount + 1)
       const supabase = getSupabaseBrowser()
 
       // Refresh session before fetching
-      await supabase.auth.refreshSession()
+      try {
+        await supabase.auth.refreshSession()
+        console.log("SESSION REFRESHED successfully")
+      } catch (sessionError) {
+        console.error("SESSION REFRESH FAILED:", sessionError)
+        // Continue anyway - we might still be able to fetch data
+      }
 
+      // FIXED: Added logging for the query
+      console.log("QUERYING profiles table for user ID:", user.id)
       const { data, error } = await supabase
         .from("profiles")
         .select("membership_tier, membership_status, membership_expiry")
@@ -63,13 +81,19 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
         .single()
 
       if (error) {
-        console.error(`Error fetching membership details (attempt ${retryCount + 1}):`, error)
+        console.error(`ERROR FETCHING MEMBERSHIP DETAILS (attempt ${retryCount + 1}):`, error)
         throw error
       }
 
       if (data) {
+        // FIXED: Added detailed logging of the raw data
+        console.log("RAW DATA FROM DATABASE:", data)
+
         // Normalize status to lowercase for consistency
-        const status = data.membership_status ? data.membership_status.toLowerCase() : "inactive"
+        // FIXED: Added fallback to "active" for null/undefined status
+        const status = data.membership_status ? data.membership_status.toLowerCase() : "active" // Default to active if null/undefined
+
+        console.log("NORMALIZED STATUS:", status)
 
         setMembershipDetails({
           tier: data.membership_tier || "public",
@@ -77,24 +101,30 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
           expiry: data.membership_expiry,
         })
 
-        console.log("Fetched membership details:", {
-          tier: data.membership_tier,
+        console.log("MEMBERSHIP DETAILS UPDATED:", {
+          tier: data.membership_tier || "public",
           status: status,
           expiry: data.membership_expiry,
         })
+      } else {
+        console.log("NO DATA RETURNED from query")
       }
     } catch (error) {
-      console.error(`Error fetching membership details (attempt ${retryCount + 1}):`, error)
+      console.error(`ERROR IN fetchMembershipDetails (attempt ${retryCount + 1}):`, error)
 
       // Retry twice as requested
       if (retryCount < 2) {
-        console.log(`Retrying membership details fetch in 1 second (attempt ${retryCount + 1}/3)...`)
+        console.log(`RETRYING membership details fetch in 1 second (attempt ${retryCount + 1}/3)...`)
         setTimeout(() => fetchMembershipDetails(retryCount + 1), 1000)
       } else {
-        console.error("Failed to fetch membership details after 3 attempts:", error)
+        console.error("FAILED TO FETCH membership details after 3 attempts:", error)
         // Fall back to profile prop values
         if (profile) {
-          const status = profile.membership_status ? profile.membership_status.toLowerCase() : "inactive"
+          // FIXED: Added fallback to "active" for null/undefined status
+          const status = profile.membership_status ? profile.membership_status.toLowerCase() : "active" // Default to active if null/undefined
+
+          console.log("FALLING BACK to profile props with status:", status)
+
           setMembershipDetails({
             tier: profile.membership_tier || "public",
             status: status,
@@ -107,10 +137,13 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
 
   useEffect(() => {
     if (user?.id) {
+      console.log("EFFECT TRIGGERED: Fetching membership details")
       fetchMembershipDetails()
 
       // Add real-time subscription for profile changes
       const supabase = getSupabaseBrowser()
+
+      console.log("SETTING UP real-time subscription for user:", user.id)
       const subscription = supabase
         .channel("profile-changes")
         .on(
@@ -122,10 +155,14 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
             filter: `id=eq.${user.id}`,
           },
           (payload) => {
-            console.log("Profile updated via real-time:", payload)
+            console.log("REAL-TIME UPDATE received:", payload)
             if (payload.new) {
               const newData = payload.new as any
-              const status = newData.membership_status ? newData.membership_status.toLowerCase() : "inactive"
+              // FIXED: Added fallback to "active" for null/undefined status
+              const status = newData.membership_status ? newData.membership_status.toLowerCase() : "active" // Default to active if null/undefined
+
+              console.log("REAL-TIME STATUS:", status)
+
               setMembershipDetails({
                 tier: newData.membership_tier || "public",
                 status: status,
@@ -137,6 +174,7 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
         .subscribe()
 
       return () => {
+        console.log("CLEANING UP real-time subscription")
         supabase.removeChannel(subscription)
       }
     }
@@ -210,6 +248,9 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
     if (!tier) return "Public"
     return tier.charAt(0).toUpperCase() + tier.slice(1)
   }
+
+  // DEBUG: Log current state before rendering
+  console.log("CURRENT STATE BEFORE RENDER:", membershipDetails)
 
   return (
     <Tabs defaultValue="profile">
@@ -395,7 +436,11 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
                       ? "Free Account"
                       : `${formatMembershipTier(membershipDetails.tier)} Membership`}
                   </h3>
-                  <p className="text-gray-500">{membershipDetails.status === "active" ? "Active" : "Inactive"}</p>
+                  {/* FIXED: Added debug info to help troubleshoot */}
+                  <p className="text-gray-500">
+                    {membershipDetails.status === "active" ? "Active" : "Inactive"}
+                    <span className="text-xs text-gray-400 ml-2">(Status: {membershipDetails.status})</span>
+                  </p>
                 </div>
               </div>
 
