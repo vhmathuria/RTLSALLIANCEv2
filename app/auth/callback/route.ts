@@ -10,23 +10,22 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get("code")
   const next = requestUrl.searchParams.get("next") || "/"
 
+  console.log("🔄 AUTH CALLBACK: Starting with code:", !!code, "next:", next)
+
   if (!code) {
-    console.error("No code provided in auth callback")
+    console.error("❌ AUTH CALLBACK: No code provided")
     return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=No_code_provided`)
   }
 
-  console.log("Auth callback initiated with next path:", next)
-
-  // Use createRouteHandlerClient which is designed for route handlers
   const supabase = createRouteHandlerClient({ cookies })
 
   try {
     // Exchange the code for a session
-    console.log("Exchanging code for session")
+    console.log("🔄 AUTH CALLBACK: Exchanging code for session")
     const { error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
 
     if (sessionError) {
-      console.error("Error exchanging code for session:", sessionError)
+      console.error("❌ AUTH CALLBACK: Session exchange error:", sessionError)
       return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=${encodeURIComponent(sessionError.message)}`)
     }
 
@@ -37,91 +36,99 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (userError || !user) {
-      console.error("Error getting user:", userError)
+      console.error("❌ AUTH CALLBACK: User fetch error:", userError)
       return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=User_not_found`)
     }
 
-    console.log("User authenticated:", user.id)
+    console.log("✅ AUTH CALLBACK: User authenticated:", user.id, user.email)
 
-    // Check if profile exists
-    const { data: existingProfile, error: profileCheckError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single()
+    // Use the admin function to ensure profile creation bypasses RLS
+    try {
+      console.log("🔄 AUTH CALLBACK: Creating/updating profile via admin function")
 
-    if (profileCheckError && profileCheckError.code !== "PGRST116") {
-      console.error("Error checking for existing profile:", profileCheckError)
-    }
-
-    // If profile doesn't exist, create one
-    if (!existingProfile) {
-      console.log("Creating new profile for user:", user.id)
-
-      // Extract name from user metadata if available
       const fullName = user.user_metadata?.full_name || user.user_metadata?.name || "RTLS Member"
 
-      console.log("User metadata:", user.user_metadata)
-      console.log("Using name:", fullName)
-
-      const { error: insertError } = await supabase.from("profiles").insert({
-        id: user.id,
-        email: user.email,
-        full_name: fullName,
-        membership_tier: "public",
-        membership_status: "active", // Fixed: using lowercase "active" instead of "ACTIVE"
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+      // Call the admin function to create/update profile
+      const { error: adminError } = await supabase.rpc("admin_update_membership", {
+        user_id: user.id,
+        tier: "public",
+        status: "active",
+        expiry: null,
+        stripe_id: null,
+        payment_date: null,
       })
 
-      if (insertError) {
-        console.error("Error creating profile:", insertError)
+      if (adminError) {
+        console.error("❌ AUTH CALLBACK: Admin function error:", adminError)
 
-        // Try update instead
+        // Fallback to direct insert/update
+        console.log("🔄 AUTH CALLBACK: Trying direct profile creation as fallback")
+
+        const { error: insertError } = await supabase.from("profiles").upsert(
+          {
+            id: user.id,
+            email: user.email,
+            full_name: fullName,
+            membership_tier: "public",
+            membership_status: "active",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          {
+            onConflict: "id",
+          },
+        )
+
+        if (insertError) {
+          console.error("❌ AUTH CALLBACK: Direct profile creation failed:", insertError)
+        } else {
+          console.log("✅ AUTH CALLBACK: Profile created via direct insert")
+        }
+      } else {
+        console.log("✅ AUTH CALLBACK: Profile created via admin function")
+
+        // Update additional fields that admin function doesn't handle
         const { error: updateError } = await supabase
           .from("profiles")
           .update({
             email: user.email,
             full_name: fullName,
-            membership_tier: "public",
-            membership_status: "active",
             updated_at: new Date().toISOString(),
           })
           .eq("id", user.id)
 
         if (updateError) {
-          console.error("Error updating profile:", updateError)
-        }
-      }
-    } else {
-      console.log("Profile already exists for user:", user.id)
-
-      // If profile exists but status is inactive or ACTIVE (uppercase), update it
-      if (
-        existingProfile.membership_status?.toLowerCase() !== "active" ||
-        existingProfile.membership_status === "ACTIVE"
-      ) {
-        const { error: updateError } = await supabase
-          .from("profiles")
-          .update({
-            membership_status: "active", // Fixed: using lowercase "active"
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", user.id)
-
-        if (updateError) {
-          console.error("Error updating profile status:", updateError)
+          console.error("❌ AUTH CALLBACK: Additional fields update error:", updateError)
         } else {
-          console.log("Profile status updated to active for user:", user.id)
+          console.log("✅ AUTH CALLBACK: Additional fields updated")
         }
       }
+
+      // Verify profile was created
+      const { data: verifyProfile, error: verifyError } = await supabase
+        .from("profiles")
+        .select("id, email, membership_tier, membership_status")
+        .eq("id", user.id)
+        .single()
+
+      if (verifyError || !verifyProfile) {
+        console.error("❌ AUTH CALLBACK: Profile verification failed:", verifyError)
+      } else {
+        console.log("✅ AUTH CALLBACK: Profile verified:", {
+          id: verifyProfile.id,
+          email: verifyProfile.email,
+          tier: verifyProfile.membership_tier,
+          status: verifyProfile.membership_status,
+        })
+      }
+    } catch (profileError) {
+      console.error("❌ AUTH CALLBACK: Profile creation error:", profileError)
     }
 
-    // Redirect to the specified next page
-    console.log("Redirecting to:", `${requestUrl.origin}${next}`)
+    console.log("🔄 AUTH CALLBACK: Redirecting to:", `${requestUrl.origin}${next}`)
     return NextResponse.redirect(`${requestUrl.origin}${next}`)
   } catch (error) {
-    console.error("Unexpected error during auth callback:", error)
+    console.error("❌ AUTH CALLBACK: Unexpected error:", error)
     return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=Unexpected_error`)
   }
 }

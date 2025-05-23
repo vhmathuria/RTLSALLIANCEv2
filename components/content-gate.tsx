@@ -27,88 +27,83 @@ export default function ContentGate({ requiredTier, userTier = "public", content
     corporate: 3,
   }
 
-  console.log("ContentGate rendered with:", {
+  console.log("🔄 CONTENT GATE: Rendered with:", {
     userTier,
     requiredTier,
     initialAccessCheck: tierHierarchy[userTier] >= tierHierarchy[requiredTier],
   })
 
   useEffect(() => {
-    // Verify membership tier on client side
     const verifyMembership = async () => {
       try {
-        console.log("ContentGate verification starting with:", {
-          userTier,
-          requiredTier,
-        })
+        console.log("🔄 CONTENT GATE: Starting verification")
 
-        // If prop-based check already grants access, no need to fetch
-        if (tierHierarchy[userTier] >= tierHierarchy[requiredTier]) {
-          console.log("Access granted based on initial props")
-          setHasAccess(true)
-          setIsLoading(false)
-          return
-        }
-
-        // Otherwise, fetch fresh data from Supabase with retries
+        // If prop-based check already grants access, verify with fresh data
         const supabase = getSupabaseBrowser()
-        const { data: session } = await supabase.auth.getSession()
 
-        if (!session.session) {
-          console.log("No session found, denying access")
+        // Get fresh session
+        const { data: session, error: sessionError } = await supabase.auth.getSession()
+
+        if (sessionError || !session.session) {
+          console.log("❌ CONTENT GATE: No valid session")
+          setHasAccess(tierHierarchy[userTier] >= tierHierarchy[requiredTier])
           setIsLoading(false)
           return
         }
 
-        // Retry up to 3 times to get fresh profile data
-        let profileData = null
-        let attempts = 0
-        const maxAttempts = 3
+        console.log("✅ CONTENT GATE: Valid session found")
 
-        while (!profileData && attempts < maxAttempts) {
-          attempts++
+        // Get fresh profile data
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("membership_tier, membership_status, membership_expiry")
+          .eq("id", session.session.user.id)
+          .single()
 
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("membership_tier, membership_status")
-            .eq("id", session.session.user.id)
-            .single()
-
-          if (error) {
-            console.error(`Error verifying membership (attempt ${attempts}):`, error)
-            if (attempts < maxAttempts) {
-              await new Promise((resolve) => setTimeout(resolve, 1000))
-            }
-          } else if (data) {
-            profileData = data
-            break
-          }
-        }
-
-        if (!profileData) {
-          console.error("Failed to get profile data after retries")
+        if (profileError || !profileData) {
+          console.error("❌ CONTENT GATE: Profile fetch error:", profileError)
+          // Fall back to prop-based check
+          setHasAccess(tierHierarchy[userTier] >= tierHierarchy[requiredTier])
           setIsLoading(false)
           return
         }
 
-        // Ensure case insensitive tier comparison
         const fetchedTier = (profileData.membership_tier?.toLowerCase() as MembershipTier) || "public"
         const status = profileData.membership_status?.toLowerCase() || "inactive"
 
-        console.log("Content gate verification:", {
+        console.log("✅ CONTENT GATE: Fresh data:", {
           fetchedTier,
           status,
           requiredTier,
-          hasAccess: status === "active" && tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier],
+          expiry: profileData.membership_expiry,
         })
 
-        // Only grant access if status is active and tier is sufficient
-        if (status === "active" && tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier]) {
-          setCurrentUserTier(fetchedTier)
-          setHasAccess(true)
+        // Check if membership has expired
+        let isExpired = false
+        if (profileData.membership_expiry) {
+          isExpired = new Date(profileData.membership_expiry) < new Date()
+          if (isExpired) {
+            console.log("⚠️ CONTENT GATE: Membership expired")
+          }
         }
+
+        // Grant access if status is active, not expired, and tier is sufficient
+        const hasValidAccess =
+          status === "active" && !isExpired && tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier]
+
+        console.log("🔍 CONTENT GATE: Access decision:", {
+          status,
+          isExpired,
+          tierCheck: tierHierarchy[fetchedTier] >= tierHierarchy[requiredTier],
+          finalAccess: hasValidAccess,
+        })
+
+        setCurrentUserTier(fetchedTier)
+        setHasAccess(hasValidAccess)
       } catch (err) {
-        console.error("Error in membership verification:", err)
+        console.error("❌ CONTENT GATE: Verification error:", err)
+        // Fall back to prop-based check
+        setHasAccess(tierHierarchy[userTier] >= tierHierarchy[requiredTier])
       } finally {
         setIsLoading(false)
       }
@@ -117,15 +112,17 @@ export default function ContentGate({ requiredTier, userTier = "public", content
     verifyMembership()
   }, [userTier, requiredTier])
 
-  // If loading or has access, don't show the gate
+  // If loading, show loading state
   if (isLoading) {
     return <div className="p-8 text-center">Verifying access...</div>
   }
 
+  // If has access, show content
   if (hasAccess) {
     return content ? <div dangerouslySetInnerHTML={{ __html: content }} /> : null
   }
 
+  // Show gate if no access
   const tierInfo = {
     student: {
       name: "Student",
