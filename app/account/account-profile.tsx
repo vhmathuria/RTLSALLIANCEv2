@@ -38,66 +38,78 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
     expiry: profile?.membership_expiry || null,
   })
 
-  // Fetch latest membership details on component mount with retry logic
+  // Add 5-second refresh interval
+  const [refreshTimestamp, setRefreshTimestamp] = useState(Date.now())
+
   useEffect(() => {
-    const fetchMembershipDetails = async (retryCount = 0) => {
-      try {
-        const supabase = getSupabaseBrowser()
+    const interval = setInterval(() => {
+      setRefreshTimestamp(Date.now())
+    }, 5000) // 5 seconds as requested
+    return () => clearInterval(interval)
+  }, [])
 
-        // Refresh session to ensure we have the latest data
-        await supabase.auth.refreshSession()
+  // Fetch latest membership details with retry logic
+  const fetchMembershipDetails = async (retryCount = 0) => {
+    try {
+      const supabase = getSupabaseBrowser()
 
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("membership_tier, membership_status, membership_expiry")
-          .eq("id", user.id)
-          .single()
+      // Refresh session before fetching
+      await supabase.auth.refreshSession()
 
-        if (error) {
-          console.error(`Error fetching membership details (attempt ${retryCount + 1}):`, error)
-          throw error
-        }
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("membership_tier, membership_status, membership_expiry")
+        .eq("id", user.id)
+        .single()
 
-        if (data) {
-          // Normalize status to lowercase for consistency
-          const status = data.membership_status ? data.membership_status.toLowerCase() : "inactive"
+      if (error) {
+        console.error(`Error fetching membership details (attempt ${retryCount + 1}):`, error)
+        throw error
+      }
 
+      if (data) {
+        // Normalize status to lowercase for consistency
+        const status = data.membership_status ? data.membership_status.toLowerCase() : "inactive"
+
+        setMembershipDetails({
+          tier: data.membership_tier || "public",
+          status: status,
+          expiry: data.membership_expiry,
+        })
+
+        console.log("Fetched membership details:", {
+          tier: data.membership_tier,
+          status: status,
+          expiry: data.membership_expiry,
+        })
+      }
+    } catch (error) {
+      console.error(`Error fetching membership details (attempt ${retryCount + 1}):`, error)
+
+      // Retry twice as requested
+      if (retryCount < 2) {
+        console.log(`Retrying membership details fetch in 1 second (attempt ${retryCount + 1}/3)...`)
+        setTimeout(() => fetchMembershipDetails(retryCount + 1), 1000)
+      } else {
+        console.error("Failed to fetch membership details after 3 attempts:", error)
+        // Fall back to profile prop values
+        if (profile) {
+          const status = profile.membership_status ? profile.membership_status.toLowerCase() : "inactive"
           setMembershipDetails({
-            tier: data.membership_tier || "public",
+            tier: profile.membership_tier || "public",
             status: status,
-            expiry: data.membership_expiry,
+            expiry: profile.membership_expiry,
           })
-
-          console.log("Fetched membership details:", {
-            tier: data.membership_tier,
-            status: status,
-            expiry: data.membership_expiry,
-          })
-        }
-      } catch (error) {
-        // Retry once after a short delay if this is the first attempt
-        if (retryCount < 1) {
-          console.log("Retrying membership details fetch in 1 second...")
-          setTimeout(() => fetchMembershipDetails(retryCount + 1), 1000)
-        } else {
-          console.error("Failed to fetch membership details after retry:", error)
-          // Fall back to profile prop values if fetch fails
-          if (profile) {
-            const status = profile.membership_status ? profile.membership_status.toLowerCase() : "inactive"
-            setMembershipDetails({
-              tier: profile.membership_tier || "public",
-              status: status,
-              expiry: profile.membership_expiry,
-            })
-          }
         }
       }
     }
+  }
 
+  useEffect(() => {
     if (user?.id) {
       fetchMembershipDetails()
 
-      // Set up real-time subscription for profile updates
+      // Add real-time subscription for profile changes
       const supabase = getSupabaseBrowser()
       const subscription = supabase
         .channel("profile-changes")
@@ -110,11 +122,10 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
             filter: `id=eq.${user.id}`,
           },
           (payload) => {
-            console.log("Profile updated:", payload)
+            console.log("Profile updated via real-time:", payload)
             if (payload.new) {
               const newData = payload.new as any
               const status = newData.membership_status ? newData.membership_status.toLowerCase() : "inactive"
-
               setMembershipDetails({
                 tier: newData.membership_tier || "public",
                 status: status,
@@ -125,12 +136,11 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
         )
         .subscribe()
 
-      // Clean up subscription on unmount
       return () => {
         supabase.removeChannel(subscription)
       }
     }
-  }, [user?.id, profile])
+  }, [user?.id, refreshTimestamp])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target

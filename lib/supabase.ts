@@ -1,5 +1,4 @@
-import { createClient } from "@supabase/supabase-js"
-import { fixSpecialChars } from "./utils"
+import { createClient } from "@/lib/supabase-server"
 
 // Check if environment variables are available and provide fallbacks for development
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -11,125 +10,66 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Create the Supabase client with error handling
-export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "")
+const client = createClient(supabaseUrl || "", supabaseAnonKey || "")
+
+export const supabase = client
 
 export async function getArticleBySlug(slug: string) {
-  try {
-    const { data, error } = await supabase.from("staging_articles").select("*").eq("slug", slug).single()
+  const supabase = createClient()
 
-    if (error) {
-      console.error("Error fetching article:", error)
-      return null
-    }
+  // Try to get from staging_articles first
+  const { data: stagingArticle, error: stagingError } = await supabase
+    .from("staging_articles")
+    .select("*")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single()
 
-    // Fix special characters in rich_text
-    if (data && data.rich_text) {
-      try {
-        const richTextObj = JSON.parse(data.rich_text)
-
-        // Fix TOC items to match actual content
-        if (richTextObj.sidebarTOC) {
-          richTextObj.sidebarTOC = richTextObj.sidebarTOC.map((item: string) => {
-            return fixSpecialChars(item)
-          })
-
-          // For Guide content type
-          if (data.content_type === "Guide") {
-            // Ensure TOC item #2 shows the correct audience
-            if (richTextObj.audienceDefinition && richTextObj.audienceDefinition.whoShouldRead) {
-              richTextObj.sidebarTOC[1] = "Who Should Read This Guide"
-            }
-
-            // Ensure TOC item #9 is just "Conclusion"
-            if (richTextObj.sidebarTOC.length >= 9) {
-              richTextObj.sidebarTOC[8] = "Conclusion"
-            }
-          }
-
-          // For Technology Comparison content type
-          if (data.content_type === "Technology Comparison") {
-            // Ensure audience section has the correct title
-            if (richTextObj.sidebarTOC.length >= 3) {
-              richTextObj.sidebarTOC[2] = "Who Should Read This Comparison"
-            }
-          }
-
-          // For Success Story content type
-          if (data.content_type === "Success Story") {
-            // Don't override the TOC if it exists and has items
-            if (!richTextObj.sidebarTOC || richTextObj.sidebarTOC.length === 0) {
-              // Default TOC for Success Stories
-              richTextObj.sidebarTOC = [
-                "Executive Summary",
-                "The Challenge",
-                "Solution Design",
-                "Implementation Timeline",
-                "Results and KPIs",
-                "Cross-Industry Insights",
-                "Key Takeaways",
-                "Next Steps",
-                "Conclusion",
-                "Related Reads",
-              ]
-            }
-          }
-
-          // For Member Insight content type
-          if (data.content_type === "Member Insight") {
-            // Don't override the TOC if it exists and has items
-            if (!richTextObj.sidebarTOC || richTextObj.sidebarTOC.length === 0) {
-              // Default TOC for Member Insights
-              richTextObj.sidebarTOC = [
-                "Executive Summary",
-                "Business Context",
-                "Insight Details",
-                "Data Analysis",
-                "Strategic Recommendations",
-                "Implementation Guidance",
-                "Case Studies",
-                "Expert Perspective",
-                "Conclusion",
-                "Related Insights",
-              ]
-            }
-          }
-        }
-
-        // Fix all string values recursively
-        const fixStringsRecursively = (obj: any) => {
-          if (!obj) return obj
-
-          if (typeof obj === "string") {
-            return fixSpecialChars(obj)
-          }
-
-          if (Array.isArray(obj)) {
-            return obj.map((item) => fixStringsRecursively(item))
-          }
-
-          if (typeof obj === "object") {
-            const newObj: any = {}
-            for (const key in obj) {
-              newObj[key] = fixStringsRecursively(obj[key])
-            }
-            return newObj
-          }
-
-          return obj
-        }
-
-        const fixedRichTextObj = fixStringsRecursively(richTextObj)
-        data.rich_text = JSON.stringify(fixedRichTextObj)
-      } catch (e) {
-        console.error("Error fixing rich_text:", e)
-      }
-    }
-
-    return data
-  } catch (err) {
-    console.error("Unexpected error in getArticleBySlug:", err)
-    return null
+  if (stagingArticle) {
+    return stagingArticle
   }
+
+  // If not found in staging, try the production articles table
+  const { data: article, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single()
+
+  if (error && error.code !== "PGRST116") {
+    console.error("Error fetching article:", error)
+  }
+
+  return article
+}
+
+export async function getAllArticles() {
+  const supabase = createClient()
+
+  // Get articles from both staging and production
+  const { data: stagingArticles, error: stagingError } = await supabase
+    .from("staging_articles")
+    .select("*")
+    .eq("is_published", true)
+
+  const { data: articles, error } = await supabase.from("articles").select("*").eq("is_published", true)
+
+  if (stagingError) {
+    console.error("Error fetching staging articles:", stagingError)
+  }
+
+  if (error) {
+    console.error("Error fetching articles:", error)
+  }
+
+  // Combine and deduplicate by slug
+  const allArticles = [...(stagingArticles || []), ...(articles || [])]
+  const uniqueArticles = allArticles.filter(
+    (article, index, self) => index === self.findIndex((a) => a.slug === article.slug),
+  )
+
+  return uniqueArticles
 }
 
 export async function getArticlesByContentType(contentType: string) {
@@ -138,6 +78,7 @@ export async function getArticlesByContentType(contentType: string) {
       .from("staging_articles")
       .select("*")
       .eq("content_type", contentType)
+      .eq("is_published", true)
       .order("publish_date", { ascending: false })
 
     if (error) {
@@ -148,25 +89,6 @@ export async function getArticlesByContentType(contentType: string) {
     return data
   } catch (err) {
     console.error("Unexpected error in getArticlesByContentType:", err)
-    return []
-  }
-}
-
-export async function getAllArticles() {
-  try {
-    const { data, error } = await supabase
-      .from("staging_articles")
-      .select("*")
-      .order("publish_date", { ascending: false })
-
-    if (error) {
-      console.error("Error fetching all articles:", error)
-      return []
-    }
-
-    return data
-  } catch (err) {
-    console.error("Unexpected error in getAllArticles:", err)
     return []
   }
 }

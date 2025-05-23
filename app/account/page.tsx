@@ -2,6 +2,9 @@ import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import AccountProfile from "./account-profile"
 
+// Force dynamic rendering to prevent ISR caching issues
+export const dynamic = "force-dynamic"
+
 export default async function AccountPage() {
   const supabase = createClient()
 
@@ -27,9 +30,9 @@ export default async function AccountPage() {
 
       return profile
     } catch (error) {
-      // Retry once after a short delay
-      if (retryCount < 1) {
-        console.log("Retrying profile fetch in 1 second...")
+      // Retry twice after a short delay
+      if (retryCount < 2) {
+        console.log(`Retrying profile fetch in 1 second (attempt ${retryCount + 1}/3)...`)
         await new Promise((resolve) => setTimeout(resolve, 1000))
         return getUserProfile(retryCount + 1)
       }

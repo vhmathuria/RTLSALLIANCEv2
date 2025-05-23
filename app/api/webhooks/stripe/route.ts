@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
         // Get user ID and membership tier from metadata
         const userId = session.metadata?.user_id
-        const membershipTier = session.metadata?.membership_tier
+        const membershipTier = session.metadata?.membership_tier?.toLowerCase() // Ensure lowercase
 
         if (!userId || !membershipTier) {
           console.error("Missing user ID or membership tier in session metadata", { userId, membershipTier })
@@ -73,10 +73,26 @@ export async function POST(req: NextRequest) {
             throw updateError
           }
 
-          // Revalidate paths that might show different content based on membership
+          // Explicitly revalidate paths that might show different content based on membership
+          console.log("Revalidating paths after checkout completion")
           revalidatePath("/resources")
           revalidatePath("/membership")
           revalidatePath("/account")
+
+          // Also try to revalidate specific article paths
+          try {
+            const { data: articles } = await supabase.from("staging_articles").select("slug").limit(50)
+            if (articles) {
+              console.log(`Revalidating ${articles.length} article paths`)
+              for (const article of articles) {
+                if (article.slug) {
+                  revalidatePath(`/resources/${article.slug}`)
+                }
+              }
+            }
+          } catch (revalidationError) {
+            console.error("Error during article path revalidation:", revalidationError)
+          }
 
           console.log("Profile updated successfully for user:", userId)
         } else {
@@ -115,7 +131,7 @@ export async function POST(req: NextRequest) {
         let membershipTier = "public"
 
         if (subscription.metadata?.membership_tier) {
-          membershipTier = subscription.metadata.membership_tier
+          membershipTier = subscription.metadata.membership_tier.toLowerCase() // Ensure lowercase
         } else {
           // Try to determine tier from price ID
           const priceId = subscription.items.data[0]?.price.id
@@ -159,10 +175,26 @@ export async function POST(req: NextRequest) {
           throw updateError
         }
 
-        // Revalidate paths that might show different content based on membership
+        // Explicitly revalidate paths
+        console.log("Revalidating paths after subscription update")
         revalidatePath("/resources")
         revalidatePath("/membership")
         revalidatePath("/account")
+
+        // Also try to revalidate specific article paths
+        try {
+          const { data: articles } = await supabase.from("staging_articles").select("slug").limit(50)
+          if (articles) {
+            console.log(`Revalidating ${articles.length} article paths`)
+            for (const article of articles) {
+              if (article.slug) {
+                revalidatePath(`/resources/${article.slug}`)
+              }
+            }
+          }
+        } catch (revalidationError) {
+          console.error("Error during article path revalidation:", revalidationError)
+        }
 
         console.log("Profile updated successfully for subscription update, user:", profile.id)
 
@@ -208,10 +240,26 @@ export async function POST(req: NextRequest) {
           throw updateError
         }
 
-        // Revalidate paths that might show different content based on membership
+        // Explicitly revalidate paths
+        console.log("Revalidating paths after subscription deletion")
         revalidatePath("/resources")
         revalidatePath("/membership")
         revalidatePath("/account")
+
+        // Also try to revalidate specific article paths
+        try {
+          const { data: articles } = await supabase.from("staging_articles").select("slug").limit(50)
+          if (articles) {
+            console.log(`Revalidating ${articles.length} article paths`)
+            for (const article of articles) {
+              if (article.slug) {
+                revalidatePath(`/resources/${article.slug}`)
+              }
+            }
+          }
+        } catch (revalidationError) {
+          console.error("Error during article path revalidation:", revalidationError)
+        }
 
         console.log("Profile downgraded successfully for subscription deletion, user:", profile.id)
 
