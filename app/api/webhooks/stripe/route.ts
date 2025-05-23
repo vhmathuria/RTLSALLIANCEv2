@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { createClient } from "@/lib/supabase-server"
-import { revalidatePath } from "next/cache"
+import { updateMembership } from "@/lib/membership-actions"
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
         // Get user ID and membership tier from metadata
         const userId = session.metadata?.user_id
-        const membershipTier = session.metadata?.membership_tier?.toLowerCase() // Ensure lowercase
+        const membershipTier = session.metadata?.membership_tier
 
         if (!userId || !membershipTier) {
           console.error("Missing user ID or membership tier in session metadata", { userId, membershipTier })
@@ -46,59 +46,30 @@ export async function POST(req: NextRequest) {
           // Calculate expiry date (end of current period)
           const expiryDate = new Date(subscription.current_period_end * 1000)
 
-          // Update user membership using direct update to avoid RLS issues
-          const supabase = createClient()
-
-          // Use a direct SQL query to bypass RLS policies
-          const { error: sqlError } = await supabase.rpc("admin_update_membership", {
-            user_id: userId,
-            tier: membershipTier,
-            status: "active",
-            expiry: expiryDate.toISOString(),
-            stripe_id: session.customer as string,
-            payment_date: new Date().toISOString(),
-          })
-
-          if (sqlError) {
-            console.error("Error updating profile with RPC:", sqlError)
-
-            // Fallback to direct update
-            const { error: updateError } = await supabase
-              .from("profiles")
-              .update({
-                membership_tier: membershipTier,
-                membership_status: "active",
-                membership_expiry: expiryDate.toISOString(),
-                last_payment_date: new Date().toISOString(),
-                stripe_customer_id: session.customer as string,
-              })
-              .eq("id", userId)
-
-            if (updateError) {
-              console.error("Error updating profile directly:", updateError)
-              throw updateError
-            }
+          // Update user membership using both methods for redundancy
+          try {
+            await updateMembership(userId, membershipTier, expiryDate)
+            console.log("Updated membership via server action")
+          } catch (serverActionError) {
+            console.error("Server action failed, falling back to direct update:", serverActionError)
           }
 
-          // Explicitly revalidate paths that might show different content based on membership
-          console.log("Revalidating paths after checkout completion")
-          revalidatePath("/resources")
-          revalidatePath("/membership")
-          revalidatePath("/account")
+          // Always perform direct update as a fallback
+          const supabase = createClient()
+          const { error: updateError } = await supabase
+            .from("profiles")
+            .update({
+              membership_tier: membershipTier,
+              membership_status: "active", // Changed to lowercase
+              membership_expiry: expiryDate.toISOString(),
+              last_payment_date: new Date().toISOString(),
+              stripe_customer_id: session.customer as string,
+            })
+            .eq("id", userId)
 
-          // Also try to revalidate specific article paths
-          try {
-            const { data: articles } = await supabase.from("staging_articles").select("slug").limit(50)
-            if (articles) {
-              console.log(`Revalidating ${articles.length} article paths`)
-              for (const article of articles) {
-                if (article.slug) {
-                  revalidatePath(`/resources/${article.slug}`)
-                }
-              }
-            }
-          } catch (revalidationError) {
-            console.error("Error during article path revalidation:", revalidationError)
+          if (updateError) {
+            console.error("Error updating profile directly:", updateError)
+            throw updateError
           }
 
           console.log("Profile updated successfully for user:", userId)
@@ -138,7 +109,7 @@ export async function POST(req: NextRequest) {
         let membershipTier = "public"
 
         if (subscription.metadata?.membership_tier) {
-          membershipTier = subscription.metadata.membership_tier.toLowerCase() // Ensure lowercase
+          membershipTier = subscription.metadata.membership_tier
         } else {
           // Try to determine tier from price ID
           const priceId = subscription.items.data[0]?.price.id
@@ -155,55 +126,31 @@ export async function POST(req: NextRequest) {
         // Calculate expiry date (end of current period)
         const expiryDate = new Date(subscription.current_period_end * 1000)
 
-        // Use a direct SQL query to bypass RLS policies
-        const { error: sqlError } = await supabase.rpc("admin_update_membership", {
-          user_id: profile.id,
-          tier: membershipTier,
-          status: "active",
-          expiry: expiryDate.toISOString(),
-          stripe_id: customer.id,
-          payment_date: new Date().toISOString(),
-        })
-
-        if (sqlError) {
-          console.error("Error updating profile with RPC:", sqlError)
-
-          // Fallback to direct update
-          const { error: updateError } = await supabase
-            .from("profiles")
-            .update({
-              membership_tier: membershipTier,
-              membership_status: "active",
-              membership_expiry: expiryDate.toISOString(),
-              last_payment_date: new Date().toISOString(),
-            })
-            .eq("id", profile.id)
-
-          if (updateError) {
-            console.error("Error updating profile directly for subscription update:", updateError)
-            throw updateError
-          }
+        // Update user membership using both methods for redundancy
+        try {
+          await updateMembership(profile.id, membershipTier, expiryDate)
+          console.log("Updated membership via server action for subscription update")
+        } catch (serverActionError) {
+          console.error(
+            "Server action failed for subscription update, falling back to direct update:",
+            serverActionError,
+          )
         }
 
-        // Explicitly revalidate paths
-        console.log("Revalidating paths after subscription update")
-        revalidatePath("/resources")
-        revalidatePath("/membership")
-        revalidatePath("/account")
+        // Always perform direct update as a fallback
+        const { error: updateError } = await supabase
+          .from("profiles")
+          .update({
+            membership_tier: membershipTier,
+            membership_status: "active", // Changed to lowercase
+            membership_expiry: expiryDate.toISOString(),
+            last_payment_date: new Date().toISOString(),
+          })
+          .eq("id", profile.id)
 
-        // Also try to revalidate specific article paths
-        try {
-          const { data: articles } = await supabase.from("staging_articles").select("slug").limit(50)
-          if (articles) {
-            console.log(`Revalidating ${articles.length} article paths`)
-            for (const article of articles) {
-              if (article.slug) {
-                revalidatePath(`/resources/${article.slug}`)
-              }
-            }
-          }
-        } catch (revalidationError) {
-          console.error("Error during article path revalidation:", revalidationError)
+        if (updateError) {
+          console.error("Error updating profile directly for subscription update:", updateError)
+          throw updateError
         }
 
         console.log("Profile updated successfully for subscription update, user:", profile.id)
@@ -236,53 +183,18 @@ export async function POST(req: NextRequest) {
           throw new Error("User profile not found")
         }
 
-        // Use a direct SQL query to bypass RLS policies
-        const { error: sqlError } = await supabase.rpc("admin_update_membership", {
-          user_id: profile.id,
-          tier: "public",
-          status: "inactive",
-          expiry: null,
-          stripe_id: customer.id,
-          payment_date: new Date().toISOString(),
-        })
+        // Downgrade user to public tier
+        const { error: updateError } = await supabase
+          .from("profiles")
+          .update({
+            membership_tier: "public",
+            membership_status: "inactive", // Changed to lowercase
+          })
+          .eq("id", profile.id)
 
-        if (sqlError) {
-          console.error("Error updating profile with RPC:", sqlError)
-
-          // Fallback to direct update
-          const { error: updateError } = await supabase
-            .from("profiles")
-            .update({
-              membership_tier: "public",
-              membership_status: "inactive",
-            })
-            .eq("id", profile.id)
-
-          if (updateError) {
-            console.error("Error downgrading profile for subscription deletion:", updateError)
-            throw updateError
-          }
-        }
-
-        // Explicitly revalidate paths
-        console.log("Revalidating paths after subscription deletion")
-        revalidatePath("/resources")
-        revalidatePath("/membership")
-        revalidatePath("/account")
-
-        // Also try to revalidate specific article paths
-        try {
-          const { data: articles } = await supabase.from("staging_articles").select("slug").limit(50)
-          if (articles) {
-            console.log(`Revalidating ${articles.length} article paths`)
-            for (const article of articles) {
-              if (article.slug) {
-                revalidatePath(`/resources/${article.slug}`)
-              }
-            }
-          }
-        } catch (revalidationError) {
-          console.error("Error during article path revalidation:", revalidationError)
+        if (updateError) {
+          console.error("Error downgrading profile for subscription deletion:", updateError)
+          throw updateError
         }
 
         console.log("Profile downgraded successfully for subscription deletion, user:", profile.id)

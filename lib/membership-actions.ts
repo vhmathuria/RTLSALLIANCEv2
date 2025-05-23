@@ -19,36 +19,6 @@ const MEMBERSHIP_TIERS = {
 
 // Check if user has access to content with specified tier
 export async function checkMembershipAccess(requiredTier: string): Promise<boolean> {
-  // If no tier required, allow access
-  if (!requiredTier || requiredTier === "public") {
-    return true
-  }
-
-  const membership = await getCurrentMembership()
-
-  // If not logged in or inactive, no access
-  if (!membership.isLoggedIn || membership.status !== "active") {
-    return false
-  }
-
-  // Define tier hierarchy
-  const tierHierarchy = {
-    public: 0,
-    student: 1,
-    professional: 2,
-    corporate: 3,
-  }
-
-  // Get numeric values for comparison
-  const userTierValue = tierHierarchy[membership.tier as keyof typeof tierHierarchy] || 0
-  const requiredTierValue = tierHierarchy[requiredTier as keyof typeof tierHierarchy] || 999
-
-  // User has access if their tier is >= required tier
-  return userTierValue >= requiredTierValue
-}
-
-// Get current user's membership info - fresh query with no caching
-export async function getCurrentMembership() {
   const supabase = createClient()
 
   // Get current user
@@ -57,51 +27,41 @@ export async function getCurrentMembership() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return {
-      tier: "public",
-      status: "inactive",
-      expiry: null,
-      isLoggedIn: false,
-    }
+    return requiredTier === "public"
   }
 
-  // Get user profile with membership info - fresh query
-  const { data: profile, error } = await supabase
+  // Get user profile with membership info
+  const { data: profile } = await supabase
     .from("profiles")
     .select("membership_tier, membership_status, membership_expiry")
     .eq("id", user.id)
     .single()
 
-  if (error) {
-    console.error("Error fetching profile in getCurrentMembership:", error)
-    return {
-      tier: "public",
-      status: "inactive",
-      expiry: null,
-      isLoggedIn: true,
-      error: error.message,
-    }
+  // If no profile or inactive membership, only allow public content
+  if (!profile) {
+    return requiredTier === "public"
   }
 
-  if (!profile) {
-    return { tier: "public", status: "inactive", expiry: null, isLoggedIn: true }
+  // Check for active status (case insensitive)
+  const isActive = profile.membership_status?.toLowerCase() === "active" // Changed to lowercase comparison
+
+  if (!isActive) {
+    return requiredTier === "public"
   }
 
   // Check if membership has expired
   if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
     // Update membership status to expired
-    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id)
+    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
 
-    return { tier: "public", status: "expired", expiry: profile.membership_expiry, isLoggedIn: true }
+    return requiredTier === "public"
   }
 
-  // Normalize to lowercase
-  return {
-    tier: profile.membership_tier || "public",
-    status: profile.membership_status.toLowerCase() || "inactive",
-    expiry: profile.membership_expiry,
-    isLoggedIn: true,
-  }
+  // Check if user's tier is sufficient for the required tier
+  const userTierLevel = MEMBERSHIP_TIERS[profile.membership_tier as keyof typeof MEMBERSHIP_TIERS] || 0
+  const requiredTierLevel = MEMBERSHIP_TIERS[requiredTier as keyof typeof MEMBERSHIP_TIERS] || 0
+
+  return userTierLevel >= requiredTierLevel
 }
 
 // Create a Stripe checkout session for membership upgrade
@@ -191,8 +151,8 @@ export async function updateMembership(userId: string, tier: string, expiryDate?
     const { error } = await supabase
       .from("profiles")
       .update({
-        membership_tier: tier.toLowerCase(), // Ensure lowercase
-        membership_status: "active", // Using lowercase consistently
+        membership_tier: tier,
+        membership_status: "active", // Changed to lowercase
         membership_expiry: expiryDate?.toISOString() || null,
         last_payment_date: new Date().toISOString(),
       })
@@ -216,6 +176,45 @@ export async function updateMembership(userId: string, tier: string, expiryDate?
   }
 }
 
+// Get current user's membership info
+export async function getCurrentMembership() {
+  const supabase = createClient()
+
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { tier: "public", status: "inactive" }
+  }
+
+  // Get user profile with membership info
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("membership_tier, membership_status, membership_expiry")
+    .eq("id", user.id)
+    .single()
+
+  if (!profile) {
+    return { tier: "public", status: "inactive" }
+  }
+
+  // Check if membership has expired
+  if (profile.membership_expiry && new Date(profile.membership_expiry) < new Date()) {
+    // Update membership status to expired
+    await supabase.from("profiles").update({ membership_status: "expired" }).eq("id", user.id) // Changed to lowercase
+
+    return { tier: "public", status: "expired", expiryDate: profile.membership_expiry }
+  }
+
+  return {
+    tier: profile.membership_tier || "public",
+    status: profile.membership_status || "inactive",
+    expiryDate: profile.membership_expiry,
+  }
+}
+
 // Verify and update membership from success page
 export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
   try {
@@ -232,7 +231,7 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
     }
 
     const userId = session.metadata?.user_id
-    const membershipTier = session.metadata?.membership_tier?.toLowerCase() // Ensure lowercase
+    const membershipTier = session.metadata?.membership_tier
 
     if (!userId || !membershipTier) {
       console.error("Missing metadata in session:", session.id)
@@ -254,7 +253,7 @@ export async function verifyAndUpdateMembershipFromSession(sessionId: string) {
       .from("profiles")
       .update({
         membership_tier: membershipTier,
-        membership_status: "active", // Using lowercase consistently
+        membership_status: "active", // Changed to lowercase
         membership_expiry: expiryDate.toISOString(),
         last_payment_date: new Date().toISOString(),
         stripe_customer_id: session.customer as string,

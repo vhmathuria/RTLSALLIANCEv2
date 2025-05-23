@@ -1,21 +1,15 @@
-// Add force-dynamic to prevent stale data
-export const dynamic = "force-dynamic"
-
-// Add revalidation - regenerate this page once per day
-export const revalidate = 86400
-
 import { notFound } from "next/navigation"
-import { createClient } from "@/lib/supabase-server"
+import { createServerClient } from "@/lib/supabase-server"
 import { getArticleBySlug } from "@/lib/supabase"
 import GuideRenderer from "@/components/renderers/guide/guide-renderer"
 import SuccessStoryRenderer from "@/components/renderers/success-story/success-story-renderer"
 import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
 import MemberInsightRenderer from "@/components/renderers/member-insight/member-insight-renderer"
 import ContentGate from "@/components/content-gate"
-import { checkMembershipAccess } from "@/lib/membership-actions"
-import { getCurrentMembership } from "@/lib/membership-actions"
-import { revalidatePath } from "next/cache"
 import type { Metadata } from "next"
+
+// Add revalidation - regenerate this page once per day
+export const revalidate = 86400
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticleBySlug(params.slug)
@@ -71,9 +65,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
-  // Force revalidation to ensure fresh data
-  revalidatePath(`/resources/${params.slug}`)
-
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
@@ -81,55 +72,45 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   }
 
   // Check if article requires membership
-  const requiredTier = article.membership_tier?.toLowerCase() || "public"
-
-  console.log(`Article ${params.slug} requires tier:`, requiredTier)
+  const requiredTier = article.membership_tier || "public"
 
   // If article is public, no need to check membership
   if (requiredTier !== "public") {
-    // Get current user's membership status directly - don't rely on cached data
-    const supabase = createClient()
+    // Get current user
+    const supabase = createServerClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()
 
     // If no user is logged in and content is gated, show content gate
     if (!user) {
-      console.log("No user logged in, showing content gate")
-      return <ContentGate requiredTier={requiredTier as any} userTier="public" content={article.content} />
+      return <ContentGate requiredTier={requiredTier as any} userTier="public" />
     }
 
-    // Get user profile to check membership tier - fresh query
-    const { data: profile, error: profileError } = await supabase
+    // Get user profile to check membership tier
+    const { data: profile } = await supabase
       .from("profiles")
       .select("membership_tier, membership_status, membership_expiry")
       .eq("id", user.id)
       .single()
 
-    if (profileError) {
-      console.error("Error fetching user profile:", profileError)
+    // Define tier levels for comparison
+    const tierLevels = {
+      public: 0,
+      student: 1,
+      professional: 2,
+      corporate: 3,
     }
 
-    // Check if user has access using membership-actions function
-    const hasAccess = await checkMembershipAccess(requiredTier)
-    const membership = await getCurrentMembership()
+    // Check if user has access
+    const userTier = profile?.membership_tier || "public"
+    const userTierLevel = tierLevels[userTier as keyof typeof tierLevels] || 0
+    const requiredTierLevel = tierLevels[requiredTier as keyof typeof tierLevels] || 0
 
-    console.log("Membership check:", {
-      userId: user.id,
-      requiredTier,
-      userTier: profile?.membership_tier || "public",
-      userStatus: profile?.membership_status?.toLowerCase() || "inactive",
-      hasAccess,
-      profileFromGetCurrent: membership,
-    })
-
-    if (!hasAccess) {
-      const userTier = profile?.membership_tier?.toLowerCase() || "public"
-      console.log(`Access denied for user ${user.id}. Required: ${requiredTier}, User has: ${userTier}`)
-      return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} content={article.content} />
+    // If user's tier is lower than required, show content gate
+    if (userTierLevel < requiredTierLevel) {
+      return <ContentGate requiredTier={requiredTier as any} userTier={userTier as any} />
     }
-
-    console.log(`Access granted for user ${user.id} to article ${params.slug}`)
   }
 
   // Render the appropriate article type
