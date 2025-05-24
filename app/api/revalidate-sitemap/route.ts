@@ -1,55 +1,29 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { revalidatePath } from "next/cache"
 
-export const dynamic = "force-dynamic"
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  const token = request.nextUrl.searchParams.get("token")
 
-export async function GET(request: NextRequest) {
+  // Verify the token matches your secret
+  if (token !== process.env.CONTENTFUL_REVALIDATE_SECRET) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 })
+  }
+
   try {
-    // Get token from query params
-    const token = request.nextUrl.searchParams.get("token")
-
-    // Get the revalidation token from environment variables
-    const validToken = process.env.REVALIDATION_TOKEN || process.env.CONTENTFUL_REVALIDATE_SECRET
-
-    // Check if token is valid
-    if (!token) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Missing token parameter",
-        },
-        { status: 400 },
-      )
-    }
-
-    if (token !== validToken) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid token",
-          providedToken: token?.substring(0, 3) + "...", // Show first 3 chars for debugging
-        },
-        { status: 401 },
-      )
-    }
-
     // Revalidate the sitemap
     revalidatePath("/sitemap.xml")
 
     return NextResponse.json({
-      success: true,
+      revalidated: true,
       message: "Sitemap revalidated successfully",
       timestamp: new Date().toISOString(),
-      paths: ["/sitemap.xml"],
     })
-  } catch (error) {
-    console.error("Error revalidating sitemap:", error)
-
+  } catch (err) {
     return NextResponse.json(
       {
-        success: false,
+        revalidated: false,
         message: "Error revalidating sitemap",
-        error: error instanceof Error ? error.message : String(error),
+        error: err instanceof Error ? err.message : String(err),
       },
       { status: 500 },
     )

@@ -1,33 +1,17 @@
 import { createClient } from "@supabase/supabase-js"
 import { fixSpecialChars } from "./utils"
 
-// Check if environment variables are available
+// Check if environment variables are available and provide fallbacks for development
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Create a mock client for development if credentials are missing
-const createMockClient = () => {
-  console.warn("Using mock Supabase client - database features will return empty data")
-  return {
-    from: () => ({
-      select: () => Promise.resolve({ data: [], error: null }),
-      insert: () => Promise.resolve({ data: null, error: null }),
-      update: () => Promise.resolve({ data: null, error: null }),
-      delete: () => Promise.resolve({ data: null, error: null }),
-      eq: () => ({ single: () => Promise.resolve({ data: null, error: null }) }),
-      order: () => Promise.resolve({ data: [], error: null }),
-      limit: () => Promise.resolve({ data: [], error: null }),
-    }),
-    auth: {
-      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-      signIn: () => Promise.resolve({ data: null, error: null }),
-      signOut: () => Promise.resolve({ error: null }),
-    },
-  } as any
+// Validate environment variables
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("Missing Supabase environment variables. Please check your .env file or environment configuration.")
 }
 
-// Create the Supabase client or a mock if credentials are missing
-export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : createMockClient()
+// Create the Supabase client with error handling
+export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "")
 
 export async function getArticleBySlug(slug: string) {
   try {
@@ -180,7 +164,7 @@ export async function getAllArticles() {
       return []
     }
 
-    return data || []
+    return data
   } catch (err) {
     console.error("Unexpected error in getAllArticles:", err)
     return []
