@@ -1,26 +1,54 @@
-import { revalidatePath } from "next/server"
 import { type NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
-  const secret = request.nextUrl.searchParams.get("secret")
-
-  if (secret !== process.env.CONTENTFUL_REVALIDATE_SECRET) {
-    return NextResponse.json({ message: "Invalid secret" }, { status: 401 })
-  }
-
-  const paths = [
-    "/",
-    "/resources",
-    "/sitemap.xml",
-    // ... other paths
-  ]
-
+export async function POST(request: NextRequest) {
   try {
-    paths.forEach((path) => {
+    // Verify the request is authorized
+    const authHeader = request.headers.get("authorization")
+    if (!authHeader || authHeader !== `Bearer ${process.env.REVALIDATION_TOKEN}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Get the paths to revalidate from the request body
+    const { paths } = await request.json()
+
+    if (!paths || !Array.isArray(paths)) {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+    }
+
+    // Revalidate each path
+    for (const path of paths) {
       revalidatePath(path)
-    })
-    return NextResponse.json({ revalidated: true, now: Date.now() })
-  } catch (error) {
-    return NextResponse.json({ revalidated: false, error: error }, { status: 500 })
+    }
+
+    return NextResponse.json({ revalidated: true, paths })
+  } catch (error: any) {
+    console.error("Error revalidating paths:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify the request is authorized
+    const { searchParams } = new URL(request.url)
+    const token = searchParams.get("token")
+    const path = searchParams.get("path")
+
+    if (!token || token !== process.env.REVALIDATION_TOKEN) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    if (!path) {
+      return NextResponse.json({ error: "Path parameter is required" }, { status: 400 })
+    }
+
+    // Revalidate the path
+    revalidatePath(path)
+
+    return NextResponse.json({ revalidated: true, path })
+  } catch (error: any) {
+    console.error("Error revalidating path:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

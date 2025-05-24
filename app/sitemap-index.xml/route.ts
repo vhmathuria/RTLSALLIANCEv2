@@ -1,20 +1,13 @@
-export async function GET(): Promise<Response> {
-  const baseUrl = "https://rtlsalliance.com"
-  const currentDate = new Date().toISOString()
+export async function GET() {
+  // Base URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
 
+  // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>${baseUrl}/sitemap-main.xml</loc>
-    <lastmod>${currentDate}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${baseUrl}/sitemap-technologies.xml</loc>
-    <lastmod>${currentDate}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${baseUrl}/sitemap-resources.xml</loc>
-    <lastmod>${currentDate}</lastmod>
+    <loc>${baseUrl}/sitemap.xml</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>
 </sitemapindex>`
 

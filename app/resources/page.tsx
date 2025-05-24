@@ -1,10 +1,11 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { getAllArticles } from "@/lib/supabase"
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
+import { cookies } from "next/headers"
 import { Suspense } from "react"
-import { ResourcesClientPage } from "./resources-client"
-import { PageSEO } from "@/components/seo/page-seo"
-import type { Metadata } from "next"
+import ResourcesClientPage from "./resources-client"
+import PageSEO from "@/components/seo/page-seo"
 
 // Add revalidation - regenerate this page once per day
 export const revalidate = 86400
@@ -39,6 +40,40 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://rtlsalliance.com/resources",
   },
+}
+
+async function getAllArticles() {
+  const cookieStore = cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name: string, options: CookieOptions) {
+          cookieStore.delete({ name, ...options })
+        },
+      },
+    },
+  )
+
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("status", "published")
+    .order("publish_date", { ascending: false })
+
+  if (error) {
+    console.error("Error fetching articles:", error)
+    return []
+  }
+
+  return data || []
 }
 
 export default async function ResourcesPage() {

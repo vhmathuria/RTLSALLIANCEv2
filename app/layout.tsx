@@ -1,96 +1,78 @@
 import type React from "react"
+import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 import Header from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
-import Script from "next/script"
+import { cn } from "@/lib/utils"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"),
   title: {
     template: "%s | RTLS Alliance",
     default: "RTLS Alliance - Real-Time Location Systems Community",
   },
   description:
-    "RTLS Alliance is a community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
-  keywords: "RTLS, real-time location systems, indoor positioning, location tracking, IoT, digital twin",
-  icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
-    shortcut: "/favicon.ico",
+    "RTLS Alliance is the premier community for real-time location systems professionals, providing resources, best practices, and networking opportunities.",
+  keywords: [
+    "RTLS",
+    "real-time location systems",
+    "indoor positioning",
+    "location tracking",
+    "BLE",
+    "UWB",
+    "WiFi",
+    "RFID",
+    "IoT",
+  ],
+  authors: [{ name: "RTLS Alliance" }],
+  creator: "RTLS Alliance",
+  publisher: "RTLS Alliance",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://rtlsalliance.com",
-    siteName: "RTLS Alliance",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com",
     title: "RTLS Alliance - Real-Time Location Systems Community",
     description:
-      "RTLS Alliance is a community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
-    images: [
-      {
-        url: "/images/rtls-alliance-logo.png",
-        width: 1200,
-        height: 630,
-        alt: "RTLS Alliance",
-      },
-    ],
+      "RTLS Alliance is the premier community for real-time location systems professionals, providing resources, best practices, and networking opportunities.",
+    siteName: "RTLS Alliance",
   },
   twitter: {
     card: "summary_large_image",
     title: "RTLS Alliance - Real-Time Location Systems Community",
     description:
-      "RTLS Alliance is a community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
-    images: ["/images/rtls-alliance-logo.png"],
+      "RTLS Alliance is the premier community for real-time location systems professionals, providing resources, best practices, and networking opportunities.",
+    creator: "@RTLSAlliance",
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google: "verification_token",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
   },
     generator: 'v0.dev'
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="canonical" href="https://rtlsalliance.com" />
-        <link rel="icon" href="/favicon.png" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
-      </head>
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
-
-        {/* Global site tag (gtag.js) - Google Analytics */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-MEASUREMENT_ID');
-          `}
-        </Script>
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn(inter.className, "min-h-screen bg-background antialiased")}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,62 +1,40 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
 
-// Define which routes require authentication
-const protectedRoutes = ["/account", "/membership/upgrade", "/membership/success", "/membership/cancel"]
+export async function middleware(request: NextRequest) {
+  const response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-// Define which routes are public (no auth required)
-const publicRoutes = [
-  "/",
-  "/login",
-  "/register",
-  "/auth/callback",
-  "/membership",
-  "/contact",
-  "/ecosystem",
-  "/rtls-digital-twin",
-]
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: CookieOptions) {
+          response.cookies.set({
+            name,
+            value: "",
+            ...options,
+          })
+        },
+      },
+    },
+  )
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
-
-  // Get session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  const url = req.nextUrl.clone()
-  const { pathname } = url
-
-  // Check if the route requires authentication
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-  const isPublicRoute = publicRoutes.some((route) => pathname === route || pathname.startsWith(route))
-
-  // If it's a protected route and user is not authenticated, redirect to login
-  if (isProtectedRoute && !session) {
-    url.pathname = "/login"
-    url.searchParams.set("redirectTo", pathname)
-    return NextResponse.redirect(url)
-  }
-
-  // For resource routes, we'll check access in the page component
-  // This allows us to show a paywall instead of redirecting
-
-  return res
-}
-
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     * - public files
-     * - api routes that don't require auth
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|api/webhooks).*)",
-  ],
+  await supabase.auth.getSession()
+  return response
 }

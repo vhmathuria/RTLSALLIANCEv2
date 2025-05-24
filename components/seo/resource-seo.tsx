@@ -59,3 +59,5 @@ export function ResourceSEO({
     </>
   )
 }
+
+export default ResourceSEO
