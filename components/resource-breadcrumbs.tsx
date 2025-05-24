@@ -56,5 +56,3 @@ export function ResourceBreadcrumbs() {
   // Show breadcrumbs with custom path if available
   return <Breadcrumbs customPath={customPath} />
 }
-
-export default ResourceBreadcrumbs

@@ -1,119 +1,69 @@
-"use client"
-
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import { createBrowserClient } from "@supabase/ssr"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Lock, GraduationCap, Briefcase, Building } from "lucide-react"
 
-export default function ContentGate({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
-  const [profile, setProfile] = useState<any>(null)
-  const [hasMembership, setHasMembership] = useState(false)
+type MembershipTier = "public" | "student" | "professional" | "corporate"
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  )
+interface ContentGateProps {
+  requiredTier: MembershipTier
+  userTier: MembershipTier
+}
 
-  useEffect(() => {
-    async function checkMembership() {
-      try {
-        setLoading(true)
+export default function ContentGate({ requiredTier, userTier }: ContentGateProps) {
+  const tierInfo = {
+    student: {
+      name: "Student",
+      icon: <GraduationCap className="h-8 w-8 text-blue-500" />,
+      description: "Access to student-level content, perfect for academic research and learning.",
+      price: "$100/year",
+    },
+    professional: {
+      name: "Professional",
+      icon: <Briefcase className="h-8 w-8 text-purple-500" />,
+      description: "Full access to professional resources, case studies, and implementation guides.",
+      price: "$550/year",
+    },
+    corporate: {
+      name: "Corporate",
+      icon: <Building className="h-8 w-8 text-green-500" />,
+      description: "Complete access to all RTLS Alliance content plus team collaboration features.",
+      price: "$3,500/year",
+    },
+  }
 
-        // Get current user
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
+  const tierToShow = tierInfo[requiredTier as keyof typeof tierInfo] || tierInfo.professional
 
-        setUser(user)
-
-        if (!user) {
-          setHasMembership(false)
-          return
-        }
-
-        // Get profile
-        const { data: profile, error } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-
-        if (error) {
-          console.error("Error loading profile:", error)
-          setHasMembership(false)
-          return
-        }
-
-        setProfile(profile)
-
-        // Check if user has a paid membership
-        const hasPaidMembership = profile.membership_tier && profile.membership_tier !== "public"
-        setHasMembership(hasPaidMembership)
-      } catch (error) {
-        console.error("Error checking membership:", error)
-        setHasMembership(false)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    checkMembership()
-  }, [supabase])
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+  return (
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-3xl mx-auto">
+      <div className="text-center mb-6">
+        <div className="bg-gray-100 p-4 inline-block rounded-full mb-4">
+          <Lock className="h-10 w-10 text-gray-500" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Members-Only Content</h2>
+        <p className="text-gray-600">This content requires a {tierToShow.name} membership or higher to access.</p>
       </div>
-    )
-  }
 
-  if (!user) {
-    return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle>Member-Only Content</CardTitle>
-          <CardDescription>Please sign in to access this premium content.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-500 mb-4">
-            This content is available exclusively to RTLS Alliance members. Sign in to your account to continue.
-          </p>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Link href="/login">
-            <Button>Sign In</Button>
-          </Link>
-          <Link href="/join-alliance">
-            <Button variant="outline">Join the Alliance</Button>
-          </Link>
-        </CardFooter>
-      </Card>
-    )
-  }
-
-  if (!hasMembership) {
-    return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle>Upgrade Your Membership</CardTitle>
-          <CardDescription>This content requires a paid membership.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-500 mb-4">
-            This premium content is available to Professional, Corporate, and Student members. Upgrade your membership
-            to access this and other exclusive resources.
-          </p>
-        </CardContent>
-        <CardFooter className="flex justify-end">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div className="flex items-center mb-4">
+          {tierToShow.icon}
+          <h3 className="text-xl font-semibold ml-3">{tierToShow.name} Membership</h3>
+        </div>
+        <p className="text-gray-600 mb-4">{tierToShow.description}</p>
+        <div className="flex justify-between items-center">
+          <span className="text-lg font-bold">{tierToShow.price}</span>
           <Link href="/membership/upgrade">
             <Button>Upgrade Membership</Button>
           </Link>
-        </CardFooter>
-      </Card>
-    )
-  }
+        </div>
+      </div>
 
-  return <>{children}</>
+      <div className="text-center text-gray-500 text-sm">
+        Already have a membership?{" "}
+        <Link href="/login" className="text-blue-600 hover:underline">
+          Sign in
+        </Link>{" "}
+        to access this content.
+      </div>
+    </div>
+  )
 }

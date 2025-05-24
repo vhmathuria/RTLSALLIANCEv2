@@ -9,12 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import { FaGoogle, FaLinkedin } from "react-icons/fa"
 import { AlertCircle } from "lucide-react"
-import { redirect } from "next/navigation"
 
 export default function AuthPage() {
-  // This page should not be accessed directly
-  redirect("/login")
-
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get("redirectTo") || "/"

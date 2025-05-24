@@ -63,5 +63,3 @@ export function TechnologySEO({ title, description, technology, breadcrumbs }: T
     </>
   )
 }
-
-export default TechnologySEO

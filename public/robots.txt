@@ -1,14 +1,24 @@
-# Allow all crawlers
+# robots.txt for RTLS Alliance
+
 User-agent: *
 Allow: /
 
-# Disallow admin, auth, and debug pages
+# Disallow admin and auth pages
 Disallow: /admin/
 Disallow: /auth/
-Disallow: /debug/
 Disallow: /auth-error/
-Disallow: /debug-db/
-Disallow: /test-deploy/
+Disallow: /debug/
+
+# Disallow account management pages
+Disallow: /account/
+Disallow: /membership/cancel/
+Disallow: /membership/success/
+
+# Disallow API routes
+Disallow: /api/
+
+# Allow specific API routes that generate public content
+Allow: /api/articles
 
 # Sitemap location
-Sitemap: https://rtlsalliance.com/sitemap-index.xml
+Sitemap: https://rtlsalliance.com/sitemap.xml

@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
 import { fixSpecialChars } from "./utils"
-import type { Database } from "@/types/supabase"
 
 // Check if environment variables are available and provide fallbacks for development
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -12,14 +11,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Create the Supabase client with error handling
-export const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-)
+export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "")
 
 export async function getArticleBySlug(slug: string) {
   try {
-    const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).single()
+    const { data, error } = await supabase.from("staging_articles").select("*").eq("slug", slug).single()
 
     if (error) {
       console.error("Error fetching article:", error)
@@ -156,13 +152,23 @@ export async function getArticlesByContentType(contentType: string) {
   }
 }
 
-export function getAllArticles() {
-  return supabase
-    .from("articles")
-    .select("*")
-    .eq("status", "published")
-    .order("publish_date", { ascending: false })
-    .then(({ data }) => data || [])
+export async function getAllArticles() {
+  try {
+    const { data, error } = await supabase
+      .from("staging_articles")
+      .select("*")
+      .order("publish_date", { ascending: false })
+
+    if (error) {
+      console.error("Error fetching all articles:", error)
+      return []
+    }
+
+    return data
+  } catch (err) {
+    console.error("Unexpected error in getAllArticles:", err)
+    return []
+  }
 }
 
 export async function getTemplateByName(templateName: string) {

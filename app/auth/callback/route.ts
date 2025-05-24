@@ -1,19 +1,18 @@
 import { createClient } from "@supabase/supabase-js"
-import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import { cookies } from "next/headers"
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get("code")
-  const returnTo = requestUrl.searchParams.get("returnTo") || "/"
+  const next = requestUrl.searchParams.get("next") || "/"
 
   if (!code) {
     console.error("No code provided in auth callback")
     return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=No_code_provided`)
   }
 
-  console.log("Auth callback initiated with returnTo path:", returnTo)
+  console.log("Auth callback initiated with next path:", next)
 
   const cookieStore = cookies()
 
@@ -21,28 +20,29 @@ export async function GET(request: NextRequest) {
   const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
   // Create a client with cookies for session management
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          cookieStore.set({ name, value, ...options })
-        },
-        remove(name: string, options: CookieOptions) {
-          cookieStore.delete({ name, ...options })
-        },
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    cookies: {
+      get(name) {
+        return cookieStore.get(name)?.value
+      },
+      set(name, value, options) {
+        cookieStore.set({ name, value, ...options })
+      },
+      remove(name, options) {
+        cookieStore.set({ name, value: "", ...options })
       },
     },
-  )
+  })
 
   try {
     // Exchange the code for a session
     console.log("Exchanging code for session")
-    await supabase.auth.exchangeCodeForSession(code)
+    const { error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (sessionError) {
+      console.error("Error exchanging code for session:", sessionError)
+      return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=${encodeURIComponent(sessionError.message)}`)
+    }
 
     // Get the user from the session
     console.log("Getting user from session")
@@ -126,9 +126,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Redirect to the specified returnTo page
-    console.log("Redirecting to:", `${requestUrl.origin}${returnTo}`)
-    return NextResponse.redirect(`${requestUrl.origin}${returnTo}`)
+    // Redirect to the specified next page
+    console.log("Redirecting to:", `${requestUrl.origin}${next}`)
+    return NextResponse.redirect(`${requestUrl.origin}${next}`)
   } catch (error) {
     console.error("Unexpected error during auth callback:", error)
     return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=Unexpected_error`)

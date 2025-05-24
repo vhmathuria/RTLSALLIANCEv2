@@ -1,106 +1,127 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { getAllArticles } from "@/lib/supabase"
 
-export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
+export async function GET(): Promise<Response> {
+  const baseUrl = "https://rtlsalliance.com"
   const currentDate = new Date().toISOString()
 
-  // Define static pages that should always be in the sitemap
-  const staticPages = [
-    { url: baseUrl, lastmod: currentDate, changefreq: "daily", priority: "1.0" },
-    { url: `${baseUrl}/resources`, lastmod: currentDate, changefreq: "daily", priority: "0.9" },
-    { url: `${baseUrl}/membership`, lastmod: currentDate, changefreq: "weekly", priority: "0.8" },
-    { url: `${baseUrl}/contact`, lastmod: currentDate, changefreq: "monthly", priority: "0.7" },
-    { url: `${baseUrl}/ecosystem`, lastmod: currentDate, changefreq: "weekly", priority: "0.8" },
-    { url: `${baseUrl}/rtls-digital-twin`, lastmod: currentDate, changefreq: "weekly", priority: "0.8" },
+  // Main pages
+  const mainPages = [
+    {
+      url: baseUrl,
+      lastmod: currentDate,
+      changefreq: "weekly",
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/rtls-digital-twin`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/resources`,
+      lastmod: currentDate,
+      changefreq: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/certification`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/membership`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/ecosystem`,
+      lastmod: currentDate,
+      changefreq: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/ecosystem/directory`,
+      lastmod: currentDate,
+      changefreq: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/project`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/membership/upgrade`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.6,
+    },
   ]
 
-  // Define technology pages
-  const technologyPages = [
+  // Technology pages
+  const technologies = [
     "ble",
     "uwb",
     "wifi",
-    "nfc",
     "lora",
+    "nfc",
     "infrared",
     "lidar",
     "ai-cameras",
     "gnss",
+    "rtk-gps",
+    "magnetic-field",
+    "ultrasound",
+    "sensor-fusion",
     "slam",
     "dead-reckoning",
-    "magnetic-field",
-    "rtk-gps",
-    "sensor-fusion",
-  ].map((tech) => ({
+  ]
+
+  const technologyPages = technologies.map((tech) => ({
     url: `${baseUrl}/rtls-digital-twin/technologies/${tech}`,
     lastmod: currentDate,
     changefreq: "monthly",
-    priority: "0.7",
+    priority: 0.8,
   }))
 
-  // Define module pages
-  const modulePages = [
-    "fleet-manager",
-    "rules-engine",
-    "dashboard-reports",
-    "production-planning",
-    "process-control",
-  ].map((module) => ({
+  // Module pages
+  const modules = ["fleet-manager", "rules-engine", "dashboard-reports", "production-planning", "process-control"]
+
+  const modulePages = modules.map((module) => ({
     url: `${baseUrl}/rtls-digital-twin/modules/${module}`,
     lastmod: currentDate,
     changefreq: "monthly",
-    priority: "0.7",
+    priority: 0.7,
   }))
 
-  // Combine all static pages
-  let allPages = [...staticPages, ...technologyPages, ...modulePages]
-
+  // Fetch all resource articles from Supabase
+  let resourcePages = []
   try {
-    // Create Supabase client
-    const cookieStore = cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options })
-          },
-          remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options })
-          },
-        },
-      },
-    )
+    const articles = await getAllArticles()
 
-    // Get all published articles
-    const { data: articles, error } = await supabase
-      .from("articles")
-      .select("slug, updated_at")
-      .eq("status", "published")
-      .order("updated_at", { ascending: false })
-
-    if (error) {
-      console.error("Error fetching articles for sitemap:", error)
-      // Continue with static pages only
-    } else {
-      // Add article pages
-      const articlePages = articles.map((article) => ({
-        url: `${baseUrl}/resources/${article.slug}`,
-        lastmod: new Date(article.updated_at).toISOString(),
-        changefreq: "monthly",
-        priority: "0.7",
-      }))
-
-      allPages = [...allPages, ...articlePages]
-    }
+    resourcePages = articles.map((article) => ({
+      url: `${baseUrl}/resources/${article.slug}`,
+      lastmod: article.updated_at || article.publish_date || currentDate,
+      changefreq: "monthly",
+      priority: 0.8,
+    }))
   } catch (error) {
-    console.error("Error generating dynamic sitemap content:", error)
-    // Continue with static pages only
+    console.error("Error fetching articles for sitemap:", error)
+    // Continue with empty resource pages if there's an error
   }
+
+  // Combine all pages
+  const allPages = [...mainPages, ...technologyPages, ...modulePages, ...resourcePages]
 
   // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -117,6 +138,7 @@ ${allPages
   .join("\n")}
 </urlset>`
 
+  // Return XML response
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml",

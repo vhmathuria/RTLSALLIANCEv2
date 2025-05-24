@@ -1,12 +1,9 @@
-import { createServerSupabaseClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import AccountProfile from "./account-profile"
 
-// Prevent this page from being statically generated
-export const dynamic = "force-dynamic"
-
 export default async function AccountPage() {
-  const supabase = createServerSupabaseClient()
+  const supabase = createClient()
 
   // Get current user
   const {

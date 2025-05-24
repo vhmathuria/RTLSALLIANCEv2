@@ -46,5 +46,3 @@ export function PageSEO({ title, description, type = "WebPage", url, imageUrl, b
     </>
   )
 }
-
-export default PageSEO

@@ -1,25 +1,17 @@
-import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { createServerClient, type CookieOptions } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase-server"
+import { getArticleBySlug } from "@/lib/supabase"
 import GuideRenderer from "@/components/renderers/guide/guide-renderer"
 import SuccessStoryRenderer from "@/components/renderers/success-story/success-story-renderer"
 import TechnologyComparisonRenderer from "@/components/renderers/technology-comparison/technology-comparison-renderer"
 import MemberInsightRenderer from "@/components/renderers/member-insight/member-insight-renderer"
 import ContentGate from "@/components/content-gate"
-import PageLayout from "@/components/layout/page-layout"
-import ResourceSEO from "@/components/seo/resource-seo"
-import ResourceBreadcrumbs from "@/components/resource-breadcrumbs"
-import { formatDate } from "@/lib/utils"
-
-type Props = {
-  params: { slug: string }
-}
+import type { Metadata } from "next"
 
 // Add revalidation - regenerate this page once per day
 export const revalidate = 86400
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
@@ -72,37 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-async function getArticleBySlug(slug: string) {
-  const cookieStore = cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          cookieStore.set({ name, value, ...options })
-        },
-        remove(name: string, options: CookieOptions) {
-          cookieStore.delete({ name, ...options })
-        },
-      },
-    },
-  )
-
-  const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).single()
-
-  if (error) {
-    console.error(`Error fetching article with slug ${slug}:`, error)
-    return null
-  }
-
-  return data
-}
-
-export default async function ResourcePage({ params }: Props) {
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
@@ -115,25 +77,7 @@ export default async function ResourcePage({ params }: Props) {
   // If article is public, no need to check membership
   if (requiredTier !== "public") {
     // Get current user
-    const cookieStore = cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options })
-          },
-          remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options })
-          },
-        },
-      },
-    )
-
+    const supabase = createServerClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()
@@ -170,58 +114,23 @@ export default async function ResourcePage({ params }: Props) {
   }
 
   // Render the appropriate article type
-  const renderContent = () => {
-    switch (article.content_type) {
-      case "Guide":
-        return <GuideRenderer article={article} />
-      case "Success Story":
-        return <SuccessStoryRenderer article={article} />
-      case "Technology Comparison":
-        return <TechnologyComparisonRenderer article={article} />
-      case "Member Insight":
-        return <MemberInsightRenderer article={article} />
-      default:
-        return (
+  switch (article.content_type) {
+    case "Guide":
+      return <GuideRenderer article={article} />
+    case "Success Story":
+      return <SuccessStoryRenderer article={article} />
+    case "Technology Comparison":
+      return <TechnologyComparisonRenderer article={article} />
+    case "Member Insight":
+      return <MemberInsightRenderer article={article} />
+    default:
+      return (
+        <div className="container mx-auto px-4 py-12">
+          <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
           <div className="prose max-w-none">
-            <h1>{article.title}</h1>
-            <div dangerouslySetInnerHTML={{ __html: article.content || "" }} />
+            <div dangerouslySetInnerHTML={{ __html: article.content }} />
           </div>
-        )
-    }
-  }
-
-  return (
-    <>
-      <ResourceSEO
-        title={article.title}
-        description={article.meta_description || article.excerpt || `Read about ${article.title} on RTLS Alliance.`}
-        canonicalUrl={`/resources/${article.slug}`}
-        publishDate={article.published_at}
-        modifiedDate={article.updated_at}
-        imageUrl={article.featured_image}
-        type={article.content_type || "Article"}
-      />
-
-      <PageLayout>
-        <div className="container mx-auto px-4 py-8">
-          <ResourceBreadcrumbs
-            title={article.title}
-            contentType={article.content_type || "Resource"}
-            slug={article.slug}
-          />
-
-          <div className="mb-4 text-sm text-gray-500">
-            {article.published_at && (
-              <time dateTime={article.published_at}>Published: {formatDate(article.published_at)}</time>
-            )}
-            {article.updated_at && article.updated_at !== article.published_at && (
-              <> • Updated: {formatDate(article.updated_at)}</>
-            )}
-          </div>
-
-          {renderContent()}
         </div>
-      </PageLayout>
-    </>
-  )
+      )
+  }
 }
