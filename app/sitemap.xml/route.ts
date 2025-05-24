@@ -1,74 +1,42 @@
 import { getAllArticles } from "@/lib/supabase"
+import { articles as staticArticles } from "@/lib/article-data"
 
-export async function GET(): Promise<Response> {
-  const baseUrl = "https://rtlsalliance.com"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+export async function GET() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
   const currentDate = new Date().toISOString()
 
-  // Main pages
+  // Start building the sitemap XML
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`
+
+  // Add main pages
   const mainPages = [
-    {
-      url: baseUrl,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/rtls-digital-twin`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resources`,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/certification`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/membership`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/ecosystem`,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/ecosystem/directory`,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/project`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/membership/upgrade`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.6,
-    },
+    { url: "", priority: "1.0" },
+    { url: "rtls-digital-twin", priority: "0.9" },
+    { url: "resources", priority: "0.9" },
+    { url: "certification", priority: "0.8" },
+    { url: "membership", priority: "0.9" },
+    { url: "contact", priority: "0.7" },
+    { url: "ecosystem", priority: "0.8" },
+    { url: "ecosystem/directory", priority: "0.8" },
+    { url: "project", priority: "0.7" },
   ]
 
-  // Technology pages
+  for (const page of mainPages) {
+    xml += `  <url>
+    <loc>${baseUrl}/${page.url}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${page.priority}</priority>
+  </url>
+`
+  }
+
+  // Add technology pages
   const technologies = [
     "ble",
     "uwb",
@@ -87,62 +55,66 @@ export async function GET(): Promise<Response> {
     "dead-reckoning",
   ]
 
-  const technologyPages = technologies.map((tech) => ({
-    url: `${baseUrl}/rtls-digital-twin/technologies/${tech}`,
-    lastmod: currentDate,
-    changefreq: "monthly",
-    priority: 0.8,
-  }))
-
-  // Module pages
-  const modules = ["fleet-manager", "rules-engine", "dashboard-reports", "production-planning", "process-control"]
-
-  const modulePages = modules.map((module) => ({
-    url: `${baseUrl}/rtls-digital-twin/modules/${module}`,
-    lastmod: currentDate,
-    changefreq: "monthly",
-    priority: 0.7,
-  }))
-
-  // Fetch all resource articles from Supabase
-  let resourcePages = []
-  try {
-    const articles = await getAllArticles()
-
-    resourcePages = articles.map((article) => ({
-      url: `${baseUrl}/resources/${article.slug}`,
-      lastmod: article.updated_at || article.publish_date || currentDate,
-      changefreq: "monthly",
-      priority: 0.8,
-    }))
-  } catch (error) {
-    console.error("Error fetching articles for sitemap:", error)
-    // Continue with empty resource pages if there's an error
+  for (const tech of technologies) {
+    xml += `  <url>
+    <loc>${baseUrl}/rtls-digital-twin/technologies/${tech}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`
   }
 
-  // Combine all pages
-  const allPages = [...mainPages, ...technologyPages, ...modulePages, ...resourcePages]
+  // Add module pages
+  const modules = ["fleet-manager", "rules-engine", "dashboard-reports", "production-planning", "process-control"]
 
-  // Generate XML
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allPages
-  .map(
-    (page) => `  <url>
-    <loc>${page.url}</loc>
-    <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
-  </url>`,
-  )
-  .join("\n")}
-</urlset>`
+  for (const module of modules) {
+    xml += `  <url>
+    <loc>${baseUrl}/rtls-digital-twin/modules/${module}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`
+  }
 
-  // Return XML response
+  // Try to get articles from database, fall back to static data
+  let articles = []
+  try {
+    const dbArticles = await getAllArticles()
+    if (dbArticles && dbArticles.length > 0) {
+      console.log(`Using ${dbArticles.length} articles from database`)
+      articles = dbArticles
+    } else {
+      console.log("No articles from database, using static data")
+      articles = staticArticles
+    }
+  } catch (error) {
+    console.error("Error fetching articles, using static data:", error)
+    articles = staticArticles
+  }
+
+  // Add resource pages
+  for (const article of articles) {
+    if (article.slug) {
+      xml += `  <url>
+    <loc>${baseUrl}/resources/${article.slug}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`
+    }
+  }
+
+  // Close the sitemap
+  xml += `</urlset>`
+
+  // Return the XML with the correct content type
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
     },
   })
 }
