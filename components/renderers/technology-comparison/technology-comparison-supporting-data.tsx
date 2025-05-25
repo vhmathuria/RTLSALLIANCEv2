@@ -84,17 +84,16 @@ export default function TechnologyComparisonSupportingData({
       {/* Visual */}
       {hasVisual && (
         <div className="mb-8">
-          <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-md border border-gray-200">
+          <div className="relative w-full bg-white" style={{ height: "500px" }}>
             <Image
               src={visual.link || "/placeholder.svg"}
               alt={visual.description || "Supporting data visualization"}
               fill
               className="object-contain"
+              sizes="(max-width: 768px) 100vw, 800px"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs p-2">
-              {visual.description}
-            </div>
           </div>
+          <p className="text-gray-700 text-center mt-4">{visual.description}</p>
         </div>
       )}
 
@@ -110,7 +109,7 @@ export default function TechnologyComparisonSupportingData({
                 </h3>
               </div>
               <div className="p-6">
-                <div className="relative h-64 w-full mb-4">
+                <div className="relative w-full bg-white" style={{ height: "400px" }}>
                   <Image
                     src={
                       chart.imageUrl ||
@@ -121,6 +120,7 @@ export default function TechnologyComparisonSupportingData({
                     alt={chart.title || "Chart"}
                     fill
                     className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 500px"
                   />
                 </div>
                 <p className="text-gray-700 text-sm">{chart.description}</p>

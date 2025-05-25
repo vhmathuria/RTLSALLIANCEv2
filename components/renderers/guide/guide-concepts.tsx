@@ -46,19 +46,16 @@ export default function GuideConcepts({ concepts }: GuideConceptsProps) {
               {concept.visual && (
                 <div>
                   <h4 className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2 flex items-center">
-                    <ImageIcon className="h-4 w-4 mr-1" />
-                    Visual
                   </h4>
-                  <figure className="relative h-48 w-full overflow-hidden rounded-lg shadow-md">
+                  <figure className="relative w-full max-w-[600px] mx-auto rounded-lg shadow-md" style={{ aspectRatio: "1/1" }}>
                     <Image
                       src={concept.visual.link || "/placeholder.svg"}
                       alt={concept.visual.description || `Visualization of ${concept.term}`}
-                      fill
-                      className="object-cover"
+                      layout="responsive"
+                      width={800}
+                      height={800}
+                      className="object-contain"
                     />
-                    <figcaption className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs p-2">
-                      {fixSpecialChars(concept.visual.description || `Visualization of ${concept.term}`)}
-                    </figcaption>
                   </figure>
                 </div>
               )}
