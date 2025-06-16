@@ -8,7 +8,6 @@ import { formatDate, truncateText, parseJsonSafely } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, BookOpen, Users, Award, Headphones, LightbulbIcon, ChevronDown } from "lucide-react"
 import NewsletterSignup from "@/components/newsletter-signup"
-import LogoCarousel from "@/components/logo-carousel"
 import { useEffect, useState } from "react"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import PageLayout from "@/components/layout/page-layout"
@@ -414,12 +413,14 @@ export default function ClientPage() {
         </section>
 
         {/* Member Logos Carousel - Moved to after Latest Insights */}
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
-            <LogoCarousel logos={memberLogos} />
-          </div>
-        </section>
+        {/*
+<section className="py-12 bg-white">
+  <div className="container mx-auto px-4">
+    <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
+    <LogoCarousel logos={memberLogos} />
+  </div>
+</section>
+*/}
 
         {/* Newsletter Section */}
         <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
