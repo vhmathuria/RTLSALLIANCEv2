@@ -9,7 +9,7 @@ import Script from "next/script"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"),
   title: {
     template: "%s | RTLS Alliance",
     default: "RTLS Alliance - Real-Time Location Systems Community",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://rtlsalliance.com",
+    url: "https://rtlsalliance.org",
     siteName: "RTLS Alliance",
     title: "RTLS Alliance - Real-Time Location Systems Community",
     description:
@@ -71,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="canonical" href="https://rtlsalliance.com" />
+        <link rel="canonical" href="https://rtlsalliance.org" />
         <link rel="icon" href="/favicon.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/favicon.png" />

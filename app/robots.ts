@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin/", "/auth/", "/auth-error/", "/debug/"],
     },
-    sitemap: "https://rtlsalliance.com/sitemap.xml",
+    sitemap: "https://rtlsalliance.org/sitemap.xml",
   }
 }

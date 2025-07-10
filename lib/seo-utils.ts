@@ -208,7 +208,7 @@ export function generateIndustryMetaDescription(industry: string): string {
  * @param path - The page path
  */
 export function generateCanonicalUrl(path: string): string {
-  return `https://rtlsalliance.com${path}`
+  return `https://rtlsalliance.org${path}`
 }
 
 /**
@@ -234,7 +234,7 @@ export function generateTechnologyStructuredData(technology: string) {
       name: "RTLS Alliance",
       logo: {
         "@type": "ImageObject",
-        url: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+        url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
       },
     },
     mainEntityOfPage: {
