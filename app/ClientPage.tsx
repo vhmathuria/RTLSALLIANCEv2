@@ -12,6 +12,8 @@ import { useEffect, useState } from "react"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import PageLayout from "@/components/layout/page-layout"
 import { homepageFAQs, generalRTLSFAQs } from "@/lib/faq-data"
+import AllianceAmbassadorsCarousel from "@/components/alliance-ambassadors-carousel"
+import LogoCarousel from "@/components/logo-carousel"
 
 export default function ClientPage() {
   const [user, setUser] = useState<any>(null)
@@ -135,7 +137,7 @@ export default function ClientPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-blue-600 text-blue-600 hover:bg-blue-50 rounded-xl transform transition-all hover:scale-105"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50 rounded-xl transform transition-all hover:scale-105 bg-transparent"
                 >
                   Explore RTLS Technologies
                 </Button>
@@ -228,6 +230,17 @@ export default function ClientPage() {
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Alliance Ambassadors Carousel Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-4">Alliance Ambassadors</h2>
+            <p className="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto">
+              Meet the industry leaders driving the Alliance forward
+            </p>
+            <AllianceAmbassadorsCarousel />
           </div>
         </section>
 
@@ -413,14 +426,12 @@ export default function ClientPage() {
         </section>
 
         {/* Member Logos Carousel - Moved to after Latest Insights */}
-        {/*
-<section className="py-12 bg-white">
-  <div className="container mx-auto px-4">
-    <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
-    <LogoCarousel logos={memberLogos} />
-  </div>
-</section>
-*/}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
+            <LogoCarousel logos={memberLogos} />
+          </div>
+        </section>
 
         {/* Newsletter Section */}
         <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
@@ -458,7 +469,7 @@ export default function ClientPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-blue-600 text-blue-600 hover:bg-blue-50 rounded-xl transform transition-all hover:scale-105"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50 rounded-xl transform transition-all hover:scale-105 bg-transparent"
                 >
                   Contact Us
                 </Button>
