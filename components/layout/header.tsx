@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, ChevronRight, Briefcase } from "lucide-react"
+import { Menu, X, ChevronDown, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
@@ -128,11 +128,10 @@ export default function Header() {
           )}
           <Link
             href="/bidding-portal"
-            className={`flex items-center gap-1 text-sm font-medium leading-6 ${
+            className={`text-sm font-medium leading-6 ${
               isActive("/bidding-portal") ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
             }`}
           >
-            <Briefcase className="h-4 w-4" />
             Bidding Portal
           </Link>
         </div>
@@ -242,12 +241,11 @@ export default function Header() {
                   ))}
                   <Link
                     href="/bidding-portal"
-                    className={`flex items-center gap-2 text-base font-medium leading-7 ${
+                    className={`block text-base font-medium leading-7 ${
                       isActive("/bidding-portal") ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <Briefcase className="h-4 w-4" />
                     Bidding Portal
                   </Link>
                 </div>

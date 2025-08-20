@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Briefcase, Search, TrendingUp } from "lucide-react"
+import { Plus, Briefcase, Search } from "lucide-react"
 import ProjectList from "@/components/projects/project-list"
 import ProjectForm from "@/components/projects/project-form"
 
@@ -34,20 +34,20 @@ export default function BiddingPortalPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+      <div className="bg-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">RTLS Project Bidding Portal</h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            RTLS Project Bidding Portal
+          </h1>
+          <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
             Connect with qualified RTLS vendors and solution providers. Post your projects and receive competitive
             proposals from industry experts.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              variant="secondary"
               onClick={() => setShowCreateForm(true)}
-              className="bg-white text-blue-600 hover:bg-gray-100"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
             >
               <Plus className="mr-2 h-5 w-5" />
               Post a Project
@@ -55,47 +55,12 @@ export default function BiddingPortalPage() {
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+              className="border-blue-600 text-blue-600 hover:bg-blue-50 bg-transparent"
               onClick={() => setActiveTab("browse")}
             >
               <Search className="mr-2 h-5 w-5" />
               Browse Projects
             </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="bg-white border-b border-gray-200 py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="flex items-center justify-center gap-3">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Briefcase className="h-6 w-6 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">500+</div>
-                <div className="text-gray-600">Active Projects</div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <div className="bg-purple-100 p-3 rounded-full">
-                <TrendingUp className="h-6 w-6 text-purple-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">95%</div>
-                <div className="text-gray-600">Success Rate</div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <div className="bg-green-100 p-3 rounded-full">
-                <Search className="h-6 w-6 text-green-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">1000+</div>
-                <div className="text-gray-600">Qualified Vendors</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
