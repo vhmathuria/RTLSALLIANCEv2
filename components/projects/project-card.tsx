@@ -80,15 +80,8 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
 
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200 relative overflow-hidden">
-      <div className="absolute top-4 left-4 z-10">
-        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
-          <Lock className="h-3 w-3 inline mr-1" />
-          Members Only
-        </div>
-      </div>
-
       <CardHeader>
-        <div className="flex items-start justify-between pl-20">
+        <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-lg font-semibold text-gray-900 line-clamp-2">{project.title}</CardTitle>
             {project.client_organization && (
@@ -112,6 +105,13 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
       <CardContent className="space-y-4">
         <div className="relative">
           <p className="text-sm text-gray-600 line-clamp-3 blur-sm select-none">{project.description}</p>
+        </div>
+
+        <div className="flex justify-start">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg flex items-center">
+            <Lock className="h-3 w-3 mr-1" />
+            Members Only
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
