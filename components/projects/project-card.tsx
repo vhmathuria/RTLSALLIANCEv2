@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, DollarSign, Users, Eye, Lock } from "lucide-react"
+import { Calendar, MapPin, DollarSign, Users, Eye, Lock, Crown } from "lucide-react"
 
 interface Project {
   id: string
@@ -80,9 +80,18 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
 
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200 relative overflow-hidden">
+      <div className="absolute top-3 right-3 z-10">
+        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-2 py-1 rounded text-xs font-bold shadow-lg flex items-center">
+          <Crown className="h-3 w-3 mr-1" />
+          Members Only
+        </div>
+      </div>
+
       <CardHeader>
         <div className="flex items-start justify-between">
-          <div className="flex-1">
+          <div className="flex-1 pr-20">
+            {" "}
+            {/* Added right padding to avoid overlap with Members Only badge */}
             <CardTitle className="text-lg font-semibold text-gray-900 line-clamp-2">{project.title}</CardTitle>
             {project.client_organization && (
               <CardDescription className="text-sm text-gray-600 blur-sm select-none mt-1">
@@ -105,13 +114,6 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
       <CardContent className="space-y-4">
         <div className="relative">
           <p className="text-sm text-gray-600 line-clamp-3 blur-sm select-none">{project.description}</p>
-        </div>
-
-        <div className="flex justify-start">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg flex items-center">
-            <Lock className="h-3 w-3 mr-1" />
-            Members Only
-          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
@@ -142,7 +144,7 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <div className="flex items-center gap-1 blur-sm select-none">
-              <Eye className="h-3 w-3" />
+              <Eye className="h-3 w-3 mr-1" />
               <span>{project.view_count} views</span>
             </div>
             <span>Posted {formatDate(project.created_at)}</span>
