@@ -80,18 +80,16 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
 
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200 relative overflow-hidden">
-      <div className="absolute top-3 right-3 z-10">
-        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-2 py-1 rounded text-xs font-bold shadow-lg flex items-center">
+      <div className="absolute top-0 right-0 z-10">
+        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 py-1 rounded-bl-lg text-xs font-bold shadow-lg flex items-center">
           <Crown className="h-3 w-3 mr-1" />
-          Members Only
+          MEMBERS ONLY
         </div>
       </div>
 
       <CardHeader>
         <div className="flex items-start justify-between">
-          <div className="flex-1 pr-20">
-            {" "}
-            {/* Added right padding to avoid overlap with Members Only badge */}
+          <div className="flex-1 pr-16">
             <CardTitle className="text-lg font-semibold text-gray-900 line-clamp-2">{project.title}</CardTitle>
             {project.client_organization && (
               <CardDescription className="text-sm text-gray-600 blur-sm select-none mt-1">
@@ -99,7 +97,7 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
               </CardDescription>
             )}
           </div>
-          <Badge className={`ml-2 ${getStatusColor(project.status)} capitalize`}>
+          <Badge className={`ml-2 mt-8 ${getStatusColor(project.status)} capitalize`}>
             {project.status.replace("_", " ")}
           </Badge>
         </div>
