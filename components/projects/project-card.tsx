@@ -67,22 +67,21 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
 
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200 relative overflow-hidden">
+      <div className="absolute top-4 right-4 z-10">
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+          <Lock className="h-3 w-3 inline mr-1" />
+          Members Only
+        </div>
+      </div>
+
       <CardHeader>
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between pr-20">
           <div className="flex-1">
             <CardTitle className="text-lg font-semibold text-gray-900 line-clamp-2">{project.title}</CardTitle>
             {project.client_organization && (
-              <div className="relative mt-1">
-                <CardDescription className="text-sm text-gray-600 blur-sm select-none">
-                  {project.client_organization}
-                </CardDescription>
-                <div className="absolute inset-0 flex items-center">
-                  <div className="flex items-center gap-1 bg-gray-800 text-white px-2 py-0.5 rounded-md text-xs font-medium shadow-sm">
-                    <Lock className="h-3 w-3" />
-                    <span>Members Only</span>
-                  </div>
-                </div>
-              </div>
+              <CardDescription className="text-sm text-gray-600 blur-sm select-none mt-1">
+                {project.client_organization}
+              </CardDescription>
             )}
           </div>
           <Badge className={`ml-2 ${getStatusColor(project.status)} capitalize`}>
@@ -100,15 +99,6 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
       <CardContent className="space-y-4">
         <div className="relative">
           <p className="text-sm text-gray-600 line-clamp-3 blur-sm select-none">{project.description}</p>
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white/90 backdrop-blur-sm flex items-center justify-center">
-            <div className="bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-lg px-4 py-3 shadow-lg">
-              <div className="flex items-center gap-2 text-gray-700">
-                <Lock className="h-4 w-4 text-gray-600" />
-                <span className="text-sm font-medium">Members Only</span>
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Join to view full details</p>
-            </div>
-          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
@@ -125,15 +115,9 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
             </div>
           )}
           {project.location && (
-            <div className="flex items-center gap-1 relative">
+            <div className="flex items-center gap-1">
               <MapPin className="h-4 w-4" />
               <span className="blur-sm select-none">{project.location}</span>
-              <div className="absolute inset-0 flex items-center justify-end">
-                <div className="bg-gray-800 text-white px-2 py-0.5 rounded text-xs font-medium shadow-sm flex items-center gap-1">
-                  <Lock className="h-2.5 w-2.5" />
-                  <span>Members Only</span>
-                </div>
-              </div>
             </div>
           )}
           <div className="flex items-center gap-1">
@@ -151,17 +135,14 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
             <span>Posted {formatDate(project.created_at)}</span>
           </div>
           {showActions && (
-            <div className="relative">
-              <Button size="sm" variant="outline" className="blur-sm select-none pointer-events-none bg-transparent">
-                View Details
-              </Button>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Button size="sm" className="bg-gray-800 hover:bg-gray-900 text-white shadow-lg">
-                  <Lock className="h-3 w-3 mr-1" />
-                  Join to View
-                </Button>
-              </div>
-            </div>
+            /* Replaced with single Unlock button */
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
+            >
+              <Lock className="h-3 w-3 mr-1" />
+              Unlock
+            </Button>
           )}
         </div>
       </CardContent>
