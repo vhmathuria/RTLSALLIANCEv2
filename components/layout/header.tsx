@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react"
+import { Menu, X, ChevronDown, ChevronRight, User, LogOut, Briefcase } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { createSupabaseClient } from "@/lib/supabase-auth"
@@ -164,6 +164,17 @@ export default function Header() {
               </Link>
             ),
           )}
+          {user && (
+            <Link
+              href="/bidding-portal"
+              className={`flex items-center gap-1 text-sm font-medium leading-6 ${
+                isActive("/bidding-portal") ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
+              }`}
+            >
+              <Briefcase className="h-4 w-4" />
+              Bidding Portal
+            </Link>
+          )}
         </div>
 
         <div className="hidden xl:flex xl:flex-1 xl:justify-end xl:items-center">
@@ -171,7 +182,7 @@ export default function Header() {
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="flex items-center gap-2 max-w-[200px]">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 max-w-[200px] bg-transparent">
                     <User className="h-4 w-4 flex-shrink-0" />
                     <span className="truncate">{profile?.full_name || user.email}</span>
                   </Button>
@@ -179,6 +190,12 @@ export default function Header() {
                 <DropdownMenuContent align="end">
                   <Link href="/account">
                     <DropdownMenuItem>My Account</DropdownMenuItem>
+                  </Link>
+                  <Link href="/bidding-portal">
+                    <DropdownMenuItem>
+                      <Briefcase className="h-4 w-4 mr-2" />
+                      Bidding Portal
+                    </DropdownMenuItem>
                   </Link>
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="h-4 w-4 mr-2" />
@@ -301,6 +318,18 @@ export default function Header() {
                       )}
                     </div>
                   ))}
+                  {user && (
+                    <Link
+                      href="/bidding-portal"
+                      className={`flex items-center gap-2 text-base font-medium leading-7 ${
+                        isActive("/bidding-portal") ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Briefcase className="h-4 w-4" />
+                      Bidding Portal
+                    </Link>
+                  )}
                 </div>
                 <div className="pt-6 border-t border-gray-200 mt-6">
                   {!loading && user ? (
