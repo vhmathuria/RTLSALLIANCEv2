@@ -65,9 +65,22 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
     return colors[category] || "bg-gray-100 text-gray-800"
   }
 
+  const getProjectTypeLabel = (type: string) => {
+    switch (type) {
+      case "pilot":
+        return "Pilot"
+      case "complete_system":
+        return "Complete System"
+      case "upgrade":
+        return "Upgrade"
+      default:
+        return type.replace("_", " ")
+    }
+  }
+
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200 relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-4 left-4 z-10">
         <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
           <Lock className="h-3 w-3 inline mr-1" />
           Members Only
@@ -75,7 +88,7 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
       </div>
 
       <CardHeader>
-        <div className="flex items-start justify-between pr-20">
+        <div className="flex items-start justify-between pl-20">
           <div className="flex-1">
             <CardTitle className="text-lg font-semibold text-gray-900 line-clamp-2">{project.title}</CardTitle>
             {project.client_organization && (
@@ -92,7 +105,7 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
           <Badge variant="outline" className={getCategoryColor(project.category)}>
             {project.category}
           </Badge>
-          <Badge variant="outline">{project.project_type.replace("_", " ")}</Badge>
+          <Badge variant="outline">{getProjectTypeLabel(project.project_type)}</Badge>
         </div>
       </CardHeader>
 
@@ -135,7 +148,6 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
             <span>Posted {formatDate(project.created_at)}</span>
           </div>
           {showActions && (
-            /* Replaced with single Unlock button */
             <Button
               size="sm"
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"

@@ -37,12 +37,12 @@ const sampleProjects: Project[] = [
     description:
       "Implementing comprehensive RTLS solution for tracking production assets, personnel, and workflow optimization across 150,000 sq ft manufacturing facility. Need real-time visibility into equipment utilization, worker safety zones, and material flow.",
     category: "manufacturing",
-    project_type: "implementation",
+    project_type: "pilot", // Changed to pilot project type
     budget_range: "250k-500k",
     timeline: "medium",
     location: "Grand Rapids, MI",
-    created_at: "2025-01-15T10:30:00Z",
-    bid_deadline: "2025-02-28T17:00:00Z",
+    created_at: "2025-03-15T10:30:00Z", // Changed to March 2025
+    bid_deadline: "2025-05-28T17:00:00Z",
     bid_count: 7,
     view_count: 34,
     status: "open",
@@ -54,12 +54,12 @@ const sampleProjects: Project[] = [
     description:
       "Seeking RTLS deployment for 400-bed medical center to track critical equipment, monitor patient flow, and ensure regulatory compliance. Integration with existing EMR and nurse call systems required.",
     category: "healthcare",
-    project_type: "implementation",
+    project_type: "complete_system", // Changed to complete system
     budget_range: "500k-1m",
     timeline: "long",
     location: "Phoenix, AZ",
-    created_at: "2025-01-12T14:20:00Z",
-    bid_deadline: "2025-03-15T23:59:00Z",
+    created_at: "2025-07-12T14:20:00Z", // Changed to July 2025
+    bid_deadline: "2025-09-15T23:59:00Z",
     bid_count: 12,
     view_count: 89,
     status: "closed",
@@ -71,12 +71,12 @@ const sampleProjects: Project[] = [
     description:
       "Digital transformation initiative requiring RTLS for vehicle tracking through assembly process, tool management, and quality control checkpoints. Must integrate with existing MES and support Industry 4.0 standards.",
     category: "automotive",
-    project_type: "integration",
+    project_type: "complete_system", // Changed to complete system
     budget_range: "over-1m",
     timeline: "long",
     location: "Detroit, MI",
-    created_at: "2025-01-10T09:15:00Z",
-    bid_deadline: "2025-04-01T17:00:00Z",
+    created_at: "2025-05-10T09:15:00Z", // Changed to May 2025
+    bid_deadline: "2025-08-01T17:00:00Z",
     bid_count: 15,
     view_count: 156,
     status: "closed",
@@ -88,12 +88,12 @@ const sampleProjects: Project[] = [
     description:
       "Upgrading existing warehouse operations with advanced RTLS for inventory tracking, picker optimization, and automated guided vehicle coordination across 500,000 sq ft facility.",
     category: "logistics",
-    project_type: "upgrade",
+    project_type: "upgrade", // Kept as upgrade type
     budget_range: "100k-250k",
     timeline: "short",
     location: "Memphis, TN",
-    created_at: "2025-01-08T16:45:00Z",
-    bid_deadline: "2025-02-20T17:00:00Z",
+    created_at: "2025-09-08T16:45:00Z", // Changed to September 2025
+    bid_deadline: "2025-11-20T17:00:00Z",
     bid_count: 9,
     view_count: 67,
     status: "closed",
@@ -105,12 +105,12 @@ const sampleProjects: Project[] = [
     description:
       "University-wide RTLS deployment for student/staff navigation, emergency response, and facility utilization analytics. Covers 25 buildings with indoor/outdoor positioning requirements.",
     category: "education",
-    project_type: "implementation",
+    project_type: "pilot", // Changed to pilot project type
     budget_range: "250k-500k",
     timeline: "medium",
     location: "Austin, TX",
-    created_at: "2025-01-05T11:30:00Z",
-    bid_deadline: "2025-03-01T17:00:00Z",
+    created_at: "2025-11-05T11:30:00Z", // Changed to November 2025
+    bid_deadline: "2025-12-01T17:00:00Z",
     bid_count: 6,
     view_count: 43,
     status: "closed",
@@ -122,12 +122,12 @@ const sampleProjects: Project[] = [
     description:
       "Multi-location RTLS solution for customer behavior analytics, inventory shrinkage reduction, and staff optimization across 50+ retail locations. Privacy-compliant implementation required.",
     category: "retail",
-    project_type: "implementation",
+    project_type: "complete_system", // Changed to complete system
     budget_range: "500k-1m",
     timeline: "long",
     location: "Chicago, IL",
-    created_at: "2025-01-03T13:20:00Z",
-    bid_deadline: "2025-03-30T17:00:00Z",
+    created_at: "2025-06-03T13:20:00Z", // Changed to June 2025
+    bid_deadline: "2025-08-30T17:00:00Z",
     bid_count: 11,
     view_count: 78,
     status: "closed",
