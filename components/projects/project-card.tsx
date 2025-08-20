@@ -3,8 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, DollarSign, Users, Eye } from "lucide-react"
-import Link from "next/link"
+import { Calendar, MapPin, DollarSign, Users, Eye, Lock, Crown } from "lucide-react"
 
 interface Project {
   id: string
@@ -67,13 +66,23 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
   }
 
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow duration-200">
+    <Card className="h-full hover:shadow-lg transition-shadow duration-200 relative overflow-hidden">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-lg font-semibold text-gray-900 line-clamp-2">{project.title}</CardTitle>
             {project.client_organization && (
-              <CardDescription className="text-sm text-gray-600 mt-1">{project.client_organization}</CardDescription>
+              <div className="relative mt-1">
+                <CardDescription className="text-sm text-gray-600 blur-sm select-none">
+                  {project.client_organization}
+                </CardDescription>
+                <div className="absolute inset-0 flex items-center">
+                  <div className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-2 py-0.5 rounded-full text-xs font-medium shadow-lg">
+                    <Crown className="h-3 w-3" />
+                    <span>Members Only</span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
           <Badge className={`ml-2 ${getStatusColor(project.status)} capitalize`}>
@@ -89,7 +98,18 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <p className="text-sm text-gray-600 line-clamp-3">{project.description}</p>
+        <div className="relative">
+          <p className="text-sm text-gray-600 line-clamp-3 blur-sm select-none">{project.description}</p>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white/90 backdrop-blur-sm flex items-center justify-center">
+            <div className="bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl px-4 py-3 shadow-xl">
+              <div className="flex items-center gap-2 text-gray-700">
+                <Lock className="h-4 w-4 text-blue-600" />
+                <span className="text-sm font-medium">Premium Content</span>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Join as a member to view full details</p>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
           {project.budget_range && (
@@ -105,9 +125,15 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
             </div>
           )}
           {project.location && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 relative">
               <MapPin className="h-4 w-4" />
-              <span>{project.location}</span>
+              <span className="blur-sm select-none">{project.location}</span>
+              <div className="absolute inset-0 flex items-center justify-end">
+                <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-medium shadow-md flex items-center gap-1">
+                  <Lock className="h-2.5 w-2.5" />
+                  <span>VIP</span>
+                </div>
+              </div>
             </div>
           )}
           <div className="flex items-center gap-1">
@@ -118,21 +144,39 @@ export default function ProjectCard({ project, showActions = true }: ProjectCard
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
           <div className="flex items-center gap-4 text-xs text-gray-500">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 blur-sm select-none">
               <Eye className="h-3 w-3" />
               <span>{project.view_count} views</span>
             </div>
             <span>Posted {formatDate(project.created_at)}</span>
           </div>
           {showActions && (
-            <Link href={`/bidding-portal/projects/${project.id}`}>
-              <Button size="sm" variant="outline">
+            <div className="relative">
+              <Button size="sm" variant="outline" className="blur-sm select-none pointer-events-none bg-transparent">
                 View Details
               </Button>
-            </Link>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
+                >
+                  <Lock className="h-3 w-3 mr-1" />
+                  Unlock
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </CardContent>
+
+      <div className="absolute top-0 right-0">
+        <div className="bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 text-white px-3 py-1 rounded-bl-lg shadow-lg">
+          <div className="flex items-center gap-1">
+            <Crown className="h-3 w-3" />
+            <span className="text-xs font-bold">PREMIUM</span>
+          </div>
+        </div>
+      </div>
     </Card>
   )
 }
