@@ -115,7 +115,7 @@ export default function AllianceAmbassadorsCarousel() {
           {duplicatedAmbassadors.map((ambassador, index) => (
             <div
               key={`${ambassador.name}-${index}`}
-              className="flex-shrink-0 bg-white rounded-xl shadow-sm p-6 w-80 transform transition-all hover:scale-105 hover:shadow-lg"
+              className="flex-shrink-0 bg-white border border-blue-600 rounded-xl shadow-sm p-6 w-80 transform transition-all hover:scale-105 hover:shadow-lg hover:bg-blue-50"
             >
               <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-600 to-purple-600">
