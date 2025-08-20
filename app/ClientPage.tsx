@@ -152,7 +152,10 @@ export default function ClientPage() {
         {/* Alliance Ambassadors Carousel Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-4">Alliance Ambassadors</h2>
+            <h2 className="text-3xl font-bold text-center mb-4">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">RTLS</span>{" "}
+              Alliance Ambassadors
+            </h2>
             <p className="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto">
               Meet the industry leaders driving the Alliance forward
             </p>
