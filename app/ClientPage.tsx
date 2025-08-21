@@ -12,7 +12,7 @@ import { useEffect, useState } from "react"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import PageLayout from "@/components/layout/page-layout"
 import { homepageFAQs, generalRTLSFAQs } from "@/lib/faq-data"
-import LogoCarousel from "@/components/logo-carousel"
+import AllianceAmbassadorsCarousel from "@/components/alliance-ambassadors-carousel"
 
 export default function ClientPage() {
   const [user, setUser] = useState<any>(null)
@@ -149,7 +149,6 @@ export default function ClientPage() {
         </section>
 
         {/* Alliance Ambassadors Carousel Section */}
-        {/*
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-4">
@@ -162,7 +161,6 @@ export default function ClientPage() {
             <AllianceAmbassadorsCarousel />
           </div>
         </section>
-        */}
 
         {/* What Can RTLS Do For You? Section */}
         <section className="py-16 bg-gray-50">
@@ -430,12 +428,14 @@ export default function ClientPage() {
         </section>
 
         {/* Member Logos Carousel - Moved to after Latest Insights */}
+        {/*
         <section className="py-12 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Our Members</h2>
             <LogoCarousel logos={memberLogos} />
           </div>
         </section>
+        */}
 
         {/* Newsletter Section */}
         <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
