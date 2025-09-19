@@ -1,9 +1,6 @@
 "use server"
 
-import { createClient } from "@supabase/supabase-js"
-
-const supabaseUrl = process.env.SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+import { createServerClient } from "@/lib/supabase/server"
 
 export async function subscribeToNewsletter(email: string) {
   // Validate email format
@@ -13,7 +10,7 @@ export async function subscribeToNewsletter(email: string) {
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+    const supabase = createServerClient()
 
     // Insert into the new Newsletter_signup table
     const { error } = await supabase.from("Newsletter_signup").insert([

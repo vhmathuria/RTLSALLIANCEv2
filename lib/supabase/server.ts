@@ -51,3 +51,5 @@ export const createClient = cache(async () => {
     },
   })
 })
+
+export { createClient as createServerClient }
