@@ -1,15 +1,10 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
-import type { Database } from "@/types/supabase"
+import { createClient as createSupabaseClient } from "@/lib/supabase/server"
 
 // Export the function with the name that's being imported elsewhere
-export function createServerClient() {
-  const cookieStore = cookies()
-  return createServerComponentClient<Database>({ cookies: () => cookieStore })
+export async function createServerClient() {
+  return await createSupabaseClient()
 }
 
-// Keep the original function for backward compatibility
-export function createClient() {
-  const cookieStore = cookies()
-  return createServerComponentClient<Database>({ cookies: () => cookieStore })
+export async function createClient() {
+  return await createSupabaseClient()
 }

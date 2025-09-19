@@ -1,16 +1,12 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import type { Database } from "@/types/supabase"
+import { createClient } from "@/lib/supabase/client"
 
 // Create a singleton instance for client components
-let clientInstance: ReturnType<typeof createClientComponentClient<Database>> | null = null
+let clientInstance: ReturnType<typeof createClient> | null = null
 
 export function getSupabaseBrowser() {
   if (!clientInstance) {
     try {
-      clientInstance = createClientComponentClient<Database>({
-        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      })
+      clientInstance = createClient()
     } catch (error) {
       console.error("Failed to initialize Supabase client:", error)
       // Return a dummy client that won't break the site
