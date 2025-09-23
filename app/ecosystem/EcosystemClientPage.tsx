@@ -1445,18 +1445,16 @@ export default function EcosystemClientPage() {
           </h1>
 
           <div className="max-w-3xl mx-auto mb-8">
-            <p className="text-xl text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-relaxed text-2xl">
                Find the INNOVATORS shaping the future of real-time location technology from SLAM, UWB and BLE to WiFi and RFID.
             </p>
           </div>
 
-          <p className="text-lg font-medium text-blue-800 mb-4">
-            Are you an RTLS provider or specialist but don't see your company in the public directory below?
-          </p>
+          
 
           <Link href="/contact">
             <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl flex items-center gap-2 mx-auto transform transition-all hover:scale-105">
-              Contact us to get listed <ArrowRight className="h-4 w-4" />
+              Contact us to get your company listed <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
