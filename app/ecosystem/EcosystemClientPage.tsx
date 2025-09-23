@@ -1,178 +1,13 @@
 "use client"
 
-const vendors = [
-  {
-    name: "LocaXion",
-    description:
-      "RTLS Digital Twin Platform, Forklift Fleet Manager, WIP Inventory Management, Patient Flow, Staff/Duress, Infant Safety",
-    location: "Texas, USA",
-    region: "North America",
-    specialties: ["SLAM", "UWB", "BLE AOA", "VHF", "5G", "WiFi", "RFID", "GNSS", "Ultrasound"],
-    industries: [
-      "Manufacturing",
-      "Healthcare",
-      "Warehousing",
-      "Automotive",
-      "Aerospace",
-      "Defense",
-      "Medical Devices",
-      "Metals",
-    ],
-    coreServices:
-      "RTLS Digital Twin Platform, Forklift Fleet Manager, WIP Inventory Management, Patient Flow, Staff/Duress, Infant Safety",
-    keyIndustries: "Manufacturing, Healthcare, Warehousing, Automotive, Aerospace, Defense, Medical Devices, Metals",
-    uniqueSellingPoint:
-      "Unified RTLS & Digital Twin Platform for complete operational intelligence, vendor & technology agnostic.",
-  },
-  {
-    name: "Litum",
-    description:
-      "Digital Transformation, Locating Systems, Employee Safety, Asset Tracking, Forklift Collision Warning, Indoor Location Services, Forklift Tracking, Infant Security, Staff Duress Systems, Patient Flow, Emergency Mustering",
-    website: "https://litum.com",
-    location: "Izmir, Turkey",
-    region: "Europe",
-    specialties: ["UWB", "RFID", "BLE"],
-    industries: [
-      "Healthcare",
-      "Manufacturing",
-      "Logistics",
-      "Mining",
-      "Construction",
-      "Oil & Gas",
-      "Automotive",
-      "Aerospace",
-    ],
-    coreServices:
-      "Digital Transformation, Locating Systems, Employee Safety, Asset Tracking, Forklift Collision Warning, Indoor Location Services, Forklift Tracking, Infant Security, Staff Duress Systems, Patient Flow, Emergency Mustering",
-    keyIndustries: "Healthcare, Manufacturing, Logistics, Mining, Construction, Oil & Gas, Automotive, Aerospace",
-    uniqueSellingPoint: "Comprehensive RTLS solutions with focus on safety and operational efficiency",
-  },
-  {
-    name: "Kontakt.io",
-    description:
-      "Asset Tracking, Contact Tracing, Workplace Analytics, Environmental Monitoring, Proximity Detection, Indoor Navigation",
-    website: "https://kontakt.io",
-    location: "Krakow, Poland",
-    region: "Europe",
-    specialties: ["BLE", "UWB", "LoRaWAN®"],
-    industries: ["Healthcare", "Manufacturing", "Logistics", "Retail", "Smart Buildings"],
-    coreServices:
-      "Asset Tracking, Contact Tracing, Workplace Analytics, Environmental Monitoring, Proximity Detection, Indoor Navigation",
-    keyIndustries: "Healthcare, Manufacturing, Logistics, Retail, Smart Buildings",
-    uniqueSellingPoint: "End-to-end IoT platform with comprehensive beacon and sensor solutions",
-  },
-  {
-    name: "Ubisense",
-    description:
-      "Smart Factory Solutions, Asset Tracking, Process Optimization, Quality Management, Automotive Manufacturing, Aerospace",
-    website: "https://ubisense.com",
-    location: "Cambridge, UK",
-    region: "Europe",
-    specialties: ["UWB", "Sensor Fusion", "Computer Vision"],
-    industries: ["Automotive", "Aerospace", "Manufacturing", "Defense"],
-    coreServices:
-      "Smart Factory Solutions, Asset Tracking, Process Optimization, Quality Management, Automotive Manufacturing, Aerospace",
-    keyIndustries: "Automotive, Aerospace, Manufacturing, Defense",
-    uniqueSellingPoint: "Proven smart factory solutions with 20+ years of manufacturing expertise",
-  },
-  {
-    name: "Pozyx",
-    description:
-      "Indoor Positioning, Asset Tracking, Robotics Navigation, Drone Positioning, IoT Location Services, Developer Platform",
-    website: "https://www.pozyx.io",
-    location: "Ghent, Belgium",
-    region: "Europe",
-    specialties: ["UWB"],
-    industries: ["Robotics", "Logistics", "Manufacturing", "Research", "IoT"],
-    coreServices:
-      "Indoor Positioning, Asset Tracking, Robotics Navigation, Drone Positioning, IoT Location Services, Developer Platform",
-    keyIndustries: "Robotics, Logistics, Manufacturing, Research, IoT",
-    uniqueSellingPoint: "Ready-to-use UWB positioning system with easy integration and developer-friendly platform",
-  },
-  {
-    name: "Quuppa",
-    description:
-      "Real-Time Locating System, Asset Tracking, People Tracking, Sports Analytics, Retail Analytics, Smart Building Solutions",
-    website: "https://quuppa.com",
-    location: "Espoo, Finland",
-    region: "Europe",
-    specialties: ["BLE AOA"],
-    industries: ["Sports", "Retail", "Healthcare", "Manufacturing", "Smart Buildings"],
-    coreServices:
-      "Real-Time Locating System, Asset Tracking, People Tracking, Sports Analytics, Retail Analytics, Smart Building Solutions",
-    keyIndustries: "Sports, Retail, Healthcare, Manufacturing, Smart Buildings",
-    uniqueSellingPoint: "High-accuracy BLE-based positioning with Angle-of-Arrival technology",
-  },
-  {
-    name: "Inpixon",
-    description:
-      "Indoor Intelligence, Asset Tracking, People Analytics, Workplace Optimization, Security Solutions, IoT Platform",
-    website: "https://inpixon.com",
-    location: "California, USA",
-    region: "North America",
-    specialties: ["WiFi", "BLE", "UWB", "Sensor Fusion"],
-    industries: ["Enterprise", "Government", "Healthcare", "Manufacturing", "Retail"],
-    coreServices:
-      "Indoor Intelligence, Asset Tracking, People Analytics, Workplace Optimization, Security Solutions, IoT Platform",
-    keyIndustries: "Enterprise, Government, Healthcare, Manufacturing, Retail",
-    uniqueSellingPoint: "Comprehensive indoor intelligence platform with multi-technology approach",
-  },
-  {
-    name: "Zebra Technologies",
-    description:
-      "Asset Visibility, Workflow Optimization, Data Capture, Mobile Computing, RFID Solutions, Healthcare Solutions",
-    website: "https://www.zebra.com",
-    location: "Illinois, USA",
-    region: "North America",
-    specialties: ["RFID", "Barcode", "Computer Vision", "IoT"],
-    industries: ["Healthcare", "Retail", "Manufacturing", "Transportation", "Logistics"],
-    coreServices:
-      "Asset Visibility, Workflow Optimization, Data Capture, Mobile Computing, RFID Solutions, Healthcare Solutions",
-    keyIndustries: "Healthcare, Retail, Manufacturing, Transportation, Logistics",
-    uniqueSellingPoint: "End-to-end visibility solutions with proven track record across industries",
-  },
-  {
-    name: "Stanley Healthcare",
-    description:
-      "Patient Flow, Asset Tracking, Staff Safety, Hand Hygiene, Temperature Monitoring, Infant Protection, Workflow Solutions",
-    website: "https://www.stanleyhealthcare.com",
-    location: "New Hampshire, USA",
-    region: "North America",
-    specialties: ["RFID", "IR", "WiFi"],
-    industries: ["Healthcare"],
-    coreServices:
-      "Patient Flow, Asset Tracking, Staff Safety, Hand Hygiene, Temperature Monitoring, Infant Protection, Workflow Solutions",
-    keyIndustries: "Healthcare",
-    uniqueSellingPoint: "Healthcare-focused RTLS solutions with comprehensive patient and staff safety features",
-  },
-  {
-    name: "KINEXON",
-    description:
-      "Industrial IoT, Sports Performance, Asset Tracking, Process Optimization, Predictive Analytics, Digital Twin",
-    website: "https://kinexon.com",
-    location: "Munich, Germany",
-    region: "Europe",
-    specialties: ["UWB", "Sensor Fusion", "AI"],
-    industries: ["Manufacturing", "Sports", "Logistics", "Automotive"],
-    coreServices:
-      "Industrial IoT, Sports Performance, Asset Tracking, Process Optimization, Predictive Analytics, Digital Twin",
-    keyIndustries: "Manufacturing, Sports, Logistics, Automotive",
-    uniqueSellingPoint: "KINEXON RTLS Mesh: ROI in <1 year, <100ms Latency in Industrial Environments",
-  },
-  {
-    name: "MachineQ",
-    description: "LoRaWAN network provider",
-    website: "https://machineq.com",
-    location: "Pennsylvania, USA",
-    region: "North America",
-    specialties: ["LoRaWAN®", "LPWAN"],
-    industries: ["Various"],
-    coreServices: "LoRaWAN network services",
-    keyIndustries: "Various",
-    uniqueSellingPoint: "Enterprise LoRaWAN network platform",
-  },
-  // Accuware, Actility, AiRISTA, Apptricity, Blickfeld GmbH, Cepton, CenTrak, Ciholas, Cisco Meraki, Digital Matter, Estimote Inc., Favendo, GiPStech, Hexagon, Humatics
-]
+import { useState, useEffect } from "react"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { MapPin, Building2, Linkedin, Mail, ArrowRight } from "lucide-react"
+import { createBrowserClient } from "@supabase/ssr"
 
 const practitioners = [
   {
@@ -438,14 +273,6 @@ const practitioners = [
   },
 ]
 
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { MapPin, Building2, Linkedin, Mail, ArrowRight } from "lucide-react"
-
 const PractitionerCard = ({ practitioner }: { practitioner: any }) => {
   return (
     <Card className="w-full h-80 p-6 bg-white border-2 border-gray-200 hover:border-blue-400 transition-colors duration-300 flex flex-col justify-between">
@@ -497,8 +324,11 @@ const PractitionerCard = ({ practitioner }: { practitioner: any }) => {
   )
 }
 
-const VendorCard = ({ vendor }: { vendor: any }) => {
+const VendorCardFlip = ({ vendor }: { vendor: any }) => {
   const [isFlipped, setIsFlipped] = useState(false)
+
+  const technologies = vendor.rtls_technologies?.split(", ").filter(Boolean) || []
+  const industries = vendor.industry_verticals?.split(", ").filter(Boolean) || []
 
   return (
     <div
@@ -513,10 +343,10 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
         <div className="absolute inset-0 w-full h-full backface-hidden">
           <Card className="w-full h-full p-6 bg-white border-2 border-gray-200 hover:border-blue-400 transition-colors duration-300 flex flex-col justify-between">
             <div>
-              <h3 className="text-xl font-bold text-black mb-2 text-balance">{vendor.name}</h3>
+              <h3 className="text-xl font-bold text-black mb-2 text-balance">{vendor.vendor_name}</h3>
               <div className="flex items-center text-gray-600 mb-4">
                 <MapPin className="w-4 h-4 mr-1" />
-                <span className="text-sm">{vendor.location}</span>
+                <span className="text-sm">{vendor.headquarters_location}</span>
               </div>
             </div>
 
@@ -524,18 +354,18 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
               <div className="space-y-2">
                 <p className="text-sm font-medium text-gray-700 mb-2">Primary RTLS Technologies:</p>
                 <div className="flex flex-wrap gap-2">
-                  {vendor.specialties.slice(0, 4).map((tech: string, index: number) => (
+                  {technologies.slice(0, 4).map((tech: string, index: number) => (
                     <Badge
                       key={index}
                       variant="secondary"
                       className="bg-blue-100 text-blue-800 border-blue-200 text-xs px-2 py-1"
                     >
-                      {tech}
+                      {tech.trim()}
                     </Badge>
                   ))}
-                  {vendor.specialties.length > 4 && (
+                  {technologies.length > 4 && (
                     <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1">
-                      +{vendor.specialties.length - 4} more
+                      +{technologies.length - 4} more
                     </Badge>
                   )}
                 </div>
@@ -552,22 +382,22 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
         <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
           <Card className="w-full h-full p-6 bg-gray-50 border-2 border-blue-400 flex flex-col justify-between">
             <div>
-              <h3 className="text-lg font-bold text-black mb-3">{vendor.name}</h3>
+              <h3 className="text-lg font-bold text-black mb-3">{vendor.vendor_name}</h3>
 
               <div className="space-y-3">
                 <div>
                   <p className="text-sm font-semibold text-gray-700 mb-1">Core Services:</p>
-                  <p className="text-xs text-gray-600 line-clamp-3">{vendor.coreServices}</p>
+                  <p className="text-xs text-gray-600 line-clamp-3">{vendor.core_services}</p>
                 </div>
 
                 <div>
                   <p className="text-sm font-semibold text-gray-700 mb-1">Key Industries:</p>
-                  <p className="text-xs text-gray-600 line-clamp-2">{vendor.keyIndustries}</p>
+                  <p className="text-xs text-gray-600 line-clamp-2">{vendor.industry_verticals}</p>
                 </div>
 
                 <div>
                   <p className="text-sm font-semibold text-gray-700 mb-1">Unique Selling Point:</p>
-                  <p className="text-xs text-gray-600 line-clamp-4">{vendor.uniqueSellingPoint}</p>
+                  <p className="text-xs text-gray-600 line-clamp-4">{vendor.unique_selling_propositions}</p>
                 </div>
               </div>
             </div>
@@ -585,22 +415,161 @@ export default function EcosystemClientPage() {
   const [selectedRegion, setSelectedRegion] = useState("all")
   const [selectedTechnology, setSelectedTechnology] = useState("all")
   const [activeTab, setActiveTab] = useState("vendors")
+  const [vendors, setVendors] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Get unique regions and technologies for filters
-  const regions = [...new Set(vendors.map((v) => v.region))]
-  const technologies = [...new Set(vendors.flatMap((v) => v.specialties))]
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        const supabase = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        )
 
-  // Filter vendors based on search and filters
+        const { data, error } = await supabase
+          .from("vendors")
+          .select("*")
+          .eq("is_active", true)
+          .order("sort_order", { ascending: true })
+
+        if (error) {
+          console.error("Error fetching vendors:", error)
+        } else {
+          setVendors(data || [])
+        }
+      } catch (error) {
+        console.error("Error fetching vendors:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVendors()
+  }, [])
+
+  const regions = [
+    ...new Set(
+      vendors
+        .map((v) => {
+          // Extract region from headquarters_location
+          if (v.headquarters_location?.includes("USA")) return "North America"
+          if (v.headquarters_location?.includes("Canada")) return "North America"
+          if (
+            v.headquarters_location?.includes("UK") ||
+            v.headquarters_location?.includes("Germany") ||
+            v.headquarters_location?.includes("France") ||
+            v.headquarters_location?.includes("Italy") ||
+            v.headquarters_location?.includes("Spain") ||
+            v.headquarters_location?.includes("Netherlands") ||
+            v.headquarters_location?.includes("Sweden") ||
+            v.headquarters_location?.includes("Finland") ||
+            v.headquarters_location?.includes("Norway") ||
+            v.headquarters_location?.includes("Denmark") ||
+            v.headquarters_location?.includes("Belgium") ||
+            v.headquarters_location?.includes("Switzerland") ||
+            v.headquarters_location?.includes("Austria") ||
+            v.headquarters_location?.includes("Poland") ||
+            v.headquarters_location?.includes("Turkey") ||
+            v.headquarters_location?.includes("Lithuania") ||
+            v.headquarters_location?.includes("Estonia")
+          )
+            return "Europe"
+          if (
+            v.headquarters_location?.includes("China") ||
+            v.headquarters_location?.includes("Japan") ||
+            v.headquarters_location?.includes("Singapore") ||
+            v.headquarters_location?.includes("Hong Kong") ||
+            v.headquarters_location?.includes("India") ||
+            v.headquarters_location?.includes("South Korea")
+          )
+            return "Asia"
+          if (v.headquarters_location?.includes("Australia") || v.headquarters_location?.includes("New Zealand"))
+            return "Oceania"
+          if (v.headquarters_location?.includes("Brazil") || v.headquarters_location?.includes("Mexico"))
+            return "South America"
+          if (
+            v.headquarters_location?.includes("UAE") ||
+            v.headquarters_location?.includes("Israel") ||
+            v.headquarters_location?.includes("Egypt")
+          )
+            return "Middle East"
+          return "Other"
+        })
+        .filter(Boolean),
+    ),
+  ]
+
+  const technologies = [
+    ...new Set(
+      vendors.flatMap(
+        (v) =>
+          v.rtls_technologies
+            ?.split(", ")
+            .map((tech: string) => tech.trim())
+            .filter(Boolean) || [],
+      ),
+    ),
+  ]
+
   const filteredVendors = vendors.filter((vendor) => {
     const matchesSearch =
-      vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vendor.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vendor.location.toLowerCase().includes(searchTerm.toLowerCase())
+      vendor.vendor_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vendor.core_services?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vendor.headquarters_location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vendor.industry_verticals?.toLowerCase().includes(searchTerm.toLowerCase())
 
-    const matchesRegion = selectedRegion === "all" || vendor.region === selectedRegion
+    // Extract region from headquarters_location for filtering
+    let vendorRegion = "Other"
+    if (vendor.headquarters_location?.includes("USA") || vendor.headquarters_location?.includes("Canada")) {
+      vendorRegion = "North America"
+    } else if (
+      vendor.headquarters_location?.includes("UK") ||
+      vendor.headquarters_location?.includes("Germany") ||
+      vendor.headquarters_location?.includes("France") ||
+      vendor.headquarters_location?.includes("Italy") ||
+      vendor.headquarters_location?.includes("Spain") ||
+      vendor.headquarters_location?.includes("Netherlands") ||
+      vendor.headquarters_location?.includes("Sweden") ||
+      vendor.headquarters_location?.includes("Finland") ||
+      vendor.headquarters_location?.includes("Norway") ||
+      vendor.headquarters_location?.includes("Denmark") ||
+      vendor.headquarters_location?.includes("Belgium") ||
+      vendor.headquarters_location?.includes("Switzerland") ||
+      vendor.headquarters_location?.includes("Austria") ||
+      vendor.headquarters_location?.includes("Poland") ||
+      vendor.headquarters_location?.includes("Turkey") ||
+      vendor.headquarters_location?.includes("Lithuania") ||
+      vendor.headquarters_location?.includes("Estonia")
+    ) {
+      vendorRegion = "Europe"
+    } else if (
+      vendor.headquarters_location?.includes("China") ||
+      vendor.headquarters_location?.includes("Japan") ||
+      vendor.headquarters_location?.includes("Singapore") ||
+      vendor.headquarters_location?.includes("Hong Kong") ||
+      vendor.headquarters_location?.includes("India") ||
+      vendor.headquarters_location?.includes("South Korea")
+    ) {
+      vendorRegion = "Asia"
+    } else if (
+      vendor.headquarters_location?.includes("Australia") ||
+      vendor.headquarters_location?.includes("New Zealand")
+    ) {
+      vendorRegion = "Oceania"
+    } else if (vendor.headquarters_location?.includes("Brazil") || vendor.headquarters_location?.includes("Mexico")) {
+      vendorRegion = "South America"
+    } else if (
+      vendor.headquarters_location?.includes("UAE") ||
+      vendor.headquarters_location?.includes("Israel") ||
+      vendor.headquarters_location?.includes("Egypt")
+    ) {
+      vendorRegion = "Middle East"
+    }
 
-    const matchesTechnology =
-      selectedTechnology === "all" || vendor.specialties.some((tech: string) => tech === selectedTechnology)
+    const matchesRegion = selectedRegion === "all" || vendorRegion === selectedRegion
+
+    const vendorTechnologies = vendor.rtls_technologies?.split(", ").map((tech: string) => tech.trim()) || []
+    const matchesTechnology = selectedTechnology === "all" || vendorTechnologies.includes(selectedTechnology)
 
     return matchesSearch && matchesRegion && matchesTechnology
   })
@@ -615,6 +584,17 @@ export default function EcosystemClientPage() {
 
     return matchesSearch
   })
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading RTLS Directory...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -727,8 +707,8 @@ export default function EcosystemClientPage() {
 
         {activeTab === "vendors" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredVendors.map((vendor, index) => (
-              <VendorCard key={index} vendor={vendor} />
+            {filteredVendors.map((vendor) => (
+              <VendorCardFlip key={vendor.id} vendor={vendor} />
             ))}
           </div>
         ) : (
