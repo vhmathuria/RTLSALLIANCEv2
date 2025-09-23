@@ -23,7 +23,7 @@ export default async function PaymentSuccessPage({
 
   // If user is not logged in, redirect to login
   if (!user) {
-    redirect("/login?redirectTo=/membership")
+    redirect("/auth?redirectTo=/membership")
   }
 
   // Get session ID from URL

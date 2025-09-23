@@ -31,7 +31,7 @@ function JoinAlliancePageContent() {
   }, [])
 
   const handleOAuthSignUp = (provider: "google" | "linkedin_oidc") => {
-    router.push(`/auth?tab=signup&redirectTo=${encodeURIComponent("/join-alliance")}`)
+    router.push(`/auth?tab=signup&redirectTo=${encodeURIComponent(redirectTo)}`)
   }
 
   return (
@@ -54,11 +54,7 @@ function JoinAlliancePageContent() {
             {/* Sign in with social options */}
             <div className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg border border-blue-200 shadow-md">
               {showEmailForm ? (
-                <EmailSignupForm
-                  onBack={() => setShowEmailForm(false)}
-                  redirectTo="/join-alliance"
-                  tier="professional"
-                />
+                <EmailSignupForm onBack={() => setShowEmailForm(false)} redirectTo={redirectTo} tier="professional" />
               ) : user ? (
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-4">
@@ -66,7 +62,7 @@ function JoinAlliancePageContent() {
                       <LogIn className="h-6 w-6" />
                     </div>
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">You're Signed In!</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">You're Already a Member!</h2>
                   <p className="text-gray-600 mb-4">
                     Welcome to the RTLS Alliance, {user.user_metadata?.full_name || user.email}
                   </p>
@@ -101,9 +97,19 @@ function JoinAlliancePageContent() {
                       Sign up with LinkedIn
                     </Button>
                   </div>
+
+                  <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600">
+                      Or{" "}
+                      <Link href="/auth?tab=signup" className="text-blue-600 hover:text-blue-700 font-medium">
+                        go to the sign-up page
+                      </Link>
+                    </p>
+                  </div>
                 </>
               )}
             </div>
+
             {/* Why RTLS Matters Section */}
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -280,7 +286,7 @@ function JoinAlliancePageContent() {
                 <AccordionItem value="item-2">
                   <AccordionTrigger className="text-left">How much does membership cost?</AccordionTrigger>
                   <AccordionContent>
-                    We offer tiered membership options: Student ($100/year), Professional ($550/year), and Vendor
+                    We offer tiered membership options: Student ($100/year), Professional ($550/year), and Corporate
                     ($7,500/year). Each tier provides different levels of access and benefits tailored to your needs.
                   </AccordionContent>
                 </AccordionItem>

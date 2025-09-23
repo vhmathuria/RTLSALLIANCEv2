@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import Link from "next/link"
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { createSupabaseClient } from "@/lib/supabase-auth"
-import { GraduationCap, Briefcase, Building, User, MapPin, BookOpen, GroupIcon as CompanyIcon } from "lucide-react"
+import { GraduationCap, Briefcase, Building, User, MapPin, BookOpen, CommandIcon as CompanyIcon } from "lucide-react"
 
 export default function AccountProfile({ user, profile }: { user: any; profile: any }) {
   console.log("Profile data:", profile)
@@ -336,17 +336,27 @@ export default function AccountProfile({ user, profile }: { user: any; profile: 
                   <p className="text-blue-700 mb-4">
                     Upgrade to a paid membership to access premium content and features.
                   </p>
-                  <Button asChild>
-                    <a href="/membership/upgrade">View Membership Options</a>
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button asChild>
+                      <Link href="/membership/upgrade">Upgrade Membership</Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link href="/membership">View All Plans</Link>
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <div className="bg-green-50 p-4 rounded-lg">
                   <h4 className="font-medium text-green-800 mb-2">Active Membership</h4>
                   <p className="text-green-700 mb-4">Thank you for being a valued member of the RTLS Alliance.</p>
-                  <Button variant="outline" asChild>
-                    <a href="/membership/manage">Manage Subscription</a>
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button variant="outline" asChild>
+                      <Link href="/membership/manage">Manage Subscription</Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link href="/membership/upgrade">Change Plan</Link>
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>

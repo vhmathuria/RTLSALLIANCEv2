@@ -123,7 +123,7 @@ export default function ClientPage() {
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               {!user && (
-                <Link href="/join-alliance">
+                <Link href="/auth?tab=signup">
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"
@@ -460,7 +460,7 @@ export default function ClientPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!user ? (
-                <Link href="/join-alliance">
+                <Link href="/auth?tab=signup">
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl transform transition-all hover:scale-105"

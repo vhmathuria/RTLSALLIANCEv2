@@ -9,7 +9,7 @@ export default async function MembershipCancelPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/login?redirectTo=/membership")
+    redirect("/auth?redirectTo=/membership")
   }
 
   return (

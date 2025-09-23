@@ -14,7 +14,7 @@ export default async function AccountPage() {
 
   // Redirect to login if not authenticated
   if (!user) {
-    redirect("/login?redirect=/account")
+    redirect("/auth?redirectTo=/account")
   }
 
   // Get user profile

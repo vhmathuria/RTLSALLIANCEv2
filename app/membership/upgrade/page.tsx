@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createServerClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase-server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Briefcase, Building, Check } from "lucide-react"
@@ -10,16 +10,17 @@ export const metadata = {
   description: "Upgrade your RTLS Alliance membership to access premium content",
 }
 
-export default async function MembershipUpgradePage({ searchParams }: { searchParams: { tier?: string } }) {
-  // Check if user is logged in
-  const supabase = await createServerClient()
+export default async function UpgradePage() {
+  const supabase = await createClient()
+
+  // Get current user
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // If user is not logged in, redirect to login
+  // Redirect to login if not authenticated
   if (!user) {
-    redirect("/login?redirectTo=/membership/upgrade")
+    redirect("/auth?redirectTo=/membership/upgrade")
   }
 
   // Get user profile
@@ -28,7 +29,7 @@ export default async function MembershipUpgradePage({ searchParams }: { searchPa
   const currentTier = profile?.membership_tier || "public"
 
   // Get the selected tier from the URL query parameter
-  const selectedTier = searchParams.tier || "all"
+  const selectedTier = "all" // Assuming no searchParams in the new function signature
 
   // Define membership tiers
   const tiers = [
