@@ -1,12 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, ChevronRight } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Menu, X, ChevronDown, ChevronRight, User, LogOut, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
+import { createSupabaseClient } from "@/lib/supabase-auth"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -41,7 +48,46 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const [expandedDropdown, setExpandedDropdown] = useState<string | null>(null)
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const supabase = createSupabaseClient()
+        const { data } = await supabase.auth.getUser()
+        setUser(data.user)
+      } catch (error) {
+        console.error("Error checking user:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkUser()
+
+    // Listen for auth state changes
+    const supabase = createSupabaseClient()
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleSignOut = async () => {
+    try {
+      const supabase = createSupabaseClient()
+      await supabase.auth.signOut()
+      router.push("/")
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
+  }
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -137,21 +183,51 @@ export default function Header() {
         </div>
 
         <div className="hidden xl:flex xl:flex-1 xl:justify-end xl:items-center">
-          <div className="flex gap-2">
-            <Link href="/auth?tab=login">
-              <Button variant="outline" size="sm">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/auth?tab=signup">
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              >
-                Join Alliance
-              </Button>
-            </Link>
-          </div>
+          {loading ? (
+            <div className="w-8 h-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+          ) : user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
+                  <User className="h-4 w-4" />
+                  <span className="max-w-32 truncate">{user.user_metadata?.full_name || user.email}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="/account" className="flex items-center gap-2 cursor-pointer">
+                    <Settings className="h-4 w-4" />
+                    Account Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="flex items-center gap-2 cursor-pointer text-red-600"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="flex gap-2">
+              <Link href="/auth?tab=login">
+                <Button variant="outline" size="sm">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/auth?tab=signup">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                >
+                  Join Alliance
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -250,20 +326,50 @@ export default function Header() {
                   </Link>
                 </div>
                 <div className="pt-6 border-t border-gray-200 mt-6">
-                  <div className="space-y-2">
-                    <Link
-                      href="/auth?tab=login"
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign In
-                    </Link>
-                    <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                        Join Alliance
-                      </Button>
-                    </Link>
-                  </div>
+                  {loading ? (
+                    <div className="flex justify-center">
+                      <div className="w-6 h-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+                    </div>
+                  ) : user ? (
+                    <div className="space-y-2">
+                      <div className="px-3 py-2 text-sm font-medium text-gray-900 border-b border-gray-200 pb-2">
+                        {user.user_metadata?.full_name || user.email}
+                      </div>
+                      <Link
+                        href="/account"
+                        className="flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        Account Settings
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleSignOut()
+                          setMobileMenuOpen(false)
+                        }}
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Link
+                        href="/auth?tab=login"
+                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                        <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                          Join Alliance
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

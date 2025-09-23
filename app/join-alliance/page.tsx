@@ -30,18 +30,8 @@ function JoinAlliancePageContent() {
     checkUser()
   }, [])
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace(`/auth?tab=signup&redirectTo=${encodeURIComponent(redirectTo)}`)
-    }
-  }, [router, redirectTo, loading, user])
-
-  if (!loading && !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    )
+  const handleOAuthSignUp = (provider: "google" | "linkedin_oidc") => {
+    router.push(`/auth?tab=signup&redirectTo=${encodeURIComponent("/join-alliance")}`)
   }
 
   return (
@@ -60,7 +50,6 @@ function JoinAlliancePageContent() {
       <section className="py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {" "}
             {/* Increased max-width from 3xl to 4xl */}
             {/* Sign in with social options */}
             <div className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg border border-blue-200 shadow-md">
@@ -78,7 +67,9 @@ function JoinAlliancePageContent() {
                     </div>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">You're Signed In!</h2>
-                  <p className="text-gray-600 mb-4">Welcome to the RTLS Alliance, {user.email}</p>
+                  <p className="text-gray-600 mb-4">
+                    Welcome to the RTLS Alliance, {user.user_metadata?.full_name || user.email}
+                  </p>
                   <div className="flex justify-center gap-4">
                     <Button asChild>
                       <Link href="/account">View Your Account</Link>
@@ -95,23 +86,19 @@ function JoinAlliancePageContent() {
                     <Button
                       className="w-full flex items-center justify-center gap-3 py-6 text-lg bg-transparent"
                       variant="outline"
-                      asChild
+                      onClick={() => handleOAuthSignUp("google")}
                     >
-                      <Link href={`/api/auth/google?redirectTo=${encodeURIComponent("/join-alliance")}`}>
-                        <Image src="/google-logo.png" alt="Google" width={24} height={24} />
-                        Sign up with Google
-                      </Link>
+                      <Image src="/google-logo.png" alt="Google" width={24} height={24} />
+                      Sign up with Google
                     </Button>
 
                     <Button
                       className="w-full flex items-center justify-center gap-3 py-6 text-lg bg-transparent"
                       variant="outline"
-                      asChild
+                      onClick={() => handleOAuthSignUp("linkedin_oidc")}
                     >
-                      <Link href={`/api/auth/linkedin?redirectTo=${encodeURIComponent("/join-alliance")}`}>
-                        <Image src="/linkedin-logo.png" alt="LinkedIn" width={24} height={24} />
-                        Sign up with LinkedIn
-                      </Link>
+                      <Image src="/linkedin-logo.png" alt="LinkedIn" width={24} height={24} />
+                      Sign up with LinkedIn
                     </Button>
                   </div>
                 </>
