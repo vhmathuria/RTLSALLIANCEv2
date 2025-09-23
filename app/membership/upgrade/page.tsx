@@ -12,7 +12,7 @@ export const metadata = {
 
 export default async function MembershipUpgradePage({ searchParams }: { searchParams: { tier?: string } }) {
   // Check if user is logged in
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()

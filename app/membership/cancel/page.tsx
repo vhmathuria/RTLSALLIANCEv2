@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase-server"
 
 export default async function MembershipCancelPage() {
   // Verify the user is logged in
-  const supabase = createClient()
+  const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()

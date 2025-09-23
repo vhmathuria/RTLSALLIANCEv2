@@ -16,7 +16,7 @@ export default async function PaymentSuccessPage({
   searchParams: { session_id?: string }
 }) {
   // Check if user is logged in
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -100,7 +100,7 @@ export default async function PaymentSuccessPage({
                 <Link href="/account">View Your Account</Link>
               </Button>
 
-              <Button asChild variant="outline" className="w-full">
+              <Button asChild variant="outline" className="w-full bg-transparent">
                 <Link href="/resources">Browse Member Resources</Link>
               </Button>
             </div>
