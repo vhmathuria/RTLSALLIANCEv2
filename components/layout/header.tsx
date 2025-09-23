@@ -1,13 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react"
+import { Menu, X, ChevronDown, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { createSupabaseClient } from "@/lib/supabase-auth"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -42,41 +41,7 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<any>(null)
   const [expandedDropdown, setExpandedDropdown] = useState<string | null>(null)
-
-  useEffect(() => {
-    async function loadUserProfile() {
-      const supabase = createSupabaseClient()
-
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
-
-      if (user) {
-        // Get user profile
-        const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-
-        if (data) {
-          setProfile(data)
-        }
-      }
-
-      setLoading(false)
-    }
-
-    loadUserProfile()
-  }, [])
-
-  const handleSignOut = async () => {
-    const supabase = createSupabaseClient()
-    await supabase.auth.signOut()
-    window.location.href = "/"
-  }
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -92,9 +57,6 @@ export default function Header() {
       setExpandedDropdown(name)
     }
   }
-
-  // Check if user has a public membership tier
-  const hasPublicTier = profile?.membership_tier === "public"
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -164,56 +126,32 @@ export default function Header() {
               </Link>
             ),
           )}
+          <Link
+            href="/bidding-portal"
+            className={`text-sm font-medium leading-6 ${
+              isActive("/bidding-portal") ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
+            }`}
+          >
+            Bidding Portal
+          </Link>
         </div>
 
         <div className="hidden xl:flex xl:flex-1 xl:justify-end xl:items-center">
-          {!loading && user ? (
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="flex items-center gap-2 max-w-[200px]">
-                    <User className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{profile?.full_name || user.email}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <Link href="/account">
-                    <DropdownMenuItem>My Account</DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {hasPublicTier && (
-                <Link href="/membership/upgrade">
-                  <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 whitespace-nowrap"
-                  >
-                    Upgrade
-                  </Button>
-                </Link>
-              )}
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <Link href="/auth?tab=login">
-                <Button variant="outline" size="sm">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/auth?tab=signup">
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                >
-                  Join Alliance
-                </Button>
-              </Link>
-            </div>
-          )}
+          <div className="flex gap-2">
+            <Link href="/auth?tab=login">
+              <Button variant="outline" size="sm">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/auth?tab=signup">
+              <Button
+                size="sm"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                Join Alliance
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -301,50 +239,31 @@ export default function Header() {
                       )}
                     </div>
                   ))}
+                  <Link
+                    href="/bidding-portal"
+                    className={`block text-base font-medium leading-7 ${
+                      isActive("/bidding-portal") ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Bidding Portal
+                  </Link>
                 </div>
                 <div className="pt-6 border-t border-gray-200 mt-6">
-                  {!loading && user ? (
-                    <div className="space-y-2">
-                      <Link
-                        href="/account"
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        My Account
-                      </Link>
-                      <button
-                        onClick={() => {
-                          handleSignOut()
-                          setMobileMenuOpen(false)
-                        }}
-                        className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                      >
-                        Sign Out
-                      </button>
-                      {hasPublicTier && (
-                        <Link href="/membership/upgrade" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                          <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                            Upgrade Membership
-                          </Button>
-                        </Link>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <Link
-                        href="/auth?tab=login"
-                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Sign In
-                      </Link>
-                      <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                        <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                          Join Alliance
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
+                  <div className="space-y-2">
+                    <Link
+                      href="/auth?tab=login"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Link href="/auth?tab=signup" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                        Join Alliance
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

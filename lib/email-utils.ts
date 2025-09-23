@@ -1,13 +1,12 @@
-import { createClient } from "@supabase/supabase-js"
+import { createServerClient } from "@/lib/supabase/server"
 
 // Email sending utility
 export async function sendWelcomeEmail(email: string, name = "") {
   try {
-    // Get Supabase admin client
-    const supabaseAdmin = createClient(process.env.SUPABASE_URL || "", process.env.SUPABASE_SERVICE_ROLE_KEY || "")
+    const supabase = createServerClient()
 
     // Use Supabase's built-in email functionality
-    const { error } = await supabaseAdmin.auth.admin.createUser({
+    const { error } = await supabase.auth.admin.createUser({
       email,
       email_confirm: true,
       user_metadata: { name },

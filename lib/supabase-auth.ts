@@ -1,9 +1,9 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import type { Provider } from "@supabase/supabase-js"
+import { createClient } from "@/lib/supabase/client"
+import type { Provider } from "@supabase/ssr"
 
 // Create a singleton instance of the Supabase client for client components
 export const createSupabaseClient = () => {
-  return createClientComponentClient()
+  return createClient()
 }
 
 // Authentication functions

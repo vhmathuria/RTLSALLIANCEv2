@@ -1,1235 +1,1671 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Building2, User, MapPin, Briefcase, Search, X, ArrowRight } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-// List of RTLS vendors (expanded with additional technology categories)
 const vendors = [
   {
-    name: "Ubisense",
-    description: "Enterprise-grade UWB RTLS solutions for manufacturing and industrial environments",
-    website: "https://ubisense.com",
-    location: "Cambridge, UK",
-    region: "Europe",
-    specialties: ["UWB", "Industrial", "Manufacturing"],
-    industries: ["Manufacturing", "Automotive", "Aerospace"],
-  },
-  {
-    name: "Zebra Technologies",
-    description: "Comprehensive RTLS solutions using various technologies for enterprise visibility",
-    website: "https://www.zebra.com",
-    location: "Lincolnshire, IL, USA",
+    name: "AiRISTA",
+    description:
+      "Personnel Safety, Asset Tracking, Patient Flow, Temperature Monitoring, Hand Hygiene, Wander Management, Inventory Management, Environmental Monitoring, Wireless ID, Workflow Management, Staff Safety",
+    website: "https://airistaflow.com",
+    location: "Maryland, USA",
     region: "North America",
-    specialties: ["BLE", "RFID", "Healthcare", "Retail"],
-    industries: ["Healthcare", "Retail", "Manufacturing", "Logistics"],
-  },
-  {
-    name: "Quuppa",
-    description: "High-accuracy Bluetooth location tracking platform for multiple industries",
-    website: "https://quuppa.com",
-    location: "Espoo, Finland",
-    region: "Europe",
-    specialties: ["Bluetooth", "Sports", "Healthcare"],
-    industries: ["Healthcare", "Sports", "Manufacturing", "Logistics"],
-  },
-  {
-    name: "Inpixon",
-    description: "Indoor intelligence solutions with RTLS capabilities for smart buildings",
-    website: "https://inpixon.com",
-    location: "Palo Alto, CA, USA",
-    region: "North America",
-    specialties: ["WiFi", "BLE", "Smart Buildings"],
-    industries: ["Corporate", "Retail", "Government", "Healthcare"],
-  },
-  {
-    name: "CenTrak",
-    description: "Healthcare-focused RTLS solutions for patient flow and asset management",
-    website: "https://centrak.com",
-    location: "Newtown, PA, USA",
-    region: "North America",
-    specialties: ["Healthcare", "Asset Tracking", "Patient Flow"],
-    industries: ["Healthcare"],
+    specialties: ["RFID", "IR", "GPS", "BLE"],
+    industries: ["Healthcare", "Hospitality", "Government", "Education", "Logistics", "Industrial"],
+    coreServices:
+      "Personnel Safety, Asset Tracking, Patient Flow, Temperature Monitoring, Hand Hygiene, Wander Management, Inventory Management, Environmental Monitoring, Wireless ID, Workflow Management, Staff Safety",
+    keyIndustries: "Healthcare, Hospitality, Government, Education, Logistics, Industrial",
+    uniqueSellingPoint: "Comprehensive RTLS solutions with focus on personnel safety and workflow management",
   },
   {
     name: "Pozyx",
-    description: "Scalable UWB positioning solutions for industrial environments",
+    description:
+      "Logistics optimization, Industrial Automation, Asset tracking, Warehouse management, Labour & Work Efficiency",
     website: "https://pozyx.io",
     location: "Ghent, Belgium",
     region: "Europe",
-    specialties: ["UWB", "Industrial", "Warehousing"],
-    industries: ["Manufacturing", "Warehousing", "Logistics"],
-  },
-  {
-    name: "Aruba Networks",
-    description: "WiFi-based RTLS solutions integrated with enterprise networking",
-    website: "https://www.arubanetworks.com",
-    location: "Santa Clara, CA, USA",
-    region: "North America",
-    specialties: ["WiFi", "Enterprise", "Networking"],
-    industries: ["Corporate", "Education", "Healthcare", "Retail"],
-  },
-  {
-    name: "Cisco Meraki",
-    description: "Cloud-managed RTLS solutions integrated with enterprise WiFi",
-    website: "https://meraki.cisco.com",
-    location: "San Francisco, CA, USA",
-    region: "North America",
-    specialties: ["WiFi", "Cloud", "Enterprise"],
-    industries: ["Corporate", "Education", "Retail", "Healthcare"],
-  },
-  {
-    name: "Kontakt.io",
-    description: "BLE and IoT solutions for smart buildings and asset tracking",
-    website: "https://kontakt.io",
-    location: "New York, NY, USA",
-    region: "North America",
-    specialties: ["BLE", "IoT", "Smart Buildings"],
-    industries: ["Corporate", "Healthcare", "Retail", "Hospitality"],
-  },
-  {
-    name: "Estimote",
-    description: "Developer-friendly BLE beacons and solutions for proximity and location",
-    website: "https://estimote.com",
-    location: "Kraków, Poland",
-    region: "Europe",
-    specialties: ["BLE", "Proximity", "Retail"],
-    industries: ["Retail", "Corporate", "Events"],
+    specialties: ["UWB", "5G", "RFID", "WiFi", "Bluetooth", "GPS"],
+    industries: ["Manufacturing", "Logistics", "Agriculture", "Automotive", "Processing Industry"],
+    coreServices:
+      "Logistics optimization, Industrial Automation, Asset tracking, Warehouse management, Labour & Work Efficiency",
+    keyIndustries: "Manufacturing, Logistics, Agriculture, Automotive, Processing Industry",
+    uniqueSellingPoint:
+      "10–30 cm UWB precision, Scalable multi-tech platform (UWB, BLE, GPS), Daisy-chaining anchor topology reduces install time and costs, In-house UWB engine and analytics platform",
   },
   {
     name: "Litum",
-    description: "UWB, BLE, and RFID solutions for industrial safety and efficiency",
+    description:
+      "Digital Transformation, Locating Systems, Employee Safety, Asset Tracking, Forklift Collision Warning, Indoor Location Services, Forklift Tracking, Infant Security, Staff Duress Systems, Patient Flow, Emergency Mustering",
     website: "https://litum.com",
     location: "Izmir, Turkey",
     region: "Europe",
-    specialties: ["UWB", "Safety", "Industrial"],
-    industries: ["Manufacturing", "Construction", "Mining"],
+    specialties: ["UWB", "RFID", "BLE"],
+    industries: [
+      "Healthcare",
+      "Manufacturing",
+      "Supply Chain",
+      "Logistics",
+      "Construction",
+      "Energy",
+      "Aviation",
+      "Education",
+    ],
+    coreServices:
+      "Digital Transformation, Locating Systems, Employee Safety, Asset Tracking, Forklift Collision Warning, Indoor Location Services, Forklift Tracking, Infant Security, Staff Duress Systems, Patient Flow, Emergency Mustering",
+    keyIndustries: "Healthcare, Manufacturing, Supply Chain, Logistics, Construction, Energy, Aviation, Education",
+    uniqueSellingPoint:
+      "Improved accuracy with TWR & TDoA location detection methods, Turnkey Provider with In-House R&D",
   },
   {
-    name: "Redpoint Positioning",
-    description: "UWB RTLS solutions for industrial environments and safety applications",
-    website: "https://redpointpositioning.com",
-    location: "Boston, MA, USA",
-    region: "North America",
-    specialties: ["UWB", "Industrial", "Safety"],
-    industries: ["Manufacturing", "Construction", "Warehousing"],
+    name: "Sick",
+    description: "Logistics optimization, Asset tracking, Factory & logistics automation, Safety & sensor integration",
+    website: "https://www.sick.com",
+    location: "Waldkirch, Germany",
+    region: "Europe",
+    specialties: ["UWB", "RFID", "LiDAR"],
+    industries: ["Consumer Goods", "Automotive", "Electronics", "Machines & Materials", "Logistics"],
+    coreServices: "Logistics optimization, Asset tracking, Factory & logistics automation, Safety & sensor integration",
+    keyIndustries: "Consumer Goods, Automotive, Electronics, Machines & Materials, Logistics",
+    uniqueSellingPoint: "Open architecture RTLS supports omlox standards and many integration combos",
   },
   {
-    name: "Siemens Enlighted",
-    description: "IoT platform with RTLS capabilities for smart buildings",
-    website: "https://enlightedinc.com",
-    location: "Sunnyvale, CA, USA",
+    name: "Zebra Technologies",
+    description: "Workflow management solutions for various industries",
+    website: "https://www.zebra.com",
+    location: "Illinois, USA",
     region: "North America",
-    specialties: ["IoT", "Smart Buildings", "Energy"],
-    industries: ["Corporate", "Healthcare", "Education"],
+    specialties: ["UWB", "RFID"],
+    industries: [
+      "Retail",
+      "Healthcare",
+      "Manufacturing",
+      "Transportation and Logistics",
+      "Government",
+      "Hospitality",
+      "Field Operations",
+      "Mobile Technology for Energy and Utilities",
+      "Banking",
+    ],
+    coreServices: "Workflow management",
+    keyIndustries:
+      "Retail, Healthcare, Manufacturing, Transportation and Logistics, Government, Hospitality, Field Operations, Mobile Technology for Energy and Utilities, Banking",
+    uniqueSellingPoint: "Comprehensive workflow management solutions across multiple industries",
   },
   {
-    name: "AiRISTA",
-    description: "RTLS solutions using WiFi, BLE, and RFID for healthcare and enterprise",
-    website: "https://airistaflow.com",
-    location: "Sparks, MD, USA",
+    name: "Securitas Healthcare",
+    description:
+      "Senior Living Management, Infant Protection, Elopement Management, Staff Duress, Regulatory Compliance, Wander Management, Resident Safety",
+    website: "https://www.securitashealthcare.com",
+    location: "Nebraska, USA",
     region: "North America",
-    specialties: ["WiFi", "Healthcare", "Manufacturing"],
-    industries: ["Healthcare", "Manufacturing", "Corporate"],
+    specialties: ["Wi-Fi", "BLE", "Low Frequency", "Ultrasound", "Passive RFID"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices:
+      "Senior Living Management, Infant Protection, Elopement Management, Staff Duress, Regulatory Compliance, Wander Management, Resident Safety",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint:
+      "Unified platform from infant to asset to staff safety, deep workflow integration, ultrasound precision via Sonitor partnership",
+  },
+  {
+    name: "CenTrak",
+    description:
+      "Asset management, Clinical workflow, Infection Control, Staff & Patient Safety, Environmental Monitoring",
+    website: "https://centrak.com",
+    location: "Pennsylvania, USA",
+    region: "North America",
+    specialties: ["BLE", "CenTrak UHF", "Wi-Fi", "Low Frequency", "Gen2IR"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices:
+      "Asset management, Clinical workflow, Infection Control, Staff & Patient Safety, Environmental Monitoring",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint:
+      "Scalable RTLS with deep clinical workflow integration and unified safety and asset tracking in one platform",
+  },
+  {
+    name: "MicroVision",
+    description: "Safety & security solutions, Collision avoidance",
+    website: "https://www.microvision.com",
+    location: "Washington, USA",
+    region: "North America",
+    specialties: ["LiDAR"],
+    industries: [
+      "Automotive & Trucking",
+      "Warehouse & Logistics",
+      "Port & Yard Automation",
+      "Agriculture & Mower",
+      "Mining & Construction",
+    ],
+    coreServices: "Safety & security solutions, Collision avoidance",
+    keyIndustries:
+      "Automotive & Trucking, Warehouse & Logistics, Port & Yard Automation, Agriculture & Mower, Mining & Construction",
+    uniqueSellingPoint:
+      "MEMS-based laser beam scanning technology that integrates MEMS, lasers, optics, hardware, algorithms and machine learning software",
+  },
+  {
+    name: "TeleTracking Technologies Inc",
+    description:
+      "Patient tracking, Asset tracking, Staff/workflow coordination, Bed and discharge automation, Clinical workflow intelligence",
+    website: "https://www.teletracking.com",
+    location: "Pittsburgh, USA",
+    region: "North America",
+    specialties: ["BLE", "Wi-Fi"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices:
+      "Patient tracking, Asset tracking, Staff/workflow coordination, Bed and discharge automation, Clinical workflow intelligence",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint:
+      "Operations IQ® platform combines RTLS with clinical workflow automation, predictive analytics, and command center visibility",
+  },
+  {
+    name: "Midmark",
+    description:
+      "Nurse Call Automation, Asset Tracking, Staff Safety, Temperature Monitoring, Contact Tracking, Patient Flow + Dentistry & Veterinary services",
+    website: "https://www.midmark.com",
+    location: "Ohio, USA",
+    region: "North America",
+    specialties: ["BLE", "Wi-Fi"],
+    industries: ["Healthcare & Wellness Industry"],
+    coreServices:
+      "Nurse Call Automation, Asset Tracking, Staff Safety, Temperature Monitoring, Contact Tracking, Patient Flow + Dentistry & Veterinary services",
+    keyIndustries: "Healthcare & Wellness Industry",
+    uniqueSellingPoint: "Comprehensive healthcare solutions including dentistry and veterinary services",
+  },
+  {
+    name: "Slamcore",
+    description:
+      "Real-time location, mapping and perception solutions, Industrial Automation, Material Handling, Intralogistics, Artificial Intelligence, Positioning, Localization, and Object Detection",
+    website: "https://www.slamcore.com",
+    location: "England, UK",
+    region: "Europe",
+    specialties: ["SLAM"],
+    industries: ["Manufacturing & Logistics", "Artificial Intelligence"],
+    coreServices:
+      "Real-time location, mapping and perception solutions, Industrial Automation, Material Handling, Intralogistics, Artificial Intelligence, Positioning, Localization, and Object Detection",
+    keyIndustries: "Manufacturing & Logistics, Artificial Intelligence",
+    uniqueSellingPoint:
+      "Vision‑based SLAM delivers centimeter-level positioning (+/- 20 cm) and real‑time mapping on low‑cost hardware",
+  },
+  {
+    name: "American RFID Solutions",
+    description: "Workflow efficiency, inventory accuracy, asset tracking, and security",
+    website: "https://www.americanrfid.com",
+    location: "Illinois, USA",
+    region: "North America",
+    specialties: ["Active/Passive/Hybrid RFID", "GPS", "Wi-Fi"],
+    industries: [
+      "Healthcare",
+      "Manufacturing",
+      "Logistics",
+      "Retail",
+      "Utilities/Power",
+      "Transportation (railroads)",
+      "Field Operations",
+    ],
+    coreServices: "Workflow efficiency, inventory accuracy, asset tracking, and security",
+    keyIndustries:
+      "Healthcare, Manufacturing, Logistics, Retail, Utilities/Power, Transportation (railroads), Field Operations",
+    uniqueSellingPoint:
+      "RFID Multi-Meter provides 3D plots of singulation and read zone performance, interoperability via LLRP (low level reader protocol)",
+  },
+  {
+    name: "Lowry Solutions",
+    description:
+      "Inventory tracking & control, Consulting & Implementation, Fixed asset & warehouse tracking, Supply chain standards compliance",
+    website: "https://www.lowrysolutions.com",
+    location: "Brighton, Michigan, USA",
+    region: "North America",
+    specialties: ["RFID", "UWB", "BLE"],
+    industries: [
+      "Government",
+      "Manufacturing",
+      "Warehouse & Distribution",
+      "Transportation & Logistics",
+      "Healthcare",
+      "Retail",
+    ],
+    coreServices:
+      "Inventory tracking & control, Consulting & Implementation, Fixed asset & warehouse tracking, Supply chain standards compliance",
+    keyIndustries:
+      "Government, Manufacturing, Warehouse & Distribution, Transportation & Logistics, Healthcare, Retail",
+    uniqueSellingPoint: "Fully converted, tested and ready-to-use Smart Trac™ labels with Gen 2 inlays.",
+  },
+  {
+    name: "HERE Technologies",
+    description:
+      "Automated Driving, EV Routing & Charging, Asset Tracking, Monetizable Services, Location Analytics, Digital Cockpit, Fleet Routing, Professional Navigation, Streamline operations",
+    website: "https://www.here.com",
+    location: "North Brabant, Netherlands",
+    region: "Europe",
+    specialties: ["GPS/GNSS", "Wi-Fi"],
+    industries: [
+      "Transportation & Logistics",
+      "Automotive (OEMs)",
+      "Smart Cities & Government",
+      "Field Operations",
+      "Retail",
+      "& Industrial IoT",
+    ],
+    coreServices:
+      "Automated Driving, EV Routing & Charging, Asset Tracking, Monetizable Services, Location Analytics, Digital Cockpit, Fleet Routing, Professional Navigation, Streamline operations",
+    keyIndustries:
+      "Transportation & Logistics, Automotive (OEMs), Smart Cities & Government, Field Operations, Retail, & Industrial IoT",
+    uniqueSellingPoint: "Comprehensive location platform for automotive and enterprise applications",
+  },
+  {
+    name: "Malin USA",
+    description: "RTLS solutions provider",
+    website: "https://www.malinusa.com",
+    location: "Texas, USA",
+    region: "North America",
+    specialties: ["RTLS"],
+    industries: ["Various"],
+    coreServices: "RTLS solutions",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Specialized RTLS solutions provider",
+  },
+  {
+    name: "Link Labs",
+    description:
+      "Heavy equipment tracking, WIP tracking, Compliance, Process optimization, Loss prevention, Waste reduction",
+    website: "https://www.link-labs.com",
+    location: "Annapolis, Maryland, USA",
+    region: "North America",
+    specialties: ["BLE", "XLE®", "RFID", "GPS", "Wi-Fi Sniffing"],
+    industries: ["Manufacturing", "Logistics", "Elections", "Healthcare"],
+    coreServices:
+      "Heavy equipment tracking, WIP tracking, Compliance, Process optimization, Loss prevention, Waste reduction",
+    keyIndustries: "Manufacturing, Logistics, Elections, Healthcare",
+    uniqueSellingPoint:
+      "Use of AirFinder XLE® tech extends life of Bluetooth LE IoT devices by 3 & improves accuracy within a meter",
+  },
+  {
+    name: "RF Controls",
+    description: "Supply chain visibility, Inventory management, Warehousing, Inbound and outbound asset tracking",
+    website: "https://www.rfcontrols.com",
+    location: "Missouri, USA",
+    region: "North America",
+    specialties: ["Passive UHF RFID"],
+    industries: ["Logistics", "Manufacturing", "Retail"],
+    coreServices: "Supply chain visibility, Inventory management, Warehousing, Inbound and outbound asset tracking",
+    keyIndustries: "Logistics, Manufacturing, Retail",
+    uniqueSellingPoint: "CS Smart Antenna > coverage up to 5000 sq. ft., tracking in 3D",
+  },
+  {
+    name: "Tracklynk",
+    description: "People Safety, Asset Utilization, Predictive Maintenance, indoor and outdoor tracking",
+    website: "https://www.tracklynk.com",
+    location: "Virginia, USA",
+    region: "North America",
+    specialties: ["RF-based Local Positioning System"],
+    industries: ["Oil & Gas", "Mining", "Construction", "Manufacturing"],
+    coreServices: "People Safety, Asset Utilization, Predictive Maintenance, indoor and outdoor tracking",
+    keyIndustries: "Oil & Gas, Mining, Construction, Manufacturing",
+    uniqueSellingPoint:
+      "ATEX certified hardware suited for hazardous environments, long life and OTA (over-the-air) configuration and updates",
+  },
+  {
+    name: "Ezurio",
+    description:
+      "Wireless Connectivity, Security Resilience, Lifecycle Management, Regulatory Compliance, Warehouse & Asset Tracking, Factory Automation & Tools, Cold chain monitoring",
+    website: "https://www.ezurio.com",
+    location: "Ohio, USA",
+    region: "North America",
+    specialties: ["RF", "LoRaWAN", "BLE"],
+    industries: ["Healthcare", "Retail", "Manufacturing & Logistics", "Defense"],
+    coreServices:
+      "Wireless Connectivity, Security Resilience, Lifecycle Management, Regulatory Compliance, Warehouse & Asset Tracking, Factory Automation & Tools, Cold chain monitoring",
+    keyIndustries: "Healthcare, Retail, Manufacturing & Logistics, Defense",
+    uniqueSellingPoint: "Comprehensive wireless connectivity solutions with security focus",
   },
   {
     name: "Sonitor",
-    description: "Ultrasound-based precision RTLS for healthcare environments",
+    description:
+      "Indoor Locating & Tracking, Workflow Management, Staff & Patient Safety, Infection Control & Contact Tracing, Asset Tracking & Management, Patient Flow, Nurse Call Automation, Environmental Monitoring, Wayfinding",
     website: "https://sonitor.com",
     location: "Oslo, Norway",
     region: "Europe",
-    specialties: ["Ultrasound", "Healthcare", "Patient Flow"],
-    industries: ["Healthcare"],
+    specialties: ["Ultrasound (ULE)", "Bluetooth"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices:
+      "Indoor Locating & Tracking, Workflow Management, Staff & Patient Safety, Infection Control & Contact Tracing, Asset Tracking & Management, Patient Flow, Nurse Call Automation, Environmental Monitoring, Wayfinding",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint: "Using low-energy ultrasound capable of area‑room‑sub-room resolution",
   },
   {
-    name: "Infsoft",
-    description: "Indoor positioning and tracking solutions for various industries",
-    website: "https://www.infsoft.com",
-    location: "Großmehring, Germany",
-    region: "Europe",
-    specialties: ["BLE", "WiFi", "Indoor Navigation"],
-    industries: ["Corporate", "Retail", "Healthcare", "Logistics"],
-  },
-  {
-    name: "Abeeway (Actility)",
-    description: "LoRaWAN-based tracking solutions for outdoor and indoor asset tracking",
-    website: "https://www.abeeway.com",
-    location: "Labège, France",
-    region: "Europe",
-    specialties: ["LoRaWAN", "IoT", "Asset Tracking"],
-    industries: ["Logistics", "Smart Cities", "Industrial"],
-  },
-  {
-    name: "Mojix",
-    description: "RFID and IoT platform for retail and supply chain visibility",
-    website: "https://mojix.com",
-    location: "Los Angeles, CA, USA",
+    name: "Atlas RFID Store",
+    description: "RFID solutions and hardware provider",
+    website: "https://atlasrfidstore.com",
+    location: "Alabama, USA",
     region: "North America",
-    specialties: ["RFID", "Retail", "Supply Chain"],
-    industries: ["Retail", "Logistics", "Manufacturing"],
+    specialties: ["RFID"],
+    industries: ["Various"],
+    coreServices: "RFID solutions and hardware",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Comprehensive RFID hardware and solutions provider",
   },
   {
-    name: "Impinj",
-    description: "RAIN RFID solutions for inventory management and asset tracking",
-    website: "https://www.impinj.com",
-    location: "Seattle, WA, USA",
+    name: "GlobeRanger",
+    description: "IT Services and IT Consulting",
+    website: "https://globeranger.com",
+    location: "Texas, USA",
     region: "North America",
-    specialties: ["RFID", "Retail", "Healthcare"],
-    industries: ["Retail", "Healthcare", "Logistics", "Manufacturing"],
+    specialties: ["RFID"],
+    industries: ["Retail", "manufacturing", "travel", "hospitality", "defense", "aerospace"],
+    coreServices: "IT Services and IT Consulting",
+    keyIndustries: "Retail, manufacturing, travel, hospitality, defense, aerospace",
+    uniqueSellingPoint: "IT consulting with RFID specialization",
   },
   {
-    name: "Identec Solutions",
-    description: "Active RFID and GPS solutions for industrial environments",
-    website: "https://www.identecsolutions.com",
-    location: "Lustenau, Austria",
-    region: "Europe",
-    specialties: ["RFID", "Industrial", "Oil & Gas"],
-    industries: ["Oil & Gas", "Maritime", "Mining", "Automotive"],
+    name: "Intelligent Locations",
+    description: "Asset Tracking, Patient Tracking, Staff Support, Environmental Monitoring",
+    website: "https://intelligentlocations.com",
+    location: "North Carolina, USA",
+    region: "North America",
+    specialties: ["RTLS"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices: "Asset Tracking, Patient Tracking, Staff Support, Environmental Monitoring",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint: "Healthcare-focused location intelligence solutions",
   },
   {
-    name: "Locatify",
-    description: "Indoor positioning solutions for museums and cultural sites",
-    website: "https://locatify.com",
-    location: "Hafnarfjörður, Iceland",
-    region: "Europe",
-    specialties: ["BLE", "Tourism", "Cultural Heritage"],
-    industries: ["Tourism", "Education", "Events"],
+    name: "Samsara",
+    description: "Safety & Risk Solutions, Compliance, Fleet & Equipment Monitoring, Fleet Telematics",
+    website: "https://samsara.com",
+    location: "San Francisco, USA",
+    region: "North America",
+    specialties: ["BLE", "GPS", "UWB"],
+    industries: [
+      "Public Sector",
+      "Construction",
+      "Transportation & Logistics",
+      "Field Services",
+      "Food & Beverage",
+      "Utilities",
+      "Passenger Transit",
+    ],
+    coreServices: "Safety & Risk Solutions, Compliance, Fleet & Equipment Monitoring, Fleet Telematics",
+    keyIndustries:
+      "Public Sector, Construction, Transportation & Logistics, Field Services, Food & Beverage, Utilities, Passenger Transit",
+    uniqueSellingPoint: "BLE-based tracking for asset geolocation in tandem with gateways and cloud analytics",
   },
   {
-    name: "Favendo",
-    description: "BLE-based indoor navigation and tracking solutions",
-    website: "https://www.favendo.com",
-    location: "Bamberg, Germany",
-    region: "Europe",
-    specialties: ["BLE", "Indoor Navigation", "Retail"],
-    industries: ["Retail", "Healthcare", "Transportation"],
+    name: "TraceSafe",
+    description:
+      "Asset visibility, carbon management, geofencing, employee safety, location analysis, workflow optimization",
+    website: "https://tracesafe.io",
+    location: "Vancouver, USA",
+    region: "North America",
+    specialties: ["BLE", "Wi-Fi"],
+    industries: ["Hospitality and Maritime", "Healthcare", "Construction", "Events and Venues", "Enterprise"],
+    coreServices:
+      "Asset visibility, carbon management, geofencing, employee safety, location analysis, workflow optimization",
+    keyIndustries: "Hospitality and Maritime, Healthcare, Construction, Events and Venues, Enterprise",
+    uniqueSellingPoint: "Comprehensive asset visibility and employee safety solutions",
   },
   {
-    name: "Proximi.io",
-    description: "Multi-technology indoor positioning platform for developers",
-    website: "https://proximi.io",
-    location: "Helsinki, Finland",
-    region: "Europe",
-    specialties: ["Multi-technology", "Developer Platform", "Indoor Navigation"],
-    industries: ["Retail", "Corporate", "Transportation"],
+    name: "ZeroKey",
+    description:
+      "Worker Safety Solutions, Supply Chain, Manufacturing Solutions, Operational Visibility, Digital process management, Process optimization",
+    website: "https://zerokey.com",
+    location: "Calgary, Canada",
+    region: "North America",
+    specialties: ["SLAM"],
+    industries: ["Industrial Manufacturing", "Logistics"],
+    coreServices:
+      "Worker Safety Solutions, Supply Chain, Manufacturing Solutions, Operational Visibility, Digital process management, Process optimization",
+    keyIndustries: "Industrial Manufacturing, Logistics",
+    uniqueSellingPoint: "+/-- 1.5 mm 3D positioning accuracy",
   },
   {
-    name: "Navigine",
-    description: "Indoor positioning and navigation solutions for various industries",
-    website: "https://navigine.com",
-    location: "Moscow, Russia",
-    region: "Europe",
-    specialties: ["Indoor Navigation", "Analytics", "Retail"],
-    industries: ["Retail", "Transportation", "Logistics"],
+    name: "Cognosos",
+    description:
+      "Equipment cleanliness, Assuring Compliance, Environment monitoring, Staff duress, Safety & Security, Finished Vehicle Logistics, Vehicle Quality Management, Auto Auctions, Automotive Upfitters, Trailer Yard Visibility",
+    website: "https://cognosos.com",
+    location: "Atlanta, USA",
+    region: "North America",
+    specialties: ["BLE", "GPS"],
+    industries: ["Hospitals & Healthcare", "Logistics"],
+    coreServices:
+      "Equipment cleanliness, Assuring Compliance, Environment monitoring, Staff duress, Safety & Security, Finished Vehicle Logistics, Vehicle Quality Management, Auto Auctions, Automotive Upfitters, Trailer Yard Visibility",
+    keyIndustries: "Hospitals & Healthcare, Logistics",
+    uniqueSellingPoint: "Integration of AI & ML with the RTLS technology",
   },
   {
-    name: "Wipelot",
-    description: "RTLS solutions for industrial safety and efficiency",
-    website: "https://www.wipelot.com",
-    location: "Istanbul, Turkey",
+    name: "Everguard",
+    description: "PPE detection, anti-colission, crane detection, fall detection, forklift safety, geofence",
+    website: "https://everguard.ai",
+    location: "California, USA",
+    region: "North America",
+    specialties: ["AI", "Computer Vision", "PLE integration"],
+    industries: ["Construction", "Manufacturing"],
+    coreServices: "PPE detection, anti-colission, crane detection, fall detection, forklift safety, geofence",
+    keyIndustries: "Construction, Manufacturing",
+    uniqueSellingPoint: "AI-powered safety solutions with computer vision",
+  },
+  {
+    name: "Mysphera",
+    description:
+      "Patient flow automation, bed and operating room (OR) management, asset/patient tracking, and wayfinding navigation",
+    website: "https://mysphera.com",
+    location: "Valencia, Spain",
     region: "Europe",
-    specialties: ["UWB", "Industrial Safety", "Manufacturing"],
-    industries: ["Manufacturing", "Mining", "Construction"],
+    specialties: ["BLE"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices:
+      "Patient flow automation, bed and operating room (OR) management, asset/patient tracking, and wayfinding navigation",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint: "Comprehensive healthcare workflow automation",
+  },
+  {
+    name: "Ubudu",
+    description: "Anti-colission, wayfinding & geofencing, social distancing assistant",
+    website: "https://ubudu.com",
+    location: "Paris, France",
+    region: "Europe",
+    specialties: ["BLE", "UWB", "LoRa", "Wi-Fi"],
+    industries: ["Manufacturing & Logistics", "Healthcare", "Quick Service Restaurant", "Construction"],
+    coreServices: "Anti-colission, wayfinding & geofencing, social distancing assistant",
+    keyIndustries: "Manufacturing & Logistics, Healthcare, Quick Service Restaurant, Construction",
+    uniqueSellingPoint: "Multi-technology platform for safety and navigation",
+  },
+  {
+    name: "Metratec",
+    description: "Asset Tracking, Personnel safety, Access Control, Workflow optimization, Container management",
+    website: "https://metratec.com",
+    location: "Magdeburg, Germany",
+    region: "Europe",
+    specialties: ["RFID", "UWB"],
+    industries: ["Safety", "Logistics & Manufacturing", "Retail", "OEMs"],
+    coreServices: "Asset Tracking, Personnel safety, Access Control, Workflow optimization, Container management",
+    keyIndustries: "Safety, Logistics & Manufacturing, Retail, OEMs",
+    uniqueSellingPoint: "Angle of Arrival (AoA) system with accuracy of +/-50cm and a wide range of +100 mtrs",
+  },
+  {
+    name: "Kathrein",
+    description:
+      "Intelligent Transport System, sesAutomated workflows, Shipment Verification, Inventory Management, Warehouse optimization",
+    website: "https://kathrein-rfid.com",
+    location: "Stephanskirchen, Germany",
+    region: "Europe",
+    specialties: ["RFID", "BLE", "UWB", "NFC"],
+    industries: ["Logistics & supply chain", "Automotive & Manufacturing", "Transportation & Traffic", "Healthcare"],
+    coreServices:
+      "Intelligent Transport System, sesAutomated workflows, Shipment Verification, Inventory Management, Warehouse optimization",
+    keyIndustries: "Logistics & supply chain, Automotive & Manufacturing, Transportation & Traffic, Healthcare",
+    uniqueSellingPoint:
+      "(K-RTLS) platform offers 3 different locating modes: Angle of Arrival (AoA), Time of Flight (ToF), Time Difference of Arrival (TDoA)",
+  },
+  {
+    name: "Zigpos",
+    description: "Employee & Visitor Management, Access control, Material Flow, Machine utilisation",
+    website: "https://zigpos.com",
+    location: "Dresden, Germany",
+    region: "Europe",
+    specialties: ["UWB"],
+    industries: ["Transportation", "Logistics", "Supply Chain and Storage"],
+    coreServices: "Employee & Visitor Management, Access control, Material Flow, Machine utilisation",
+    keyIndustries: "Transportation, Logistics, Supply Chain and Storage",
+    uniqueSellingPoint: "Fully Omlox certified UWB- Coriva (Satellites+Tags) & uses Monte-Carlo Localization",
+  },
+  {
+    name: "RFID Discovery",
+    description:
+      "Mobile medical asset tracking, Theatre inventory management, Baby Tagging Systems, Wandering Patient Safety Solutions, Automatic temperature monitoring, Staff emergency call systems",
+    website: "https://rfiddiscovery.com",
+    location: "Milton Keynes, UK",
+    region: "Europe",
+    specialties: ["RFID", "BLE", "UWB", "LoRaWAN", "NFC"],
+    industries: [
+      "Healthcare",
+      "Warehousing & Logistics",
+      "Manufacturing",
+      "Construction",
+      "Oil & Gas",
+      "Mining",
+      "Aviation",
+      "Retail",
+    ],
+    coreServices:
+      "Mobile medical asset tracking, Theatre inventory management, Baby Tagging Systems, Wandering Patient Safety Solutions, Automatic temperature monitoring, Staff emergency call systems",
+    keyIndustries:
+      "Healthcare, Warehousing & Logistics, Manufacturing, Construction, Oil & Gas, Mining, Aviation, Retail",
+    uniqueSellingPoint: "Comprehensive RFID solutions across multiple industries",
+  },
+  {
+    name: "Telematics",
+    description:
+      "Fleet management, Logistics & delivery services, Car sharing, rental & leasing, E-mobility management, Utility & emergency transport, Assets & workforce, Driver safety",
+    website: "https://telematics.com",
+    location: "Vilnius, Lithuania",
+    region: "Europe",
+    specialties: ["GPS/GNSS", "BLE"],
+    industries: ["Automotive", "Manufacturing"],
+    coreServices:
+      "Fleet management, Logistics & delivery services, Car sharing, rental & leasing, E-mobility management, Utility & emergency transport, Assets & workforce, Driver safety",
+    keyIndustries: "Automotive, Manufacturing",
+    uniqueSellingPoint: "Pharmaceutical-grade telematics real-time temperature and location data with ±0.5 °C accuracy",
+  },
+  {
+    name: "Iiwari",
+    description:
+      "Indoor Positioning, Personnel Tracking, Asset tracking, Warehouse Management, Healthcare tracking, smart buildings, indoor navigation, route optimisation",
+    website: "https://iiwari.com",
+    location: "Vuokatti, Finland",
+    region: "Europe",
+    specialties: ["UWB"],
+    industries: ["Healthcare", "Retail", "Manufacturing", "Software Companies"],
+    coreServices:
+      "Indoor Positioning, Personnel Tracking, Asset tracking, Warehouse Management, Healthcare tracking, smart buildings, indoor navigation, route optimisation",
+    keyIndustries: "Healthcare, Retail, Manufacturing, Software Companies",
+    uniqueSellingPoint: "Comprehensive indoor positioning solutions",
+  },
+  {
+    name: "Pointr",
+    description: "Indoor Mapping, Geofencing, Indoor Positioning, Indoor Navigation, Analytics",
+    website: "https://pointr.tech",
+    location: "London, UK",
+    region: "Europe",
+    specialties: ["GPS", "BLE"],
+    industries: ["Healthcare", "smart workplace", "retail", "and aviation"],
+    coreServices: "Indoor Mapping, Geofencing, Indoor Positioning, Indoor Navigation, Analytics",
+    keyIndustries: "Healthcare, smart workplace, retail, and aviation",
+    uniqueSellingPoint: "Advanced indoor mapping and navigation platform",
+  },
+  {
+    name: "Xtag Medical",
+    description: "Infant protection, Asset Tracking, Baby Tagging, Mother & Baby Monitoring",
+    website: "https://xtagmedical.com",
+    location: "Leeds, UK",
+    region: "Europe",
+    specialties: ["RFID"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices: "Infant protection, Asset Tracking, Baby Tagging, Mother & Baby Monitoring",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint: "Specialized infant protection and monitoring solutions",
+  },
+  {
+    name: "WiTTRA Networks AB",
+    description: "Wireless mesh networking solutions",
+    website: "https://wittra.se",
+    location: "Stockholm, Sweden",
+    region: "Europe",
+    specialties: ["UWB & 6LoWPAN mesh"],
+    industries: ["Industrial"],
+    coreServices: "Wireless mesh networking solutions",
+    keyIndustries: "Industrial",
+    uniqueSellingPoint: "Accuracy from ±0.5m in 3D to ±5m",
+  },
+  {
+    name: "Wheere",
+    description:
+      "Personal safety, Asset protection and asset tracking, Access to sensitive areas, Indoor and outdoor fleet geolocation, Optimizing trajectories",
+    website: "https://wheere.com",
+    location: "Castelnau-le-Lez, France",
+    region: "Europe",
+    specialties: ["Low frequency waves : 148 -174 MHz Geolocation"],
+    industries: ["Industry 4.0", "Critical Sites", "Security & Defense", "Hospitals & Clinics", "Smart Cities"],
+    coreServices:
+      "Personal safety, Asset protection and asset tracking, Access to sensitive areas, Indoor and outdoor fleet geolocation, Optimizing trajectories",
+    keyIndustries: "Industry 4.0, Critical Sites, Security & Defense, Hospitals & Clinics, Smart Cities",
+    uniqueSellingPoint:
+      "Accuracy: 80cm, Range: +10km, Goes through 50m concrete, range of one kilometer with just four antennas",
+  },
+  {
+    name: "Outsight",
+    description: "Airport Management, People Flow monitoring, Perimetric Security, Physical Security, Crowd Monitoring",
+    website: "https://outsight.ai",
+    location: "Paris, France",
+    region: "Europe",
+    specialties: ["LiDAR"],
+    industries: ["Hospitality", "Smart City", "Sport Venues", "Airports", "Railyways", "Roadways"],
+    coreServices:
+      "Airport Management, People Flow monitoring, Perimetric Security, Physical Security, Crowd Monitoring",
+    keyIndustries: "Hospitality, Smart City, Sport Venues, Airports, Railyways, Roadways",
+    uniqueSellingPoint: "3D anonymized spatial detection throug Shift platform- compatible with all hardwares",
+  },
+  {
+    name: "Quuppa",
+    description:
+      "Production & Logistic Visibility, Asset & Worker tracking, Workflow optimization, Performance Tracking, Operational Control",
+    website: "https://quuppa.com",
+    location: "Espoo, Finland",
+    region: "Europe",
+    specialties: ["Bluetooth"],
+    industries: [
+      "Manufacturing",
+      "Logistics",
+      "Healthcare",
+      "Safety & Security",
+      "Smart Office",
+      "Retail",
+      "Museums & Events",
+      "Sports",
+    ],
+    coreServices:
+      "Production & Logistic Visibility, Asset & Worker tracking, Workflow optimization, Performance Tracking, Operational Control",
+    keyIndustries:
+      "Manufacturing, Logistics, Healthcare, Safety & Security, Smart Office, Retail, Museums & Events, Sports",
+    uniqueSellingPoint: "Bluetooth AoA/AoD sub-meter tracking",
+  },
+  {
+    name: "Thinkin",
+    description: "Manufacturing Digitization, Asset Management, Store Management",
+    website: "https://thinkin.io",
+    location: "Trento, Italy",
+    region: "Europe",
+    specialties: ["GPS & IoT"],
+    industries: ["Industry 4.0", "Retail", "Healthcare"],
+    coreServices: "Manufacturing Digitization, Asset Management, Store Management",
+    keyIndustries: "Industry 4.0, Retail, Healthcare",
+    uniqueSellingPoint: "Digital Kanban allowing integration with major ERP, MES, and WMS systems",
+  },
+  {
+    name: "Intranav",
+    description:
+      "Asset & vehicle tracking, Yard & fleet management, Material flow automation, Production & logistics digital twin, Safety geofencing & collision avoidance",
+    website: "https://intranav.com",
+    location: "Eschborn, Germany",
+    region: "Europe",
+    specialties: ["UWB", "BLE", "RFID/UHF", "Wi‑Fi", "LiDAR", "GPS/LTE"],
+    industries: [
+      "Manufacturing & Logistics",
+      "Automotive",
+      "Supply Chain & Warehouse",
+      "Heavy Industry",
+      "Industrial Automation",
+      "Smart Factories",
+    ],
+    coreServices:
+      "Asset & vehicle tracking, Yard & fleet management, Material flow automation, Production & logistics digital twin, Safety geofencing & collision avoidance",
+    keyIndustries:
+      "Manufacturing & Logistics, Automotive, Supply Chain & Warehouse, Heavy Industry, Industrial Automation, Smart Factories",
+    uniqueSellingPoint:
+      "Multi-modal RTLS hardware/software, ±40 cm accuracy, digital‑twin and process automation platform (INTRANAV.IO + INTRALYTICS)",
+  },
+  {
+    name: "Minew",
+    description:
+      "Indoor positioning, Navigation and proximity marketing, Workforce safety and management, asset management, sensing, temp/humidity monitoring, ambient light measurement, air quality monitoring, water leakage management, motion detection",
+    website: "https://minew.com",
+    location: "Shenzen, China",
+    region: "Asia",
+    specialties: ["UWB", "LoRaWAN", "Wi-Fi", "GPS/GNSS"],
+    industries: [
+      "Manufacturing",
+      "Retail & proximity marketing",
+      "Smart Offices",
+      "Logistics & Warehousing",
+      "Healthcare",
+      "Smart Buildings",
+    ],
+    coreServices:
+      "Indoor positioning, Navigation and proximity marketing, Workforce safety and management, asset management, sensing, temp/humidity monitoring, ambient light measurement, air quality monitoring, water leakage management, motion detection",
+    keyIndustries:
+      "Manufacturing, Retail & proximity marketing, Smart Offices, Logistics & Warehousing, Healthcare, Smart Buildings",
+    uniqueSellingPoint: "Bluetooth AoA G2 Gateway Kits for sub-meter positioning",
+  },
+  {
+    name: "Tatwah Technology Co. Ltd.",
+    description: "BLE, NFC, RFID & other IoT solutions, Hardware provider",
+    website: "https://tatwah.com",
+    location: "Zhongshan, China",
+    region: "Asia",
+    specialties: ["BLE", "NFC", "RFID"],
+    industries: [
+      "Automation & Manufacturing",
+      "Industry & Logistic",
+      "Transportation",
+      "Location & Condition Monitoring",
+      "High Security Product",
+      "Access Technology",
+    ],
+    coreServices: "BLE, NFC, RFID & other IoT solutions, Hardware provider",
+    keyIndustries:
+      "Automation & Manufacturing, Industry & Logistic, Transportation, Location & Condition Monitoring, High Security Product, Access Technology",
+    uniqueSellingPoint: "Comprehensive IoT hardware solutions provider",
+  },
+  {
+    name: "Inpixon",
+    description:
+      "Asset Tracking, Yard Management, Production Tracking, Collision Avoidance, Manufacturing Analytics, Paperless Factory, Forklift Tracking, Supply Chain Visibility",
+    website: "https://inpixon.com",
+    location: "Colorado, USA",
+    region: "North America",
+    specialties: ["UWB", "Chirp", "BLE", "GPS", "LiDAR"],
+    industries: ["Smart Factories", "Warehouses", "Mining", "and Digital Supply Chains"],
+    coreServices:
+      "Asset Tracking, Yard Management, Production Tracking, Collision Avoidance, Manufacturing Analytics, Paperless Factory, Forklift Tracking, Supply Chain Visibility",
+    keyIndustries: "Smart Factories, Warehouses, Mining, and Digital Supply Chains",
+    uniqueSellingPoint:
+      "Multi-tech RTLS (UWB, CSS, BLE, Wi-Fi) with digital twin mapping and AI analytics, long-range CSS mode",
+  },
+  {
+    name: "Sensolus",
+    description:
+      "Asset management, Inventory management, Utilization monitoring, Maintenance management, Condition monitoring",
+    website: "https://sensolus.com",
+    location: "Ghent, Belgium",
+    region: "Europe",
+    specialties: ["GNSS", "Wi-Fi", "BLE"],
+    industries: [
+      "Industrial manufacturing",
+      "Healthcare",
+      "Automotive",
+      "Transport & logistics",
+      "Waste management",
+      "Specialized equipment",
+      "Construction",
+    ],
+    coreServices:
+      "Asset management, Inventory management, Utilization monitoring, Maintenance management, Condition monitoring",
+    keyIndustries:
+      "Industrial manufacturing, Healthcare, Automotive, Transport & logistics, Waste management, Specialized equipment, Construction",
+    uniqueSellingPoint:
+      "Edge + cloud analytics on a scalable global IoT platform, Supports condition monitoring (temp, humidity, fill level)",
+  },
+  {
+    name: "BlueUp",
+    description:
+      "Asset Tracking, Automatic Inventory, Workforce Safety, Personnel Localization, Forklift Tracking, Outdoor Tracking, Medical Equipment Tracking, Nurse Call, Medical Staff Safety, Air Quality Monitoring, Access Control, Presence Control",
+    website: "https://blueup.eu",
+    location: "Colle Val d'Elsa, Italy",
+    region: "Europe",
+    specialties: ["BLE", "Wirepas Mesh 2.4GHz"],
+    industries: ["Manufacturing industry", "logistics", "healthcare and safety and security markets"],
+    coreServices:
+      "Asset Tracking, Automatic Inventory, Workforce Safety, Personnel Localization, Forklift Tracking, Outdoor Tracking, Medical Equipment Tracking, Nurse Call, Medical Staff Safety, Air Quality Monitoring, Access Control, Presence Control",
+    keyIndustries: "Manufacturing industry, logistics, healthcare and safety and security markets",
+    uniqueSellingPoint: "Multiple RTLS platform options: LocateBLE (BLE), MeshCube (Wirepas), AccuRTLS (Quuppa AoA)",
+  },
+  {
+    name: "PDi Digital",
+    description: "Process Automation, Gelocation & Tracking, Digital Displays",
+    website: "https://pdidigital.com",
+    location: "Steiermark, Austria",
+    region: "Europe",
+    specialties: ["BLE", "NB-IoT", "GPS"],
+    industries: ["Automotive Retail", "Manufacturing & Logistics", "Healthcare Automation", "Building Management"],
+    coreServices: "Process Automation, Gelocation & Tracking, Digital Displays",
+    keyIndustries: "Automotive Retail, Manufacturing & Logistics, Healthcare Automation, Building Management",
+    uniqueSellingPoint: "Combines RTLS data with interactive e-paper/digital displays for two-way user interaction",
+  },
+  {
+    name: "Ela Innovation",
+    description: "Indoor Tracking, Environmental Monitoring, IoT solutions",
+    website: "https://elainnovation.com",
+    location: "Montpellier, France",
+    region: "Europe",
+    specialties: ["BLE", "Wirepas MESH", "LoRaWan"],
+    industries: ["Transport and Telematics", "Construction & Smart-Building", "Industry 4.0", "Health"],
+    coreServices: "Indoor Tracking, Environmental Monitoring, IoT solutions",
+    keyIndustries: "Transport and Telematics, Construction & Smart-Building, Industry 4.0, Health",
+    uniqueSellingPoint: "Industry-leading ultra-low-power, long-battery-life sensors (up to 20 years autonomy) for BLE",
+  },
+  {
+    name: "QLog",
+    description: "Staff duress alerting, asset tracking, patient elopement, remote patient monitoring",
+    website: "https://qlog.com",
+    location: "Binyamina, Israel",
+    region: "Middle East",
+    specialties: ["BLE"],
+    industries: ["Hospitals & Healthcare"],
+    coreServices: "Staff duress alerting, asset tracking, patient elopement, remote patient monitoring",
+    keyIndustries: "Hospitals & Healthcare",
+    uniqueSellingPoint: "Hybrid RTLS with zero infrastructure need",
+  },
+  {
+    name: "Omni-ID",
+    description: "RFID solutions provider",
+    website: "https://omni-id.com",
+    location: "Texas, USA",
+    region: "North America",
+    specialties: ["RFID"],
+    industries: ["Various"],
+    coreServices: "RFID solutions",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Specialized RFID solutions provider",
+  },
+  {
+    name: "Sentrics",
+    description: "Risk-management, Case management, Resident engagement, Life safety, Entertainment",
+    website: "https://sentrics.io",
+    location: "Florida, USA",
+    region: "North America",
+    specialties: ["RTLS"],
+    industries: ["Senior Living Communities", "Care Facilities", "Hospitals"],
+    coreServices: "Risk-management, Case management, Resident engagement, Life safety, Entertainment",
+    keyIndustries: "Senior Living Communities, Care Facilities, Hospitals",
+    uniqueSellingPoint: "Sentrics360° suite (Ensure, Entertain, Enrich and Engage)",
   },
   {
     name: "Eliko",
-    description: "UWB positioning technology for industrial applications",
+    description: "UWB positioning technology provider",
     website: "https://www.eliko.ee",
-    location: "Tallinn, Estonia",
+    location: "Estonia",
     region: "Europe",
-    specialties: ["UWB", "Industrial", "Robotics"],
-    industries: ["Manufacturing", "Robotics", "Automation"],
+    specialties: ["UWB"],
+    industries: ["Industrial"],
+    coreServices: "UWB positioning technology",
+    keyIndustries: "Industrial",
+    uniqueSellingPoint: "30 cm +/- 20 cm tracking, Down to 10 ms latency and two-way communication",
   },
   {
-    name: "Kinexon",
-    description: "Ultra-precise RTLS for sports analytics and industrial applications",
-    website: "https://kinexon.com",
-    location: "Munich, Germany",
+    name: "System Loco",
+    description:
+      "Waste reduction, Asset tracking, Cold chain compliance, Theft preventions, Efficiency gains, Quality assurance",
+    website: "https://systemloco.com",
+    location: "Lancaster, UK",
     region: "Europe",
-    specialties: ["UWB", "Sports Analytics", "Industry 4.0"],
-    industries: ["Sports", "Manufacturing", "Logistics"],
+    specialties: ["GPS", "Wi-Fi", "GSM", "BLE", "UWB"],
+    industries: ["Third-Party", "Logistics", "Food & Beverage", "Pharmaceuticals", "MedTech", "High-Value Goods"],
+    coreServices:
+      "Waste reduction, Asset tracking, Cold chain compliance, Theft preventions, Efficiency gains, Quality assurance",
+    keyIndustries: "Third-Party, Logistics, Food & Beverage, Pharmaceuticals, MedTech, High-Value Goods",
+    uniqueSellingPoint: "Comprehensive asset tracking with cold chain compliance",
   },
   {
-    name: "Apptricity",
-    description: "IoT and RFID solutions for supply chain and asset management",
-    website: "https://www.apptricity.com",
-    location: "Dallas, TX, USA",
+    name: "Ubisense",
+    description:
+      "Asset tracking & management, Assembly line visibility & control, Process Visibility & Optimization, Tool & Equipment Management, Quality & Compliance",
+    website: "https://ubisense.com",
+    location: "Cambridge, UK",
+    region: "Europe",
+    specialties: ["UWB"],
+    industries: ["Healthcare", "Automotive", "Manufacturing", "Army & Defense", "Aviation", "Aerospace"],
+    coreServices:
+      "Asset tracking & management, Assembly line visibility & control, Process Visibility & Optimization, Tool & Equipment Management, Quality & Compliance",
+    keyIndustries: "Healthcare, Automotive, Manufacturing, Army & Defense, Aviation, Aerospace",
+    uniqueSellingPoint: "Dimension4 UWB with dual-mode (AoA + TDoA) for precision tracking",
+  },
+  {
+    name: "Sentrax",
+    description: "Proximity Tracking, Accurate Tracking, Hybrid tracking, Indoor positioning",
+    website: "https://sentrax.com",
+    location: "Root, Switzerland",
+    region: "Europe",
+    specialties: ["BLE"],
+    industries: ["Smart buildings & cities", "Healthcare & Hospitals", "Manufacturing & Warehouse"],
+    coreServices: "Proximity Tracking, Accurate Tracking, Hybrid tracking, Indoor positioning",
+    keyIndustries: "Smart buildings & cities, Healthcare & Hospitals, Manufacturing & Warehouse",
+    uniqueSellingPoint: "Advanced BLE tracking solutions",
+  },
+  {
+    name: "Notinote",
+    description: "Positioning & Monitoring mobile objects, Environment detection",
+    website: "https://notinote.com",
+    location: "Poland",
+    region: "Europe",
+    specialties: ["BLE"],
+    industries: ["Various"],
+    coreServices: "Positioning & Monitoring mobile objects, Environment detection",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Mobile object positioning and monitoring",
+  },
+  {
+    name: "ITL Group",
+    description: "Supply Chain Visibility, Inventory Management, Omni Channel Integration, Loss Prevention",
+    website: "https://itlgroup.com",
+    location: "London, UK",
+    region: "Europe",
+    specialties: ["RFID"],
+    industries: ["Manufacturing", "Textile", "Logistics", "Fashion & Apparel"],
+    coreServices: "Supply Chain Visibility, Inventory Management, Omni Channel Integration, Loss Prevention",
+    keyIndustries: "Manufacturing, Textile, Logistics, Fashion & Apparel",
+    uniqueSellingPoint: "Specialized in textile and fashion industry solutions",
+  },
+  {
+    name: "Globos",
+    description: "Asset & personnel tracking, location-based workflow automation",
+    website: "https://globos.com",
+    location: "Hannover, Germany",
+    region: "Europe",
+    specialties: ["WLAN", "RFID", "BLE & UWB"],
+    industries: ["Logistics", "Manufacturing", "Retail", "Healthcare"],
+    coreServices: "Asset & personnel tracking, location-based workflow automation",
+    keyIndustries: "Logistics, Manufacturing, Retail, Healthcare",
+    uniqueSellingPoint: "Multi-technology platform for workflow automation",
+  },
+  {
+    name: "IndoorAtlas",
+    description: "Positioning, Wayfinding, Geofence, heatmap, Augmented Reality",
+    website: "https://www.indooratlas.com",
+    location: "Oulu, Finland",
+    region: "Europe",
+    specialties: ["GPS", "Wi-Fi / BLE / RTT"],
+    industries: ["Various"],
+    coreServices: "Positioning, Wayfinding, Geofence, heatmap, Augmented Reality",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Magnetic positioning technology",
+  },
+  {
+    name: "InVirtus",
+    description: "inventory monitoring, flow visualization, indoor/out",
+    website: "https://invirtus.com",
+    location: "Nantes, France",
+    region: "Europe",
+    specialties: ["GPS", "RFID", "BLE"],
+    industries: [
+      "Defense",
+      "Naval",
+      "Transport",
+      "Logistics",
+      "Automotive",
+      "Health",
+      "Construction",
+      "Administrations",
+      "Agriculture",
+      "Luxury",
+    ],
+    coreServices: "inventory monitoring, flow visualization, indoor/out",
+    keyIndustries:
+      "Defense, Naval, Transport, Logistics, Automotive, Health, Construction, Administrations, Agriculture, Luxury",
+    uniqueSellingPoint:
+      "Plug-and-play BLE tracker with hybrid indoor/outdoor mode, cloud UI/dashboard with alerts and analytics",
+  },
+  {
+    name: "Actility",
+    description: "LoRaWAN network solutions",
+    website: "https://www.actility.com",
+    location: "Paris, France",
+    region: "Europe",
+    specialties: ["LoRaWAN"],
+    industries: ["Smart Buldings", "Logistics & Supply chain", "Energy & Utilities", "Smart industries"],
+    coreServices: "LoRaWAN network solutions",
+    keyIndustries: "Smart Buldings, Logistics & Supply chain, Energy & Utilities, Smart industries",
+    uniqueSellingPoint: "Leading LoRaWAN network platform",
+  },
+  {
+    name: "Peak Technologies",
+    description: "Asset visibility, Mobile workforce management, Supply chain & warehouse analytics",
+    website: "https://peaktech.com",
+    location: "Colorado, USA",
     region: "North America",
-    specialties: ["RFID", "Supply Chain", "Asset Management"],
-    industries: ["Logistics", "Government", "Healthcare"],
+    specialties: ["RFID", "BLE"],
+    industries: ["Healthcare", "Manufacturing & Warehousing", "Retail", "Transportation & Logistics"],
+    coreServices: "Asset visibility, Mobile workforce management, Supply chain & warehouse analytics",
+    keyIndustries: "Healthcare, Manufacturing & Warehousing, Retail, Transportation & Logistics",
+    uniqueSellingPoint: "Comprehensive asset visibility solutions",
   },
   {
-    name: "Tagstone",
-    description: "RFID and BLE solutions for healthcare and industrial applications",
-    website: "https://www.tagstone.com",
+    name: "Telebeacon Solutions Pvt. Ltd.",
+    description: "BLE beacon solutions provider",
+    website: "https://telebeacon.com",
+    location: "Telangana, India",
+    region: "Asia",
+    specialties: ["BLE"],
+    industries: ["Various"],
+    coreServices: "BLE beacon solutions",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Specialized BLE beacon solutions",
+  },
+  {
+    name: "Hornbird Technology",
+    description: "IoT and wireless solutions provider",
+    website: "https://hornbird.com",
+    location: "Hong Kong",
+    region: "Asia",
+    specialties: ["BLE"],
+    industries: ["Various"],
+    coreServices: "IoT and wireless solutions",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "IoT and wireless technology solutions",
+  },
+  {
+    name: "EPM",
+    description: "Asset Tracking, Physical Access control, Identity Management, Warehouse Management",
+    website: "https://epm.com",
+    location: "UAE",
+    region: "Middle East",
+    specialties: ["BLE", "RFID"],
+    industries: ["Manufacuring & Logistics"],
+    coreServices: "Asset Tracking, Physical Access control, Identity Management, Warehouse Management",
+    keyIndustries: "Manufacuring & Logistics",
+    uniqueSellingPoint: "Comprehensive access control and asset tracking",
+  },
+  {
+    name: "SADELABS",
+    description:
+      "Collision avoidance & proximity warning, cold chain monitoring, asset tracking, industrial equipment monitoring, and personnel tracking",
+    website: "https://sadelabs.com",
+    location: "Izmir, Turkey",
+    region: "Europe",
+    specialties: ["GSM", "LTE", "NB-IoT", "Wi-Fi", "Bluetooth Low Energy", "NFC", "LoRa", "Sigfox"],
+    industries: ["Manufacturing", "energy", "healthcare", "retail", "vending", "security industries"],
+    coreServices:
+      "Collision avoidance & proximity warning, cold chain monitoring, asset tracking, industrial equipment monitoring, and personnel tracking",
+    keyIndustries: "Manufacturing, energy, healthcare, retail, vending, security industries",
+    uniqueSellingPoint: "Multi-technology IoT platform for industrial applications",
+  },
+  {
+    name: "AetherIOT",
+    description:
+      "Warehouse pallet tracking, Worker tracking and environment sensoring, Staff & patient tracking & fall detection, medical equipment tracking, environment tracking",
+    website: "https://aetheriot.com",
     location: "Singapore",
     region: "Asia",
-    specialties: ["RFID", "BLE", "Healthcare"],
-    industries: ["Healthcare", "Manufacturing", "Logistics"],
+    specialties: ["Wireless Mesh", "UWB", "LoRaWAN"],
+    industries: [
+      "Supply chain",
+      "Oil & Gas",
+      "Patient care",
+      "Cold storage logistics",
+      "construction",
+      "event management",
+    ],
+    coreServices:
+      "Warehouse pallet tracking, Worker tracking and environment sensoring, Staff & patient tracking & fall detection, medical equipment tracking, environment tracking",
+    keyIndustries: "Supply chain, Oil & Gas, Patient care, Cold storage logistics, construction, event management",
+    uniqueSellingPoint: "40%+ lower pricing vs. other providers",
+  },
+  {
+    name: "IntraPosition",
+    description: "Indoor positioning and navigation systems, asset tracking, operational flow optimization",
+    website: "https://intraposition.com",
+    location: "Ramat Gan, Israel",
+    region: "Middle East",
+    specialties: ["BLE", "UWB", "Wi-Fi"],
+    industries: ["Logistics", "Manufacturing", "Retail", "Healthcare"],
+    coreServices: "Indoor positioning and navigation systems, asset tracking, operational flow optimization",
+    keyIndustries: "Logistics, Manufacturing, Retail, Healthcare",
+    uniqueSellingPoint:
+      "Mix-and-match sensors, cores, and bases without soldering through an Arduino-compatible firmware",
+  },
+  {
+    name: "Rakon",
+    description: "Frequency control and timing solutions",
+    website: "https://rakon.com",
+    location: "Auckland, New Zealand",
+    region: "Oceania",
+    specialties: ["GNSS", "GPS"],
+    industries: ["Telecommunication", "Space", "Defense", "Automotive"],
+    coreServices: "Frequency control and timing solutions",
+    keyIndustries: "Telecommunication, Space, Defense, Automotive",
+    uniqueSellingPoint: "Precision frequency control solutions",
+  },
+  {
+    name: "Lansitec",
+    description: "Safety & Compliance, Environmental Monitoring",
+    website: "https://lansitec.com",
+    location: "Nanjing, China",
+    region: "Asia",
+    specialties: ["Bluetooth®", "LoRaWAN", "NB-IoT", "UWB"],
+    industries: ["Manufacturing & Logistics", "Construction", "Hospitals", "Transport", "Safety & Security"],
+    coreServices: "Safety & Compliance, Environmental Monitoring",
+    keyIndustries: "Manufacturing & Logistics, Construction, Hospitals, Transport, Safety & Security",
+    uniqueSellingPoint:
+      "Rugged IP68 tracker combining GNSS, LoRaWAN, and Bluetooth with ultra-long battery life, tamper alerts, and indoor-outdoor visibility in one device",
+  },
+  {
+    name: "RT Smart Data",
+    description: "Healthy Workspaces, Targeted IOT Analytics, Occupancy Management",
+    website: "https://rtsmartdata.com",
+    location: "Carlow, Ireland",
+    region: "Europe",
+    specialties: ["UWB", "IoT"],
+    industries: ["Business", "Logistics", "Cold Storage"],
+    coreServices: "Healthy Workspaces, Targeted IOT Analytics, Occupancy Management",
+    keyIndustries: "Business, Logistics, Cold Storage",
+    uniqueSellingPoint: "Smart workspace analytics and occupancy management",
+  },
+  {
+    name: "TTI Inc. The IP&E Specialist",
+    description: "Product line & Supply chain solutions",
+    website: "https://tti.com",
+    location: "Texas, USA",
+    region: "North America",
+    specialties: ["RF Wireless"],
+    industries: ["Industrial", "military", "aerospace and consumer electronic manufacturers"],
+    coreServices: "Product line & Supply chain solutions",
+    keyIndustries: "Industrial, military, aerospace and consumer electronic manufacturers",
+    uniqueSellingPoint: "Specialized in electronic components and supply chain",
+  },
+  {
+    name: "Redpoint",
+    description: "Social Distancing, Personnel and Vehicle Safety, Operations Management, Technology Integration",
+    website: "https://redpointpositioning.com",
+    location: "Boston, USA",
+    region: "North America",
+    specialties: ["BLE", "UWB"],
+    industries: ["Warehouses", "Chemical Plants", "AGV/AMR Crew Safety", "Seaport and Airport", "Manufacture Plant"],
+    coreServices: "Social Distancing, Personnel and Vehicle Safety, Operations Management, Technology Integration",
+    keyIndustries: "Warehouses, Chemical Plants, AGV/AMR Crew Safety, Seaport and Airport, Manufacture Plant",
+    uniqueSellingPoint: "Sub-20 cm accuracy with millisecond latency, deployable without Wi-Fi",
+  },
+  {
+    name: "Omnilink",
+    description: "Tracking, fleet management, load baiting, risk management, & advanced telemetry",
+    website: "https://omnilink.com",
+    location: "São Paulo, Brazil",
+    region: "South America",
+    specialties: ["Fleet Management"],
+    industries: ["Automotive", "Transport & Logistics", "Retail"],
+    coreServices: "Tracking, fleet management, load baiting, risk management, & advanced telemetry",
+    keyIndustries: "Automotive, Transport & Logistics, Retail",
+    uniqueSellingPoint: "Omnifleet & Omnitelemetry providing holistic fleet management & vehicle tracking",
   },
   {
     name: "Sensoro",
-    description: "IoT and BLE solutions for smart cities and retail",
+    description:
+      "Environmental Monitoring, IoT products, Smart security solutions, Location Service, Safety Monitoring, Gas & Leak Detections",
     website: "https://www.sensoro.com",
     location: "Beijing, China",
     region: "Asia",
-    specialties: ["BLE", "Smart Cities", "Retail"],
-    industries: ["Smart Cities", "Retail", "Environmental"],
+    specialties: ["BLE", "IoT", "LPWAN"],
+    industries: ["Safety & Security", "Cultural & Religious", "Smart Cities", "Smart Home"],
+    coreServices:
+      "Environmental Monitoring, IoT products, Smart security solutions, Location Service, Safety Monitoring, Gas & Leak Detections",
+    keyIndustries: "Safety & Security, Cultural & Religious, Smart Cities, Smart Home",
+    uniqueSellingPoint: "Offer a holistic IoT platform with Alpha Product Suite with 120 sq miles of coverage",
   },
   {
-    name: "Ciholas",
-    description: "High-precision UWB positioning systems for industrial and commercial applications",
-    website: "https://ciholas.com",
-    location: "Newburgh, IN, USA",
+    name: "Impinj",
+    description:
+      "Asset Management, Automated Checkout, Baggage Tracking, Inventory Management, Loss Prevention, Product Authentication, Shipment Verification, Supply Chain Automation",
+    website: "https://www.impinj.com",
+    location: "Seattle, USA",
     region: "North America",
-    specialties: ["UWB", "Industrial", "Precision Tracking"],
-    industries: ["Manufacturing", "Entertainment", "Research"],
+    specialties: ["RFID"],
+    industries: [
+      "Airlines & Airports",
+      "Healthcare",
+      "Hospitality",
+      "Manufacturing & Automotive",
+      "Retail",
+      "Supply Chain & Logistics Solutions",
+    ],
+    coreServices:
+      "Asset Management, Automated Checkout, Baggage Tracking, Inventory Management, Loss Prevention, Product Authentication, Shipment Verification, Supply Chain Automation",
+    keyIndustries:
+      "Airlines & Airports, Healthcare, Hospitality, Manufacturing & Automotive, Retail, Supply Chain & Logistics Solutions",
+    uniqueSellingPoint: "Leading RAIN RFID platform and solutions",
   },
   {
-    name: "Mist Systems (Juniper)",
-    description: "AI-driven wireless networks with built-in location services",
-    website: "https://www.mist.com",
-    location: "Cupertino, CA, USA",
+    name: "RedLore",
+    description:
+      "Location Tracking, Inventory management, Cold storage monitoring, People tracking, Vendor Managed Inventory & Consignment stocking, Environmental monitoring, Spare parts management",
+    website: "https://redlore.com",
+    location: "Ontario, Canada",
     region: "North America",
-    specialties: ["WiFi", "BLE", "AI-driven Location"],
-    industries: ["Corporate", "Retail", "Healthcare", "Education"],
+    specialties: ["RTLS"],
+    industries: [
+      "Manufacturing",
+      "Automotive",
+      "Aerospace",
+      "Wholesale",
+      "Distribution",
+      "Pharma",
+      "Warehousing",
+      "Defence",
+      "3PL",
+    ],
+    coreServices:
+      "Location Tracking, Inventory management, Cold storage monitoring, People tracking, Vendor Managed Inventory & Consignment stocking, Environmental monitoring, Spare parts management",
+    keyIndustries: "Manufacturing, Automotive, Aerospace, Wholesale, Distribution, Pharma, Warehousing, Defence, 3PL",
+    uniqueSellingPoint:
+      "Positioning accuracy down to 30 cm or 1 ft, 100% wire-free, Up to 80% lower Total Cost of Ownership compared with other solutions",
   },
   {
-    name: "Humatics",
-    description: "Microlocation technology for industrial environments and transit systems",
-    website: "https://humatics.com",
-    location: "Waltham, MA, USA",
-    region: "North America",
-    specialties: ["UWB", "Industrial", "Transit"],
-    industries: ["Transit", "Manufacturing", "Warehousing"],
-  },
-  {
-    name: "Signify (Philips Lighting)",
-    description: "Visible Light Communication (VLC) for indoor positioning",
-    website: "https://www.signify.com",
-    location: "Eindhoven, Netherlands",
+    name: "Kinexon",
+    description:
+      "AMR & AGV fleet management, Order Tracking & Process Management, Asset Tracking, Assembly Line Control",
+    website: "https://kinexon.com",
+    location: "Munich, Germany",
     region: "Europe",
-    specialties: ["VLC", "Retail", "Smart Buildings"],
-    industries: ["Retail", "Corporate", "Hospitality"],
-  },
-  {
-    name: "Leantegra",
-    description: "BLE and UWB solutions for indoor positioning and analytics",
-    website: "https://leantegra.com",
-    location: "New York, NY, USA",
-    region: "North America",
-    specialties: ["BLE", "UWB", "Retail Analytics"],
-    industries: ["Retail", "Corporate", "Warehousing"],
+    specialties: ["UWB", "Mesh"],
+    industries: ["Automotive", "Aerospace & Defense", "Machinery & Equipment", "Intralogistics"],
+    coreServices:
+      "AMR & AGV fleet management, Order Tracking & Process Management, Asset Tracking, Assembly Line Control",
+    keyIndustries: "Automotive, Aerospace & Defense, Machinery & Equipment, Intralogistics",
+    uniqueSellingPoint: "KINEXON RTLS Mesh: ROI in <1 year, <100ms Latency in Industrial Environments",
   },
   {
     name: "Accuware",
-    description: "Indoor positioning solutions using WiFi, visual positioning, and sensors",
+    description: "Indoor positioning solutions provider",
     website: "https://www.accuware.com",
-    location: "Miami, FL, USA",
+    location: "Florida, USA",
     region: "North America",
-    specialties: ["WiFi", "Visual Positioning", "Indoor Navigation"],
-    industries: ["Retail", "Corporate", "Warehousing"],
+    specialties: ["Indoor Positioning"],
+    industries: ["Various"],
+    coreServices: "Indoor positioning solutions",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Advanced indoor positioning technology",
   },
   {
-    name: "Indoo.rs",
-    description: "Indoor positioning and navigation solutions for large venues",
-    website: "https://indoo.rs",
-    location: "Vienna, Austria",
-    region: "Europe",
-    specialties: ["BLE", "Indoor Navigation", "Airports"],
-    industries: ["Transportation", "Retail", "Corporate"],
-  },
-  {
-    name: "Oriient",
-    description: "Magnetic positioning technology that works without hardware installation",
-    website: "https://www.oriient.me",
-    location: "Tel Aviv, Israel",
-    region: "Middle East",
-    specialties: ["Magnetic Positioning", "Retail", "No Hardware"],
-    industries: ["Retail", "Shopping Centers", "Warehousing"],
-  },
-  {
-    name: "Situm",
-    description: "Indoor positioning platform for large buildings and campuses",
-    website: "https://situm.com",
-    location: "Santiago de Compostela, Spain",
-    region: "Europe",
-    specialties: ["Multi-technology", "Indoor Navigation", "Smart Buildings"],
-    industries: ["Corporate", "Healthcare", "Retail", "Transportation"],
-  },
-  // Vision RTLS companies
-  {
-    name: "Slamcore",
-    description: "Visual-inertial SLAM solutions for robots and autonomous systems",
-    website: "https://www.slamcore.com",
-    location: "London, UK",
-    region: "Europe",
-    specialties: ["Visual SLAM", "Robotics", "Spatial Intelligence"],
-    industries: ["Robotics", "Automation", "Warehousing"],
-  },
-  {
-    name: "Synaos",
-    description: "AI-powered visual tracking for intralogistics and material flow",
-    website: "https://www.synaos.com",
-    location: "Hannover, Germany",
-    region: "Europe",
-    specialties: ["Computer Vision", "Intralogistics", "AI"],
-    industries: ["Manufacturing", "Warehousing", "Logistics"],
-  },
-  {
-    name: "Vimana",
-    description: "Computer vision and AI for manufacturing visibility and analytics",
-    website: "https://www.vimana.global",
-    location: "Boston, MA, USA",
+    name: "Apptricity",
+    description: "Asset Tracking, Inventory & Work Order Management, Field Services, Spend & Travel Management",
+    website: "https://www.apptricity.com",
+    location: "Texas, USA",
     region: "North America",
-    specialties: ["Computer Vision", "Manufacturing", "Analytics"],
-    industries: ["Manufacturing", "Aerospace", "Automotive"],
+    specialties: ["IoT", "RFID", "GPS", "BLE"],
+    industries: [
+      "Department of Defense",
+      "Government",
+      "Construction",
+      "Healthcare",
+      "Retail",
+      "Logistics",
+      "Telecommunications",
+      "Energy",
+    ],
+    coreServices: "Asset Tracking, Inventory & Work Order Management, Field Services, Spend & Travel Management",
+    keyIndustries:
+      "Department of Defense, Government, Construction, Healthcare, Retail, Logistics, Telecommunications, Energy",
+    uniqueSellingPoint: "20-Mile Bluetooth Beacon",
   },
   {
-    name: "Zensors",
-    description: "Computer vision platform for retail and facility management",
-    website: "https://www.zensors.com",
-    location: "Pittsburgh, PA, USA",
-    region: "North America",
-    specialties: ["Computer Vision", "Retail Analytics", "Occupancy"],
-    industries: ["Retail", "Corporate", "Hospitality"],
-  },
-  {
-    name: "Motional AI",
-    description: "Visual positioning and tracking for retail and smart buildings",
-    website: "https://www.motional.ai",
-    location: "San Francisco, CA, USA",
-    region: "North America",
-    specialties: ["Computer Vision", "Retail", "People Counting"],
-    industries: ["Retail", "Corporate", "Transportation"],
-  },
-  // LoRa solutions companies
-  {
-    name: "Semtech",
-    description: "LoRa technology provider for long-range, low-power IoT applications",
-    website: "https://www.semtech.com",
-    location: "Camarillo, CA, USA",
-    region: "North America",
-    specialties: ["LoRa", "IoT", "Semiconductors"],
-    industries: ["Smart Cities", "Agriculture", "Logistics", "Industrial"],
-  },
-  {
-    name: "Kerlink",
-    description: "LoRaWAN network infrastructure for IoT and asset tracking",
-    website: "https://www.kerlink.com",
-    location: "Thorigné-Fouillard, France",
-    region: "Europe",
-    specialties: ["LoRaWAN", "IoT", "Network Infrastructure"],
-    industries: ["Smart Cities", "Agriculture", "Utilities", "Logistics"],
-  },
-  {
-    name: "Senet",
-    description: "LoRaWAN network provider for IoT applications including asset tracking",
-    website: "https://www.senetco.com",
-    location: "Portsmouth, NH, USA",
-    region: "North America",
-    specialties: ["LoRaWAN", "IoT", "Network Services"],
-    industries: ["Smart Cities", "Utilities", "Agriculture", "Logistics"],
-  },
-  {
-    name: "Comcast MachineQ",
-    description: "Enterprise IoT network and platform based on LoRaWAN",
-    website: "https://machineq.com",
-    location: "Philadelphia, PA, USA",
-    region: "North America",
-    specialties: ["LoRaWAN", "Enterprise IoT", "Asset Tracking"],
-    industries: ["Corporate", "Healthcare", "Education", "Utilities"],
-  },
-  {
-    name: "Digital Matter",
-    description: "GPS and LoRaWAN tracking devices for asset management",
-    website: "https://www.digitalmatter.com",
-    location: "Perth, Australia",
-    region: "Oceania",
-    specialties: ["LoRaWAN", "GPS", "Asset Tracking"],
-    industries: ["Logistics", "Agriculture", "Construction", "Mining"],
-  },
-  // GNSS/RTK GPS companies
-  {
-    name: "Swift Navigation",
-    description: "Precise positioning solutions using RTK and GNSS technology",
-    website: "https://www.swiftnav.com",
-    location: "San Francisco, CA, USA",
-    region: "North America",
-    specialties: ["RTK", "GNSS", "Precision Positioning"],
-    industries: ["Autonomous Vehicles", "Agriculture", "Construction", "Surveying"],
-  },
-  {
-    name: "Trimble",
-    description: "Advanced positioning solutions for various industries",
-    website: "https://www.trimble.com",
-    location: "Sunnyvale, CA, USA",
-    region: "North America",
-    specialties: ["GNSS", "RTK", "Surveying"],
-    industries: ["Construction", "Agriculture", "Transportation", "Geospatial"],
-  },
-  {
-    name: "Hexagon",
-    description: "Precision measurement and positioning technologies",
-    website: "https://hexagon.com",
-    location: "Stockholm, Sweden",
-    region: "Europe",
-    specialties: ["GNSS", "Positioning", "Industrial"],
-    industries: ["Construction", "Manufacturing", "Mining", "Agriculture"],
-  },
-  {
-    name: "u-blox",
-    description: "Positioning and wireless communication technologies for IoT",
-    website: "https://www.u-blox.com",
-    location: "Thalwil, Switzerland",
-    region: "Europe",
-    specialties: ["GNSS", "Cellular", "Bluetooth"],
-    industries: ["Automotive", "Industrial", "Consumer", "Healthcare"],
-  },
-  {
-    name: "Septentrio",
-    description: "High-precision GNSS receivers for professional applications",
-    website: "https://www.septentrio.com",
-    location: "Leuven, Belgium",
-    region: "Europe",
-    specialties: ["GNSS", "RTK", "Precision Positioning"],
-    industries: ["Surveying", "Autonomous Vehicles", "Marine", "Agriculture"],
-  },
-  // LiDAR-based tracking companies
-  {
-    name: "Quanergy",
-    description: "LiDAR sensors and smart sensing solutions for various applications",
-    website: "https://quanergy.com",
-    location: "Sunnyvale, CA, USA",
-    region: "North America",
-    specialties: ["LiDAR", "People Tracking", "Security"],
-    industries: ["Smart Cities", "Security", "Industrial", "Transportation"],
-  },
-  {
-    name: "Ouster",
-    description: "High-resolution LiDAR sensors for mapping and object detection",
-    website: "https://ouster.com",
-    location: "San Francisco, CA, USA",
-    region: "North America",
-    specialties: ["LiDAR", "Mapping", "Robotics"],
-    industries: ["Robotics", "Automotive", "Smart Cities", "Industrial"],
-  },
-  {
-    name: "Cepton",
-    description: "LiDAR solutions for smart spaces and people tracking",
-    website: "https://www.cepton.com",
-    location: "San Jose, CA, USA",
-    region: "North America",
-    specialties: ["LiDAR", "Smart Spaces", "People Counting"],
-    industries: ["Smart Cities", "Retail", "Security", "Automotive"],
-  },
-  {
-    name: "Seoul Robotics",
-    description: "3D perception software for LiDAR-based tracking and analytics",
-    website: "https://www.seoulrobotics.org",
-    location: "Seoul, South Korea",
-    region: "Asia",
-    specialties: ["LiDAR", "3D Perception", "Traffic Monitoring"],
-    industries: ["Smart Cities", "Automotive", "Security", "Retail"],
-  },
-  {
-    name: "Blickfeld",
-    description: "LiDAR technology for people counting and crowd analytics",
+    name: "Blickfeld GmbH",
+    description:
+      "Volume Monitoring, threat detection and alarm generation, Crowd Analytics, Traffic & Infrastructure management, Automation & Mobility",
     website: "https://www.blickfeld.com",
     location: "Munich, Germany",
     region: "Europe",
-    specialties: ["LiDAR", "People Counting", "Smart Cities"],
-    industries: ["Smart Cities", "Retail", "Transportation", "Security"],
+    specialties: ["LiDAR"],
+    industries: ["Security", "Automotive", "Infrastructure", "Electronics Manufacturing"],
+    coreServices:
+      "Volume Monitoring, threat detection and alarm generation, Crowd Analytics, Traffic & Infrastructure management, Automation & Mobility",
+    keyIndustries: "Security, Automotive, Infrastructure, Electronics Manufacturing",
+    uniqueSellingPoint: "Advanced LiDAR solutions for various applications",
   },
-  // Magnetic field mapping companies
   {
-    name: "IndoorAtlas",
-    description: "Geomagnetic indoor positioning platform for mobile applications",
-    website: "https://www.indooratlas.com",
-    location: "Helsinki, Finland",
+    name: "Cepton",
+    description: "Crowd analytics, Intelligent transportation systems",
+    website: "https://www.cepton.com",
+    location: "California, USA",
+    region: "North America",
+    specialties: ["LiDAR"],
+    industries: ["ADAS", "Autonomous Vehicles (AV)", "Smart Infrastructure markets"],
+    coreServices: "Crowd analytics, Intelligent transportation systems",
+    keyIndustries: "ADAS, Autonomous Vehicles (AV), Smart Infrastructure markets",
+    uniqueSellingPoint: "Proprietary micro-optical modules",
+  },
+  {
+    name: "Ciholas",
+    description:
+      "Embedded Technology solutions, Design Work, Invention and Patent Work, Network Protocol Development, Regulatory and Safety Compliance, Manufacturing Support and Repair, Product Life Cycle Support",
+    website: "https://ciholas.com",
+    location: "Indiana, USA",
+    region: "North America",
+    specialties: ["UWB", "Wifi"],
+    industries: ["Various"],
+    coreServices:
+      "Embedded Technology solutions, Design Work, Invention and Patent Work, Network Protocol Development, Regulatory and Safety Compliance, Manufacturing Support and Repair, Product Life Cycle Support",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Comprehensive embedded technology solutions",
+  },
+  {
+    name: "Cisco Meraki",
+    description: "Cloud-managed networking solutions",
+    website: "https://meraki.cisco.com",
+    location: "California, USA",
+    region: "North America",
+    specialties: ["Wi-Fi"],
+    industries: [
+      "Financial Services",
+      "Manufacturing",
+      "Government",
+      "Healthcare",
+      "Retail",
+      "Education",
+      "Small Business",
+      "Hospitality",
+      "Physical Security",
+    ],
+    coreServices: "Cloud-managed networking solutions",
+    keyIndustries:
+      "Financial Services, Manufacturing, Government, Healthcare, Retail, Education, Small Business, Hospitality, Physical Security",
+    uniqueSellingPoint: "Cloud-managed Wi-Fi and networking solutions",
+  },
+  {
+    name: "MachineQ",
+    description: "LoRaWAN network provider",
+    website: "https://machineq.com",
+    location: "Pennsylvania, USA",
+    region: "North America",
+    specialties: ["LoRaWAN®", "LPWAN"],
+    industries: ["Various"],
+    coreServices: "LoRaWAN network services",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Enterprise LoRaWAN network platform",
+  },
+  {
+    name: "Digital Matter",
+    description:
+      "Cold Chain Monitoring, Fleet Tracking and Management, Logistics, Remote Sensor Monitoring, Supply Chain Visibility",
+    website: "https://www.digitalmatter.com",
+    location: "Perth, Australia",
+    region: "Oceania",
+    specialties: ["LoRaWAN®", "GPS", "BLE"],
+    industries: ["Various"],
+    coreServices:
+      "Cold Chain Monitoring, Fleet Tracking and Management, Logistics, Remote Sensor Monitoring, Supply Chain Visibility",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Comprehensive tracking and monitoring solutions",
+  },
+  {
+    name: "Estimote Inc.",
+    description: "Sensor-based analytics, Cloud and Content Management",
+    website: "https://estimote.com",
+    location: "New York, USA",
+    region: "North America",
+    specialties: ["UWB", "LTE/NB-IoT", "Wi-Fi"],
+    industries: ["Bricks-and-mortar retail stores"],
+    coreServices: "Sensor-based analytics, Cloud and Content Management",
+    keyIndustries: "Bricks-and-mortar retail stores",
+    uniqueSellingPoint: "Advanced sensor analytics for retail",
+  },
+  {
+    name: "Favendo",
+    description: "Indoor positioning and navigation solutions",
+    website: "https://www.favendo.com",
+    location: "Bamberg, Germany",
     region: "Europe",
-    specialties: ["Magnetic Positioning", "Indoor Navigation", "Mobile SDK"],
-    industries: ["Retail", "Transportation", "Corporate", "Healthcare"],
+    specialties: ["NFC", "BLE", "IoT", "GPS"],
+    industries: ["Industry 4.0", "Healthcare", "Mining", "Cruise Ships", "Leisure Facilities", "Smart Buildings"],
+    coreServices: "Indoor positioning and navigation solutions",
+    keyIndustries: "Industry 4.0, Healthcare, Mining, Cruise Ships, Leisure Facilities, Smart Buildings",
+    uniqueSellingPoint: "Multi-technology indoor positioning platform",
   },
   {
     name: "GiPStech",
-    description: "Geomagnetic indoor positioning technology for various applications",
+    description: "Positioning technology provider",
     website: "https://www.gipstech.com",
-    location: "Rende, Italy",
+    location: "Italy",
     region: "Europe",
-    specialties: ["Magnetic Positioning", "Indoor Navigation", "Retail"],
-    industries: ["Retail", "Transportation", "Corporate", "Events"],
+    specialties: ["Positioning"],
+    industries: ["Various"],
+    coreServices: "Positioning technology",
+    keyIndustries: "Various",
+    uniqueSellingPoint: "Advanced positioning technology solutions",
   },
   {
-    name: "Pole Star",
-    description: "Indoor location services using multiple technologies including magnetic",
-    website: "https://www.polestar.eu",
-    location: "Toulouse, France",
+    name: "Hexagon",
+    description: "Asset Lifecycle Intelligence, Autonomous Solutions, Manufacturing Intelligence",
+    website: "https://hexagon.com",
+    location: "Stockholm, Sweden",
     region: "Europe",
-    specialties: ["Magnetic Positioning", "Indoor Navigation", "Airports"],
-    industries: ["Transportation", "Retail", "Corporate", "Hospitality"],
+    specialties: ["GNSS/INS"],
+    industries: [
+      "Agriculture",
+      "Geospatial",
+      "Industrial asset lifecycle",
+      "Manufacturing",
+      "Mining",
+      "Positioning",
+      "Safety, security and surveillance",
+      "Surveying and construction",
+    ],
+    coreServices: "Asset Lifecycle Intelligence, Autonomous Solutions, Manufacturing Intelligence",
+    keyIndustries:
+      "Agriculture, Geospatial, Industrial asset lifecycle, Manufacturing, Mining, Positioning, Safety, security and surveillance, Surveying and construction",
+    uniqueSellingPoint: "Comprehensive digital reality solutions",
   },
-  // Ultrasound RTLS companies
   {
-    name: "Stethoscope Health",
-    description: "Ultrasound-based positioning for healthcare asset tracking",
-    website: "https://www.stethoscopehealth.com",
-    location: "Boston, MA, USA",
+    name: "Humatics",
+    description:
+      "Automotive & Semiconductor Manufacturing, Dynamic Material Handling, Predictive Maintenance, Indoor Localization",
+    website: "https://humatics.com",
+    location: "Massachusetts, USA",
     region: "North America",
-    specialties: ["Ultrasound", "Healthcare", "Asset Tracking"],
-    industries: ["Healthcare"],
+    specialties: ["IoT", "AI"],
+    industries: ["Manufacturing", "Mobility", "Smart Factories"],
+    coreServices:
+      "Automotive & Semiconductor Manufacturing, Dynamic Material Handling, Predictive Maintenance, Indoor Localization",
+    keyIndustries: "Manufacturing, Mobility, Smart Factories",
+    uniqueSellingPoint: "MILO automation with sub-millimeter positioning hundreds of times per second",
+  },
+  {
+    name: "Indoo.rs",
+    description: "Asset Tracking, indoor positioning, indoor mapping, and indoor analytics",
+    website: "https://indoo.rs",
+    location: "Austria",
+    region: "Europe",
+    specialties: ["BLE", "Wi-Fi"],
+    industries: [
+      "Architecture, Engineering & Construction",
+      "Business",
+      "Conservation",
+      "Education",
+      "Energy Utilities",
+      "Facilities Management",
+      "Health & Human Services",
+      "Government",
+      "Natural Resources",
+      "Nonprofit",
+      "Public Safety",
+      "Science",
+      "Sustainable Development",
+      "Telecommunications",
+      "Transportation",
+    ],
+    coreServices: "Asset Tracking, indoor positioning, indoor mapping, and indoor analytics",
+    keyIndustries:
+      "Architecture, Engineering & Construction, Business, Conservation, Education, Energy Utilities, Facilities Management, Health & Human Services, Government, Natural Resources, Nonprofit, Public Safety, Science, Sustainable Development, Telecommunications, Transportation",
+    uniqueSellingPoint: "Comprehensive indoor positioning and analytics platform",
   },
   {
     name: "Intelligent InSites",
-    description: "Healthcare operational intelligence platform with ultrasound RTLS",
+    description:
+      "Patient Flow, Business Intelligence, Infection Control, Temperature Monitoring, Asset Management, Healthcare Operations",
     website: "https://www.intelligentinsites.com",
-    location: "Fargo, ND, USA",
+    location: "North Dakota, USA",
     region: "North America",
-    specialties: ["Ultrasound", "Healthcare", "Operational Intelligence"],
+    specialties: ["RFID"],
     industries: ["Healthcare"],
+    coreServices:
+      "Patient Flow, Business Intelligence, Infection Control, Temperature Monitoring, Asset Management, Healthcare Operations",
+    keyIndustries: "Healthcare",
+    uniqueSellingPoint: "Healthcare-focused operational intelligence",
   },
   {
-    name: "PLUS Location Systems",
-    description: "Ultrasound and RF hybrid positioning for precise indoor tracking",
-    website: "https://pluslocation.com",
-    location: "Huntsville, AL, USA",
-    region: "North America",
-    specialties: ["Ultrasound", "RF Hybrid", "Industrial"],
-    industries: ["Manufacturing", "Healthcare", "Warehousing"],
+    name: "Kerlink",
+    description: "LoRaWAN network infrastructure provider",
+    website: "https://www.kerlink.com",
+    location: "Thorigné-Fouillard, France",
+    region: "Europe",
+    specialties: ["LoRaWAN", "IoT"],
+    industries: ["Smart City & Quality of Life", "Smart Agriculture & Environment", "Smart Building & Industry"],
+    coreServices: "LoRaWAN network infrastructure",
+    keyIndustries: "Smart City & Quality of Life, Smart Agriculture & Environment, Smart Building & Industry",
+    uniqueSellingPoint: "Leading LoRaWAN infrastructure solutions",
   },
 ]
 
-// List of RTLS practitioners (fictional)
-const practitioners = [
-  {
-    name: "Dr. Sarah Johnson",
-    title: "RTLS Implementation Specialist",
-    organization: "Global Healthcare Solutions",
-    expertise: ["Healthcare RTLS", "Patient Flow Optimization", "Asset Management"],
-    location: "Boston, MA, USA",
-  },
-  {
-    name: "Michael Chen",
-    title: "Manufacturing RTLS Architect",
-    organization: "Industrial Automation Partners",
-    expertise: ["UWB Systems", "Production Tracking", "Digital Twin Integration"],
-    location: "Detroit, MI, USA",
-  },
-  {
-    name: "Sophia Rodriguez",
-    title: "Retail RTLS Consultant",
-    organization: "Smart Retail Advisors",
-    expertise: ["Customer Analytics", "Inventory Tracking", "BLE Implementation"],
-    location: "New York, NY, USA",
-  },
-  {
-    name: "James Wilson",
-    title: "Warehouse RTLS Engineer",
-    organization: "Logistics Optimization Group",
-    expertise: ["Warehouse Management", "AGV Navigation", "RFID Systems"],
-    location: "Atlanta, GA, USA",
-  },
-  {
-    name: "Emma Thompson",
-    title: "Healthcare RTLS Project Manager",
-    organization: "Medical Technology Solutions",
-    expertise: ["Hospital Deployments", "Staff Workflow", "Equipment Tracking"],
-    location: "Chicago, IL, USA",
-  },
-  {
-    name: "David Kim",
-    title: "RTLS Systems Architect",
-    organization: "Enterprise Location Intelligence",
-    expertise: ["Multi-technology Integration", "Enterprise Deployments", "Location Analytics"],
-    location: "San Francisco, CA, USA",
-  },
-  {
-    name: "Olivia Martinez",
-    title: "RTLS Data Scientist",
-    organization: "Location Analytics Partners",
-    expertise: ["Spatial Data Analysis", "Predictive Modeling", "Process Optimization"],
-    location: "Austin, TX, USA",
-  },
-  {
-    name: "Robert Johnson",
-    title: "Industrial RTLS Specialist",
-    organization: "Factory Automation Consultants",
-    expertise: ["Manufacturing Workflows", "Tool Tracking", "Safety Applications"],
-    location: "Pittsburgh, PA, USA",
-  },
-  {
-    name: "Jennifer Lee",
-    title: "Healthcare RTLS Consultant",
-    organization: "Patient Flow Solutions",
-    expertise: ["Emergency Department Optimization", "Asset Utilization", "Staff Efficiency"],
-    location: "Seattle, WA, USA",
-  },
-  {
-    name: "Thomas Schmidt",
-    title: "RTLS Integration Architect",
-    organization: "Enterprise Systems Group",
-    expertise: ["ERP Integration", "API Development", "System Architecture"],
-    location: "Munich, Germany",
-  },
-  {
-    name: "Maria Garcia",
-    title: "Retail RTLS Specialist",
-    organization: "Customer Experience Innovations",
-    expertise: ["Customer Journey Mapping", "Store Analytics", "Proximity Marketing"],
-    location: "Barcelona, Spain",
-  },
-  {
-    name: "John Anderson",
-    title: "RTLS Project Manager",
-    organization: "Location Technology Partners",
-    expertise: ["Implementation Strategy", "Change Management", "ROI Analysis"],
-    location: "Toronto, Canada",
-  },
-  {
-    name: "Aisha Patel",
-    title: "Healthcare RTLS Analyst",
-    organization: "Clinical Workflow Solutions",
-    expertise: ["Process Improvement", "Patient Experience", "Staff Utilization"],
-    location: "London, UK",
-  },
-  {
-    name: "Carlos Mendez",
-    title: "Logistics RTLS Engineer",
-    organization: "Supply Chain Optimization Group",
-    expertise: ["Warehouse Management", "Yard Management", "Fleet Tracking"],
-    location: "Mexico City, Mexico",
-  },
-  {
-    name: "Natalie Wong",
-    title: "RTLS Implementation Specialist",
-    organization: "Enterprise Location Services",
-    expertise: ["System Deployment", "User Training", "Performance Optimization"],
-    location: "Singapore",
-  },
-  {
-    name: "Alexander Petrov",
-    title: "Manufacturing RTLS Consultant",
-    organization: "Industry 4.0 Solutions",
-    expertise: ["Production Tracking", "Quality Control", "Digital Manufacturing"],
-    location: "Berlin, Germany",
-  },
-  {
-    name: "Fatima Al-Farsi",
-    title: "RTLS Solutions Architect",
-    organization: "Smart Building Technologies",
-    expertise: ["Building Management", "Occupancy Analytics", "Energy Optimization"],
-    location: "Dubai, UAE",
-  },
-  {
-    name: "Ryan O'Connor",
-    title: "RTLS Network Engineer",
-    organization: "Wireless Infrastructure Group",
-    expertise: ["WiFi Design", "BLE Infrastructure", "Network Optimization"],
-    location: "Dublin, Ireland",
-  },
-  {
-    name: "Yuki Tanaka",
-    title: "RTLS Application Developer",
-    organization: "Location Intelligence Software",
-    expertise: ["Mobile Applications", "Dashboard Development", "User Experience"],
-    location: "Tokyo, Japan",
-  },
-  {
-    name: "Pierre Dubois",
-    title: "RTLS Integration Specialist",
-    organization: "Enterprise Systems Consultancy",
-    expertise: ["System Integration", "Data Migration", "API Development"],
-    location: "Paris, France",
-  },
-  {
-    name: "Liam Wilson",
-    title: "RTLS Project Engineer",
-    organization: "Industrial Automation Solutions",
-    expertise: ["Factory Automation", "Process Optimization", "Safety Systems"],
-    location: "Melbourne, Australia",
-  },
-  {
-    name: "Elena Popova",
-    title: "Healthcare RTLS Consultant",
-    organization: "Medical Process Improvement",
-    expertise: ["Patient Flow", "Asset Management", "Staff Efficiency"],
-    location: "Moscow, Russia",
-  },
-  {
-    name: "Ahmed Hassan",
-    title: "RTLS Systems Analyst",
-    organization: "Enterprise Location Intelligence",
-    expertise: ["Data Analysis", "Process Improvement", "ROI Calculation"],
-    location: "Cairo, Egypt",
-  },
-  {
-    name: "Isabella Romano",
-    title: "Retail RTLS Strategist",
-    organization: "Customer Experience Design",
-    expertise: ["Shopper Journey", "Store Layout Optimization", "Engagement Analytics"],
-    location: "Milan, Italy",
-  },
-  {
-    name: "Daniel Kim",
-    title: "RTLS Solution Architect",
-    organization: "Enterprise Mobility Group",
-    expertise: ["System Design", "Technology Selection", "Implementation Planning"],
-    location: "Seoul, South Korea",
-  },
-  {
-    name: "Sophia Chen",
-    title: "RTLS Data Analyst",
-    organization: "Location Intelligence Partners",
-    expertise: ["Spatial Analytics", "Predictive Modeling", "Visualization"],
-    location: "Taipei, Taiwan",
-  },
-  {
-    name: "Marco Silva",
-    title: "Logistics RTLS Consultant",
-    organization: "Supply Chain Optimization",
-    expertise: ["Warehouse Management", "Inventory Tracking", "Process Improvement"],
-    location: "São Paulo, Brazil",
-  },
-  {
-    name: "Priya Sharma",
-    title: "RTLS Implementation Manager",
-    organization: "Enterprise Technology Solutions",
-    expertise: ["Project Management", "Change Management", "User Adoption"],
-    location: "Mumbai, India",
-  },
-  {
-    name: "Lars Johansson",
-    title: "Manufacturing RTLS Specialist",
-    organization: "Industrial Digitalization Group",
-    expertise: ["Production Tracking", "Tool Management", "Process Optimization"],
-    location: "Stockholm, Sweden",
-  },
-  {
-    name: "Zoe Williams",
-    title: "RTLS UX Designer",
-    organization: "Location Software Solutions",
-    expertise: ["User Interface Design", "Dashboard Development", "User Experience"],
-    location: "Cape Town, South Africa",
-  },
-]
+import { useState } from "react"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { MapPin } from "lucide-react"
 
-// Sort vendors alphabetically by name
-const sortedVendors = [...vendors].sort((a, b) => a.name.localeCompare(b.name))
+const VendorCard = ({ vendor }: { vendor: any }) => {
+  const [isFlipped, setIsFlipped] = useState(false)
 
-// Sort practitioners alphabetically by name
-const sortedPractitioners = [...practitioners].sort((a, b) => a.name.localeCompare(b.name))
+  return (
+    <div
+      className="relative w-full h-80 perspective-1000"
+      onMouseEnter={() => setIsFlipped(true)}
+      onMouseLeave={() => setIsFlipped(false)}
+    >
+      <div
+        className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${isFlipped ? "rotate-y-180" : ""}`}
+      >
+        {/* Front of card */}
+        <div className="absolute inset-0 w-full h-full backface-hidden">
+          <Card className="w-full h-full p-6 bg-white border-2 border-gray-200 hover:border-blue-400 transition-colors duration-300 flex flex-col justify-between">
+            <div>
+              <h3 className="text-xl font-bold text-black mb-2 text-balance">{vendor.name}</h3>
+              <div className="flex items-center text-gray-600 mb-4">
+                <MapPin className="w-4 h-4 mr-1" />
+                <span className="text-sm">{vendor.location}</span>
+              </div>
+            </div>
 
-// Extract unique values for filters
-const getUniqueValues = (array, key) => {
-  if (key === "specialties" || key === "industries") {
-    const allValues = array.flatMap((item) => item[key] || [])
-    return [...new Set(allValues)].sort()
-  }
-  return [...new Set(array.map((item) => item[key]))].filter(Boolean).sort()
-}
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-gray-700 mb-2">Primary RTLS Technologies:</p>
+                <div className="flex flex-wrap gap-2">
+                  {vendor.specialties.slice(0, 4).map((tech: string, index: number) => (
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="bg-blue-100 text-blue-800 border-blue-200 text-xs px-2 py-1"
+                    >
+                      {tech}
+                    </Badge>
+                  ))}
+                  {vendor.specialties.length > 4 && (
+                    <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1">
+                      +{vendor.specialties.length - 4} more
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
 
-// Get only technology values from specialties
-const getTechnologyValues = (vendors) => {
-  // Define core RTLS technologies
-  const coreTechnologies = [
-    "UWB",
-    "BLE",
-    "RFID",
-    "WiFi",
-    "Bluetooth",
-    "LoRa",
-    "LoRaWAN",
-    "GNSS",
-    "RTK",
-    "GPS",
-    "LiDAR",
-    "Ultrasound",
-    "Visual SLAM",
-    "Computer Vision",
-    "Magnetic Positioning",
-    "VLC",
-  ]
+            <div className="text-center mt-4">
+              <p className="text-xs text-gray-500">Hover to see more details</p>
+            </div>
+          </Card>
+        </div>
 
-  // Get all specialties
-  const allSpecialties = vendors.flatMap((vendor) => vendor.specialties || [])
+        {/* Back of card */}
+        <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
+          <Card className="w-full h-full p-6 bg-gray-50 border-2 border-blue-400 flex flex-col justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-black mb-3">{vendor.name}</h3>
 
-  // Filter to only include core technologies
-  const technologies = allSpecialties.filter((specialty) => coreTechnologies.some((tech) => specialty.includes(tech)))
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 mb-1">Core Services:</p>
+                  <p className="text-xs text-gray-600 line-clamp-3">{vendor.coreServices}</p>
+                </div>
 
-  // Return unique values
-  return [...new Set(technologies)].sort()
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 mb-1">Key Industries:</p>
+                  <p className="text-xs text-gray-600 line-clamp-2">{vendor.keyIndustries}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 mb-1">Unique Selling Point:</p>
+                  <p className="text-xs text-gray-600 line-clamp-4">{vendor.uniqueSellingPoint}</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function EcosystemClientPage() {
-  const [activeTab, setActiveTab] = useState("vendors")
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedTechnology, setSelectedTechnology] = useState("All Technologies")
-  const [selectedRegion, setSelectedRegion] = useState("All Regions")
-  const [selectedIndustry, setSelectedIndustry] = useState("All Industries")
-  const [filteredVendors, setFilteredVendors] = useState(sortedVendors)
-  const [filteredPractitioners, setFilteredPractitioners] = useState(sortedPractitioners)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedRegion, setSelectedRegion] = useState("all")
+  const [selectedTechnology, setSelectedTechnology] = useState("all")
 
-  // Get unique values for filters
-  const technologies = getTechnologyValues(vendors)
-  const regions = getUniqueValues(vendors, "region")
-  const industries = getUniqueValues(vendors, "industries")
+  // Get unique regions and technologies for filters
+  const regions = [...new Set(vendors.map((v) => v.region))]
+  const technologies = [...new Set(vendors.flatMap((v) => v.specialties))]
 
-  // Filter vendors when search or filters change
-  useEffect(() => {
-    let result = [...sortedVendors]
+  // Filter vendors based on search and filters
+  const filteredVendors = vendors.filter((vendor) => {
+    const matchesSearch =
+      vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vendor.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vendor.location.toLowerCase().includes(searchTerm.toLowerCase())
 
-    // Filter by search query
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      result = result.filter(
-        (vendor) =>
-          vendor.name.toLowerCase().includes(query) ||
-          vendor.description.toLowerCase().includes(query) ||
-          vendor.location.toLowerCase().includes(query) ||
-          vendor.specialties.some((specialty) => specialty.toLowerCase().includes(query)),
-      )
-    }
+    const matchesRegion = selectedRegion === "all" || vendor.region === selectedRegion
 
-    // Filter by technology
-    if (selectedTechnology !== "All Technologies") {
-      result = result.filter((vendor) =>
-        vendor.specialties.some((specialty) => specialty.toLowerCase() === selectedTechnology.toLowerCase()),
-      )
-    }
+    const matchesTechnology =
+      selectedTechnology === "all" || vendor.specialties.some((tech: string) => tech === selectedTechnology)
 
-    // Filter by region
-    if (selectedRegion !== "All Regions") {
-      result = result.filter((vendor) => vendor.region === selectedRegion)
-    }
-
-    // Filter by industry
-    if (selectedIndustry !== "All Industries") {
-      result = result.filter(
-        (vendor) =>
-          vendor.industries &&
-          vendor.industries.some((industry) => industry.toLowerCase() === selectedIndustry.toLowerCase()),
-      )
-    }
-
-    setFilteredVendors(result)
-  }, [searchQuery, selectedTechnology, selectedRegion, selectedIndustry])
-
-  // Filter practitioners when search changes
-  useEffect(() => {
-    if (!searchQuery) {
-      setFilteredPractitioners(sortedPractitioners)
-      return
-    }
-
-    const query = searchQuery.toLowerCase()
-    const result = sortedPractitioners.filter(
-      (practitioner) =>
-        practitioner.name.toLowerCase().includes(query) ||
-        practitioner.title.toLowerCase().includes(query) ||
-        practitioner.organization.toLowerCase().includes(query) ||
-        practitioner.location.toLowerCase().includes(query) ||
-        practitioner.expertise.some((skill) => skill.toLowerCase().includes(query)),
-    )
-
-    setFilteredPractitioners(result)
-  }, [searchQuery])
-
-  // Reset filters
-  const resetFilters = () => {
-    setSearchQuery("")
-    setSelectedTechnology("All Technologies")
-    setSelectedRegion("All Regions")
-    setSelectedIndustry("All Industries")
-  }
+    return matchesSearch && matchesRegion && matchesTechnology
+  })
 
   return (
-    <main className="bg-white pb-16">
-      <section className="py-12 text-center bg-gradient-to-r from-blue-50 to-purple-50">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
-            RTLS Directory
-          </h1>
-
-          {/* Improved hero subtitle styling */}
-          <div className="max-w-3xl mx-auto mb-8 bg-white p-6 rounded-lg shadow-sm">
-            <p className="text-xl text-gray-700 leading-relaxed">
-              We're here to help you find the perfect RTLS vendor to transform your operations and unlock new
-              possibilities. Explore the innovators shaping the future of real-time location technology—from UWB and BLE
-              to WiFi and RFID—and discover the solution that fits your unique needs.
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-black mb-4">RTLS Vendor Ecosystem</h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover {vendors.length} leading Real-Time Location System vendors worldwide. Explore their technologies,
+              specialties, and unique capabilities.
             </p>
           </div>
-
-          {/* Moved text above CTA button and increased size */}
-          <p className="text-lg font-medium text-blue-800 mb-4">
-            Are you an RTLS provider or specialist but don't see your company in the public directory below?
-          </p>
-
-          <Link href="/contact">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 mx-auto">
-              Contact Us to get listed for free <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
         </div>
-      </section>
+      </div>
 
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          {/* More prominent tabs */}
-          <Tabs defaultValue="vendors" className="w-full" onValueChange={setActiveTab}>
-            <div className="flex justify-center mb-8">
-              <TabsList className="bg-blue-100 p-1 rounded-lg">
-                <TabsTrigger
-                  value="vendors"
-                  className="flex items-center gap-2 px-6 py-3 text-base font-medium data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  <Building2 className="h-5 w-5" />
-                  Vendors
-                </TabsTrigger>
-                <TabsTrigger
-                  value="practitioners"
-                  className="flex items-center gap-2 px-6 py-3 text-base font-medium data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  <User className="h-5 w-5" />
-                  Practitioners
-                </TabsTrigger>
-              </TabsList>
+      {/* Filters */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-gray-50 rounded-lg p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Search Vendors</label>
+              <Input
+                placeholder="Search by name, location, or services..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-white border-gray-300"
+              />
             </div>
 
-            {/* Search and Filters */}
-            <div className="mb-8">
-              <div className="flex flex-col md:flex-row gap-4 mb-4">
-                <div className="relative flex-grow">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <Input
-                    type="text"
-                    placeholder="Search directory..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Button variant="outline" className="flex items-center gap-2" onClick={resetFilters}>
-                  <X size={18} />
-                  Reset Filters
-                </Button>
-              </div>
-
-              {activeTab === "vendors" && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Technology Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Technology</label>
-                    <Select value={selectedTechnology} onValueChange={setSelectedTechnology}>
-                      <SelectTrigger className="border-blue-300 focus:ring-blue-500">
-                        <SelectValue placeholder="All Technologies" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="All Technologies">All Technologies</SelectItem>
-                        {technologies.map((tech) => (
-                          <SelectItem key={tech} value={tech}>
-                            {tech}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Region Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Region</label>
-                    <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                      <SelectTrigger className="border-blue-300 focus:ring-blue-500">
-                        <SelectValue placeholder="All Regions" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="All Regions">All Regions</SelectItem>
-                        {regions.map((region) => (
-                          <SelectItem key={region} value={region}>
-                            {region}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Industry Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
-                    <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
-                      <SelectTrigger className="border-blue-300 focus:ring-blue-500">
-                        <SelectValue placeholder="All Industries" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="All Industries">All Industries</SelectItem>
-                        {industries.map((industry) => (
-                          <SelectItem key={industry} value={industry}>
-                            {industry}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              )}
-
-              {/* Filter Results Summary */}
-              {activeTab === "vendors" && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {selectedTechnology !== "All Technologies" && (
-                    <Badge variant="outline" className="flex items-center gap-1">
-                      Technology: {selectedTechnology}
-                      <X
-                        size={14}
-                        className="cursor-pointer"
-                        onClick={() => setSelectedTechnology("All Technologies")}
-                      />
-                    </Badge>
-                  )}
-                  {selectedRegion !== "All Regions" && (
-                    <Badge variant="outline" className="flex items-center gap-1">
-                      Region: {selectedRegion}
-                      <X size={14} className="cursor-pointer" onClick={() => setSelectedRegion("All Regions")} />
-                    </Badge>
-                  )}
-                  {selectedIndustry !== "All Industries" && (
-                    <Badge variant="outline" className="flex items-center gap-1">
-                      Industry: {selectedIndustry}
-                      <X size={14} className="cursor-pointer" onClick={() => setSelectedIndustry("All Industries")} />
-                    </Badge>
-                  )}
-                  {(selectedTechnology !== "All Technologies" ||
-                    selectedRegion !== "All Regions" ||
-                    selectedIndustry !== "All Industries") && (
-                    <span className="text-sm text-gray-500">
-                      Showing {filteredVendors.length} of {sortedVendors.length} vendors
-                    </span>
-                  )}
-                </div>
-              )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
+              <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                <SelectTrigger className="bg-white border-gray-300">
+                  <SelectValue placeholder="Select region" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Regions</SelectItem>
+                  {regions.map((region) => (
+                    <SelectItem key={region} value={region}>
+                      {region}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
-            <TabsContent value="vendors">
-              {filteredVendors.length === 0 ? (
-                <div className="text-center py-12">
-                  <h3 className="text-xl font-medium text-gray-700">No vendors found</h3>
-                  <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
-                  <Button onClick={resetFilters} className="mt-4">
-                    Reset Filters
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredVendors.map((vendor, index) => (
-                    <div
-                      key={index}
-                      className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
-                    >
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{vendor.name}</h3>
-                      <p className="text-gray-700 mb-4">{vendor.description}</p>
-
-                      <div className="flex items-center text-gray-600 mb-4">
-                        <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <span>{vendor.location}</span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {vendor.specialties.map((specialty, i) => (
-                          <span key={i} className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                            {specialty}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Technology</label>
+              <Select value={selectedTechnology} onValueChange={setSelectedTechnology}>
+                <SelectTrigger className="bg-white border-gray-300">
+                  <SelectValue placeholder="Select technology" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Technologies</SelectItem>
+                  {technologies.map((tech) => (
+                    <SelectItem key={tech} value={tech}>
+                      {tech}
+                    </SelectItem>
                   ))}
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="practitioners">
-              {filteredPractitioners.length === 0 ? (
-                <div className="text-center py-12">
-                  <h3 className="text-xl font-medium text-gray-700">No practitioners found</h3>
-                  <p className="text-gray-500 mt-2">Try adjusting your search</p>
-                  <Button onClick={() => setSearchQuery("")} className="mt-4">
-                    Clear Search
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPractitioners.map((practitioner, index) => (
-                    <div
-                      key={index}
-                      className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
-                    >
-                      <h3 className="text-xl font-bold text-gray-900 mb-1">{practitioner.name}</h3>
-                      <div className="flex items-center text-gray-600 mb-3">
-                        <Briefcase className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <span>{practitioner.title}</span>
-                      </div>
-
-                      <p className="text-gray-700 mb-2">{practitioner.organization}</p>
-
-                      <div className="flex items-center text-gray-600 mb-4">
-                        <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <span>{practitioner.location}</span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {practitioner.expertise.map((skill, i) => (
-                          <span
-                            key={i}
-                            className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white mt-12">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Showcase Your RTLS Solutions</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Are you an RTLS provider or specialist but don't see your company listed in the public directory above?
-            Contact us to get listed for free and connect with potential clients looking for your solutions.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Link href="/contact">
-              <Button className="bg-white text-blue-900 hover:bg-gray-100 font-semibold text-lg px-6 py-2">
-                Contact Us
-              </Button>
-            </Link>
-            <Link href="/membership">
-              <Button className="bg-transparent border-2 border-white text-white hover:bg-white/10 font-semibold text-lg px-6 py-2">
-                Join The Alliance
-              </Button>
-            </Link>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* Disclaimer */}
-      <section className="py-4 bg-white border-t">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-sm text-gray-500">
-            This directory is provided as a resource for the RTLS community. Listing in this directory does not imply
-            endorsement by the RTLS Alliance.
+        {/* Results count */}
+        <div className="mb-6">
+          <p className="text-gray-600">
+            Showing {filteredVendors.length} of {vendors.length} vendors
           </p>
         </div>
-      </section>
-    </main>
+
+        {/* Vendor Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredVendors.map((vendor, index) => (
+            <VendorCard key={index} vendor={vendor} />
+          ))}
+        </div>
+
+        {filteredVendors.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No vendors found matching your criteria.</p>
+            <p className="text-gray-400 mt-2">Try adjusting your search or filters.</p>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

@@ -1,5 +1,4 @@
-import { createClient } from "@supabase/supabase-js"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
@@ -14,27 +13,9 @@ export async function GET(request: Request) {
 
   console.log("Auth callback initiated with next path:", next)
 
-  const cookieStore = cookies()
-
-  // Create a client with the service role key for admin operations
-  const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-
-  // Create a client with cookies for session management
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
-    cookies: {
-      get(name) {
-        return cookieStore.get(name)?.value
-      },
-      set(name, value, options) {
-        cookieStore.set({ name, value, ...options })
-      },
-      remove(name, options) {
-        cookieStore.set({ name, value: "", ...options })
-      },
-    },
-  })
-
   try {
+    const supabase = createServerClient()
+
     // Exchange the code for a session
     console.log("Exchanging code for session")
     const { error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
@@ -59,7 +40,7 @@ export async function GET(request: Request) {
 
     // Check if profile exists
     console.log("Checking if profile exists for user:", user.id)
-    const { data: existingProfile, error: profileCheckError } = await supabaseAdmin
+    const { data: existingProfile, error: profileCheckError } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", user.id)
@@ -80,7 +61,7 @@ export async function GET(request: Request) {
       console.log("Using name:", fullName)
 
       try {
-        const { error: insertError } = await supabaseAdmin.from("profiles").insert({
+        const { error: insertError } = await supabase.from("profiles").insert({
           id: user.id,
           email: user.email,
           full_name: fullName,
@@ -107,7 +88,7 @@ export async function GET(request: Request) {
         (existingProfile.membership_status === "INACTIVE" || !existingProfile.membership_status)
       ) {
         try {
-          const { error: updateError } = await supabaseAdmin
+          const { error: updateError } = await supabase
             .from("profiles")
             .update({
               membership_status: "ACTIVE",
