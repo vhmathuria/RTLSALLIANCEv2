@@ -1446,8 +1446,7 @@ export default function EcosystemClientPage() {
 
           <div className="max-w-3xl mx-auto mb-8">
             <p className="text-xl text-gray-700 leading-relaxed">
-              Find the perfect RTLS vendor to transform your operations. Explore innovators shaping the future of
-              real-time location technology—from UWB and BLE to WiFi and RFID.
+               Find the INNOVATORS shaping the future of real-time location technology from SLAM, UWB and BLE to WiFi and RFID.
             </p>
           </div>
 
