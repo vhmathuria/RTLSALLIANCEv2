@@ -604,6 +604,491 @@ const vendors = [
   },
 ]
 
+const newVendors = [
+  {
+    name: "Atlas RFID Store",
+    description: "Comprehensive RFID solutions and hardware for asset tracking and inventory management",
+    website: "https://atlasrfidstore.com",
+    location: "Birmingham, AL, USA",
+    region: "North America",
+    specialties: ["RFID", "Asset Tracking", "Inventory Management"],
+    industries: ["Retail", "Manufacturing", "Healthcare", "Logistics"],
+  },
+  {
+    name: "GlobeRanger",
+    description: "Enterprise RFID and sensor-based visibility solutions for supply chain optimization",
+    website: "https://globeranger.com",
+    location: "Richardson, TX, USA",
+    region: "North America",
+    specialties: ["RFID", "Supply Chain", "Enterprise"],
+    industries: ["Manufacturing", "Logistics", "Retail", "Healthcare"],
+  },
+  {
+    name: "Intelligent Locations",
+    description: "Advanced location intelligence solutions for industrial and commercial applications",
+    website: "https://intelligentlocations.com",
+    location: "Austin, TX, USA",
+    region: "North America",
+    specialties: ["Location Intelligence", "Industrial", "Analytics"],
+    industries: ["Manufacturing", "Warehousing", "Corporate", "Logistics"],
+  },
+  {
+    name: "Samsara",
+    description: "Connected operations platform with fleet tracking and asset monitoring capabilities",
+    website: "https://samsara.com",
+    location: "San Francisco, CA, USA",
+    region: "North America",
+    specialties: ["Fleet Tracking", "Asset Monitoring", "IoT"],
+    industries: ["Transportation", "Logistics", "Construction", "Manufacturing"],
+  },
+  {
+    name: "TraceSafe",
+    description: "Wearable safety and location tracking solutions for workplace safety",
+    website: "https://tracesafe.io",
+    location: "Vancouver, BC, Canada",
+    region: "North America",
+    specialties: ["Wearable Safety", "Contact Tracing", "BLE"],
+    industries: ["Healthcare", "Manufacturing", "Corporate", "Events"],
+  },
+  {
+    name: "ZeroKey",
+    description: "Secure location-based access control and tracking solutions",
+    website: "https://zerokey.com",
+    location: "Boston, MA, USA",
+    region: "North America",
+    specialties: ["Access Control", "Security", "Location-based"],
+    industries: ["Corporate", "Healthcare", "Education", "Government"],
+  },
+  {
+    name: "Cognosos",
+    description: "AI-powered location intelligence and spatial analytics platform",
+    website: "https://cognosos.com",
+    location: "Toronto, ON, Canada",
+    region: "North America",
+    specialties: ["AI", "Spatial Analytics", "Location Intelligence"],
+    industries: ["Retail", "Corporate", "Smart Cities", "Healthcare"],
+  },
+  {
+    name: "Everguard",
+    description: "Industrial safety and location tracking solutions for hazardous environments",
+    website: "https://everguard.ai",
+    location: "Calgary, AB, Canada",
+    region: "North America",
+    specialties: ["Industrial Safety", "Hazardous Environments", "UWB"],
+    industries: ["Oil & Gas", "Mining", "Construction", "Manufacturing"],
+  },
+  {
+    name: "Mysphera",
+    description: "Healthcare-focused RTLS solutions for asset and patient tracking",
+    website: "https://mysphera.com",
+    location: "Valencia, Spain",
+    region: "Europe",
+    specialties: ["Healthcare", "Asset Tracking", "Patient Flow"],
+    industries: ["Healthcare"],
+  },
+  {
+    name: "Ubudu",
+    description: "Proximity marketing and indoor location solutions using BLE technology",
+    website: "https://ubudu.com",
+    location: "Paris, France",
+    region: "Europe",
+    specialties: ["BLE", "Proximity Marketing", "Indoor Location"],
+    industries: ["Retail", "Hospitality", "Events", "Transportation"],
+  },
+  {
+    name: "Metratec",
+    description: "RFID and UHF solutions for industrial automation and tracking",
+    website: "https://metratec.com",
+    location: "Magdeburg, Germany",
+    region: "Europe",
+    specialties: ["RFID", "UHF", "Industrial Automation"],
+    industries: ["Manufacturing", "Logistics", "Automotive", "Aerospace"],
+  },
+  {
+    name: "Kathrein",
+    description: "RFID antenna and reader solutions for industrial applications",
+    website: "https://kathrein-rfid.com",
+    location: "Rosenheim, Germany",
+    region: "Europe",
+    specialties: ["RFID", "Antennas", "Industrial"],
+    industries: ["Manufacturing", "Logistics", "Retail", "Transportation"],
+  },
+  {
+    name: "Zigpos",
+    description: "Indoor positioning and navigation solutions for large venues",
+    website: "https://zigpos.com",
+    location: "Barcelona, Spain",
+    region: "Europe",
+    specialties: ["Indoor Navigation", "Large Venues", "WiFi"],
+    industries: ["Transportation", "Retail", "Corporate", "Events"],
+  },
+  {
+    name: "RFID Discovery",
+    description: "RFID consulting and implementation services for various industries",
+    website: "https://rfiddiscovery.com",
+    location: "London, UK",
+    region: "Europe",
+    specialties: ["RFID", "Consulting", "Implementation"],
+    industries: ["Retail", "Healthcare", "Manufacturing", "Logistics"],
+  },
+  {
+    name: "Telematics",
+    description: "Fleet management and vehicle tracking solutions",
+    website: "https://telematics.com",
+    location: "Munich, Germany",
+    region: "Europe",
+    specialties: ["Fleet Management", "Vehicle Tracking", "GPS"],
+    industries: ["Transportation", "Logistics", "Construction", "Government"],
+  },
+  {
+    name: "Iiwari",
+    description: "IoT and location tracking solutions for smart building applications",
+    website: "https://iiwari.com",
+    location: "Helsinki, Finland",
+    region: "Europe",
+    specialties: ["IoT", "Smart Buildings", "Location Tracking"],
+    industries: ["Corporate", "Healthcare", "Education", "Hospitality"],
+  },
+  {
+    name: "Pointr",
+    description: "Indoor location platform for navigation and analytics",
+    website: "https://pointr.tech",
+    location: "London, UK",
+    region: "Europe",
+    specialties: ["Indoor Navigation", "Analytics", "Platform"],
+    industries: ["Retail", "Transportation", "Corporate", "Healthcare"],
+  },
+  {
+    name: "Xtag Medical",
+    description: "Medical device tracking and management solutions for healthcare",
+    website: "https://xtagmedical.com",
+    location: "Dublin, Ireland",
+    region: "Europe",
+    specialties: ["Medical Devices", "Healthcare", "Asset Tracking"],
+    industries: ["Healthcare"],
+  },
+  {
+    name: "WiTTRA Networks AB",
+    description: "Wireless mesh networking solutions for industrial IoT and tracking",
+    website: "https://wittra.se",
+    location: "Stockholm, Sweden",
+    region: "Europe",
+    specialties: ["Wireless Mesh", "Industrial IoT", "Tracking"],
+    industries: ["Manufacturing", "Mining", "Oil & Gas", "Utilities"],
+  },
+  {
+    name: "Wheere",
+    description: "Indoor positioning and wayfinding solutions for complex buildings",
+    website: "https://wheere.com",
+    location: "Milan, Italy",
+    region: "Europe",
+    specialties: ["Indoor Positioning", "Wayfinding", "Complex Buildings"],
+    industries: ["Healthcare", "Corporate", "Transportation", "Education"],
+  },
+  {
+    name: "Outsight",
+    description: "3D LiDAR perception software for people and object tracking",
+    website: "https://outsight.ai",
+    location: "Paris, France",
+    region: "Europe",
+    specialties: ["LiDAR", "3D Perception", "Object Tracking"],
+    industries: ["Smart Cities", "Retail", "Transportation", "Security"],
+  },
+  {
+    name: "Thinkin",
+    description: "AI-powered location analytics and optimization solutions",
+    website: "https://thinkin.io",
+    location: "Berlin, Germany",
+    region: "Europe",
+    specialties: ["AI", "Location Analytics", "Optimization"],
+    industries: ["Retail", "Corporate", "Manufacturing", "Logistics"],
+  },
+  {
+    name: "Intranav",
+    description: "Indoor navigation and positioning solutions for mobile applications",
+    website: "https://intranav.com",
+    location: "Vienna, Austria",
+    region: "Europe",
+    specialties: ["Indoor Navigation", "Mobile Apps", "Positioning"],
+    industries: ["Retail", "Transportation", "Corporate", "Healthcare"],
+  },
+  {
+    name: "Minew",
+    description: "BLE beacon and IoT hardware solutions for location tracking",
+    website: "https://minew.com",
+    location: "Shenzhen, China",
+    region: "Asia",
+    specialties: ["BLE", "IoT Hardware", "Beacons"],
+    industries: ["Retail", "Healthcare", "Manufacturing", "Logistics"],
+  },
+  {
+    name: "Tatwah Technology Co. Ltd.",
+    description: "RFID and IoT solutions for industrial automation and tracking",
+    website: "https://tatwah.com",
+    location: "Taipei, Taiwan",
+    region: "Asia",
+    specialties: ["RFID", "IoT", "Industrial Automation"],
+    industries: ["Manufacturing", "Logistics", "Healthcare", "Retail"],
+  },
+  {
+    name: "Sensolus",
+    description: "LoRaWAN-based asset tracking solutions for industrial applications",
+    website: "https://sensolus.com",
+    location: "Antwerp, Belgium",
+    region: "Europe",
+    specialties: ["LoRaWAN", "Asset Tracking", "Industrial"],
+    industries: ["Construction", "Logistics", "Manufacturing", "Agriculture"],
+  },
+  {
+    name: "BlueUp",
+    description: "BLE beacon solutions for proximity marketing and indoor positioning",
+    website: "https://blueup.eu",
+    location: "Padova, Italy",
+    region: "Europe",
+    specialties: ["BLE", "Proximity Marketing", "Indoor Positioning"],
+    industries: ["Retail", "Tourism", "Events", "Transportation"],
+  },
+  {
+    name: "PDi Digital",
+    description: "Digital transformation solutions with location intelligence capabilities",
+    website: "https://pdidigital.com",
+    location: "London, UK",
+    region: "Europe",
+    specialties: ["Digital Transformation", "Location Intelligence", "Analytics"],
+    industries: ["Corporate", "Retail", "Manufacturing", "Healthcare"],
+  },
+  {
+    name: "Ela Innovation",
+    description: "BLE and IoT solutions for asset tracking and monitoring",
+    website: "https://elainnovation.com",
+    location: "Montpellier, France",
+    region: "Europe",
+    specialties: ["BLE", "IoT", "Asset Tracking"],
+    industries: ["Healthcare", "Manufacturing", "Logistics", "Agriculture"],
+  },
+  {
+    name: "QLog",
+    description: "Supply chain visibility and tracking solutions",
+    website: "https://qlog.com",
+    location: "Singapore",
+    region: "Asia",
+    specialties: ["Supply Chain", "Visibility", "Tracking"],
+    industries: ["Logistics", "Manufacturing", "Retail", "Pharmaceuticals"],
+  },
+  {
+    name: "Omni-ID",
+    description: "Rugged RFID tags and solutions for harsh industrial environments",
+    website: "https://omni-id.com",
+    location: "Rochester, NY, USA",
+    region: "North America",
+    specialties: ["RFID", "Rugged Tags", "Industrial"],
+    industries: ["Oil & Gas", "Aerospace", "Automotive", "Manufacturing"],
+  },
+  {
+    name: "Sentrics",
+    description: "IoT and sensor solutions for asset monitoring and tracking",
+    website: "https://sentrics.io",
+    location: "Amsterdam, Netherlands",
+    region: "Europe",
+    specialties: ["IoT", "Sensors", "Asset Monitoring"],
+    industries: ["Manufacturing", "Healthcare", "Logistics", "Smart Cities"],
+  },
+  {
+    name: "System Loco",
+    description: "Location-based services and indoor positioning solutions",
+    website: "https://systemloco.com",
+    location: "Madrid, Spain",
+    region: "Europe",
+    specialties: ["Location Services", "Indoor Positioning", "Navigation"],
+    industries: ["Transportation", "Retail", "Corporate", "Healthcare"],
+  },
+  {
+    name: "Sentrax",
+    description: "RFID and tracking solutions for inventory and asset management",
+    website: "https://sentrax.com",
+    location: "Toronto, ON, Canada",
+    region: "North America",
+    specialties: ["RFID", "Inventory Management", "Asset Tracking"],
+    industries: ["Retail", "Healthcare", "Manufacturing", "Logistics"],
+  },
+  {
+    name: "Notinote",
+    description: "Smart notification and location tracking solutions",
+    website: "https://notinote.com",
+    location: "Seoul, South Korea",
+    region: "Asia",
+    specialties: ["Smart Notifications", "Location Tracking", "Mobile"],
+    industries: ["Corporate", "Healthcare", "Education", "Hospitality"],
+  },
+  {
+    name: "ITL Group",
+    description: "Technology solutions including RFID and location tracking systems",
+    website: "https://itlgroup.com",
+    location: "Mumbai, India",
+    region: "Asia",
+    specialties: ["RFID", "Location Tracking", "Technology Solutions"],
+    industries: ["Manufacturing", "Retail", "Healthcare", "Government"],
+  },
+  {
+    name: "Globos",
+    description: "Global positioning and tracking solutions for various industries",
+    website: "https://globos.com",
+    location: "São Paulo, Brazil",
+    region: "South America",
+    specialties: ["GPS", "Tracking", "Fleet Management"],
+    industries: ["Transportation", "Logistics", "Construction", "Agriculture"],
+  },
+  {
+    name: "InVirtus",
+    description: "Virtual and augmented reality solutions with location tracking",
+    website: "https://invirtus.com",
+    location: "Barcelona, Spain",
+    region: "Europe",
+    specialties: ["VR/AR", "Location Tracking", "Immersive Tech"],
+    industries: ["Entertainment", "Education", "Healthcare", "Training"],
+  },
+  {
+    name: "Peak Technologies",
+    description: "Barcode, RFID, and mobile computing solutions for data capture",
+    website: "https://peaktech.com",
+    location: "Columbia, MD, USA",
+    region: "North America",
+    specialties: ["RFID", "Barcode", "Data Capture"],
+    industries: ["Manufacturing", "Healthcare", "Retail", "Logistics"],
+  },
+  {
+    name: "Telebeacon Solutions Pvt. Ltd.",
+    description: "BLE beacon and proximity solutions for location-based services",
+    website: "https://telebeacon.com",
+    location: "Bangalore, India",
+    region: "Asia",
+    specialties: ["BLE", "Proximity", "Location Services"],
+    industries: ["Retail", "Healthcare", "Corporate", "Transportation"],
+  },
+  {
+    name: "Hornbird Technology",
+    description: "IoT and wireless communication solutions for tracking applications",
+    website: "https://hornbird.com",
+    location: "Shenzhen, China",
+    region: "Asia",
+    specialties: ["IoT", "Wireless", "Tracking"],
+    industries: ["Manufacturing", "Logistics", "Smart Cities", "Agriculture"],
+  },
+  {
+    name: "EPM",
+    description: "Enterprise performance management with location intelligence",
+    website: "https://epm.com",
+    location: "Chicago, IL, USA",
+    region: "North America",
+    specialties: ["Performance Management", "Location Intelligence", "Analytics"],
+    industries: ["Corporate", "Manufacturing", "Healthcare", "Retail"],
+  },
+  {
+    name: "SADELABS",
+    description: "Laboratory and research solutions with asset tracking capabilities",
+    website: "https://sadelabs.com",
+    location: "Boston, MA, USA",
+    region: "North America",
+    specialties: ["Laboratory", "Research", "Asset Tracking"],
+    industries: ["Healthcare", "Research", "Pharmaceuticals", "Education"],
+  },
+  {
+    name: "AetherIOT",
+    description: "Industrial IoT solutions with location tracking and monitoring",
+    website: "https://aetheriot.com",
+    location: "Austin, TX, USA",
+    region: "North America",
+    specialties: ["Industrial IoT", "Location Tracking", "Monitoring"],
+    industries: ["Manufacturing", "Oil & Gas", "Utilities", "Mining"],
+  },
+  {
+    name: "IntraPosition",
+    description: "Indoor positioning solutions for enterprise and industrial applications",
+    website: "https://intraposition.com",
+    location: "Stockholm, Sweden",
+    region: "Europe",
+    specialties: ["Indoor Positioning", "Enterprise", "Industrial"],
+    industries: ["Manufacturing", "Warehousing", "Corporate", "Healthcare"],
+  },
+  {
+    name: "Rakon",
+    description: "Frequency control and timing solutions for location systems",
+    website: "https://rakon.com",
+    location: "Auckland, New Zealand",
+    region: "Oceania",
+    specialties: ["Frequency Control", "Timing", "Location Systems"],
+    industries: ["Telecommunications", "Aerospace", "Defense", "Industrial"],
+  },
+  {
+    name: "Lansitec",
+    description: "LoRaWAN and IoT tracking solutions for asset management",
+    website: "https://lansitec.com",
+    location: "Shenzhen, China",
+    region: "Asia",
+    specialties: ["LoRaWAN", "IoT", "Asset Management"],
+    industries: ["Logistics", "Agriculture", "Smart Cities", "Industrial"],
+  },
+  {
+    name: "RT Smart Data",
+    description: "Real-time data analytics and location intelligence solutions",
+    website: "https://rtsmartdata.com",
+    location: "Tel Aviv, Israel",
+    region: "Middle East",
+    specialties: ["Real-time Analytics", "Location Intelligence", "Data"],
+    industries: ["Retail", "Corporate", "Smart Cities", "Transportation"],
+  },
+  {
+    name: "TTI Inc. The IP&E Specialist",
+    description: "Interconnect, passive, and electromechanical components for tracking systems",
+    website: "https://tti.com",
+    location: "Fort Worth, TX, USA",
+    region: "North America",
+    specialties: ["Components", "Interconnect", "Electronics"],
+    industries: ["Electronics", "Automotive", "Industrial", "Telecommunications"],
+  },
+  {
+    name: "Omnilink",
+    description: "Connected solutions and tracking systems for various applications",
+    website: "https://omnilink.com",
+    location: "Toronto, ON, Canada",
+    region: "North America",
+    specialties: ["Connected Solutions", "Tracking", "IoT"],
+    industries: ["Transportation", "Logistics", "Healthcare", "Government"],
+  },
+  {
+    name: "Synapses BlueGPS",
+    description: "Indoor positioning and navigation solutions using Bluetooth technology",
+    website: "https://synapsesworld.com",
+    location: "Rome, Italy",
+    region: "Europe",
+    specialties: ["Bluetooth", "Indoor Navigation", "GPS"],
+    industries: ["Healthcare", "Corporate", "Transportation", "Retail"],
+  },
+  {
+    name: "Wizzilab",
+    description: "Ultra-low power wireless solutions for IoT and tracking applications",
+    website: "https://wizzilab.com",
+    location: "Grenoble, France",
+    region: "Europe",
+    specialties: ["Ultra-low Power", "Wireless", "IoT"],
+    industries: ["Industrial", "Smart Cities", "Healthcare", "Agriculture"],
+  },
+  {
+    name: "Inviso",
+    description: "Visual analytics and location intelligence platform",
+    website: "https://inviso.com",
+    location: "Copenhagen, Denmark",
+    region: "Europe",
+    specialties: ["Visual Analytics", "Location Intelligence", "Platform"],
+    industries: ["Retail", "Corporate", "Transportation", "Smart Cities"],
+  },
+]
+
+const allVendors = [...vendors, ...newVendors]
+
+// Sort all vendors alphabetically by name
+const sortedVendors = [...allVendors].sort((a, b) => a.name.localeCompare(b.name))
+
 // List of RTLS practitioners (fictional)
 const practitioners = [
   {
@@ -819,7 +1304,7 @@ const practitioners = [
 ]
 
 // Sort vendors alphabetically by name
-const sortedVendors = [...vendors].sort((a, b) => a.name.localeCompare(b.name))
+// const sortedVendors = [...vendors].sort((a, b) => a.name.localeCompare(b.name)) // This line is replaced by the combined and sorted list above
 
 // Sort practitioners alphabetically by name
 const sortedPractitioners = [...practitioners].sort((a, b) => a.name.localeCompare(b.name))
@@ -828,9 +1313,9 @@ const sortedPractitioners = [...practitioners].sort((a, b) => a.name.localeCompa
 const getUniqueValues = (array, key) => {
   if (key === "specialties" || key === "industries") {
     const allValues = array.flatMap((item) => item[key] || [])
-    return [...new Set(allValues)].sort()
+    return [...new Set(allValues)].filter(Boolean).sort() // Added filter(Boolean) to remove potential empty strings
   }
-  return [...new Set(array.map((item) => item[key]))].filter(Boolean).sort()
+  return [...new Set(array.map((item) => item[key]))].filter(Boolean).sort() // Added filter(Boolean) to remove potential empty strings
 }
 
 // Get only technology values from specialties
@@ -859,7 +1344,9 @@ const getTechnologyValues = (vendors) => {
   const allSpecialties = vendors.flatMap((vendor) => vendor.specialties || [])
 
   // Filter to only include core technologies
-  const technologies = allSpecialties.filter((specialty) => coreTechnologies.some((tech) => specialty.includes(tech)))
+  const technologies = allSpecialties.filter((specialty) =>
+    coreTechnologies.some((tech) => specialty.toLowerCase().includes(tech.toLowerCase())),
+  )
 
   // Return unique values
   return [...new Set(technologies)].sort()
@@ -875,9 +1362,9 @@ export default function EcosystemClientPage() {
   const [filteredPractitioners, setFilteredPractitioners] = useState(sortedPractitioners)
 
   // Get unique values for filters
-  const technologies = getTechnologyValues(vendors)
-  const regions = getUniqueValues(vendors, "region")
-  const industries = getUniqueValues(vendors, "industries")
+  const technologies = getTechnologyValues(allVendors)
+  const regions = getUniqueValues(allVendors, "region")
+  const industries = getUniqueValues(allVendors, "industries")
 
   // Filter vendors when search or filters change
   useEffect(() => {
@@ -891,7 +1378,7 @@ export default function EcosystemClientPage() {
           vendor.name.toLowerCase().includes(query) ||
           vendor.description.toLowerCase().includes(query) ||
           vendor.location.toLowerCase().includes(query) ||
-          vendor.specialties.some((specialty) => specialty.toLowerCase().includes(query)),
+          (vendor.specialties && vendor.specialties.some((specialty) => specialty.toLowerCase().includes(query))),
       )
     }
 
@@ -933,7 +1420,7 @@ export default function EcosystemClientPage() {
         practitioner.title.toLowerCase().includes(query) ||
         practitioner.organization.toLowerCase().includes(query) ||
         practitioner.location.toLowerCase().includes(query) ||
-        practitioner.expertise.some((skill) => skill.toLowerCase().includes(query)),
+        (practitioner.expertise && practitioner.expertise.some((skill) => skill.toLowerCase().includes(query))),
     )
 
     setFilteredPractitioners(result)
@@ -949,29 +1436,28 @@ export default function EcosystemClientPage() {
 
   return (
     <main className="bg-white pb-16">
-      <section className="py-12 text-center bg-gradient-to-r from-blue-50 to-purple-50">
+      <section className="py-16 text-center bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
-            RTLS Directory
+          <h1 className="text-5xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              RTLS Directory
+            </span>
           </h1>
 
-          {/* Improved hero subtitle styling */}
-          <div className="max-w-3xl mx-auto mb-8 bg-white p-6 rounded-lg shadow-sm">
+          <div className="max-w-3xl mx-auto mb-8">
             <p className="text-xl text-gray-700 leading-relaxed">
-              We're here to help you find the perfect RTLS vendor to transform your operations and unlock new
-              possibilities. Explore the innovators shaping the future of real-time location technology—from UWB and BLE
-              to WiFi and RFID—and discover the solution that fits your unique needs.
+              Find the perfect RTLS vendor to transform your operations. Explore innovators shaping the future of
+              real-time location technology—from UWB and BLE to WiFi and RFID.
             </p>
           </div>
 
-          {/* Moved text above CTA button and increased size */}
           <p className="text-lg font-medium text-blue-800 mb-4">
             Are you an RTLS provider or specialist but don't see your company in the public directory below?
           </p>
 
           <Link href="/contact">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 mx-auto">
-              Contact Us to get listed for free <ArrowRight className="h-4 w-4" />
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl flex items-center gap-2 mx-auto transform transition-all hover:scale-105">
+              Contact us to get listed <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
@@ -1013,7 +1499,7 @@ export default function EcosystemClientPage() {
                     className="pl-10"
                   />
                 </div>
-                <Button variant="outline" className="flex items-center gap-2" onClick={resetFilters}>
+                <Button variant="outline" className="flex items-center gap-2 bg-transparent" onClick={resetFilters}>
                   <X size={18} />
                   Reset Filters
                 </Button>
@@ -1138,11 +1624,15 @@ export default function EcosystemClientPage() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        {vendor.specialties.map((specialty, i) => (
-                          <span key={i} className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                            {specialty}
-                          </span>
-                        ))}
+                        {vendor.specialties &&
+                          vendor.specialties.map((specialty, i) => (
+                            <span
+                              key={i}
+                              className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                            >
+                              {specialty}
+                            </span>
+                          ))}
                       </div>
                     </div>
                   ))}
@@ -1180,14 +1670,15 @@ export default function EcosystemClientPage() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        {practitioner.expertise.map((skill, i) => (
-                          <span
-                            key={i}
-                            className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded"
-                          >
-                            {skill}
-                          </span>
-                        ))}
+                        {practitioner.expertise &&
+                          practitioner.expertise.map((skill, i) => (
+                            <span
+                              key={i}
+                              className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                            >
+                              {skill}
+                            </span>
+                          ))}
                       </div>
                     </div>
                   ))}
