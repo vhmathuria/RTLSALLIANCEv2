@@ -1,7 +1,7 @@
 import { getAllArticles } from "@/lib/supabase"
 
 export async function GET(): Promise<Response> {
-  const baseUrl = "https://rtlsalliance.com"
+  const baseUrl = "https://rtlsalliance.org"
   const currentDate = new Date().toISOString()
 
   // Main pages

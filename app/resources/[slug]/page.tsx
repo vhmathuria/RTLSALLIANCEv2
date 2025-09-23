@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   // Base URL for canonical and OG URLs
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"
   const canonicalUrl = `${baseUrl}/resources/${article.slug}`
 
   // Determine content category

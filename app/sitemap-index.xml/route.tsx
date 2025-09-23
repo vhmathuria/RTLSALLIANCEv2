@@ -1,5 +1,5 @@
 export async function GET(): Promise<Response> {
-  const baseUrl = "https://rtlsalliance.com"
+  const baseUrl = "https://rtlsalliance.org"
   const currentDate = new Date().toISOString()
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

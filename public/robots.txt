@@ -21,4 +21,4 @@ Disallow: /api/
 Allow: /api/articles
 
 # Sitemap location
-Sitemap: https://rtlsalliance.com/sitemap.xml
+Sitemap: https://rtlsalliance.org/sitemap.xml

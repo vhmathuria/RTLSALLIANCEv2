@@ -2,61 +2,61 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main Pages -->
   <url>
-    <loc>https://rtlsalliance.com/</loc>
+    <loc>https://rtlsalliance.org/</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/resources</loc>
+    <loc>https://rtlsalliance.org/resources</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/certification</loc>
+    <loc>https://rtlsalliance.org/certification</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/membership</loc>
+    <loc>https://rtlsalliance.org/membership</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/contact</loc>
+    <loc>https://rtlsalliance.org/contact</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/ecosystem</loc>
+    <loc>https://rtlsalliance.org/ecosystem</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/ecosystem/directory</loc>
+    <loc>https://rtlsalliance.org/ecosystem/directory</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/project</loc>
+    <loc>https://rtlsalliance.org/project</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/membership/upgrade</loc>
+    <loc>https://rtlsalliance.org/membership/upgrade</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -64,91 +64,91 @@
   
   <!-- Technology Pages -->
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ble</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/ble</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/uwb</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/uwb</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/wifi</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/wifi</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/lora</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/lora</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/nfc</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/nfc</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/infrared</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/infrared</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/lidar</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/lidar</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ai-cameras</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/ai-cameras</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/gnss</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/gnss</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/rtk-gps</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/rtk-gps</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/magnetic-field</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/magnetic-field</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/ultrasound</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/ultrasound</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/sensor-fusion</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/sensor-fusion</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/slam</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/slam</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/technologies/dead-reckoning</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/technologies/dead-reckoning</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -156,31 +156,31 @@
   
   <!-- Module Pages -->
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/fleet-manager</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/modules/fleet-manager</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/rules-engine</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/modules/rules-engine</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/dashboard-reports</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/modules/dashboard-reports</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/production-planning</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/modules/production-planning</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/rtls-digital-twin/modules/process-control</loc>
+    <loc>https://rtlsalliance.org/rtls-digital-twin/modules/process-control</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -189,19 +189,19 @@
   <!-- Resource Articles -->
   <!-- Guide Articles -->
   <url>
-    <loc>https://rtlsalliance.com/resources/rtls-implementation-guide</loc>
+    <loc>https://rtlsalliance.org/resources/rtls-implementation-guide</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/resources/uwb-vs-ble-comparison</loc>
+    <loc>https://rtlsalliance.org/resources/uwb-vs-ble-comparison</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/resources/healthcare-asset-tracking</loc>
+    <loc>https://rtlsalliance.org/resources/healthcare-asset-tracking</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -209,13 +209,13 @@
   
   <!-- Technology Comparison Articles -->
   <url>
-    <loc>https://rtlsalliance.com/resources/ble-vs-uwb-positioning-accuracy</loc>
+    <loc>https://rtlsalliance.org/resources/ble-vs-uwb-positioning-accuracy</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/resources/wifi-vs-ble-indoor-positioning</loc>
+    <loc>https://rtlsalliance.org/resources/wifi-vs-ble-indoor-positioning</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -223,13 +223,13 @@
   
   <!-- Success Story Articles -->
   <url>
-    <loc>https://rtlsalliance.com/resources/hospital-asset-tracking-case-study</loc>
+    <loc>https://rtlsalliance.org/resources/hospital-asset-tracking-case-study</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/resources/warehouse-optimization-success-story</loc>
+    <loc>https://rtlsalliance.org/resources/warehouse-optimization-success-story</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -237,13 +237,13 @@
   
   <!-- Member Insight Articles -->
   <url>
-    <loc>https://rtlsalliance.com/resources/future-of-rtls-in-manufacturing</loc>
+    <loc>https://rtlsalliance.org/resources/future-of-rtls-in-manufacturing</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rtlsalliance.com/resources/rtls-roi-calculation-framework</loc>
+    <loc>https://rtlsalliance.org/resources/rtls-roi-calculation-framework</loc>
     <lastmod>2025-05-21T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

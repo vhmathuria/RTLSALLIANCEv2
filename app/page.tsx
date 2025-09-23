@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     title: "RTLS Alliance - Real-Time Location Systems Community",
     description:
       "Join the RTLS Alliance, a community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
-    url: "https://rtlsalliance.com",
+    url: "https://rtlsalliance.org",
     siteName: "RTLS Alliance",
     images: [
       {
-        url: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+        url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
         width: 1200,
         height: 630,
         alt: "RTLS Alliance",
@@ -35,10 +35,10 @@ export const metadata: Metadata = {
     title: "RTLS Alliance - Real-Time Location Systems Community",
     description:
       "Join the RTLS Alliance, a community of professionals and organizations dedicated to advancing real-time location systems technology and implementation.",
-    images: ["https://rtlsalliance.com/images/rtls-alliance-logo.png"],
+    images: ["https://rtlsalliance.org/images/rtls-alliance-logo.png"],
   },
   alternates: {
-    canonical: "https://rtlsalliance.com",
+    canonical: "https://rtlsalliance.org",
   },
 }
 

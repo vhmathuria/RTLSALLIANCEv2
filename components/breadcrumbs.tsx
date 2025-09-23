@@ -82,7 +82,7 @@ export function Breadcrumbs({
         "@type": "ListItem",
         position: index + 1,
         name: item.label,
-        item: `${process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"}${item.href}`,
+        item: `${process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"}${item.href}`,
       })),
     }
 
@@ -158,13 +158,13 @@ export function Breadcrumbs({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: `${process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"}`,
+        item: `${process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"}`,
       },
       ...breadcrumbItems.map((item, index) => ({
         "@type": "ListItem",
         position: index + 2,
         name: item.label,
-        item: `${process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"}${item.href}`,
+        item: `${process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"}${item.href}`,
       })),
     ],
   }

@@ -16,7 +16,7 @@ interface TechnologySEOProps {
 }
 
 export function TechnologySEO({ title, description, technology, breadcrumbs }: TechnologySEOProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.com"
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"
 
   // Handle both string and object technology props
   const technologySlug = typeof technology === "string" ? technology : technology.slug

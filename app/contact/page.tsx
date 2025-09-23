@@ -10,11 +10,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Contact Us - RTLS Alliance",
     description: "Get in touch with the RTLS Alliance team for inquiries, partnerships, or support.",
-    url: "https://rtlsalliance.com/contact",
+    url: "https://rtlsalliance.org/contact",
     siteName: "RTLS Alliance",
     images: [
       {
-        url: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+        url: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
         width: 1200,
         height: 630,
         alt: "Contact RTLS Alliance",
@@ -27,10 +27,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Contact Us - RTLS Alliance",
     description: "Get in touch with the RTLS Alliance team for inquiries, partnerships, or support.",
-    images: ["https://rtlsalliance.com/images/rtls-alliance-logo.png"],
+    images: ["https://rtlsalliance.org/images/rtls-alliance-logo.png"],
   },
   alternates: {
-    canonical: "https://rtlsalliance.com/contact",
+    canonical: "https://rtlsalliance.org/contact",
   },
 }
 
@@ -40,8 +40,8 @@ export default function ContactServerPage() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "RTLS Alliance",
-    url: "https://rtlsalliance.com",
-    logo: "https://rtlsalliance.com/images/rtls-alliance-logo.png",
+    url: "https://rtlsalliance.org",
+    logo: "https://rtlsalliance.org/images/rtls-alliance-logo.png",
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "+4915205888777",
