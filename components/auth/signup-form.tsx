@@ -1,7 +1,6 @@
 "use client"
 
-import { useActionState } from "react"
-import { useFormStatus } from "react-dom"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,16 +8,14 @@ import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { signUp } from "@/lib/auth-actions"
 
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
+function SubmitButton({ isPending }: { isPending: boolean }) {
   return (
     <Button
       type="submit"
-      disabled={pending}
+      disabled={isPending}
       className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
     >
-      {pending ? (
+      {isPending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Creating account...
@@ -31,7 +28,15 @@ function SubmitButton() {
 }
 
 export default function SignUpForm() {
-  const [state, formAction] = useActionState(signUp, null)
+  const [state, setState] = useState<any>(null)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await signUp(state, formData)
+      setState(result)
+    })
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -42,7 +47,7 @@ export default function SignUpForm() {
         <CardDescription>Create your account to access the bidding portal</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4">
           {state?.error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {state.error}
@@ -96,7 +101,7 @@ export default function SignUpForm() {
             <Input id="password" name="password" type="password" required className="w-full" />
           </div>
 
-          <SubmitButton />
+          <SubmitButton isPending={isPending} />
 
           <div className="text-center text-sm text-gray-600">
             Already have an account?{" "}

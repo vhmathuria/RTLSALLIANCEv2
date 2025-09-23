@@ -1,16 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { BarChartIcon as ChartBar, Globe, Award, Building, Zap, Users, LogIn } from "lucide-react"
+import { BarChartBig as ChartBar, Globe, Award, Building, Zap, Users, LogIn } from "lucide-react"
 import EmailSignupForm from "@/components/auth/email-signup-form"
 import { createSupabaseClient } from "@/lib/supabase-auth"
 import { useRouter, useSearchParams } from "next/navigation"
 
-export default function JoinAlliancePage() {
+function JoinAlliancePageContent() {
   const [showEmailForm, setShowEmailForm] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -93,7 +93,7 @@ export default function JoinAlliancePage() {
                   <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign Up with One Click</h2>
                   <div className="space-y-4">
                     <Button
-                      className="w-full flex items-center justify-center gap-3 py-6 text-lg"
+                      className="w-full flex items-center justify-center gap-3 py-6 text-lg bg-transparent"
                       variant="outline"
                       asChild
                     >
@@ -104,7 +104,7 @@ export default function JoinAlliancePage() {
                     </Button>
 
                     <Button
-                      className="w-full flex items-center justify-center gap-3 py-6 text-lg"
+                      className="w-full flex items-center justify-center gap-3 py-6 text-lg bg-transparent"
                       variant="outline"
                       asChild
                     >
@@ -330,5 +330,21 @@ export default function JoinAlliancePage() {
         </div>
       </section>
     </main>
+  )
+}
+
+function JoinAlliancePageLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  )
+}
+
+export default function JoinAlliancePage() {
+  return (
+    <Suspense fallback={<JoinAlliancePageLoading />}>
+      <JoinAlliancePageContent />
+    </Suspense>
   )
 }

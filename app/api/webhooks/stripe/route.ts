@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           }
 
           // Always perform direct update as a fallback
-          const supabase = createClient()
+          const supabase = await createClient()
           const { error: updateError } = await supabase
             .from("profiles")
             .update({
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const supabase = createClient()
+        const supabase = await createClient()
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")
@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Find user by Stripe customer ID
-        const supabase = createClient()
+        const supabase = await createClient()
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("id")

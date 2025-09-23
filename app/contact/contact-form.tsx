@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { useActionState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { submitContactForm } from "@/lib/contact-actions"
 import { CheckCircle, AlertCircle } from "lucide-react"
@@ -12,8 +11,15 @@ const initialState = {
 }
 
 export default function ContactForm() {
-  const [state, formAction] = useActionState(submitContactForm, initialState)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [state, setState] = useState(initialState)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await submitContactForm(state, formData)
+      setState(result)
+    })
+  }
 
   return (
     <div>
@@ -40,7 +46,7 @@ export default function ContactForm() {
       ) : null}
 
       {!state.success && (
-        <form action={formAction} onSubmit={() => setIsSubmitting(true)} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -94,8 +100,8 @@ export default function ContactForm() {
             ></textarea>
           </div>
 
-          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isSubmitting}>
-            {isSubmitting ? "Sending..." : "Send Message"}
+          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isPending}>
+            {isPending ? "Sending..." : "Send Message"}
           </Button>
         </form>
       )}

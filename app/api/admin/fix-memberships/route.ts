@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Update all public tier accounts with INACTIVE status to ACTIVE
     const { data, error } = await supabase

@@ -1,26 +1,22 @@
 "use client"
 
-import { useActionState } from "react"
-import { useFormStatus } from "react-dom"
+import { useState, useTransition, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 import { signIn } from "@/lib/auth-actions"
 
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
+function SubmitButton({ isPending }: { isPending: boolean }) {
   return (
     <Button
       type="submit"
-      disabled={pending}
+      disabled={isPending}
       className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
     >
-      {pending ? (
+      {isPending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Signing in...
@@ -34,7 +30,15 @@ function SubmitButton() {
 
 export default function LoginForm() {
   const router = useRouter()
-  const [state, formAction] = useActionState(signIn, null)
+  const [state, setState] = useState<any>(null)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await signIn(state, formData)
+      setState(result)
+    })
+  }
 
   useEffect(() => {
     if (state?.success) {
@@ -51,7 +55,7 @@ export default function LoginForm() {
         <CardDescription>Sign in to access the RTLS Alliance Bidding Portal</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4">
           {state?.error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {state.error}
@@ -72,7 +76,7 @@ export default function LoginForm() {
             <Input id="password" name="password" type="password" required className="w-full" />
           </div>
 
-          <SubmitButton />
+          <SubmitButton isPending={isPending} />
 
           <div className="text-center text-sm text-gray-600">
             Don't have an account?{" "}

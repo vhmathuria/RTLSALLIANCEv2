@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -10,7 +10,7 @@ import { createSupabaseClient } from "@/lib/supabase-auth"
 import { FaGoogle, FaLinkedin } from "react-icons/fa"
 import { AlertCircle } from "lucide-react"
 
-export default function AuthPage() {
+function AuthPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get("redirectTo") || "/"
@@ -196,7 +196,7 @@ export default function AuthPage() {
                 <div className="flex flex-col gap-4 sm:gap-5 w-full">
                   <Button
                     variant="outline"
-                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
+                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 bg-transparent"
                     onClick={() => handleOAuthSignIn("google")}
                     disabled={isLoading.google}
                   >
@@ -206,7 +206,7 @@ export default function AuthPage() {
 
                   <Button
                     variant="outline"
-                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
+                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 bg-transparent"
                     onClick={() => handleOAuthSignIn("linkedin_oidc")}
                     disabled={isLoading.linkedin_oidc}
                   >
@@ -232,7 +232,7 @@ export default function AuthPage() {
                 <div className="flex flex-col gap-4 sm:gap-5 w-full">
                   <Button
                     variant="outline"
-                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
+                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 bg-transparent"
                     onClick={() => handleOAuthSignIn("google")}
                     disabled={isLoading.google}
                   >
@@ -242,7 +242,7 @@ export default function AuthPage() {
 
                   <Button
                     variant="outline"
-                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
+                    className="flex items-center justify-center gap-3 w-full py-5 sm:py-7 text-base sm:text-lg font-medium transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 bg-transparent"
                     onClick={() => handleOAuthSignIn("linkedin_oidc")}
                     disabled={isLoading.linkedin_oidc}
                   >
@@ -286,5 +286,21 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function AuthPageLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+    </div>
+  )
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<AuthPageLoading />}>
+      <AuthPageContent />
+    </Suspense>
   )
 }
