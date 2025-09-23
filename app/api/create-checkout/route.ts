@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createClient } from "@/lib/supabase/server"
 import Stripe from "stripe"
 
 // Initialize Stripe
@@ -25,8 +24,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
     }
 
-    // Get the current user
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createClient()
     const {
       data: { user },
       error: authError,

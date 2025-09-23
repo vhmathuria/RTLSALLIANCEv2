@@ -46,7 +46,12 @@ export default async function UpgradePage() {
         "Basic implementation guides",
         "Community forum access",
       ],
-      buttonText: currentTier === "student" ? "Current Plan" : "Upgrade to Student",
+      buttonText:
+        currentTier === "student"
+          ? "Current Plan"
+          : currentTier === "corporate" || currentTier === "professional"
+            ? "Downgrade to Student"
+            : "Upgrade to Student",
       disabled: currentTier === "student",
       recommended: false,
       color: "border-blue-200",
@@ -66,7 +71,12 @@ export default async function UpgradePage() {
         "Expert webinars and workshops",
         "Priority support",
       ],
-      buttonText: currentTier === "professional" ? "Current Plan" : "Upgrade to Professional",
+      buttonText:
+        currentTier === "professional"
+          ? "Current Plan"
+          : currentTier === "corporate"
+            ? "Downgrade to Professional"
+            : "Upgrade to Professional",
       disabled: currentTier === "professional",
       recommended: true,
       color: "border-purple-200",

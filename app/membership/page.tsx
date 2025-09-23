@@ -128,7 +128,13 @@ export default function MembershipPage() {
               </ul>
             </div>
             <div className="px-6 pb-6 mt-auto">
-              {user ? (
+              {user && profile?.membership_tier && profile.membership_tier !== "public" ? (
+                <Link href="/membership/upgrade?tier=student">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {profile?.membership_tier === "student" ? "Current Plan" : "Change to Student"}
+                  </Button>
+                </Link>
+              ) : user ? (
                 <Link href="/membership/upgrade?tier=student">
                   <Button className="w-full bg-blue-600 hover:bg-blue-700">
                     {profile?.membership_tier === "student" ? "Current Plan" : "Upgrade to Student"}
@@ -198,7 +204,13 @@ export default function MembershipPage() {
               </ul>
             </div>
             <div className="px-6 pb-6 mt-auto">
-              {user ? (
+              {user && profile?.membership_tier && profile.membership_tier !== "public" ? (
+                <Link href="/membership/upgrade?tier=professional">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {profile?.membership_tier === "professional" ? "Current Plan" : "Change to Professional"}
+                  </Button>
+                </Link>
+              ) : user ? (
                 <Link href="/membership/upgrade?tier=professional">
                   <Button className="w-full bg-blue-600 hover:bg-blue-700">
                     {profile?.membership_tier === "professional" ? "Current Plan" : "Upgrade to Professional"}
@@ -265,7 +277,13 @@ export default function MembershipPage() {
               </ul>
             </div>
             <div className="px-6 pb-6 mt-auto">
-              {user ? (
+              {user && profile?.membership_tier && profile.membership_tier !== "public" ? (
+                <Link href="/membership/upgrade?tier=vendor">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {profile?.membership_tier === "vendor" ? "Current Plan" : "Change to Vendor"}
+                  </Button>
+                </Link>
+              ) : user ? (
                 <Link href="/membership/upgrade?tier=vendor">
                   <Button className="w-full bg-blue-600 hover:bg-blue-700">
                     {profile?.membership_tier === "vendor" ? "Current Plan" : "Upgrade to Vendor"}
@@ -502,7 +520,7 @@ export default function MembershipPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
+                  d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 00-1-1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
                 />
               </svg>
             </div>
