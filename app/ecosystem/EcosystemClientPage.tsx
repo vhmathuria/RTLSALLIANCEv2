@@ -16,19 +16,27 @@ const vendors = [
     uniqueSellingPoint: "Comprehensive RTLS solutions with focus on personnel safety and workflow management",
   },
   {
-    name: "Pozyx",
+    name: "LocaXion",
     description:
-      "Logistics optimization, Industrial Automation, Asset tracking, Warehouse management, Labour & Work Efficiency",
-    website: "https://pozyx.io",
-    location: "Ghent, Belgium",
-    region: "Europe",
-    specialties: ["UWB", "5G", "RFID", "WiFi", "Bluetooth", "GPS"],
-    industries: ["Manufacturing", "Logistics", "Agriculture", "Automotive", "Processing Industry"],
+      "RTLS Digital Twin Platform, Forklift Fleet Manager, WIP Inventory Management, Patient Flow, Staff/Duress, Infant Safety",
+    location: "Texas, USA",
+    region: "North America",
+    specialties: ["SLAM", "UWB", "BLE AOA", "VHF", "5G", "WiFi", "RFID", "GNSS", "Ultrasound"],
+    industries: [
+      "Manufacturing",
+      "Healthcare",
+      "Warehousing",
+      "Automotive",
+      "Aerospace",
+      "Defense",
+      "Medical Devices",
+      "Metals",
+    ],
     coreServices:
-      "Logistics optimization, Industrial Automation, Asset tracking, Warehouse management, Labour & Work Efficiency",
-    keyIndustries: "Manufacturing, Logistics, Agriculture, Automotive, Processing Industry",
+      "RTLS Digital Twin Platform, Forklift Fleet Manager, WIP Inventory Management, Patient Flow, Staff/Duress, Infant Safety",
+    keyIndustries: "Manufacturing, Healthcare, Warehousing, Automotive, Aerospace, Defense, Medical Devices, Metals",
     uniqueSellingPoint:
-      "10–30 cm UWB precision, Scalable multi-tech platform (UWB, BLE, GPS), Daisy-chaining anchor topology reduces install time and costs, In-house UWB engine and analytics platform",
+      "Unified RTLS & Digital Twin Platform for complete operational intelligence, vendor & technology agnostic.",
   },
   {
     name: "Litum",
