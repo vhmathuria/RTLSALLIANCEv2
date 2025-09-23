@@ -81,17 +81,6 @@ export default function EcosystemPageWrapper() {
         position: 3,
         item: {
           "@type": "Organization",
-          name: "Sewio",
-          url: "https://www.sewio.net",
-          logo: "https://rtlsalliance.com/sewio-logo.png",
-          description: "Provider of UWB RTLS solutions",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        item: {
-          "@type": "Organization",
           name: "Ubisense",
           url: "https://ubisense.com",
           logo: "https://rtlsalliance.com/ubisense-logo.png",
@@ -100,7 +89,7 @@ export default function EcosystemPageWrapper() {
       },
       {
         "@type": "ListItem",
-        position: 5,
+        position: 4,
         item: {
           "@type": "Organization",
           name: "Pozyx",

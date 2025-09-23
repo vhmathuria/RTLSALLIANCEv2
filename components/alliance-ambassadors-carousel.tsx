@@ -49,7 +49,7 @@ const ambassadors: Ambassador[] = [
   },
   {
     name: "Randy Fahrenbach",
-    industry: "Metals",
+    industry: "Metals Manufacturing",
     company: "Arconic",
     image: "/images/ambassadors/randy-fahrenbach.jpg",
   },
@@ -58,6 +58,42 @@ const ambassadors: Ambassador[] = [
     industry: "Government",
     company: "Oak Ridge",
     image: "/images/ambassadors/terry-johnson.jpg",
+  },
+  {
+    name: "Frank Wean",
+    industry: "Metals Manufacturing",
+    company: "Arconic",
+    image: "/images/ambassadors/frank-wean.jpg",
+  },
+  {
+    name: "Alyssa Stillian",
+    industry: "Automotive",
+    company: "Denso",
+    image: "/images/ambassadors/alyssa-stillian.jpg",
+  },
+  {
+    name: "Sebastian Bersch",
+    industry: "Software",
+    company: "Siemens",
+    image: "/images/ambassadors/sebastian-bersch.jpg",
+  },
+  {
+    name: "Brent Erb",
+    industry: "Med-Devices",
+    company: "Philips Ultrasound",
+    image: "/images/ambassadors/brent-erb.jpg",
+  },
+  {
+    name: "Jimmy Nassif",
+    industry: "Automotive",
+    company: "IdealWorks",
+    image: "/images/ambassadors/jimmy-nassif.jpg",
+  },
+  {
+    name: "Johnathan Settlemeyre",
+    industry: "Manufacturing",
+    company: "Clayton Homes",
+    image: "/images/ambassadors/johnathan-settlemeyre.jpg",
   },
 ]
 
@@ -70,7 +106,7 @@ export default function AllianceAmbassadorsCarousel() {
 
     let animationId: number
     let scrollPosition = 0
-    const scrollSpeed = 0.5 // pixels per frame
+    const scrollSpeed = 0.8 // pixels per frame
 
     const animate = () => {
       scrollPosition += scrollSpeed

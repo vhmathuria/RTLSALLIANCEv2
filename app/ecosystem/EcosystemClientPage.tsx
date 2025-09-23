@@ -62,20 +62,6 @@ const vendors = [
     uniqueSellingPoint: "End-to-end IoT platform with comprehensive beacon and sensor solutions",
   },
   {
-    name: "Sewio",
-    description:
-      "Asset Tracking, Personnel Tracking, Workflow Optimization, Safety & Security, Process Automation, Indoor Analytics",
-    website: "https://www.sewio.net",
-    location: "Prague, Czech Republic",
-    region: "Europe",
-    specialties: ["UWB"],
-    industries: ["Manufacturing", "Logistics", "Healthcare", "Smart Buildings", "Automotive"],
-    coreServices:
-      "Asset Tracking, Personnel Tracking, Workflow Optimization, Safety & Security, Process Automation, Indoor Analytics",
-    keyIndustries: "Manufacturing, Logistics, Healthcare, Smart Buildings, Automotive",
-    uniqueSellingPoint: "Ultra-precise UWB RTLS with sub-meter accuracy and real-time analytics",
-  },
-  {
     name: "Ubisense",
     description:
       "Smart Factory Solutions, Asset Tracking, Process Optimization, Quality Management, Automotive Manufacturing, Aerospace",
