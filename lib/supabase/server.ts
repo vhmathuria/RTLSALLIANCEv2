@@ -52,4 +52,40 @@ export const createClient = cache(async () => {
   })
 })
 
+export function createClientSync() {
+  if (!isSupabaseConfigured) {
+    console.warn("Supabase environment variables are not set. Using dummy client.")
+    return {
+      auth: {
+        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      },
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+          }),
+          order: () => Promise.resolve({ data: [], error: null }),
+        }),
+        insert: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+        update: () => ({
+          eq: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+        }),
+      }),
+    } as any
+  }
+
+  // For build time, return a client without cookies
+  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    cookies: {
+      getAll() {
+        return []
+      },
+      setAll() {
+        // No-op during build
+      },
+    },
+  })
+}
+
 export { createClient as createServerClient }

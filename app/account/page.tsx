@@ -2,8 +2,10 @@ import { createClient } from "@/lib/supabase-server"
 import { redirect } from "next/navigation"
 import AccountProfile from "./account-profile"
 
+export const dynamic = "force-dynamic"
+
 export default async function AccountPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // Get current user
   const {
