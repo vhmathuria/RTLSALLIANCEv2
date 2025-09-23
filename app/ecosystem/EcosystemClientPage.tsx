@@ -1549,6 +1549,8 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
                 </div>
               </div>
             </div>
+
+            <div className="mt-4"></div>
           </Card>
         </div>
       </div>

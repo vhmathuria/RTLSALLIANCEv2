@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Building2, MapPin, ExternalLink, Linkedin, Mail } from "lucide-react"
+import { Building2, MapPin, Linkedin, Mail } from "lucide-react"
 import Image from "next/image"
 
 // Enable daily revalidation (86400 seconds = 24 hours)
@@ -65,7 +65,7 @@ const vendors = [
   },
   {
     name: "Airista",
-    logo: "/placeholder.svg?height=60&width=120&query=Airista logo",
+    logo: "/placeholder.svg?height=60&width=120",
     description: "RTLS solutions for healthcare, manufacturing, and logistics",
     specialties: ["Healthcare", "Wi-Fi", "RFID"],
     location: "Sparks, USA",
@@ -73,7 +73,7 @@ const vendors = [
   },
   {
     name: "CEIT",
-    logo: "/placeholder.svg?height=60&width=120&query=CEIT logo",
+    logo: "/placeholder.svg?height=60&width=120",
     description: "Research and development in RTLS and industrial automation",
     specialties: ["R&D", "Industrial", "Automation"],
     location: "San Sebastian, Spain",
@@ -81,7 +81,7 @@ const vendors = [
   },
   {
     name: "CyberNX",
-    logo: "/placeholder.svg?height=60&width=120&query=CyberNX logo",
+    logo: "/placeholder.svg?height=60&width=120",
     description: "Cybersecurity and IoT solutions with location tracking capabilities",
     specialties: ["Cybersecurity", "IoT", "Enterprise"],
     location: "Bangalore, India",
@@ -89,7 +89,7 @@ const vendors = [
   },
   {
     name: "Quuppa",
-    logo: "/placeholder.svg?height=60&width=120&query=Quuppa logo",
+    logo: "/placeholder.svg?height=60&width=120",
     description: "Bluetooth Low Energy (BLE) real-time locating system",
     specialties: ["BLE", "Sports", "Retail"],
     location: "Espoo, Finland",
@@ -97,7 +97,7 @@ const vendors = [
   },
   {
     name: "Litum",
-    logo: "/placeholder.svg?height=60&width=120&query=Litum logo",
+    logo: "/placeholder.svg?height=60&width=120",
     description: "IoT-enabled RTLS solutions for workforce safety and asset tracking",
     specialties: ["Safety", "Construction", "UWB"],
     location: "Izmir, Turkey",
@@ -105,7 +105,7 @@ const vendors = [
   },
   {
     name: "FleetIQ360",
-    logo: "/placeholder.svg?height=60&width=120&query=FleetIQ360 logo",
+    logo: "/placeholder.svg?height=60&width=120",
     description: "Fleet management and asset tracking solutions",
     specialties: ["Fleet Management", "GPS", "Logistics"],
     location: "Toronto, Canada",
@@ -428,14 +428,6 @@ export default function DirectoryPage() {
                         ))}
                       </div>
                     </CardContent>
-                    <CardFooter>
-                      <a href={vendor.website} target="_blank" rel="noopener noreferrer" className="w-full">
-                        <Button variant="outline" className="w-full gap-2">
-                          <ExternalLink className="h-4 w-4" />
-                          Visit Website
-                        </Button>
-                      </a>
-                    </CardFooter>
                   </Card>
                 ))}
               </div>
@@ -470,13 +462,13 @@ export default function DirectoryPage() {
                     </CardContent>
                     <CardFooter className="flex gap-2">
                       <a href={practitioner.linkedin} target="_blank" rel="noopener noreferrer" className="flex-1">
-                        <Button variant="outline" className="w-full">
+                        <Button variant="outline" className="w-full bg-transparent">
                           <Linkedin className="h-4 w-4 mr-2" />
                           LinkedIn
                         </Button>
                       </a>
                       <a href={`mailto:${practitioner.email}`} className="flex-1">
-                        <Button variant="outline" className="w-full">
+                        <Button variant="outline" className="w-full bg-transparent">
                           <Mail className="h-4 w-4 mr-2" />
                           Email
                         </Button>
