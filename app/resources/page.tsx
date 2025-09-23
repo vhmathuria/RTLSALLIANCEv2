@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { getAllArticles } from "@/lib/supabase"
+import { getAllArticlesForUser } from "@/lib/supabase"
+import { createServerClient } from "@/lib/supabase-server"
 import { Suspense } from "react"
 import { ResourcesClientPage } from "./resources-client"
 import { PageSEO } from "@/components/seo/page-seo"
@@ -42,8 +43,14 @@ export const metadata: Metadata = {
 }
 
 export default async function ResourcesPage() {
-  // Get all articles
-  const allArticles = await getAllArticles()
+  // Get current user
+  const supabase = createServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  // Get articles filtered by user access level
+  const allArticles = await getAllArticlesForUser(user?.id)
 
   // Define collection data for structured data
   const collectionData = {

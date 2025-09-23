@@ -3,11 +3,19 @@
 import { createClient } from "@/lib/supabase/server"
 import { getCurrentUser } from "@/lib/auth-actions"
 import { revalidatePath } from "next/cache"
+import { isCorporateDomain, getCorporateDomainMessage } from "@/lib/domain-validation"
 
 export async function createBid(formData: FormData) {
   const user = await getCurrentUser()
   if (!user) {
     return { error: "You must be logged in to submit a bid" }
+  }
+
+  const userEmail = user.email
+  if (!isCorporateDomain(userEmail)) {
+    return {
+      error: getCorporateDomainMessage(userEmail) + " This ensures all bids come from legitimate business entities.",
+    }
   }
 
   // Check if user has qualified vendor membership
@@ -157,13 +165,16 @@ export async function checkVendorAccess() {
     return { hasAccess: false, user: null }
   }
 
-  const hasAccess =
+  const hasCorporateDomain = isCorporateDomain(user.email)
+  const hasActiveMembership =
     user.profile?.membership_status === "active" && ["professional", "corporate"].includes(user.profile.membership_tier)
 
   return {
-    hasAccess,
+    hasAccess: hasCorporateDomain && hasActiveMembership,
     user,
     membershipTier: user.profile?.membership_tier,
     membershipStatus: user.profile?.membership_status,
+    hasCorporateDomain,
+    corporateDomainMessage: getCorporateDomainMessage(user.email),
   }
 }

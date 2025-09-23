@@ -200,3 +200,60 @@ export async function updateArticleTOC(slug: string, updatedTOC: string[]) {
     return { success: false, error }
   }
 }
+
+export async function getAllArticlesForUser(userId?: string) {
+  try {
+    const { data: articles, error } = await supabase
+      .from("staging_articles")
+      .select("*")
+      .order("publish_date", { ascending: false })
+
+    if (error) {
+      console.error("Error fetching all articles:", error)
+      return []
+    }
+
+    // If no user, only return public articles
+    if (!userId) {
+      return articles.filter((article) => !article.membership_tier || article.membership_tier === "public")
+    }
+
+    // Get user's membership info
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("membership_tier, membership_status, membership_expiry")
+      .eq("id", userId)
+      .single()
+
+    if (!profile) {
+      return articles.filter((article) => !article.membership_tier || article.membership_tier === "public")
+    }
+
+    // Define tier levels for comparison
+    const tierLevels = {
+      public: 0,
+      student: 1,
+      professional: 2,
+      corporate: 3,
+    }
+
+    const userTierLevel = tierLevels[profile.membership_tier as keyof typeof tierLevels] || 0
+
+    // Check if membership is active and not expired
+    const isActive = profile.membership_status?.toLowerCase() === "active"
+    const isExpired = profile.membership_expiry && new Date(profile.membership_expiry) < new Date()
+
+    if (!isActive || isExpired) {
+      return articles.filter((article) => !article.membership_tier || article.membership_tier === "public")
+    }
+
+    // Filter articles based on user's tier level
+    return articles.filter((article) => {
+      const articleTierLevel = tierLevels[article.membership_tier as keyof typeof tierLevels] || 0
+      return userTierLevel >= articleTierLevel
+    })
+  } catch (err) {
+    console.error("Unexpected error in getAllArticlesForUser:", err)
+    return []
+  }
+}

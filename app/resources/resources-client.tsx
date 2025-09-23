@@ -107,7 +107,12 @@ export function ResourcesClientPage({ initialArticles }: ResourcesClientPageProp
               {filteredArticles.length} {filteredArticles.length === 1 ? "Resource" : "Resources"}
             </h2>
             {hasActiveFilters && (
-              <Button variant="outline" size="sm" onClick={clearFilters} className="flex items-center gap-1 text-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-sm bg-transparent"
+              >
                 <X className="h-3 w-3" /> Clear filters
               </Button>
             )}

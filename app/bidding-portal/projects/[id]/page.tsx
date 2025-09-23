@@ -109,12 +109,13 @@ export default function ProjectDetailPage() {
     )
   }
 
-  // Show access gate if user doesn't have vendor access
   if (vendorAccess && !vendorAccess.hasAccess) {
     return (
       <VendorAccessGate
         userMembershipTier={vendorAccess.membershipTier}
         userMembershipStatus={vendorAccess.membershipStatus}
+        hasCorporateDomain={vendorAccess.hasCorporateDomain}
+        corporateDomainMessage={vendorAccess.corporateDomainMessage}
       />
     )
   }
