@@ -12,9 +12,10 @@ export async function createBid(formData: FormData) {
   }
 
   const userEmail = user.email
-  if (!isCorporateDomain(userEmail)) {
+  if (!(await isCorporateDomain(userEmail))) {
     return {
-      error: getCorporateDomainMessage(userEmail) + " This ensures all bids come from legitimate business entities.",
+      error:
+        (await getCorporateDomainMessage(userEmail)) + " This ensures all bids come from legitimate business entities.",
     }
   }
 
@@ -165,7 +166,7 @@ export async function checkVendorAccess() {
     return { hasAccess: false, user: null }
   }
 
-  const hasCorporateDomain = isCorporateDomain(user.email)
+  const hasCorporateDomain = await isCorporateDomain(user.email)
   const hasActiveMembership =
     user.profile?.membership_status === "active" && ["professional", "corporate"].includes(user.profile.membership_tier)
 
@@ -175,6 +176,6 @@ export async function checkVendorAccess() {
     membershipTier: user.profile?.membership_tier,
     membershipStatus: user.profile?.membership_status,
     hasCorporateDomain,
-    corporateDomainMessage: getCorporateDomainMessage(user.email),
+    corporateDomainMessage: await getCorporateDomainMessage(user.email),
   }
 }

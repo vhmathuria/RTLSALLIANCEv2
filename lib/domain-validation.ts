@@ -24,7 +24,7 @@ const FREE_EMAIL_PROVIDERS = [
 // Common educational domains (usually not corporate)
 const EDUCATIONAL_DOMAINS = [".edu", ".ac.uk", ".edu.au", ".ac.in", ".edu.cn"]
 
-export function isCorporateDomain(email: string): boolean {
+export async function isCorporateDomain(email: string): Promise<boolean> {
   if (!email || !email.includes("@")) {
     return false
   }
@@ -61,12 +61,12 @@ export function isCorporateDomain(email: string): boolean {
   return true
 }
 
-export function getCorporateDomainMessage(email: string): string {
+export async function getCorporateDomainMessage(email: string): Promise<string> {
   if (!email) {
     return "Please provide a valid email address."
   }
 
-  if (!isCorporateDomain(email)) {
+  if (!(await isCorporateDomain(email))) {
     return "Please use your corporate email address to create bids. Personal email addresses (Gmail, Yahoo, etc.) are not allowed for bid submissions."
   }
 

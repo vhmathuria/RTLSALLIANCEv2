@@ -12,7 +12,7 @@ export async function createProject(formData: FormData) {
   }
 
   const userEmail = user.email
-  if (!isCorporateDomain(userEmail)) {
+  if (!(await isCorporateDomain(userEmail))) {
     return {
       error: "You must use a corporate email address to create projects. Personal email addresses are not allowed.",
     }
@@ -90,12 +90,10 @@ export async function getProjects() {
       return { success: true, data: [] } // No projects visible to non-logged-in users
     }
 
-    // Check if user has corporate membership and corporate domain
-    const hasCorporateDomain = isCorporateDomain(user.email)
+    const hasCorporateDomain = await isCorporateDomain(user.email)
     const hasCorporateMembership =
       user.profile?.membership_tier === "corporate" && user.profile?.membership_status === "active"
 
-    // Only corporate members with corporate domains can see projects
     if (!hasCorporateDomain || !hasCorporateMembership) {
       return { success: true, data: [] }
     }
@@ -123,9 +121,7 @@ export async function getProject(id: string) {
       return { error: "You must be logged in to view projects" }
     }
 
-    // Check if user is the project owner
     if (data.client_id === user.id) {
-      // Project owners can always view their own projects
       await supabase
         .from("projects")
         .update({ view_count: (data.view_count || 0) + 1 })
@@ -134,8 +130,7 @@ export async function getProject(id: string) {
       return { success: true, data }
     }
 
-    // For non-owners, check corporate membership and domain
-    const hasCorporateDomain = isCorporateDomain(user.email)
+    const hasCorporateDomain = await isCorporateDomain(user.email)
     const hasCorporateMembership =
       user.profile?.membership_tier === "corporate" && user.profile?.membership_status === "active"
 
@@ -143,7 +138,6 @@ export async function getProject(id: string) {
       return { error: "You need an active Corporate membership with a corporate email domain to view bid requests" }
     }
 
-    // Increment view count
     await supabase
       .from("projects")
       .update({ view_count: (data.view_count || 0) + 1 })
@@ -193,7 +187,7 @@ export async function checkProjectAccess() {
     }
   }
 
-  const hasCorporateDomain = isCorporateDomain(user.email)
+  const hasCorporateDomain = await isCorporateDomain(user.email)
   const hasCorporateMembership =
     user.profile?.membership_tier === "corporate" && user.profile?.membership_status === "active"
 
