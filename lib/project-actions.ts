@@ -3,19 +3,11 @@
 import { createClient } from "@/lib/supabase/server"
 import { getCurrentUser } from "@/lib/auth-actions"
 import { revalidatePath } from "next/cache"
-import { isCorporateDomain } from "@/lib/domain-validation"
 
 export async function createProject(formData: FormData) {
   const user = await getCurrentUser()
   if (!user) {
     return { error: "You must be logged in to create a project" }
-  }
-
-  const userEmail = user.email
-  if (!(await isCorporateDomain(userEmail))) {
-    return {
-      error: "You must use a corporate email address to create projects. Personal email addresses are not allowed.",
-    }
   }
 
   const title = formData.get("title")?.toString()
@@ -71,7 +63,6 @@ export async function createProject(formData: FormData) {
 }
 
 export async function getProjects() {
-  const user = await getCurrentUser()
   const supabase = createClient()
 
   try {
@@ -86,18 +77,6 @@ export async function getProjects() {
       return { error: "Failed to load projects" }
     }
 
-    if (!user) {
-      return { success: true, data: [] } // No projects visible to non-logged-in users
-    }
-
-    const hasCorporateDomain = await isCorporateDomain(user.email)
-    const hasCorporateMembership =
-      user.profile?.membership_tier === "corporate" && user.profile?.membership_status === "active"
-
-    if (!hasCorporateDomain || !hasCorporateMembership) {
-      return { success: true, data: [] }
-    }
-
     return { success: true, data }
   } catch (error) {
     console.error("Projects fetch error:", error)
@@ -106,7 +85,6 @@ export async function getProjects() {
 }
 
 export async function getProject(id: string) {
-  const user = await getCurrentUser()
   const supabase = createClient()
 
   try {
@@ -117,27 +95,7 @@ export async function getProject(id: string) {
       return { error: "Failed to load project" }
     }
 
-    if (!user) {
-      return { error: "You must be logged in to view projects" }
-    }
-
-    if (data.client_id === user.id) {
-      await supabase
-        .from("projects")
-        .update({ view_count: (data.view_count || 0) + 1 })
-        .eq("id", id)
-
-      return { success: true, data }
-    }
-
-    const hasCorporateDomain = await isCorporateDomain(user.email)
-    const hasCorporateMembership =
-      user.profile?.membership_tier === "corporate" && user.profile?.membership_status === "active"
-
-    if (!hasCorporateDomain || !hasCorporateMembership) {
-      return { error: "You need an active Corporate membership with a corporate email domain to view bid requests" }
-    }
-
+    // Increment view count
     await supabase
       .from("projects")
       .update({ view_count: (data.view_count || 0) + 1 })
@@ -174,33 +132,5 @@ export async function getUserProjects() {
   } catch (error) {
     console.error("User projects fetch error:", error)
     return { error: "An unexpected error occurred" }
-  }
-}
-
-export async function checkProjectAccess() {
-  const user = await getCurrentUser()
-  if (!user) {
-    return {
-      hasAccess: false,
-      user: null,
-      reason: "not_logged_in",
-    }
-  }
-
-  const hasCorporateDomain = await isCorporateDomain(user.email)
-  const hasCorporateMembership =
-    user.profile?.membership_tier === "corporate" && user.profile?.membership_status === "active"
-
-  return {
-    hasAccess: hasCorporateDomain && hasCorporateMembership,
-    user,
-    membershipTier: user.profile?.membership_tier,
-    membershipStatus: user.profile?.membership_status,
-    hasCorporateDomain,
-    reason: !hasCorporateDomain
-      ? "no_corporate_domain"
-      : !hasCorporateMembership
-        ? "no_corporate_membership"
-        : "access_granted",
   }
 }

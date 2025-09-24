@@ -4,11 +4,9 @@ import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, Filter, Plus, Lock, Crown, Mail } from "lucide-react"
-import Link from "next/link"
+import { Search, Filter, Plus } from "lucide-react"
 import ProjectCard from "./project-card"
-import { getProjects, checkProjectAccess } from "@/lib/project-actions"
+import { getProjects } from "@/lib/project-actions"
 
 interface Project {
   id: string
@@ -32,33 +30,130 @@ interface ProjectListProps {
   onCreateClick?: () => void
 }
 
+const sampleProjects: Project[] = [
+  {
+    id: "1",
+    title: "Smart Manufacturing Floor Optimization",
+    description:
+      "Implementing comprehensive RTLS solution for tracking production assets, personnel, and workflow optimization across 150,000 sq ft manufacturing facility. Need real-time visibility into equipment utilization, worker safety zones, and material flow.",
+    category: "manufacturing",
+    project_type: "pilot",
+    budget_range: "250k-500k",
+    timeline: "medium",
+    location: "Grand Rapids, MI",
+    created_at: "2025-03-15T10:30:00Z",
+    bid_deadline: "2025-05-28T17:00:00Z",
+    bid_count: 7,
+    view_count: 34,
+    status: "open",
+    client_organization: "Precision Components Inc",
+  },
+  {
+    id: "2",
+    title: "Hospital Asset & Patient Flow Management",
+    description:
+      "Seeking RTLS deployment for 400-bed medical center to track critical equipment, monitor patient flow, and ensure regulatory compliance. Integration with existing EMR and nurse call systems required.",
+    category: "healthcare",
+    project_type: "complete_system",
+    budget_range: "500k-1m",
+    timeline: "long",
+    location: "Phoenix, AZ",
+    created_at: "2025-01-12T14:20:00Z",
+    bid_deadline: "2025-09-15T23:59:00Z",
+    bid_count: 12,
+    view_count: 89,
+    status: "closed",
+    client_organization: "Desert Valley Medical Center",
+  },
+  {
+    id: "3",
+    title: "Automotive Assembly Line Digitization",
+    description:
+      "Digital transformation initiative requiring RTLS for vehicle tracking through assembly process, tool management, and quality control checkpoints. Must integrate with existing MES and support Industry 4.0 standards.",
+    category: "automotive",
+    project_type: "complete_system",
+    budget_range: "over-1m",
+    timeline: "long",
+    location: "Detroit, MI",
+    created_at: "2025-02-10T09:15:00Z",
+    bid_deadline: "2025-08-01T17:00:00Z",
+    bid_count: 15,
+    view_count: 156,
+    status: "closed",
+    client_organization: "Motor City Assembly",
+  },
+  {
+    id: "4",
+    title: "Distribution Center Automation Enhancement",
+    description:
+      "Upgrading existing warehouse operations with advanced RTLS for inventory tracking, picker optimization, and automated guided vehicle coordination across 500,000 sq ft facility.",
+    category: "logistics",
+    project_type: "upgrade",
+    budget_range: "100k-250k",
+    timeline: "short",
+    location: "Memphis, TN",
+    created_at: "2025-04-08T16:45:00Z",
+    bid_deadline: "2025-11-20T17:00:00Z",
+    bid_count: 9,
+    view_count: 67,
+    status: "closed",
+    client_organization: "Central Logistics Hub",
+  },
+  {
+    id: "5",
+    title: "Smart Campus Navigation & Safety",
+    description:
+      "University-wide RTLS deployment for student/staff navigation, emergency response, and facility utilization analytics. Covers 25 buildings with indoor/outdoor positioning requirements.",
+    category: "education",
+    project_type: "pilot",
+    budget_range: "250k-500k",
+    timeline: "medium",
+    location: "Austin, TX",
+    created_at: "2025-05-05T11:30:00Z",
+    bid_deadline: "2025-12-01T17:00:00Z",
+    bid_count: 6,
+    view_count: 43,
+    status: "closed",
+    client_organization: "State University of Texas",
+  },
+  {
+    id: "6",
+    title: "Retail Store Analytics & Loss Prevention",
+    description:
+      "Multi-location RTLS solution for customer behavior analytics, inventory shrinkage reduction, and staff optimization across 50+ retail locations. Privacy-compliant implementation required.",
+    category: "retail",
+    project_type: "complete_system",
+    budget_range: "500k-1m",
+    timeline: "long",
+    location: "Chicago, IL",
+    created_at: "2025-06-03T13:20:00Z",
+    bid_deadline: "2025-08-30T17:00:00Z",
+    bid_count: 11,
+    view_count: 78,
+    status: "closed",
+    client_organization: "Midwest Retail Group",
+  },
+]
+
 export default function ProjectList({ showCreateButton = false, onCreateClick }: ProjectListProps) {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
-  const [accessInfo, setAccessInfo] = useState<any>(null)
 
   useEffect(() => {
-    loadProjectsAndAccess()
+    loadProjects()
   }, [])
 
-  const loadProjectsAndAccess = async () => {
+  const loadProjects = async () => {
     setLoading(true)
-
-    // Check access first
-    const access = await checkProjectAccess()
-    setAccessInfo(access)
-
-    // Load projects
     const result = await getProjects()
-    if (result.success && result.data) {
+    if (result.success && result.data && result.data.length > 0) {
       setProjects(result.data)
     } else {
-      setProjects([])
+      setProjects(sampleProjects)
     }
-
     setLoading(false)
   }
 
@@ -78,116 +173,6 @@ export default function ProjectList({ showCreateButton = false, onCreateClick }:
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-2 text-gray-600">Loading projects...</p>
         </div>
-      </div>
-    )
-  }
-
-  if (accessInfo && !accessInfo.hasAccess) {
-    return (
-      <div className="max-w-2xl mx-auto p-6">
-        <Card className="border-blue-200 bg-blue-50">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <Lock className="h-6 w-6 text-blue-600" />
-            </div>
-            <CardTitle className="text-xl text-blue-900">Corporate Membership Required</CardTitle>
-            <CardDescription className="text-blue-700">
-              Access to bid requests is restricted to Corporate members with verified business email addresses.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Corporate Domain Requirement */}
-            <div
-              className={`flex items-start gap-3 p-4 rounded-lg ${
-                accessInfo.hasCorporateDomain
-                  ? "bg-green-50 border border-green-200"
-                  : "bg-red-50 border border-red-200"
-              }`}
-            >
-              <Mail className={`h-5 w-5 mt-0.5 ${accessInfo.hasCorporateDomain ? "text-green-600" : "text-red-600"}`} />
-              <div className="flex-1">
-                <h3 className={`font-semibold ${accessInfo.hasCorporateDomain ? "text-green-900" : "text-red-900"}`}>
-                  Corporate Email Domain {accessInfo.hasCorporateDomain ? "✓" : "✗"}
-                </h3>
-                <p className={`text-sm mt-1 ${accessInfo.hasCorporateDomain ? "text-green-700" : "text-red-700"}`}>
-                  {accessInfo.hasCorporateDomain
-                    ? "Your email domain is verified as a corporate domain."
-                    : "You must use a corporate email address to view bid requests."}
-                </p>
-              </div>
-            </div>
-
-            {/* Corporate Membership Requirement */}
-            <div
-              className={`flex items-start gap-3 p-4 rounded-lg ${
-                accessInfo.membershipTier === "corporate" && accessInfo.membershipStatus === "active"
-                  ? "bg-green-50 border border-green-200"
-                  : "bg-red-50 border border-red-200"
-              }`}
-            >
-              <Crown
-                className={`h-5 w-5 mt-0.5 ${
-                  accessInfo.membershipTier === "corporate" && accessInfo.membershipStatus === "active"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              />
-              <div className="flex-1">
-                <h3
-                  className={`font-semibold ${
-                    accessInfo.membershipTier === "corporate" && accessInfo.membershipStatus === "active"
-                      ? "text-green-900"
-                      : "text-red-900"
-                  }`}
-                >
-                  Active Corporate Membership{" "}
-                  {accessInfo.membershipTier === "corporate" && accessInfo.membershipStatus === "active" ? "✓" : "✗"}
-                </h3>
-                <p
-                  className={`text-sm mt-1 ${
-                    accessInfo.membershipTier === "corporate" && accessInfo.membershipStatus === "active"
-                      ? "text-green-700"
-                      : "text-red-700"
-                  }`}
-                >
-                  {accessInfo.membershipTier === "corporate" && accessInfo.membershipStatus === "active"
-                    ? "You have an active Corporate membership."
-                    : "You need an active Corporate membership to view bid requests."}
-                </p>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
-              {accessInfo.membershipTier !== "corporate" || accessInfo.membershipStatus !== "active" ? (
-                <Link href="/membership" className="flex-1">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                    <Crown className="mr-2 h-4 w-4" />
-                    Upgrade to Corporate
-                  </Button>
-                </Link>
-              ) : null}
-
-              {!accessInfo.hasCorporateDomain && (
-                <Link href="/account" className="flex-1">
-                  <Button variant="outline" className="w-full bg-transparent">
-                    <Mail className="mr-2 h-4 w-4" />
-                    Update Email Address
-                  </Button>
-                </Link>
-              )}
-            </div>
-
-            <div className="text-center pt-4 border-t border-blue-200">
-              <p className="text-sm text-blue-700">
-                Need help?{" "}
-                <Link href="/contact" className="underline hover:no-underline">
-                  Contact our support team
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     )
   }
@@ -270,11 +255,7 @@ export default function ProjectList({ showCreateButton = false, onCreateClick }:
             <Filter className="h-12 w-12 mx-auto" />
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">No projects found</h3>
-          <p className="text-gray-600">
-            {projects.length === 0
-              ? "No projects are currently available for bidding."
-              : "Try adjusting your search criteria or filters"}
-          </p>
+          <p className="text-gray-600">Try adjusting your search criteria or filters</p>
         </div>
       )}
     </div>
