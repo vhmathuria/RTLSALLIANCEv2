@@ -1,44 +1,31 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { AlertCircle, CheckCircle2, Mail, MapPin, Phone } from "lucide-react"
+import { submitContactForm } from "@/lib/contact-actions"
+
+const initialState = {
+  message: "",
+  success: false,
+}
 
 export default function ContactPage() {
-  const [formState, setFormState] = useState<"idle" | "submitting" | "success" | "error">("idle")
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  })
+  const [state, setState] = useState(initialState)
+  const [isPending, startTransition] = useTransition()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setFormState("submitting")
-
-    // Simulate form submission
-    setTimeout(() => {
-      setFormState("success")
-      // Reset form after success
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      })
-    }, 1500)
+  const handleSubmit = async (formData: FormData) => {
+    console.log("[v0] Contact form handleSubmit called")
+    startTransition(async () => {
+      console.log("[v0] Calling submitContactForm...")
+      const result = await submitContactForm(state, formData)
+      console.log("[v0] submitContactForm result:", result)
+      setState(result)
+    })
   }
 
   return (
@@ -94,85 +81,60 @@ export default function ContactPage() {
                 <br />
                 9:00 AM - 5:00 PM CET
               </p>
-              <p className="text-sm text-gray-600">{""}</p>
             </div>
           </div>
 
           <div className="md:col-span-2">
             <Card>
               <CardContent className="pt-6">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
+                {state.success && (
+                  <div className="bg-green-50 p-4 rounded-md flex items-start mb-6">
+                    <CheckCircle2 className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-green-700 font-medium">Thank you for your message!</p>
+                      <p className="text-green-600 text-sm mt-1">We'll get back to you shortly.</p>
+                    </div>
+                  </div>
+                )}
+
+                {!state.success && state.message && (
+                  <div className="bg-red-50 p-4 rounded-md flex items-start mb-6">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-red-700 font-medium">Error sending message</p>
+                      <p className="text-red-600 text-sm mt-1">{state.message}</p>
+                    </div>
+                  </div>
+                )}
+
+                {!state.success && (
+                  <form action={handleSubmit} className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" name="name" required disabled={isPending} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" type="email" required disabled={isPending} />
+                      </div>
+                    </div>
+
                     <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        disabled={formState === "submitting"}
-                      />
+                      <Label htmlFor="subject">Subject</Label>
+                      <Input id="subject" name="subject" required disabled={isPending} />
                     </div>
+
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        disabled={formState === "submitting"}
-                      />
+                      <Label htmlFor="message">Message</Label>
+                      <Textarea id="message" name="message" rows={5} required disabled={isPending} />
                     </div>
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
-                    <Input
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      disabled={formState === "submitting"}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      rows={5}
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      disabled={formState === "submitting"}
-                    />
-                  </div>
-
-                  {formState === "success" && (
-                    <div className="bg-green-50 p-3 rounded-md flex items-start">
-                      <CheckCircle2 className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      <p className="text-green-700 text-sm">
-                        Thank you for your message! We'll get back to you shortly.
-                      </p>
-                    </div>
-                  )}
-
-                  {formState === "error" && (
-                    <div className="bg-red-50 p-3 rounded-md flex items-start">
-                      <AlertCircle className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
-                      <p className="text-red-700 text-sm">There was an error sending your message. Please try again.</p>
-                    </div>
-                  )}
-
-                  <Button type="submit" className="w-full" disabled={formState === "submitting"}>
-                    {formState === "submitting" ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
+                    <Button type="submit" className="w-full" disabled={isPending}>
+                      {isPending ? "Sending..." : "Send Message"}
+                    </Button>
+                  </form>
+                )}
               </CardContent>
             </Card>
           </div>
