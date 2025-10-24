@@ -5,13 +5,33 @@ import { fixSpecialChars } from "./utils"
 export const supabase = createClient()
 
 export async function getArticleBySlug(slug: string) {
+  console.log("[v0] Fetching article by slug:", slug)
+
   try {
     const { data, error } = await supabase.from("staging_articles").select("*").eq("slug", slug).single()
 
     if (error) {
-      console.error("Error fetching article:", error)
+      console.error("[v0] Error fetching article:", error)
+      console.error("[v0] Error details:", {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+      })
       return null
     }
+
+    if (!data) {
+      console.log("[v0] No article found for slug:", slug)
+      return null
+    }
+
+    console.log("[v0] Article found:", {
+      title: data.title,
+      slug: data.slug,
+      contentType: data.content_type,
+      isPublished: data.is_published,
+    })
 
     // Fix special characters in rich_text
     if (data && data.rich_text) {
@@ -112,13 +132,13 @@ export async function getArticleBySlug(slug: string) {
         const fixedRichTextObj = fixStringsRecursively(richTextObj)
         data.rich_text = JSON.stringify(fixedRichTextObj)
       } catch (e) {
-        console.error("Error fixing rich_text:", e)
+        console.error("[v0] Error fixing rich_text:", e)
       }
     }
 
     return data
   } catch (err) {
-    console.error("Unexpected error in getArticleBySlug:", err)
+    console.error("[v0] Unexpected error in getArticleBySlug:", err)
     return null
   }
 }
@@ -132,13 +152,13 @@ export async function getArticlesByContentType(contentType: string) {
       .order("publish_date", { ascending: false })
 
     if (error) {
-      console.error("Error fetching articles:", error)
+      console.error("[v0] Error fetching articles:", error)
       return []
     }
 
     return data
   } catch (err) {
-    console.error("Unexpected error in getArticlesByContentType:", err)
+    console.error("[v0] Unexpected error in getArticlesByContentType:", err)
     return []
   }
 }
@@ -151,13 +171,13 @@ export async function getAllArticles() {
       .order("publish_date", { ascending: false })
 
     if (error) {
-      console.error("Error fetching all articles:", error)
+      console.error("[v0] Error fetching all articles:", error)
       return []
     }
 
     return data
   } catch (err) {
-    console.error("Unexpected error in getAllArticles:", err)
+    console.error("[v0] Unexpected error in getAllArticles:", err)
     return []
   }
 }
@@ -167,13 +187,13 @@ export async function getTemplateByName(templateName: string) {
     const { data, error } = await supabase.from("article_templates").select("*").eq("template", templateName).single()
 
     if (error) {
-      console.error("Error fetching template:", error)
+      console.error("[v0] Error fetching template:", error)
       return null
     }
 
     return data
   } catch (err) {
-    console.error("Unexpected error in getTemplateByName:", err)
+    console.error("[v0] Unexpected error in getTemplateByName:", err)
     return null
   }
 }
@@ -196,7 +216,7 @@ export async function updateArticleTOC(slug: string, updatedTOC: string[]) {
 
     return { success: true }
   } catch (error) {
-    console.error("Error updating article TOC:", error)
+    console.error("[v0] Error updating article TOC:", error)
     return { success: false, error }
   }
 }

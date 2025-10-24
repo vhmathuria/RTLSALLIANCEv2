@@ -14,6 +14,8 @@ export default function NewsletterSignup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    console.log("[v0] Newsletter form submitted with email:", email)
+
     if (!email) {
       setStatus("error")
       setMessage("Please enter your email address")
@@ -23,12 +25,15 @@ export default function NewsletterSignup() {
     setStatus("loading")
 
     try {
+      console.log("[v0] Calling subscribeToNewsletter...")
       // Add a small delay to improve user experience
       const subscribePromise = subscribeToNewsletter(email)
       const delayPromise = new Promise((resolve) => setTimeout(resolve, 800))
 
       // Wait for both the subscription and the minimum delay
       const [result] = await Promise.all([subscribePromise, delayPromise])
+
+      console.log("[v0] Newsletter subscription result:", result)
 
       if (result.success) {
         setStatus("success")
@@ -39,7 +44,7 @@ export default function NewsletterSignup() {
         setMessage(result.error || "There was an error subscribing. Please try again.")
       }
     } catch (error) {
-      console.error("Client-side error subscribing to newsletter:", error)
+      console.error("[v0] Client-side error subscribing to newsletter:", error)
       setStatus("error")
       setMessage("There was an error subscribing. Please try again.")
     }

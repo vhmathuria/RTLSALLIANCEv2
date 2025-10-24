@@ -12,14 +12,18 @@ import type { Metadata } from "next"
 export const revalidate = 86400
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  console.log("[v0] Generating metadata for slug:", params.slug)
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
+    console.log("[v0] Article not found for slug:", params.slug)
     return {
       title: "Article Not Found - RTLS Alliance",
       description: "The requested article could not be found.",
     }
   }
+
+  console.log("[v0] Article found:", article.title)
 
   // Base URL for canonical and OG URLs
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rtlsalliance.org"
@@ -65,11 +69,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  console.log("[v0] Rendering article page for slug:", params.slug)
   const article = await getArticleBySlug(params.slug)
 
   if (!article) {
+    console.log("[v0] Article not found in database for slug:", params.slug)
     notFound()
   }
+
+  console.log("[v0] Article data:", {
+    title: article.title,
+    contentType: article.content_type,
+    membershipTier: article.membership_tier,
+    isPublished: article.is_published,
+  })
 
   // Check if article requires membership
   const requiredTier = article.membership_tier || "public"
@@ -77,7 +90,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   // If article is public, no need to check membership
   if (requiredTier !== "public") {
     // Get current user
-    const supabase = createServerClient()
+    const supabase = await createServerClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()

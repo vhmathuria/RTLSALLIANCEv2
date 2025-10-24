@@ -88,4 +88,55 @@ export function createClientSync() {
   })
 }
 
+export const createServiceRoleClient = cache(() => {
+  if (!isSupabaseConfigured) {
+    console.warn("Supabase environment variables are not set. Using dummy client.")
+    return {
+      auth: {
+        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      },
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+          }),
+          order: () => Promise.resolve({ data: [], error: null }),
+        }),
+        insert: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+        update: () => ({
+          eq: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+        }),
+      }),
+    } as any
+  }
+
+  // Check if service role key is available
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.warn("SUPABASE_SERVICE_ROLE_KEY not set. Using anon key instead.")
+    return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+      cookies: {
+        getAll() {
+          return []
+        },
+        setAll() {
+          // No-op
+        },
+      },
+    })
+  }
+
+  // Create client with service role key to bypass RLS
+  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+    cookies: {
+      getAll() {
+        return []
+      },
+      setAll() {
+        // No-op for service role client
+      },
+    },
+  })
+})
+
 export { createClient as createServerClient }
