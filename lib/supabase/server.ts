@@ -90,11 +90,11 @@ export function createClientSync() {
 
 export const createServiceRoleClient = cache(() => {
   console.log("[v0] Creating service role client")
-  console.log("[v0] Supabase configured:", isSupabaseConfigured)
-  console.log("[v0] Service role key exists:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
+  console.log("[v0] Supabase URL configured:", !!process.env.NEXT_PUBLIC_SUPABASE_URL)
+  console.log("[v0] Service role key configured:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
   if (!isSupabaseConfigured) {
-    console.warn("[v0] Supabase environment variables are not set. Using dummy client.")
+    console.error("[v0] Supabase base configuration missing (URL or anon key)")
     return {
       auth: {
         getUser: () => Promise.resolve({ data: { user: null }, error: null }),
@@ -107,9 +107,7 @@ export const createServiceRoleClient = cache(() => {
           }),
           order: () => Promise.resolve({ data: [], error: null }),
         }),
-        insert: () => ({
-          select: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
-        }),
+        insert: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
         update: () => ({
           eq: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
         }),
@@ -117,10 +115,25 @@ export const createServiceRoleClient = cache(() => {
     } as any
   }
 
-  // Check if service role key is available
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    console.error("[v0] SUPABASE_SERVICE_ROLE_KEY not set! This is required for public form submissions.")
-    console.warn("[v0] Falling back to anon key - this may fail due to RLS policies.")
+    console.error("[v0] ========================================")
+    console.error("[v0] CRITICAL CONFIGURATION ERROR")
+    console.error("[v0] ========================================")
+    console.error("[v0] SUPABASE_SERVICE_ROLE_KEY environment variable is NOT SET")
+    console.error("[v0] This is REQUIRED for:")
+    console.error("[v0]   - Contact form submissions")
+    console.error("[v0]   - Newsletter signups")
+    console.error("[v0]   - Any public form that needs to bypass RLS")
+    console.error("[v0] ========================================")
+    console.error("[v0] To fix this:")
+    console.error("[v0] 1. Go to your Supabase project settings")
+    console.error("[v0] 2. Navigate to API settings")
+    console.error("[v0] 3. Copy the 'service_role' key (NOT the anon key)")
+    console.error("[v0] 4. Add it as SUPABASE_SERVICE_ROLE_KEY environment variable")
+    console.error("[v0] 5. Redeploy your application")
+    console.error("[v0] ========================================")
+
+    // Return anon client as fallback, but it will fail for inserts due to RLS
     return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
       cookies: {
         getAll() {
@@ -133,7 +146,7 @@ export const createServiceRoleClient = cache(() => {
     })
   }
 
-  console.log("[v0] Creating service role client with service role key")
+  console.log("[v0] Service role client created successfully with service role key")
   // Create client with service role key to bypass RLS
   return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY, {
     cookies: {
