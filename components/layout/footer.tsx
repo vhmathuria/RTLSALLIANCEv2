@@ -25,7 +25,7 @@ const navigation = {
   social: [
     {
       name: "LinkedIn",
-      href: "#",
+      href: "https://www.linkedin.com/company/rtls-alliance/",
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -127,7 +127,7 @@ export default function Footer() {
                 <strong>Phone:</strong>
                 <br />
                 <a href="tel:+4915205888777" className="hover:text-blue-600">
-                  +49 1520 5888777
+                  +49 156 79663671  
                 </a>
               </p>
             </address>

@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient } from "@/lib/supabase-server"
+import { createServiceRoleClient } from "@/lib/supabase/server"
 
 export async function submitContactForm(prevState: any, formData: FormData) {
   console.log("[v0] Contact form submission started")
@@ -19,9 +19,8 @@ export async function submitContactForm(prevState: any, formData: FormData) {
       return { success: false, message: "All fields are required" }
     }
 
-    // Create Supabase client
-    const supabase = createClient()
-    console.log("[v0] Supabase client created")
+    const supabase = createServiceRoleClient()
+    console.log("[v0] Supabase service role client created")
 
     const { data, error } = await supabase.from("contact_messages").insert([{ name, email, subject, message }]).select()
 
