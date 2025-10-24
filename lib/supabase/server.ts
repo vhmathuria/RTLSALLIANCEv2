@@ -89,8 +89,12 @@ export function createClientSync() {
 }
 
 export const createServiceRoleClient = cache(() => {
+  console.log("[v0] Creating service role client")
+  console.log("[v0] Supabase configured:", isSupabaseConfigured)
+  console.log("[v0] Service role key exists:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
+
   if (!isSupabaseConfigured) {
-    console.warn("Supabase environment variables are not set. Using dummy client.")
+    console.warn("[v0] Supabase environment variables are not set. Using dummy client.")
     return {
       auth: {
         getUser: () => Promise.resolve({ data: { user: null }, error: null }),
@@ -103,7 +107,9 @@ export const createServiceRoleClient = cache(() => {
           }),
           order: () => Promise.resolve({ data: [], error: null }),
         }),
-        insert: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+        insert: () => ({
+          select: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
+        }),
         update: () => ({
           eq: () => Promise.resolve({ data: null, error: { message: "Supabase not configured" } }),
         }),
@@ -113,7 +119,8 @@ export const createServiceRoleClient = cache(() => {
 
   // Check if service role key is available
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    console.warn("SUPABASE_SERVICE_ROLE_KEY not set. Using anon key instead.")
+    console.error("[v0] SUPABASE_SERVICE_ROLE_KEY not set! This is required for public form submissions.")
+    console.warn("[v0] Falling back to anon key - this may fail due to RLS policies.")
     return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
       cookies: {
         getAll() {
@@ -126,6 +133,7 @@ export const createServiceRoleClient = cache(() => {
     })
   }
 
+  console.log("[v0] Creating service role client with service role key")
   // Create client with service role key to bypass RLS
   return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY, {
     cookies: {

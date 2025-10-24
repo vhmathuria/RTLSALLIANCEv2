@@ -80,7 +80,7 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 text-primary mr-3 mt-0.5" />
                     <div>
                       <h3 className="font-medium">Phone</h3>
-                      <p className="text-sm text-gray-600">+49 152 0588 8777</p>
+                      <p className="text-sm text-gray-600">+49 156 79663671</p>
                     </div>
                   </div>
                 </div>
@@ -94,7 +94,7 @@ export default function ContactPage() {
                 <br />
                 9:00 AM - 5:00 PM CET
               </p>
-              <p className="text-sm text-gray-600">We aim to respond to all inquiries within 24 business hours.</p>
+              <p className="text-sm text-gray-600">{""}</p>
             </div>
           </div>
 
